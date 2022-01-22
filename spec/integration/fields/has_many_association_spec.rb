@@ -3,6 +3,12 @@ require 'spec_helper'
 RSpec.describe 'HasManyAssociation field', type: :request do
   subject { page }
 
+  it 'adds a related id to the has_many create team link' do
+    @team = FactoryBot.create :team
+    visit edit_path(model_name: 'team', id: @team.id)
+    is_expected.to have_selector("a[data-link='/admin/player/new?modal=true&player%5Bteam_id%5D=#{@team.id}']")
+  end
+
   context 'when an association is readonly' do
     it 'is not editable' do
       @league = FactoryBot.create :league
@@ -151,7 +157,7 @@ RSpec.describe 'HasManyAssociation field', type: :request do
       end
     end
 
-    it "allows update" do
+    it 'allows update' do
       visit edit_path(model_name: 'managing_user', id: user.id)
       expect(find("select#managing_user_team_ids option[value=\"#{teams[0].id}\"]")).to have_content teams[0].name
       select(teams[1].name, from: 'Teams')
@@ -166,11 +172,9 @@ RSpec.describe 'HasManyAssociation field', type: :request do
         end
       end
 
-      it "allows update", js: true do
+      it 'allows update', js: true do
         visit edit_path(model_name: 'managing_user', id: user.id)
         find('input.ra-multiselect-search').set('T')
-        page.execute_script("$('input.ra-multiselect-search').trigger('focus')")
-        page.execute_script("$('input.ra-multiselect-search').trigger('keydown')")
         find('.ra-multiselect-collection option', text: teams[1].name).select_option
         find('.ra-multiselect-item-add').click
         click_button 'Save'

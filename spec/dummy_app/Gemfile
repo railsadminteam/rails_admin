@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '>= 6.0.0'
+gem 'webpacker', require: false
 
 group :active_record do
   platforms :jruby do
@@ -19,27 +20,27 @@ group :active_record do
 end
 
 group :mongoid do
-  gem 'mongoid', ['>= 6.0', '< 8']
-  gem 'kaminari-mongoid'
-  gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
   gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
+  gem 'kaminari-mongoid'
+  gem 'mongoid', ['>= 6.0', '< 8']
+  gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
   gem 'shrine-mongoid', '~> 1.0'
 end
 
 gem 'carrierwave', '>= 2.0.0.rc', '< 3.0'
-gem 'devise', '>= 3.2'
+gem 'devise', '>= 3.2', github: 'heartcombo/devise'
 gem 'dragonfly', '~> 1.0'
 gem 'mini_magick', '>= 3.4'
-gem 'mlb', '>= 0.7'
+gem 'mlb', '>= 0.7', github: 'mshibuya/mlb', branch: 'ruby-3'
 gem 'paperclip', '>= 3.4'
 gem 'rails_admin', path: '../../'
 gem 'shrine', '~> 3.0'
+gem 'webrick', '~> 1.7'
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
   gem 'sassc-rails', '~> 2.1'
-  gem 'coffee-rails', '~> 4.0'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer'

@@ -142,11 +142,11 @@ RSpec.describe 'Show action', type: :request do
 
       is_expected.not_to have_selector('h4', text: 'Basic info')
 
-      %w(
+      %w[
         division name logo_url manager
         ballpark mascot founded wins
         losses win_percentage revenue
-      ).each do |field|
+      ].each do |field|
         is_expected.not_to have_selector(".#{field}_field")
       end
     end
@@ -231,7 +231,7 @@ RSpec.describe 'Show action', type: :request do
     end
   end
 
-  describe "fields" do
+  describe 'fields' do
     before do
       RailsAdmin.config do |c|
         c.compact_show_view = false
@@ -241,11 +241,11 @@ RSpec.describe 'Show action', type: :request do
     it 'shows all by default' do
       visit show_path(model_name: 'team', id: team.id)
 
-      %w(
+      %w[
         division name logo_url manager
         ballpark mascot founded wins
         losses win_percentage revenue players fans
-      ).each do |field|
+      ].each do |field|
         is_expected.to have_selector(".#{field}_field")
       end
     end
@@ -435,6 +435,24 @@ RSpec.describe 'Show action', type: :request do
       it 'raises error along with suggestion' do
         expect { visit show_path(model_name: 'team', id: team.id) }.to raise_error(/you should declare 'formatted_value'/)
       end
+    end
+  end
+
+  describe 'with model scope' do
+    let!(:comments) { %w[something anything].map { |content| FactoryBot.create :comment_confirmed, content: content } }
+    before do
+      RailsAdmin.config do |config|
+        config.model Comment::Confirmed do
+          scope { Comment::Confirmed.unscoped }
+        end
+      end
+    end
+
+    it 'overrides default_scope' do
+      visit show_path(model_name: 'comment~confirmed', id: comments[0].id)
+      is_expected.to have_selector('dd', text: 'something')
+      visit show_path(model_name: 'comment~confirmed', id: comments[1].id)
+      is_expected.to have_selector('dd', text: 'anything')
     end
   end
 end

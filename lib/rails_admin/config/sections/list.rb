@@ -32,10 +32,6 @@ module RailsAdmin
           parent.abstract_model.primary_key
         end
 
-        register_instance_option :sort_reverse? do
-          true # By default show latest first
-        end
-
         register_instance_option :scopes do
           []
         end
@@ -44,23 +40,16 @@ module RailsAdmin
           ''
         end
 
-        register_instance_option :sidescroll do
-          nil
+        register_deprecated_instance_option :sidescroll do
+          ActiveSupport::Deprecation.warn('The sidescroll configuration option was removed, it is always enabled now.')
         end
 
-        def sidescroll_frozen_columns
-          global_config = RailsAdmin::Config.sidescroll
-          model_config = sidescroll
-          enabled = model_config.nil? ? global_config : model_config
-          if enabled
-            num_frozen = model_config[:num_frozen_columns] if model_config.is_a?(Hash)
-            unless num_frozen
-              num_frozen = global_config[:num_frozen_columns] if global_config.is_a?(Hash)
-              num_frozen ||= 3 # by default, freeze checkboxes, links & first property (usually primary key / id?)
-              num_frozen -= 1 unless checkboxes? # model config should be explicit about this, only adjust if using global config
-            end
-            num_frozen
-          end
+        def fields_for_table
+          visible_fields.partition(&:sticky?).flatten
+        end
+
+        register_deprecated_instance_option :sort_reverse do
+          ActiveSupport::Deprecation.warn('The sort_reverse configuration option is deprecated and has no effect.')
         end
       end
     end

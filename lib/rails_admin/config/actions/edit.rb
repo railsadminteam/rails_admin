@@ -9,7 +9,7 @@ module RailsAdmin
         end
 
         register_instance_option :http_methods do
-          [:get, :put]
+          %i[get put]
         end
 
         register_instance_option :controller do
@@ -42,7 +42,11 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-pencil'
+          'fas fa-pencil-alt'
+        end
+
+        register_instance_option :writable? do
+          !(bindings[:object] && bindings[:object].readonly?)
         end
       end
     end

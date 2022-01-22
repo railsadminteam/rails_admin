@@ -1,13 +1,18 @@
 inherit_from: .rubocop_todo.yml
 
+require:
+  - rubocop-performance
+
 AllCops:
   Exclude:
-    - 'gemfiles/*'
-    - 'spec/dummy_app/bin/**/*'
-    - 'spec/dummy_app/db/schema.rb'
-    - 'spec/dummy_app/tmp/**/*'
-    - 'vendor/bundle/**/*'
+    - "gemfiles/*"
+    - "node_modules/**/*"
+    - "spec/dummy_app/bin/**/*"
+    - "spec/dummy_app/db/schema.rb"
+    - "spec/dummy_app/tmp/**/*"
+    - "vendor/bundle/**/*"
   NewCops: disable
+  SuggestExtensions: false
   TargetRubyVersion: 2.5
 
 Gemspec/DateAssignment:
@@ -25,6 +30,10 @@ Layout/LineEndStringConcatenationIndentation:
 Layout/LineLength:
   AllowURI: true
   Enabled: false
+
+Layout/MultilineAssignmentLayout:
+  Enabled: true
+  SupportedTypes: [case, if]
 
 Layout/SpaceBeforeBrackets:
   Enabled: true
@@ -51,12 +60,12 @@ Lint/DuplicateRegexpCharacterClassElement:
 Lint/EmptyBlock:
   Enabled: true
   Exclude:
-    - 'spec/**/*'
+    - "spec/**/*"
 
 Lint/EmptyClass:
   Enabled: true
   Exclude:
-    - 'spec/**/*'
+    - "spec/**/*"
 
 Lint/EmptyInPattern:
   Enabled: true
@@ -99,7 +108,7 @@ Metrics/BlockNesting:
 
 Metrics/ClassLength:
   CountComments: false
-  Max: 120 # TODO: Lower to 100
+  Max: 132 # TODO: Lower to 100
 
 Metrics/CyclomaticComplexity:
   Max: 15 # TODO: Lower to 6
@@ -109,7 +118,7 @@ Metrics/MethodLength:
   Max: 29 # TODO: Lower to 15
 
 Metrics/ModuleLength:
-  Max: 202 # TODO: Lower to 100
+  Max: 205 # TODO: Lower to 100
 
 Metrics/ParameterLists:
   Max: 8 # TODO: Lower to 4
@@ -120,7 +129,7 @@ Metrics/PerceivedComplexity:
 
 Naming/FileName:
   Exclude:
-    - 'lib/rails_admin/bootstrap-sass.rb'
+    - "lib/rails_admin/bootstrap-sass.rb"
 
 Naming/InclusiveLanguage:
   Enabled: true
@@ -136,10 +145,10 @@ Style/CollectionCompact:
 
 Style/CollectionMethods:
   PreferredMethods:
-    map:      'collect'
-    reduce:   'inject'
-    find:     'detect'
-    find_all: 'select'
+    map: "collect"
+    reduce: "inject"
+    find: "detect"
+    find_all: "select"
 
 Style/Documentation:
   Enabled: false
@@ -208,10 +217,10 @@ Style/SwapValues:
   Enabled: true
 
 Style/TrailingCommaInArguments:
-  EnforcedStyleForMultiline: 'comma'
+  EnforcedStyleForMultiline: "comma"
 
 Style/TrailingCommaInArrayLiteral:
-  EnforcedStyleForMultiline: 'comma'
+  EnforcedStyleForMultiline: "comma"
 
 Style/TrailingCommaInHashLiteral:
-  EnforcedStyleForMultiline: 'comma'
+  EnforcedStyleForMultiline: "comma"

@@ -21,8 +21,8 @@ module RailsAdmin
 
           register_instance_option :color do
             if value.present?
-              if value =~ /^[0-9a-fA-F]{3,6}$/
-                '#' + value
+              if /^[0-9a-fA-F]{3,6}$/.match?(value)
+                "##{value}"
               else
                 value
               end

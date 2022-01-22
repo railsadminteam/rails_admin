@@ -1,11 +1,7 @@
-require 'jquery-rails'
-require 'jquery-ui-rails'
 require 'kaminari'
 require 'nested_form'
-require 'rack-pjax'
 require 'rails'
 require 'rails_admin'
-require 'remotipart'
 
 module RailsAdmin
   class Engine < Rails::Engine
@@ -14,14 +10,15 @@ module RailsAdmin
     config.action_dispatch.rescue_responses['RailsAdmin::ActionNotAllowed'] = :forbidden
 
     initializer 'RailsAdmin precompile hook', group: :all do |app|
-      app.config.assets.precompile += %w(
-        rails_admin/rails_admin.js
-        rails_admin/rails_admin.css
-      )
-    end
-
-    initializer 'RailsAdmin setup middlewares' do |app|
-      app.config.middleware.use Rack::Pjax
+      if app.config.respond_to?(:assets)
+        app.config.assets.precompile += %w[
+          rails_admin.js
+          rails_admin.css
+        ]
+        app.config.assets.paths << RailsAdmin::Engine.root.join('src')
+        require 'rails_admin/support/esmodule_preprocessor'
+        Sprockets.register_preprocessor 'application/javascript', RailsAdmin::ESModulePreprocessor
+      end
     end
 
     initializer 'RailsAdmin reload config in development' do |app|
@@ -55,7 +52,7 @@ module RailsAdmin
           m.klass.name =~ /^ActionDispatch::Session::/
       end
       loaded = app.config.middleware.to_a.map(&:name)
-      required = %w(ActionDispatch::Cookies ActionDispatch::Flash Rack::MethodOverride)
+      required = %w[ActionDispatch::Cookies ActionDispatch::Flash Rack::MethodOverride]
       missing = required - loaded
       unless missing.empty? && has_session_store
         configs = missing.map { |m| "config.middleware.use #{m}" }
@@ -71,6 +68,9 @@ module RailsAdmin
       end
 
       RailsAdmin::Config.initialize!
+
+      # Force route reload, since it doesn't reflect RailsAdmin action configuration yet
+      app.reload_routes!
     end
   end
 end

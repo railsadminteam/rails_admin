@@ -13,7 +13,7 @@ module RailsAdmin
         end
 
         register_instance_option :http_methods do
-          [:get, :delete]
+          %i[get delete]
         end
 
         register_instance_option :authorization_key do
@@ -44,7 +44,11 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-remove'
+          'fas fa-times'
+        end
+
+        register_instance_option :writable? do
+          !(bindings[:object] && bindings[:object].readonly?)
         end
       end
     end

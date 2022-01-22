@@ -24,6 +24,28 @@ RSpec.describe 'Dashboard action', type: :request do
     visit dashboard_path
   end
 
+  it 'does not show history if turned off', active_record: true do
+    RailsAdmin.config do |c|
+      c.audit_with :paper_trail, 'User', 'PaperTrail::Version'
+      c.included_models = [PaperTrailTest]
+      c.actions do
+        dashboard do
+          history false
+        end
+        index # mandatory
+        new
+        history_index
+      end
+    end
+    with_versioning do
+      visit new_path(model_name: 'paper_trail_test')
+      fill_in 'paper_trail_test[name]', with: 'Jackie Robinson'
+      click_button 'Save'
+    end
+    visit dashboard_path
+    is_expected.not_to have_content 'Jackie Robinson'
+  end
+
   it 'counts are different for same-named models in different modules' do
     allow(RailsAdmin.config(User::Confirmed).abstract_model).to receive(:count).and_return(10)
     allow(RailsAdmin.config(Comment::Confirmed).abstract_model).to receive(:count).and_return(0)

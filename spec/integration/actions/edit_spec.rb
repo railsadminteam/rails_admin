@@ -9,19 +9,19 @@ RSpec.describe 'Edit action', type: :request do
       visit edit_path(model_name: 'player', id: @player.id)
     end
 
-    it "shows \"Edit model\"" do
+    it 'shows "Edit model"' do
       is_expected.to have_content('Edit Player')
     end
 
-    it "shows required fields as \"Required\"" do
+    it 'shows required fields as "Required"' do
       is_expected.to have_selector('div', text: /Name\s*Required/)
       is_expected.to have_selector('div', text: /Number\s*Required/)
     end
 
-    it "shows non-required fields as \"Optional\"" do
-      expect(find('#player_position_field .help-block')).to have_content('Optional')
-      expect(find('#player_born_on_field .help-block')).to have_content('Optional')
-      expect(find('#player_notes_field .help-block')).to have_content('Optional')
+    it 'shows non-required fields as "Optional"' do
+      expect(find('#player_position_field .form-text')).to have_content('Optional')
+      expect(find('#player_born_on_field .form-text')).to have_content('Optional')
+      expect(find('#player_notes_field .form-text')).to have_content('Optional')
     end
 
     it 'checks required fields to have required attribute set' do
@@ -118,19 +118,19 @@ RSpec.describe 'Edit action', type: :request do
       context 'using mongoid', skip_active_record: true do
         it 'uses the db column size for the maximum length' do
           visit new_path(model_name: 'help_test')
-          expect(find('#help_test_name_field .help-block')).to have_content('Length up to 255.')
+          expect(find('#help_test_name_field .form-text')).to have_content('Length up to 255.')
         end
 
         it 'returns nil for the maximum length' do
           visit new_path(model_name: 'team')
-          expect(find('#team_custom_field_field .help-block')).not_to have_content('Length')
+          expect(find('#team_custom_field_field .form-text')).not_to have_content('Length')
         end
       end
 
       context 'using active_record', skip_mongoid: true do
         it 'uses the db column size for the maximum length' do
           visit new_path(model_name: 'help_test')
-          expect(find('#help_test_name_field .help-block')).to have_content('Length up to 50.')
+          expect(find('#help_test_name_field .form-text')).to have_content('Length up to 50.')
         end
 
         it 'uses the :minimum setting from the validation' do
@@ -138,7 +138,7 @@ RSpec.describe 'Edit action', type: :request do
             validates_length_of :name, minimum: 1
           end
           visit new_path(model_name: 'help_test')
-          expect(find('#help_test_name_field .help-block')).to have_content('Length of 1-50.')
+          expect(find('#help_test_name_field .form-text')).to have_content('Length of 1-50.')
         end
 
         it 'uses the minimum of db column size or :maximum setting from the validation' do
@@ -146,7 +146,7 @@ RSpec.describe 'Edit action', type: :request do
             validates_length_of :name, maximum: 51
           end
           visit new_path(model_name: 'help_test')
-          expect(find('#help_test_name_field .help-block')).to have_content('Length up to 50.')
+          expect(find('#help_test_name_field .form-text')).to have_content('Length up to 50.')
         end
       end
 
@@ -199,7 +199,7 @@ RSpec.describe 'Edit action', type: :request do
           validates_length_of :name, is: 3
         end
         visit new_path(model_name: 'help_test')
-        expect(find('#help_test_name_field .help-block')).to have_content('Length of 3.')
+        expect(find('#help_test_name_field .form-text')).to have_content('Length of 3.')
       end
 
       it 'uses the :maximum setting from the validation' do
@@ -207,7 +207,7 @@ RSpec.describe 'Edit action', type: :request do
           validates_length_of :name, maximum: 49
         end
         visit new_path(model_name: 'help_test')
-        expect(find('#help_test_name_field .help-block')).to have_content('Length up to 49.')
+        expect(find('#help_test_name_field .form-text')).to have_content('Length up to 49.')
       end
 
       it 'uses the :minimum and :maximum from the validation' do
@@ -215,7 +215,7 @@ RSpec.describe 'Edit action', type: :request do
           validates_length_of :name, minimum: 1, maximum: 49
         end
         visit new_path(model_name: 'help_test')
-        expect(find('#help_test_name_field .help-block')).to have_content('Length of 1-49.')
+        expect(find('#help_test_name_field .form-text')).to have_content('Length of 1-49.')
       end
 
       it 'uses the range from the validation' do
@@ -223,7 +223,7 @@ RSpec.describe 'Edit action', type: :request do
           validates_length_of :name, in: 1..49
         end
         visit new_path(model_name: 'help_test')
-        expect(find('#help_test_name_field .help-block')).to have_content('Length of 1-49.')
+        expect(find('#help_test_name_field .form-text')).to have_content('Length of 1-49.')
       end
 
       it 'does not show help for hidden fields' do
@@ -233,7 +233,7 @@ RSpec.describe 'Edit action', type: :request do
           end
         end
         visit new_path(model_name: 'help_test')
-        expect(page).not_to have_css('.help-block')
+        expect(page).not_to have_css('.form-text')
       end
     end
 
@@ -289,7 +289,7 @@ RSpec.describe 'Edit action', type: :request do
     end
   end
 
-  describe "fields" do
+  describe 'fields' do
     it 'shows all by default' do
       visit new_path(model_name: 'team')
       is_expected.to have_selector('select#team_division_id')
@@ -510,9 +510,9 @@ RSpec.describe 'Edit action', type: :request do
         end
       end
       visit new_path(model_name: 'team')
-      expect(find('#team_manager_field .help-block')).to have_content('Required. Length up to 100. Additional help text for manager field.')
-      expect(find('#team_division_id_field .help-block')).to have_content('Required')
-      expect(find('#team_name_field .help-block')).not_to have_content('Additional help text')
+      expect(find('#team_manager_field .form-text')).to have_content('Required. Length up to 100. Additional help text for manager field.')
+      expect(find('#team_division_id_field .form-text')).to have_content('Required')
+      expect(find('#team_name_field .form-text')).not_to have_content('Additional help text')
     end
 
     it 'has option to override required status' do
@@ -530,9 +530,9 @@ RSpec.describe 'Edit action', type: :request do
         end
       end
       visit new_path(model_name: 'team')
-      expect(find('#team_manager_field .help-block')).to have_content('Optional')
-      expect(find('#team_division_id_field .help-block')).to have_content('Optional')
-      expect(find('#team_name_field .help-block')).to have_content(I18n.translate('admin.help.team.name'))
+      expect(find('#team_manager_field .form-text')).to have_content('Optional')
+      expect(find('#team_division_id_field .form-text')).to have_content('Optional')
+      expect(find('#team_name_field .form-text')).to have_content(I18n.translate('admin.help.team.name'))
     end
 
     describe 'inline_add' do
@@ -656,6 +656,14 @@ RSpec.describe 'Edit action', type: :request do
 
     it 'raises NotFound' do
       expect(page.driver.status_code).to eq(404)
+    end
+  end
+
+  context 'with a readonly object' do
+    let(:comment) { FactoryBot.create :comment, (CI_ORM == :mongoid ? {_type: 'ReadOnlyComment'} : {}) }
+
+    it 'raises ActionNotAllowed' do
+      expect { visit edit_path(model_name: 'read_only_comment', id: comment.id) }.to raise_error 'RailsAdmin::ActionNotAllowed'
     end
   end
 

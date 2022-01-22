@@ -24,7 +24,7 @@ RSpec.describe 'HistoryShow action', type: :request, active_record: true do
     expect(all('table#history tbody tr').count).to eq(20)
   end
 
-  it "supports pagination" do
+  it 'supports pagination' do
     visit history_show_path(model_name: 'paper_trail_test', id: paper_trail_test.id, page: 2)
     expect(all('table#history tbody tr').count).to eq(11)
   end

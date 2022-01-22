@@ -58,7 +58,7 @@ RSpec.describe 'Export action', type: :request do
                                    'Updated at [Draft]', 'Date [Draft]', 'Round [Draft]', 'Pick [Draft]', 'Overall [Draft]',
                                    'College [Draft]', 'Notes [Draft]', 'Id [Comments]', 'Content [Comments]', 'Created at [Comments]',
                                    'Updated at [Comments]']
-    expect(csv.flatten).to include(@player.name + ' exported')
+    expect(csv.flatten).to include("#{@player.name} exported")
     expect(csv.flatten).to include(@player.team.name)
     expect(csv.flatten).to include(@player.draft.college)
 
@@ -106,9 +106,28 @@ RSpec.describe 'Export action', type: :request do
     end
   end
 
-  it 'supports bulk export' do
-    visit index_path(model_name: 'player')
-    click_link 'Export found Players'
-    is_expected.to have_content('Select fields to export')
+  describe 'bulk export' do
+    it 'is supported' do
+      visit index_path(model_name: 'player')
+      click_link 'Export found Players'
+      is_expected.to have_content('Select fields to export')
+    end
+
+    describe 'with model scope' do
+      let!(:comments) { %w[something anything].map { |content| FactoryBot.create :comment_confirmed, content: content } }
+      before do
+        RailsAdmin.config do |config|
+          config.model Comment::Confirmed do
+            scope { Comment::Confirmed.unscoped }
+          end
+        end
+      end
+
+      it 'overrides default_scope' do
+        page.driver.post(export_path(model_name: 'comment~confirmed', schema: {only: ['content']}, csv: true, all: true, csv_options: {generator: {col_sep: ','}}, bulk_ids: comments.map(&:id)))
+        csv = CSV.parse page.driver.response.body
+        expect(csv.flatten).to match_array %w[Content something anything]
+      end
+    end
   end
 end

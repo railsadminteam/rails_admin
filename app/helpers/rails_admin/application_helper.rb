@@ -22,12 +22,13 @@ module RailsAdmin
     def edit_user_link
       return nil unless _current_user.respond_to?(:email)
       return nil unless abstract_model = RailsAdmin.config(_current_user.class).abstract_model
+
       content = [
-        RailsAdmin::Config.show_gravatar && _current_user.email.present? && image_tag("#{(request.ssl? ? 'https://secure' : 'http://www')}.gravatar.com/avatar/#{Digest::MD5.hexdigest _current_user.email}?s=30", alt: ''),
+        RailsAdmin::Config.show_gravatar && _current_user.email.present? && image_tag("#{request.ssl? ? 'https://secure' : 'http://www'}.gravatar.com/avatar/#{Digest::MD5.hexdigest _current_user.email}?s=30", alt: ''),
         content_tag(:span, _current_user.email),
       ].compact.join.html_safe
       if (edit_action = RailsAdmin::Config::Actions.find(:edit, controller: controller, abstract_model: abstract_model, object: _current_user)).try(:authorized?)
-        link_to content, rails_admin.url_for(action: edit_action.action_name, model_name: abstract_model.to_param, id: _current_user.id, controller: 'rails_admin/main')
+        link_to content, rails_admin.url_for(action: edit_action.action_name, model_name: abstract_model.to_param, id: _current_user.id, controller: 'rails_admin/main'), class: 'nav-link'
       else
         content_tag :span, content
       end
@@ -36,7 +37,11 @@ module RailsAdmin
     def logout_path
       if defined?(Devise)
         scope = Devise::Mapping.find_scope!(_current_user)
-        main_app.send("destroy_#{scope}_session_path") rescue false
+        begin
+          main_app.send("destroy_#{scope}_session_path")
+        rescue StandardError
+          false
+        end
       elsif main_app.respond_to?(:logout_path)
         main_app.logout_path
       end
@@ -44,6 +49,7 @@ module RailsAdmin
 
     def logout_method
       return [Devise.sign_out_via].flatten.first if defined?(Devise)
+
       :delete
     end
 
@@ -63,10 +69,11 @@ module RailsAdmin
     def main_navigation
       nodes_stack = RailsAdmin::Config.visible_models(controller: controller)
       node_model_names = nodes_stack.collect { |c| c.abstract_model.model_name }
+      parent_groups = nodes_stack.group_by { |n| n.parent&.to_s }
 
       nodes_stack.group_by(&:navigation_label).collect do |navigation_label, nodes|
         nodes = nodes.select { |n| n.parent.nil? || !n.parent.to_s.in?(node_model_names) }
-        li_stack = navigation nodes_stack, nodes
+        li_stack = navigation parent_groups, nodes
 
         label = navigation_label || t('admin.misc.navigation')
 
@@ -77,10 +84,10 @@ module RailsAdmin
     def root_navigation
       actions(:root).select(&:show_in_sidebar).group_by(&:sidebar_label).collect do |label, nodes|
         li_stack = nodes.map do |node|
-          url = rails_admin.url_for(action: node.action_name, controller: "rails_admin/main")
+          url = rails_admin.url_for(action: node.action_name, controller: 'rails_admin/main')
           nav_icon = node.link_icon ? %(<i class="#{node.link_icon}"></i>).html_safe : ''
           content_tag :li do
-            link_to nav_icon + " " + wording_for(:menu, node), url, class: "pjax"
+            link_to nav_icon + " " + wording_for(:menu, node), url, class: "nav-link"
           end
         end.join.html_safe
         label ||= t('admin.misc.root_navigation')
@@ -91,7 +98,7 @@ module RailsAdmin
 
     def static_navigation
       li_stack = RailsAdmin::Config.navigation_static_links.collect do |title, url|
-        content_tag(:li, link_to(title.to_s, url, target: '_blank', rel: 'noopener noreferrer'))
+        content_tag(:li, link_to(title.to_s, url, target: '_blank', rel: 'noopener noreferrer', class: 'nav-link'))
       end.join
 
       label = RailsAdmin::Config.navigation_static_label || t('admin.misc.navigation_static_label')
@@ -99,16 +106,18 @@ module RailsAdmin
       li_stack
     end
 
-    def navigation(nodes_stack, nodes, level = 0)
+    def navigation(parent_groups, nodes, level = 0)
       nodes.collect do |node|
-        model_param = node.abstract_model.to_param
+        abstract_model = node.abstract_model
+        model_param = abstract_model.to_param
         url         = rails_admin.url_for(action: :index, controller: 'rails_admin/main', model_name: model_param)
         level_class = " nav-level-#{level}" if level > 0
         nav_icon = node.navigation_icon ? %(<i class="#{node.navigation_icon}"></i>).html_safe : ''
         li = content_tag :li, data: {model: model_param} do
-          link_to nav_icon + node.label_plural, url, class: "pjax#{level_class}"
+          link_to nav_icon + node.label_plural, url, class: "nav-link#{level_class}"
         end
-        li + navigation(nodes_stack, nodes_stack.select { |n| n.parent.to_s == node.abstract_model.model_name }, level + 1)
+        child_nodes = parent_groups[abstract_model.model_name]
+        child_nodes ? li + navigation(parent_groups, child_nodes, level + 1) : li
       end.join.html_safe
     end
 
@@ -121,41 +130,39 @@ module RailsAdmin
         parent_actions.collect do |a|
           am = a.send(:eval, 'bindings[:abstract_model]')
           o = a.send(:eval, 'bindings[:object]')
-          content_tag(:li, class: current_action?(a, am, o) && 'active') do
-            crumb = begin
-              if current_action?(a, am, o)
+          content_tag(:li, class: ['breadcrumb-item', current_action?(a, am, o) && 'active']) do
+            if current_action?(a, am, o)
+              wording_for(:breadcrumb, a, am, o)
+            elsif a.http_methods.include?(:get)
+              link_to rails_admin.url_for(action: a.action_name, controller: 'rails_admin/main', model_name: am.try(:to_param), id: (o.try(:persisted?) && o.try(:id) || nil)) do
                 wording_for(:breadcrumb, a, am, o)
-              elsif a.http_methods.include?(:get)
-                link_to rails_admin.url_for(action: a.action_name, controller: 'rails_admin/main', model_name: am.try(:to_param), id: (o.try(:persisted?) && o.try(:id) || nil)), class: 'pjax' do
-                  wording_for(:breadcrumb, a, am, o)
-                end
-              else
-                content_tag(:span, wording_for(:breadcrumb, a, am, o))
               end
+            else
+              content_tag(:span, wording_for(:breadcrumb, a, am, o))
             end
-            crumb
           end
         end.reverse.join.html_safe
       end
     end
 
     # parent => :root, :collection, :member
-    def menu_for(parent, abstract_model = nil, object = nil, only_icon = false) # perf matters here (no action view trickery)
+    # perf matters here (no action view trickery)
+    def menu_for(parent, abstract_model = nil, object = nil, only_icon = false)
       actions = actions(parent, abstract_model, object).select { |a| a.http_methods.include?(:get) && a.show_in_menu }
       actions.collect do |action|
         wording = wording_for(:menu, action)
-        li_class = ['icon', "#{action.key}_#{parent}_link"].
-                   concat(current_action?(action) ? ['active'] : []).
+        li_class = ['nav-item', 'icon', "#{action.key}_#{parent}_link"].
                    concat(action.enabled? ? [] : ['disabled'])
         content_tag(:li, {class: li_class}.merge(only_icon ? {title: wording, rel: 'tooltip'} : {})) do
-          label = content_tag(:i, '', {class: action.link_icon}) + content_tag(:span, wording, (only_icon ? {style: 'display:none'} : {}))
+          label = content_tag(:i, '', {class: action.link_icon}) + ' ' + content_tag(:span, wording, (only_icon ? {style: 'display:none'} : {}))
           if action.enabled? || !only_icon
-            href = if action.enabled?
-                     rails_admin.url_for(action: action.action_name, controller: 'rails_admin/main', model_name: abstract_model.try(:to_param), id: (object.try(:persisted?) && object.try(:id) || nil))
-                   else
-                     'javascript:void(0)'
-                   end
-            content_tag(:a, label, {href: href}.merge(action.pjax? ? {class: ['pjax']} : {}))
+            href =
+              if action.enabled?
+                rails_admin.url_for(action: action.action_name, controller: 'rails_admin/main', model_name: abstract_model.try(:to_param), id: (object.try(:persisted?) && object.try(:id) || nil))
+              else
+                'javascript:void(0)'
+              end
+            content_tag(:a, label, {href: href, target: action.link_target, class: ['nav-link', current_action?(action) && 'active', !action.enabled? && 'disabled'].compact})
           else
             content_tag(:span, label)
           end
@@ -166,12 +173,13 @@ module RailsAdmin
     def bulk_menu(abstract_model = @abstract_model)
       actions = actions(:bulkable, abstract_model)
       return '' if actions.empty?
-      content_tag :li, class: 'dropdown', style: 'float:right' do
-        content_tag(:a, class: 'dropdown-toggle', data: {toggle: 'dropdown'}, href: '#') { t('admin.misc.bulk_menu_title').html_safe + ' ' + '<b class="caret"></b>'.html_safe } +
+
+      content_tag :li, class: 'nav-item dropdown dropdown-menu-end' do
+        content_tag(:a, class: 'nav-link dropdown-toggle', data: {'bs-toggle': 'dropdown'}, href: '#') { t('admin.misc.bulk_menu_title').html_safe + ' ' + '<b class="caret"></b>'.html_safe } +
           content_tag(:ul, class: 'dropdown-menu', style: 'left:auto; right:0;') do
             actions.collect do |action|
               content_tag :li do
-                link_to wording_for(:bulk_link, action, abstract_model), '#', class: 'bulk-link', data: {action: action.action_name}
+                link_to wording_for(:bulk_link, action, abstract_model), '#', class: 'dropdown-item bulk-link', data: {action: action.action_name}
               end
             end.join.html_safe
           end
@@ -185,6 +193,18 @@ module RailsAdmin
       when 'notice' then 'alert-info'
       else "alert-#{flash_key}"
       end
+    end
+
+    def handle_asset_dependency_error
+      yield
+    rescue LoadError => e
+      if /sassc/.match?(e.message)
+        e = e.exception <<-MSG.gsub(/^\s{10}/, '')
+          #{e.message}
+          RailsAdmin requires the gem sassc-rails, make sure to put `gem 'sassc-rails'` to Gemfile.
+        MSG
+      end
+      raise e
     end
   end
 end

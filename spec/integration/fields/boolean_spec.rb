@@ -19,14 +19,25 @@ RSpec.describe 'Boolean field', type: :request do
 
     it 'can be updated' do
       visit edit_path(model_name: 'field_test', id: field_test.id)
-      find('.boolean_type .icon-ok').sibling('input').click
+
+      # change the value to true and assert the values
+      find('.boolean_type label.success').click
       click_button 'Save and edit'
+      # validate that the success button rendered and is active
+      expect(page).to have_selector('.boolean_type input[value="1"][checked]')
+      # validate the value is true
       expect(field_test.reload.boolean_field).to be true
-      find('.boolean_type .icon-remove').sibling('input').click
+
+      # change the value to false and assert the values
+      find('.boolean_type label.danger').click
       click_button 'Save and edit'
+      expect(page).to have_selector('.boolean_type input[value="0"][checked]')
       expect(field_test.reload.boolean_field).to be false
-      find('.boolean_type .icon-minus').sibling('input').click
+
+      # change the value to nil and assert the values
+      find('.boolean_type label.default').click
       click_button 'Save and edit'
+      expect(page).to have_selector('.boolean_type input[value=""][checked]')
       expect(field_test.reload.boolean_field).to be nil
     end
   end

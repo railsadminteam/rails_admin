@@ -21,30 +21,31 @@ module RailsAdmin
       include RailsAdmin::Config::Sections
       include RailsAdmin::Config::Inspectable
 
-      attr_reader :abstract_model
+      attr_reader :abstract_model, :parent, :root
       attr_accessor :groups
-      attr_reader :parent, :root
 
-      NAMED_INSTANCE_VARIABLES = [:@parent, :@root].freeze
+      NAMED_INSTANCE_VARIABLES = %i[@parent @root].freeze
 
       def initialize(entity)
         @parent = nil
         @root = self
 
-        @abstract_model = begin
-          if entity.is_a?(RailsAdmin::AbstractModel)
+        @abstract_model =
+          case entity
+          when RailsAdmin::AbstractModel
             entity
-          elsif entity.is_a?(Class) || entity.is_a?(String) || entity.is_a?(Symbol)
+          when Class, String, Symbol
             RailsAdmin::AbstractModel.new(entity)
           else
             RailsAdmin::AbstractModel.new(entity.class)
           end
-        end
+
         @groups = [RailsAdmin::Config::Fields::Group.new(self, :default).tap { |g| g.label { I18n.translate('admin.form.basic_info') } }]
       end
 
       def excluded?
         return @excluded if defined?(@excluded)
+
         @excluded = !RailsAdmin::AbstractModel.all.collect(&:model_name).include?(abstract_model.try(:model_name))
       end
 
@@ -81,21 +82,28 @@ module RailsAdmin
       register_instance_option :parent do
         @parent_model ||= begin
           klass = abstract_model.model.superclass
-          klass = nil if klass.to_s.in?(%w(Object BasicObject ActiveRecord::Base))
+          klass = nil if klass.to_s.in?(%w[Object BasicObject ActiveRecord::Base])
           klass
         end
       end
 
       register_instance_option :navigation_label do
-        @navigation_label ||= begin
+        @navigation_label ||=
           if (parent_module = abstract_model.model.try(:module_parent) || abstract_model.model.try!(:parent)) != Object
             parent_module.to_s
           end
-        end
       end
 
       register_instance_option :navigation_icon do
         nil
+      end
+
+      register_instance_option :scope do
+        abstract_model.scoped
+      end
+
+      register_instance_option :last_created_at do
+        abstract_model.model.last.try(:created_at) if abstract_model.properties.detect { |c| c.name == :created_at }
       end
 
       # Act as a proxy for the base section configuration that actually

@@ -61,4 +61,24 @@ RSpec.describe RailsAdmin::Config::Fields::Association do
       end
     end
   end
+
+  describe '#value' do
+    context 'when using `system` as the association name' do
+      before do
+        class System < Tableless; end
+
+        class BelongsToSystem < Tableless
+          column :system_id, :integer
+          belongs_to :system
+        end
+      end
+      let(:record) { BelongsToSystem.new(system: System.new) }
+      let(:field) { RailsAdmin.config(BelongsToSystem).fields.detect { |f| f.name == :system } }
+      subject { field.with(object: record).value }
+
+      it 'does not break' do
+        expect(subject).to be_a_kind_of System
+      end
+    end
+  end
 end

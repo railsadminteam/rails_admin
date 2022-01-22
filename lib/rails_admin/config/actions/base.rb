@@ -36,7 +36,7 @@ module RailsAdmin
 
         # http://getbootstrap.com/2.3.2/base-css.html#icons
         register_instance_option :link_icon do
-          'icon-question-sign'
+          'fas fa-question'
         end
 
         # Should the action be visible
@@ -49,7 +49,7 @@ module RailsAdmin
             (only.nil? || [only].flatten.collect(&:to_s).include?(bindings[:abstract_model].to_s)) &&
             ![except].flatten.collect(&:to_s).include?(bindings[:abstract_model].to_s) &&
             !bindings[:abstract_model].config.excluded?
-          )
+          ) && (!respond_to?(:writable?) || writable?)
         end
 
         register_instance_option :authorized? do
@@ -73,9 +73,9 @@ module RailsAdmin
           false
         end
 
-        # Render via pjax?
-        register_instance_option :pjax? do
-          true
+        # Target window [_self, _blank]
+        register_instance_option :link_target do
+          nil
         end
 
         # This block is evaluated in the context of the controller when action is called

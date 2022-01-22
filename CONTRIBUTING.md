@@ -5,21 +5,21 @@ improve this project.
 
 [free-sw]: http://www.fsf.org/licensing/essays/free-sw.html
 
-Here are some ways *you* can contribute:
+Here are some ways _you_ can contribute:
 
-* by using alpha, beta, and prerelease versions
-* by triaging bug reports
-* by writing or editing documentation
-* by writing specifications
-* by writing code (**no patch is too small**: fix typos, add comments, clean up
+- by using alpha, beta, and prerelease versions
+- by triaging bug reports
+- by writing or editing documentation
+- by writing specifications
+- by writing code (**no patch is too small**: fix typos, add comments, clean up
   inconsistent whitespace)
-* by refactoring code
-* by fixing [issues][]
-* by reviewing patches
-* by suggesting new features
-* [financially][gittip]
+- by refactoring code
+- by fixing [issues][]
+- by reviewing patches
+- by suggesting new features
+- [financially][gittip]
 
-[issues]: https://github.com/sferik/rails_admin/issues
+[issues]: https://github.com/railsadminteam/rails_admin/issues
 [gittip]: https://www.gittip.com/sferik/
 
 ## Development
@@ -36,14 +36,14 @@ Example on macOS using Homebrew:
 
 ### Tests run against multiple versions of Rails
 
-In CI, we use [appraisal] to run tests against multiple versions of Rails.
-The [gemfiles/ directory] contains the Gemfiles used to create the CI build
-matrix. See [the Travis CI configuration] for more details on what Ruby versions
+In CI, we use [appraisal] to run tests against multiple versions of Rails. The
+[gemfiles/ directory] contains the Gemfiles used to create the CI build matrix.
+See the [GitHub Actions configuration] for more details on what Ruby versions
 run what Rails versions.
 
 [appraisal]: https://github.com/thoughtbot/appraisal
 [gemfiles/ directory]: ./gemfiles
-[the Travis CI configuration]: ./.travis.yml
+[github actions configuration]: ./.github/workflows/test.yml
 
 ## Getting Help
 
@@ -59,13 +59,14 @@ rails_admin, please [open an issue][issues], but check to make sure it hasn't
 already been submitted. When submitting a bug report, please include a
 [Gist][] that includes a stack trace and any details that may be
 necessary to reproduce the bug, including your gem version, Ruby
-version, and operating system.  Ideally, a bug report should include a
+version, and operating system. Ideally, a bug report should include a
 pull request with failing specs.
 
 [gist]: https://gist.github.com/
 [list]: http://groups.google.com/group/rails_admin
 
 ## Submitting a Pull Request
+
 1. [Fork the repository.][fork]
 2. Create a branch.
 3. Add specs for your unimplemented feature or bug fix.

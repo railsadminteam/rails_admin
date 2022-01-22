@@ -8,9 +8,9 @@ module RailsAdmin
 
           register_instance_option :labels do
             {
-              true => %(<span class="icon icon-ok"></span>),
-              false => %(<span class="icon icon-remove"></span>),
-              nil => %(<span class="icon icon-minus"></span>),
+              true => %(<span class="fas fa-check"></span>),
+              false => %(<span class="fas fa-times"></span>),
+              nil => %(<span class="fas fa-minus"></span>),
             }
           end
 

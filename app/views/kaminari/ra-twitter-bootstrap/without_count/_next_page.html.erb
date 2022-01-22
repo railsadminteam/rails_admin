@@ -1,0 +1,9 @@
+<% if current_page.last? %>
+  <li class="page-item next disabled">
+    <%= link_to raw(t 'admin.pagination.next'), '#', class: 'page-link' %>
+  </li>
+<% else %>
+  <li class="page-item next">
+    <%= link_to raw(t 'admin.pagination.next'), url, class: 'page-link' %>
+  </li>
+<% end %>

@@ -13,6 +13,9 @@ RSpec.describe 'RailsAdmin::FormBuilder', type: :helper do
       (@object = Player.new).save
       @builder = RailsAdmin::FormBuilder.new(:player, @object, helper, {})
       allow(@builder).to receive(:field_for).and_return('field')
+      action = double
+      allow(action).to receive(:enabled?).and_return true
+      helper.instance_variable_set :@action, action
     end
 
     it 'does not add additional error div from default ActionView::Base.field_error_proc' do
@@ -21,7 +24,7 @@ RSpec.describe 'RailsAdmin::FormBuilder', type: :helper do
     end
 
     it 'hidden fields should be wrapper' do
-      expect(@builder.generate(action: :create, model_config: RailsAdmin.config(Player))).to match('form-group control-group hidden_type number_field')
+      expect(@builder.generate(action: :create, model_config: RailsAdmin.config(Player))).to match('control-group row mb-3 hidden_type number_field')
     end
   end
 

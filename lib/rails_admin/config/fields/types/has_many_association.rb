@@ -25,6 +25,10 @@ module RailsAdmin
           def errors
             bindings[:object].errors[name]
           end
+
+          def associated_prepopulate_params
+            {associated_model_config.abstract_model.param_key => {association.foreign_key => bindings[:object].try(:id)}}
+          end
         end
       end
     end

@@ -4,7 +4,7 @@ RSpec.describe 'Nested many widget', type: :request, js: true do
   subject { page }
 
   let(:field_test) { FactoryBot.create :field_test }
-  let(:nested_field_tests) { %w(1 2).map { |i| NestedFieldTest.create! title: "title #{i}", field_test: field_test } }
+  let(:nested_field_tests) { %w[1 2].map { |i| NestedFieldTest.create! title: "title #{i}", field_test: field_test } }
   before do
     RailsAdmin.config(FieldTest) do
       field :nested_field_tests
@@ -18,7 +18,7 @@ RSpec.describe 'Nested many widget', type: :request, js: true do
     expect(page).to have_selector('.fields.tab-pane.active', visible: true)
 
     # trigger click via JS, workaround for instability in CI
-    execute_script %($('button[name="_save"]').trigger('click');)
+    execute_script %(document.querySelector('button[name="_save"]').click())
     is_expected.to have_content('Field test successfully updated')
 
     expect(field_test.nested_field_tests.length).to eq(1)
@@ -32,7 +32,7 @@ RSpec.describe 'Nested many widget', type: :request, js: true do
     edited_id = find('#field_test_nested_field_tests_attributes_0_id', visible: false).value
 
     # trigger click via JS, workaround for instability in CI
-    execute_script %($('button[name="_save"]').trigger('click');)
+    execute_script %(document.querySelector('button[name="_save"]').click())
     is_expected.to have_content('Field test successfully updated')
 
     expect(field_test.nested_field_tests.find(edited_id).title).to eq('nested field test title 1 edited')
@@ -45,7 +45,7 @@ RSpec.describe 'Nested many widget', type: :request, js: true do
     find('#field_test_nested_field_tests_attributes_0__destroy', visible: false).set('true')
 
     # trigger click via JS, workaround for instability in CI
-    execute_script %($('button[name="_save"]').trigger('click');)
+    execute_script %(document.querySelector('button[name="_save"]').click())
     is_expected.to have_content('Field test successfully updated')
 
     expect(field_test.reload.nested_field_tests.map(&:id)).to eq [nested_field_tests[1].id]

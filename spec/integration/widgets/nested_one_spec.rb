@@ -17,7 +17,7 @@ RSpec.describe 'Nested one widget', type: :request, js: true do
     fill_in 'field_test_comment_attributes_content', with: 'nested comment content'
 
     # trigger click via JS, workaround for instability in CI
-    execute_script %($('button[name="_save"]').trigger('click');)
+    execute_script %(document.querySelector('button[name="_save"]').click())
     is_expected.to have_content('Field test successfully updated')
 
     expect(field_test.reload.comment.content.strip).to eq('nested comment content')
@@ -31,7 +31,7 @@ RSpec.describe 'Nested one widget', type: :request, js: true do
     find('.comment_field .remove_nested_fields', visible: false).click
 
     # trigger click via JS, workaround for instability in CI
-    execute_script %($('button[name="_save"]').trigger('click');)
+    execute_script %(document.querySelector('button[name="_save"]').click())
     is_expected.to have_content('Field test successfully updated')
 
     expect(field_test.reload.comment).to be nil
@@ -77,7 +77,7 @@ RSpec.describe 'Nested one widget', type: :request, js: true do
       find('.comment_field .remove_nested_fields', visible: false).click
 
       # trigger click via JS, workaround for instability in CI
-      execute_script %($('button[name="_save"]').trigger('click');)
+      execute_script %(document.querySelector('button[name="_save"]').click())
       is_expected.to have_content('Field test successfully updated')
 
       expect(field_test.reload.comment).to be nil

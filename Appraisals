@@ -1,6 +1,5 @@
-appraise "rails-6.0" do
+appraise 'rails-6.0' do
   gem 'rails', '~> 6.0.0'
-  gem 'haml'
   gem 'sassc-rails', '~> 2.1'
   gem 'devise', '~> 4.7'
 
@@ -32,9 +31,8 @@ appraise "rails-6.0" do
   end
 end
 
-appraise "rails-6.1" do
+appraise 'rails-6.1' do
   gem 'rails', '~> 6.1.0'
-  gem 'haml'
   gem 'sassc-rails', '~> 2.1'
   gem 'devise', '~> 4.7'
 
@@ -66,11 +64,10 @@ appraise "rails-6.1" do
   end
 end
 
-appraise "rails-7.0" do
-  gem 'rails', '~> 7.0.0.alpha2'
-  gem 'haml'
+appraise 'rails-7.0' do
+  gem 'rails', '~> 7.0.0'
   gem 'sassc-rails', '~> 2.1'
-  gem 'devise', '~> 4.7', github: 'strobilomyces/devise', branch: 'patch-1'
+  gem 'devise', '~> 4.8'
 
   group :test do
     gem 'cancancan', '~> 3.2'

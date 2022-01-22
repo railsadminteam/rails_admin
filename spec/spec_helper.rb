@@ -1,7 +1,7 @@
 # Configure Rails Envinronment
 ENV['RAILS_ENV'] = 'test'
 CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym
-CI_TARGET_ORMS = [:active_record, :mongoid].freeze
+CI_TARGET_ORMS = %i[active_record mongoid].freeze
 PK_COLUMN = {active_record: :id, mongoid: :_id}[CI_ORM]
 
 if RUBY_ENGINE == 'jruby'
@@ -26,7 +26,7 @@ SimpleCov::Formatter::LcovFormatter.config do |c|
   c.single_report_path = 'coverage/lcov.info'
 end
 
-require File.expand_path('../dummy_app/config/environment', __FILE__)
+require File.expand_path('dummy_app/config/environment', __dir__)
 
 require 'rspec/rails'
 require 'factory_bot'
@@ -36,8 +36,8 @@ require "database_cleaner/#{CI_ORM}"
 require "orm/#{CI_ORM}"
 require 'paper_trail/frameworks/rspec' if defined?(PaperTrail)
 
-Dir[File.expand_path('../support/**/*.rb', __FILE__),
-    File.expand_path('../shared_examples/**/*.rb', __FILE__)].each { |f| require f }
+Dir[File.expand_path('support/**/*.rb', __dir__),
+    File.expand_path('shared_examples/**/*.rb', __dir__)].sort.each { |f| require f }
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
@@ -90,14 +90,18 @@ RSpec.configure do |config|
   config.verbose_retry = true
   config.display_try_failure_messages = true
   config.around :each, :js do |example|
-    example.run_with_retry retry: 2
+    example.run_with_retry retry: (ENV['CI'] && RUBY_ENGINE == 'jruby' ? 3 : 2)
   end
   config.retry_callback = proc do |example|
     Capybara.reset! if example.metadata[:js]
   end
 
+  config.before(:all) do
+    Webpacker.instance.compiler.compile if defined?(Webpacker)
+  end
+
   config.before do |example|
-    DatabaseCleaner.strategy = (CI_ORM == :mongoid || example.metadata[:js]) ? :deletion : :transaction
+    DatabaseCleaner.strategy = CI_ORM == :mongoid || example.metadata[:js] ? :deletion : :transaction
 
     DatabaseCleaner.start
     RailsAdmin::Config.reset

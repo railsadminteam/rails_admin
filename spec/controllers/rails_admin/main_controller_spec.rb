@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 require 'spec_helper'
 
 RSpec.describe RailsAdmin::MainController, type: :controller do
@@ -10,7 +11,7 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
 
   describe '#check_for_cancel' do
     before do
-      allow(controller).to receive(:back_or_index) { raise(StandardError.new('redirected back')) }
+      allow(controller).to receive(:back_or_index) { raise StandardError.new('redirected back') }
     end
 
     it 'redirects to back if params[:bulk_ids] is nil when params[:bulk_action] is present' do
@@ -182,6 +183,20 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
     end
   end
 
+  describe '#action_missing' do
+    it 'raises error when action is not found' do
+      expect(RailsAdmin::Config::Actions).to receive(:find).and_return(nil)
+      expect { get :index, model_name: 'player' }.to raise_error AbstractController::ActionNotFound
+    end
+  end
+
+  describe '#respond_to_missing?' do
+    it 'returns the result based on existence of action' do
+      expect(controller.send(:respond_to_missing?, :index, false)).to be true
+      expect(controller.send(:respond_to_missing?, :invalid_action, false)).to be false
+    end
+  end
+
   describe '#get_collection' do
     let(:team) { FactoryBot.create :team }
     let!(:player) { FactoryBot.create :player, team: team }
@@ -217,7 +232,7 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
       @user = FactoryBot.create :managing_user
       @team = FactoryBot.create :managed_team, user: @user
       get :index, model_name: 'managing_user', source_object_id: @team.id, source_abstract_model: 'managing_user', associated_collection: 'teams', current_action: :create, compact: true, format: :json
-      expect(response.body).to match(/\"id\":\"#{@user.id}\"/)
+      expect(response.body).to match(/"id":"#{@user.id}"/)
     end
 
     context 'as JSON' do
@@ -328,15 +343,21 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
         field :paperclip_asset do
           delete_method :delete_paperclip_asset
         end
-        field :active_storage_asset do
-          delete_method :remove_active_storage_asset
-        end if defined?(ActiveStorage)
-        field :active_storage_assets do
-          delete_method :remove_active_storage_assets
-        end if defined?(ActiveStorage)
-        field :shrine_asset do
-          delete_method :remove_shrine_asset
-        end if defined?(Shrine)
+        if defined?(ActiveStorage)
+          field :active_storage_asset do
+            delete_method :remove_active_storage_asset
+          end
+        end
+        if defined?(ActiveStorage)
+          field :active_storage_assets do
+            delete_method :remove_active_storage_assets
+          end
+        end
+        if defined?(Shrine)
+          field :shrine_asset do
+            delete_method :remove_shrine_asset
+          end
+        end
       end
       controller.params = HashWithIndifferentAccess.new(
         'field_test' => {
