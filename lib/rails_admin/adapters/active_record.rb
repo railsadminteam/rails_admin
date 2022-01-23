@@ -176,27 +176,34 @@ module RailsAdmin
           @scope = scope
         end
 
-        def add(field, value, operator)
+        def add(field, value, operator, separator = 'OR')
+          field_statements = []
           field.searchable_columns.flatten.each do |column_infos|
             statement, value1, value2 = StatementBuilder.new(column_infos[:column], column_infos[:type], value, operator, @scope.connection.adapter_name).to_statement
-            @statements << statement if statement.present?
+            field_statements << statement if statement.present?
             @values << value1 unless value1.nil?
             @values << value2 unless value2.nil?
             table, column = column_infos[:column].split('.')
             @tables.push(table) if column
           end
+          return unless field_statements.any?
+
+          statement =
+            if field_statements.length > 1
+              "(#{field_statements.join(' OR ')})"
+            else
+              field_statements[0]
+            end
+          @statements <<
+            if @statements.any?
+              " #{separator} #{statement}"
+            else
+              statement
+            end
         end
 
         def build
-          scope = @scope.where(@statements.join(' OR '), *@values)
-          scope = scope.references(*@tables.uniq) if @tables.any?
-          scope
-        end
-
-        def build_with_separator(initial_scope, separator)
           scope = @scope.where(@statements.join, *@values)
-          initial_scope = initial_scope.references(*@tables.uniq) if @tables.any?
-          scope = @scope.or(initial_scope.where(@statements.join, *@values)) if separator == 'or'
           scope = scope.references(*@tables.uniq) if @tables.any?
           scope
         end
@@ -219,18 +226,15 @@ module RailsAdmin
       # filters example => {"string_field"=>{"0055"=>{"o"=>"like", "v"=>"test_value"}}, ...}
       # "0055" is the filter index, no use here. o is the operator, v the value
       def filter_scope(scope, filters, fields = config.list.fields.select(&:filterable?))
-        initial_scope = scope
         filters.each_pair do |field_name, filters_dump|
           field = fields.detect { |f| f.name.to_s == field_name }
+          wb = WhereBuilder.new(scope)
           filters_dump.each_value do |filter_dump|
-            wb = WhereBuilder.new(scope)
-
             value = parse_field_value(field, filter_dump[:v])
 
-            wb.add(field, value, (filter_dump[:o] || RailsAdmin::Config.default_search_operator))
-            scope = wb.build_with_separator(initial_scope, filter_dump[:s]) if filter_dump[:s] == 'or'
-            scope = wb.build unless filter_dump[:s] == 'or'
+            wb.add(field, value, (filter_dump[:o] || RailsAdmin::Config.default_search_operator), filter_dump[:s] == 'or' ? 'OR' : 'AND')
           end
+          scope = wb.build
         end
         scope
       end

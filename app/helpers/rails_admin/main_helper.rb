@@ -52,6 +52,7 @@ module RailsAdmin
           field.filter_options.merge(
             index: duplet[0],
             operator: filter_hash['o'] || field.default_filter_operator,
+            separator: filter_hash['s'],
             value: filter_hash['v'],
           )
         end

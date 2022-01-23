@@ -18,6 +18,8 @@ en:
       is_exactly: Is exactly
       starts_with: Starts with
       ends_with: Ends with
+      and: And
+      or: Or
       too_many_objects: "Too many objects, use search box above"
       no_objects: "No objects found"
       clear: Clear

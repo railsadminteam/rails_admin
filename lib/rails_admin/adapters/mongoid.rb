@@ -150,31 +150,34 @@ module RailsAdmin
       # filters example => {"string_field"=>{"0055"=>{"o"=>"like", "v"=>"test_value"}}, ...}
       # "0055" is the filter index, no use here. o is the operator, v the value
       def filter_scope(scope, filters, fields = config.list.fields.select(&:filterable?))
-        initial_scope = scope
         filters.each_pair do |field_name, filters_dump|
           field = fields.detect { |f| f.name.to_s == field_name }
+          statements = []
+          statement_groups = [] # To group AND conditions first
 
           filters_dump.each_value do |filter_dump|
             next unless field
 
-            statements = []
             value = parse_field_value(field, filter_dump[:v])
             conditions_per_collection = make_field_conditions(field, value, (filter_dump[:o] || 'default'))
             field_statements = make_condition_for_current_collection(field, conditions_per_collection)
             if field_statements.many?
-              statements << {'$or' => field_statements}
+              current_statement = {'$or' => field_statements}
             elsif field_statements.any?
-              statements << field_statements.first
+              current_statement = field_statements.first
             end
-            separator = '$and'
-            is_separator_or_input = filter_dump[:s].present? && filter_dump[:s] == 'or'
-            scope =
-              if is_separator_or_input
-                scope.or(initial_scope.where(statements.any? ? {separator => statements} : {}))
-              else
-                scope.where(statements.any? ? {separator => statements} : {})
-              end
+            if filter_dump[:s] == 'or'
+              statement_groups << statements
+              statements = [current_statement]
+            else
+              statements << current_statement
+            end
           end
+          if statement_groups.any?
+            statement_groups << statements
+            statements = [{'$or' => statement_groups.map { |group| {'$and' => group} }}]
+          end
+          scope = scope.and(*statements) if statements.any?
         end
         scope
       end

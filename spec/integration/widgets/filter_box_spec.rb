@@ -217,4 +217,45 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
       expect(page).to have_css '[name^="f[draft]"][name$="[v]"]'
     end
   end
+
+  describe 'for string field' do
+    let!(:players) { %w[aaa aab bbb].each { |name| FactoryBot.create :player, name: name } }
+    before do
+      RailsAdmin.config Player do
+        field :name
+        field :notes
+      end
+    end
+
+    it 'shows separators which can be used for combination method of and/or' do
+      visit index_path(model_name: 'player')
+      click_link 'Add filter'
+      click_link 'Name'
+      is_expected.not_to have_css('[name^="f[name]"][name$="[s]"]')
+      click_link 'Add filter'
+      click_link 'Name'
+      is_expected.to have_css('[name^="f[name]"][name$="[s]"]')
+      all('[name^="f[name]"][name$="[o]"] option[value="like"]').each(&:select_option)
+      all('[name^="f[name]"][name$="[v]"]').zip(%w[aa ab]).each { |elem, value| elem.set(value) }
+      click_button 'Refresh'
+      find('[name^="f[name]"][name$="[s]"] option[value="and"]').select_option
+      expect(all('td.name_field').map(&:text)).to match_array %w[aaa aab]
+      all('[name^="f[name]"][name$="[v]"]').zip(%w[aa ab]).each { |elem, value| elem.set(value) }
+      click_button 'Refresh'
+      expect(all('td.name_field').map(&:text)).to match_array %w[aab]
+      expect(find('[name^="f[name]"][name$="[s]"]').value).to eq 'and'
+    end
+
+    it 'does not add separator when adding a different field' do
+      visit index_path(model_name: 'player')
+      click_link 'Add filter'
+      click_link 'Name'
+      click_link 'Add filter'
+      click_link 'Name'
+      is_expected.to have_css('[name^="f[name]"][name$="[s]"]')
+      click_link 'Add filter'
+      click_link 'Notes'
+      is_expected.not_to have_css('[name^="f[notes]"][name$="[s]"]')
+    end
+  end
 end

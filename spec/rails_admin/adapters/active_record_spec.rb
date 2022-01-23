@@ -290,6 +290,20 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
         expect(abstract_model.all(filters: {'name' => {'0000' => {v: 'somewhere'}}})).to match_array @teams[2]
       end
     end
+
+    describe 'filter separators(and/or)' do
+      it 'makes correct query' do
+        expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'some'}, '0001' => {o: 'like', s: 'or', v: 'no'}}})).to eq(@teams[2..3])
+      end
+
+      it 'does not affect filters for other fields' do
+        expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'some'}, '0001' => {o: 'like', s: 'or', v: 'no'}}, 'division' => {'0001' => {o: 'like', v: 'bar'}}}, include: :division)).to eq(@teams[2..2])
+      end
+
+      it 'can handle (a AND b OR c AND d) expression with putting priority on AND' do
+        expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'some'}, '0001' => {o: 'like', s: 'and', v: 'foos'}, '0002' => {o: 'like', s: 'or', v: 'nowhere'}, '0003' => {o: 'like', s: 'and', v: 'nobody'}}})).to eq(@teams[2..2])
+      end
+    end
   end
 
   describe '#build_statement' do

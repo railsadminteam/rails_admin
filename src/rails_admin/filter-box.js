@@ -113,9 +113,11 @@ import flatpickr from "flatpickr";
         case "text":
         case "belongs_to_association":
         case "has_one_association":
-          if ($("#filters_box > div").length > 0) {
+          if (
+            $("#filters_box").children(`div[id^="${field_name}-"]`).length > 0
+          ) {
             separator_control = $(
-              '<select class="input-sm form-control"></select>'
+              '<select class="separator form-control form-control-sm"></select>'
             )
               .prop("name", separator_filter_name)
               .append(
