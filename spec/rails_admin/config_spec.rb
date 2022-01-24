@@ -283,6 +283,11 @@ RSpec.describe RailsAdmin::Config do
 
   describe '.parent_controller=' do
     context 'if RailsAdmin::ApplicationController is already loaded' do
+      before do
+        # preload cotrollers (e.g. when config.eager_load = true)
+        RailsAdmin::MainController
+      end
+
       after do
         RailsAdmin::Config.reset
         RailsAdmin.send(:remove_const, :ApplicationController)
@@ -292,6 +297,7 @@ RSpec.describe RailsAdmin::Config do
       it 'can be changed' do
         RailsAdmin.config.parent_controller = 'ApplicationController'
         expect(RailsAdmin::ApplicationController.superclass).to eq ApplicationController
+        expect(RailsAdmin::MainController.superclass.superclass).to eq ApplicationController
       end
     end
   end
