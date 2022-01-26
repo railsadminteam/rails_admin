@@ -3,7 +3,7 @@ You can include/exclude models totally. They won't appear in RailsAdmin at all.
 By default, RailsAdmin automatically discovers all the models in the system and adds them to its list of models to
 be accessible through RailsAdmin. 
 
-**Blacklist Approach**
+**Disallowlist Approach**
 
 The `excluded_models` configuration above permits the blacklisting of individual model classes.
 
@@ -11,7 +11,7 @@ The `excluded_models` configuration above permits the blacklisting of individual
 config.excluded_models << "ClassName"
 ```
 
-**Whitelist Approach**
+**Allowlist Approach**
 
 If you prefer a whitelist approach, then you can use the `included_models` configuration option instead:
 
