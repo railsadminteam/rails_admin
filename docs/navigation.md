@@ -5,7 +5,7 @@ be accessible through RailsAdmin.
 
 **Disallowlist Approach**
 
-The `excluded_models` configuration above permits the blacklisting of individual model classes.
+The `excluded_models` configuration above permits the disallowlisting of individual model classes.
 
 ```ruby
 config.excluded_models << "ClassName"
@@ -13,14 +13,14 @@ config.excluded_models << "ClassName"
 
 **Allowlist Approach**
 
-If you prefer a whitelist approach, then you can use the `included_models` configuration option instead:
+If you prefer a allowlist approach, then you can use the `included_models` configuration option instead:
 
 ```ruby
 config.included_models = ["Class1", "Class2", "Class3"]
 ```
 Only the models explicitly listed will be put under RailsAdmin access, and the auto-discovery of models is skipped.
 
-The blacklist is effective on top of that, still, so that if you also have:
+The disallowlist is effective on top of that, still, so that if you also have:
 
 ```ruby
 config.excluded_models = ["Class1"]
@@ -28,7 +28,7 @@ config.excluded_models = ["Class1"]
 
 then only `Class2` and `Class3` would be made available to RailsAdmin.
 
-The whitelist approach may be useful if RailsAdmin is used only for a part of the application and you want to make
+The allowlist approach may be useful if RailsAdmin is used only for a part of the application and you want to make
 sure that new models are not automatically added to RailsAdmin, e.g. because of security concerns.
 
 
