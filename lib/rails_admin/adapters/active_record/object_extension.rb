@@ -13,7 +13,7 @@ module RailsAdmin
                 end
 
                 def #{association.name}_id=(item_id)
-                  self.#{association.name} = #{association.klass}.find_by_id(item_id)
+                  self.#{association.name} = (#{association.klass}.find(item_id) rescue nil)
                 end
               RUBY
             end

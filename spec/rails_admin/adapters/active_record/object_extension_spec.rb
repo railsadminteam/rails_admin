@@ -56,5 +56,16 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord::ObjectExtension', active_rec
         expect(user.reload.team).to eq team
       end
     end
+
+    context 'when associated class has custom primary key' do
+      let(:league) { FactoryBot.build(:league).extend(RailsAdmin::Adapters::ActiveRecord::ObjectExtension) }
+      let(:division) { FactoryBot.create :division }
+
+      it 'does not break' do
+        league.division_id = division.id
+        league.save!
+        expect(league.reload.division).to eq division
+      end
+    end
   end
 end
