@@ -101,7 +101,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
     it '#destroy destroys multiple items' do
       abstract_model.destroy(@players[0..1])
-      expect(Player.all).to eq(@players[2..])
+      expect(Player.all).to match_array(@players[2..])
     end
 
     it '#where returns filtered results' do

@@ -24,6 +24,7 @@ RSpec.describe 'MultipleCarrierwave field', type: :request, active_record: true 
       visit edit_path(model_name: 'field_test', id: field_test.id)
       attach_file 'Carrierwave assets', [file_path('test.gif')]
       click_button 'Save'
+      is_expected.to have_content 'Field test successfully updated'
       field_test.reload
       expect(field_test.carrierwave_assets.map { |image| File.basename(image.url) }).to eq ['test.jpg', 'test.png', 'test.gif']
     end
@@ -32,6 +33,7 @@ RSpec.describe 'MultipleCarrierwave field', type: :request, active_record: true 
       visit edit_path(model_name: 'field_test', id: field_test.id)
       click_link "Delete 'Carrierwave assets' #1"
       click_button 'Save'
+      is_expected.to have_content 'Field test successfully updated'
       field_test.reload
       expect(field_test.carrierwave_assets.map { |image| File.basename(image.url) }).to eq ['test.png']
     end
@@ -42,6 +44,7 @@ RSpec.describe 'MultipleCarrierwave field', type: :request, active_record: true 
       page.execute_script File.read(File.expand_path('../../support/jquery.simulate.drag-sortable.js', __dir__))
       page.execute_script %{$(".ui-sortable-handle:first-child").simulateDragSortable({move: 1});}
       click_button 'Save'
+      is_expected.to have_content 'Field test successfully updated'
       field_test.reload
       expect(field_test.carrierwave_assets.map { |image| File.basename(image.url) }).to eq ['test.png', 'test.jpg']
     end
