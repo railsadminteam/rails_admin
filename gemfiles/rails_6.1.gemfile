@@ -8,6 +8,7 @@ gem "rails", "~> 6.1.0"
 gem "webpacker", require: false
 gem "webrick", "~> 1.7"
 gem "sassc-rails", "~> 2.1"
+gem "turbo-rails", platform: :jruby, github: "mshibuya/turbo-rails", branch: "fix/breaking-in-non-zeitwerk-env"
 
 group :active_record do
   gem "paper_trail", ">= 12.0"
