@@ -14,6 +14,7 @@ RSpec.describe 'MultipleCarrierwave field', type: :request, active_record: true 
     visit new_path(model_name: 'field_test')
     attach_file 'Carrierwave assets', [file_path('test.jpg'), file_path('test.png')]
     click_button 'Save'
+    is_expected.to have_content 'Field test successfully created'
     expect(FieldTest.first.carrierwave_assets.map { |image| File.basename(image.url) }).to match_array ['test.jpg', 'test.png']
   end
 
