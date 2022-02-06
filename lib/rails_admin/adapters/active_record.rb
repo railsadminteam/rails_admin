@@ -80,7 +80,11 @@ module RailsAdmin
         when 'postgresql'
           ::ActiveRecord::Base.connection.select_one("SELECT ''::text AS str;").values.first.encoding
         when 'mysql2'
-          ::ActiveRecord::Base.connection.raw_connection.encoding
+          if RUBY_ENGINE == 'jruby'
+            ::ActiveRecord::Base.connection.select_one("SELECT '' AS str;").values.first.encoding
+          else
+            ::ActiveRecord::Base.connection.raw_connection.encoding
+          end
         when 'oracle_enhanced'
           ::ActiveRecord::Base.connection.select_one('SELECT dummy FROM DUAL').values.first.encoding
         else

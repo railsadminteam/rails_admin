@@ -52,7 +52,7 @@ jobs:
           - ruby: jruby
             gemfile: gemfiles/rails_6.1.gemfile
             orm: active_record
-            adapter: sqlite3
+            adapter: mysql2
             asset: sprockets
           - ruby: jruby
             gemfile: gemfiles/rails_6.1.gemfile

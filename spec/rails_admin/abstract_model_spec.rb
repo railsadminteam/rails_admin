@@ -112,7 +112,6 @@ RSpec.describe RailsAdmin::AbstractModel do
       end
 
       it 'lists elements within outbound limits' do
-        pending('Due to the JRuby SQLite3 datetime boundary issue') if RUBY_ENGINE == 'jruby' && CI_ORM == :active_record
         expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', '2012-01-02T00:00:00', '2012-01-03T23:59:59'], o: 'between'}}}).count).to eq(2)
         expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', '2012-01-02T00:00:00', '2012-01-03T12:00:00'], o: 'between'}}}).count).to eq(1)
         expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', '2012-01-03T12:00:00', ''], o: 'between'}}}).count).to eq(2)
