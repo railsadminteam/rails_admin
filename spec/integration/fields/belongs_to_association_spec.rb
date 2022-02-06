@@ -22,9 +22,8 @@ RSpec.describe 'BelongsToAssociation field', type: :request do
 
   describe 'on show' do
     before do
-      @player = FactoryBot.create :player
       @team   = FactoryBot.create :team
-      @player.update(team_id: @team.id)
+      @player = FactoryBot.create :player, team_id: @team.id
       visit show_path(model_name: 'player', id: @player.id)
     end
 

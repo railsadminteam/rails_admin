@@ -21,7 +21,7 @@ RSpec.describe 'HasOneAssociation field', type: :request do
 
     it 'creates an object with correct associations' do
       post new_path(model_name: 'player', player: {name: 'Jackie Robinson', number: 42, position: 'Second baseman', draft_id: @draft.id})
-      @player = RailsAdmin::AbstractModel.new('Player').all.to_a.detect { |player| player.name == 'Jackie Robinson' }
+      @player = Player.where(name: 'Jackie Robinson').first
       @draft.reload
       expect(@player.draft).to eq(@draft)
     end
