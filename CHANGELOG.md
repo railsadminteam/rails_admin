@@ -2,7 +2,36 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0.beta...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0.rc...HEAD)
+
+## [3.0.0.rc](https://github.com/railsadminteam/rails_admin/tree/v3.0.0.rc) - 2022-02-06
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0.beta2...v3.0.0.rc)
+
+### Added
+- Support Mongoid's Storage Field Names ([cefa23c](https://github.com/railsadminteam/rails_admin/commit/cefa23c9d23d06dc1134228e142e6f0aa4655c54), [#1745](https://github.com/railsadminteam/rails_admin/issues/1745))
+- Allow save/delete oprations to be disabled based on an object's `#read_only?` status ([9cd7541](https://github.com/railsadminteam/rails_admin/commit/9cd7541a2e6af4ae4941b200840a1474baeb2f06), [#1684](https://github.com/railsadminteam/rails_admin/issues/1684))
+- Allow customizing model's last created time ([d6d380a](https://github.com/railsadminteam/rails_admin/commit/d6d380a02e955c3b14ff7dc30f1809a2a6cd0f47), [#3010](https://github.com/railsadminteam/rails_admin/issues/3010))
+- Add ability to hide the dashboard history section ([#3189](https://github.com/railsadminteam/rails_admin/pull/3189))
+- Add model scope configuration option, which enables 'unscoped' mode ([8d905f9](https://github.com/railsadminteam/rails_admin/commit/8d905f9e2f1102e8addf324b496720e3fd47bf1d), [#1348](https://github.com/railsadminteam/rails_admin/issues/1348))
+
+### Changed
+- Switch from pjax to Turbo Drive, due to pjax's low maintenance activity ([#3461](https://github.com/railsadminteam/rails_admin/pull/3461), [#3435](https://github.com/railsadminteam/rails_admin/pull/3435))
+- Upgrade Bootstrap to 5.1.3 ([#3455](https://github.com/railsadminteam/rails_admin/pull/3455), [#3083](https://github.com/railsadminteam/rails_admin/issues/3083))
+- Switch datetime picker library to Flatpickr ([#3455](https://github.com/railsadminteam/rails_admin/pull/3455))
+
+### Removed
+- Drop support for Ruby 2.5 ([#3430](https://github.com/railsadminteam/rails_admin/pull/3430))
+- Remove Sections::List#sort_reverse because of having very limited usecase ([0c7bc61](https://github.com/railsadminteam/rails_admin/commit/0c7bc6124a189e5307f2bd1f960dd06495932d10), [#1181](https://github.com/railsadminteam/rails_admin/issues/1181))
+
+### Fixed
+- Fix failing to detect encoding with JDBC MySQL adapter ([0dfe2e4](https://github.com/railsadminteam/rails_admin/commit/0dfe2e4d1301cc353f972b28ab19554a53cad482))
+- Fix unable to start app when using redis-session-store ([#3462](https://github.com/railsadminteam/rails_admin/pull/3462))
+- Fix ActiveRecord ObjectExtension has_one setter breaks with custom primary key class ([0e2e0e4](https://github.com/railsadminteam/rails_admin/commit/0e2e0e4e24328a063813a3a5266a15faee7960c8), [#3460](https://github.com/railsadminteam/rails_admin/issues/3460))
+- Fix inheritance of parent_controller not updated properly when controllers were eagerly loaded ([#3458](https://github.com/railsadminteam/rails_admin/pull/3458))
+- Fix to retrieve actions correctly in the action `#bulk_action` ([#3407](https://github.com/railsadminteam/rails_admin/pull/3407))
+- Fix issue when RailsAdmin::MainController needs to dispatch a method call using `#respond_to_missing?` ([da51b91](https://github.com/railsadminteam/rails_admin/commit/da51b91f712b235c0c6e2a120724fcb31ff28168), [#3454](https://github.com/railsadminteam/rails_admin/issues/3454))
+- Fix modal foreign keys are not prepopulated unless the association inverse_of is configured ([75504d0](https://github.com/railsadminteam/rails_admin/commit/75504d08ee6197a3a2c72a56ea30f01272b1d28b), [#2585](https://github.com/railsadminteam/rails_admin/issues/2585))
 
 ## [3.0.0.beta2](https://github.com/railsadminteam/rails_admin/tree/v3.0.0.beta2) - 2021-12-25
 
