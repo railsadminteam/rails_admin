@@ -8,36 +8,36 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: [2.7, "3.0", jruby]
-        gemfile: [gemfiles/rails_6.1.gemfile]
+        ruby: ["3.0", 3.1]
+        gemfile: [gemfiles/rails_7.0.gemfile]
         orm: [active_record]
         adapter: [sqlite3]
-        asset: [sprockets]
+        asset: [webpacker]
         include:
           - ruby: 2.6
             gemfile: gemfiles/rails_6.0.gemfile
             orm: active_record
             adapter: sqlite3
             asset: sprockets
-          - ruby: "3.0"
+          - ruby: 2.7
             gemfile: gemfiles/rails_6.1.gemfile
+            orm: active_record
+            adapter: sqlite3
+            asset: sprockets
+          - ruby: 2.7
+            gemfile: gemfiles/rails_6.1.gemfile
+            orm: active_record
+            adapter: sqlite3
+            asset: webpacker
+          - ruby: "3.0"
+            gemfile: gemfiles/rails_7.0.gemfile
             orm: active_record
             adapter: mysql2
             asset: sprockets
           - ruby: "3.0"
-            gemfile: gemfiles/rails_6.1.gemfile
+            gemfile: gemfiles/rails_7.0.gemfile
             orm: active_record
             adapter: postgresql
-            asset: webpacker
-          - ruby: "3.0"
-            gemfile: gemfiles/rails_7.0.gemfile
-            orm: active_record
-            adapter: sqlite3
-            asset: webpacker
-          - ruby: "3.0"
-            gemfile: gemfiles/rails_7.0.gemfile
-            orm: active_record
-            adapter: sqlite3
             asset: sprockets
           - ruby: 2.7
             gemfile: gemfiles/rails_6.0.gemfile
@@ -47,6 +47,11 @@ jobs:
           - ruby: "3.0"
             gemfile: gemfiles/rails_6.1.gemfile
             orm: mongoid
+            adapter: sqlite3
+            asset: sprockets
+          - ruby: jruby
+            gemfile: gemfiles/rails_6.1.gemfile
+            orm: active_record
             adapter: sqlite3
             asset: sprockets
           - ruby: jruby
