@@ -9,7 +9,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :version do
-            '1.1.1'
+            '1.3.1'
           end
 
           register_instance_option :css_location do

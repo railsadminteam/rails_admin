@@ -1,4 +1,5 @@
 //=  require 'rails-ujs'
+//=  require 'turbo'
 //=  require 'rails_admin/jquery3'
 //=  require 'jquery_nested_form'
 //=  require 'rails_admin/jquery-ui/effect'

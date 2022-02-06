@@ -51,7 +51,7 @@ import I18n from "./i18n";
     }
   );
 
-  $(document).ready(function () {
+  document.addEventListener("turbo:load", function () {
     I18n.init($("html").attr("lang"), $("#admin-js").data("i18nOptions"));
 
     const event = new CustomEvent("rails_admin.dom_ready");

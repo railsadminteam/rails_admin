@@ -14,7 +14,9 @@
     "format": "prettier -w ."
   },
   "dependencies": {
+    "@babel/runtime": "^7.16.7",
     "@fortawesome/fontawesome-free": "^5.15.4",
+    "@hotwired/turbo-rails": "^7.1.0",
     "@popperjs/core": "^2.11.0",
     "@rails/ujs": "^6.1.4-1",
     "bootstrap": "^5.1.3",
