@@ -27,9 +27,31 @@ Now twitter-bootstrap-rails works with rails_admin.
 
 Reason: RailsAdmin DSL needs access to locale before default_locale being set by application.rb
 
-See: https://github.com/sferik/rails_admin/issues/746
+See: [#746](https://github.com/sferik/rails_admin/issues/746), [#3140](https://github.com/railsadminteam/rails_admin/issues/3140)
 
-Workaround: add `I18n.default_locale = :de` inside RailsAdmin's initializer (before model configs)
+Workaround: Using a custom `parent` controller, add an `around_action` that sets the locale for the request.
+
+```ruby
+# initializers/rails_admin.rb
+RailsAdmin.config do |config|
+  config.parent_controller = "Admin::BaseController"
+end
+
+# controllers/admin/base_controller.rb
+class Admin::BaseController < ActionController::Base
+  around_action :use_default_locale
+  
+  private
+  
+  def use_default_locale(&block)
+    # Executes the request with the I18n.default_locale.
+    # https://github.com/ruby-i18n/i18n/commit/9b14943d5e814723296cd501283d9343985fca4e
+    I18n.with_locale(I18n.default_locale, &block)
+  end
+end
+```
+
+[Related Rails Guides](https://guides.rubyonrails.org/i18n.html#managing-the-locale-across-requests)
 
 ***
 
