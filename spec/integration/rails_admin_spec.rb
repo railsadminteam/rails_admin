@@ -49,6 +49,16 @@ RSpec.describe RailsAdmin, type: :request do
     end
   end
 
+  describe 'custom theming' do
+    before { visit dashboard_path }
+
+    if RailsAdmin.config.asset_source == :sprockets
+      it 'applies the style overridden by assets in the application', js: true do
+        expect(find('.navbar-brand small').style('opacity')).to eq({'opacity' => '0.99'})
+      end
+    end
+  end
+
   describe '_current_user' do # https://github.com/railsadminteam/rails_admin/issues/549
     it 'is accessible from the list view' do
       RailsAdmin.config Player do
