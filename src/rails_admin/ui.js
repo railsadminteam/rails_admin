@@ -80,9 +80,21 @@ import I18n from "./i18n";
       .each(function () {
         $(this).siblings(".control-group").hide();
       });
-    $("[formnovalidate]").on("click", function () {
-      $(this).closest("form").attr("novalidate", true);
-    });
+    $(".form-actions .extra_buttons button")
+      .attr("type", "button")
+      .on("click", function () {
+        var form = $(this).closest("form");
+        form.append(
+          $("<input />")
+            .attr("type", "hidden")
+            .attr("name", $(this).attr("name"))
+            .attr("value", true)
+        );
+        if ($(this).is("[formnovalidate]")) {
+          form.attr("novalidate", true);
+        }
+        form.trigger("submit");
+      });
     $.each($("#filters_box").data("options"), function () {
       $.filters.append(this);
     });

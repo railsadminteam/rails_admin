@@ -121,19 +121,21 @@ RSpec.describe 'New action', type: :request do
     end
   end
 
-  context 'on create and add another' do
+  context 'on create and add another', js: true do
     before do
       visit new_path(model_name: 'player')
 
       fill_in 'player[name]', with: 'Jackie Robinson'
       fill_in 'player[number]', with: '42'
       fill_in 'player[position]', with: 'Second baseman'
-      click_button 'Save and add another'
-
-      @player = RailsAdmin::AbstractModel.new('Player').first
+      find_button('Save and add another').trigger('click')
     end
 
     it 'creates an object with correct attributes' do
+      is_expected.to have_text 'Player successfully created'
+      expect(page.current_path).to eq('/admin/player/new')
+
+      @player = RailsAdmin::AbstractModel.new('Player').first
       expect(@player.name).to eq('Jackie Robinson')
       expect(@player.number).to eq(42)
       expect(@player.position).to eq('Second baseman')

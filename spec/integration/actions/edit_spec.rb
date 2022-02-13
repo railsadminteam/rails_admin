@@ -688,18 +688,21 @@ RSpec.describe 'Edit action', type: :request do
 
   context 'on cancel' do
     before do
-      @ball = FactoryBot.create :ball
-      visit '/admin/ball?sort=color'
+      @player = FactoryBot.create :player
+      visit '/admin/player'
       click_link 'Edit'
     end
 
-    it "shows cancel button with 'novalidate' attribute" do
-      expect(page).to have_css '[type="submit"][name="_continue"][formnovalidate]'
+    it 'sends back to previous URL', js: true do
+      find_button('Cancel').trigger('click')
+      is_expected.to have_text 'No actions were taken'
+      expect(page.current_path).to eq('/admin/player')
     end
 
-    it 'sends back to previous URL' do
-      click_button 'Cancel'
-      expect(page.current_url).to eq('http://www.example.com/admin/ball?sort=color')
+    it 'allows submit even if client-side validation is not satisfied', js: true do
+      fill_in 'player[name]', with: ''
+      find_button('Cancel').trigger('click')
+      is_expected.to have_text 'No actions were taken'
     end
   end
 
@@ -738,7 +741,7 @@ RSpec.describe 'Edit action', type: :request do
     end
   end
 
-  describe 'update and edit' do
+  describe 'update and edit', js: true do
     before do
       @player = FactoryBot.create :player
 
@@ -747,12 +750,14 @@ RSpec.describe 'Edit action', type: :request do
       fill_in 'player[name]', with: 'Jackie Robinson'
       fill_in 'player[number]', with: '42'
       fill_in 'player[position]', with: 'Second baseman'
-      click_button 'Save and edit'
-
-      @player.reload
+      find_button('Save and edit').trigger('click')
     end
 
     it 'updates an object with correct attributes' do
+      is_expected.to have_text 'Player successfully updated'
+      expect(page.current_path).to eq("/admin/player/#{@player.id}/edit")
+
+      @player.reload
       expect(@player.name).to eq('Jackie Robinson')
       expect(@player.number).to eq(42)
       expect(@player.position).to eq('Second baseman')
