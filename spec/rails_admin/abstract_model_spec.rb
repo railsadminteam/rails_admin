@@ -21,6 +21,16 @@ RSpec.describe RailsAdmin::AbstractModel do
         expect(RailsAdmin::AbstractModel.new('WithoutTable')).to eq nil
       end
     end
+
+    context 'on ActiveRecord::ConnectionNotEstablished', active_record: true do
+      before do
+        expect(WithoutTable).to receive(:table_exists?).and_raise(ActiveRecord::ConnectionNotEstablished)
+      end
+
+      it 'does not raise error and returns nil' do
+        expect(RailsAdmin::AbstractModel.new('WithoutTable')).to eq nil
+      end
+    end
   end
 
   describe '#to_s' do
