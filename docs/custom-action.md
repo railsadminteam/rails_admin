@@ -25,10 +25,6 @@ It is also possible to inherit from any other action class.
 
 ## Resources
  
-How to create custom action in Rails admin, as a plugin:
-
- [[http://blog.endpoint.com/2012/03/railsadmin-custom-action-case-study.html]]
-
 Add a custom action without needing to add it as a plugin:
 
  [[https://web.archive.org/web/20180828051240/http://blog.paulrugelhiatt.com/ruby/rails/2014/10/27/rails-admin-custom-action-example.html]]
