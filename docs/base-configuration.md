@@ -14,7 +14,7 @@ end
 
 **Locale**
 
-To set locale for a request - use a custom parent controller and add an around_action that sets the locale for the request.
+To set locale for RailsAdmin - use a custom parent controller and add an `around_action` to execute the request in the context of a given locale, ie.
 
 ```ruby
 # initializers/rails_admin.rb
