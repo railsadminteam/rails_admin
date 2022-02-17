@@ -9,3 +9,10 @@ RailsAdmin.config do |config|
   end
 end
 ```
+
+
+NOTE: If you are doing custom authorization or your authorization library's `current_user` method is not available in initializer use this:
+
+```
+config.parent_controller = "::ApplicationController"
+```
