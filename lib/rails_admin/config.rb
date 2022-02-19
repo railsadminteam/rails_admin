@@ -81,7 +81,7 @@ module RailsAdmin
       attr_accessor :navigation_static_label
 
       # Set where RailsAdmin fetches JS/CSS from, defaults to :sprockets
-      attr_accessor :asset_source
+      attr_writer :asset_source
 
       # Finish initialization by executing deferred configuration blocks
       def initialize!
@@ -257,6 +257,17 @@ module RailsAdmin
         @registry[key]
       end
 
+      def asset_source
+        @asset_source ||=
+          begin
+            warn <<-MSG.gsub(/^ +/, '').freeze
+              [Warning] After upgrading RailsAdmin to 3.x you haven't set asset_source yet, using :sprockets as the default.
+              To suppress this message, run 'rails rails_admin:install' to setup the asset delivery method suitable to you.
+            MSG
+            :sprockets
+          end
+      end
+
       def default_hidden_fields=(fields)
         if fields.is_a?(Array)
           @default_hidden_fields = {}
@@ -326,7 +337,7 @@ module RailsAdmin
         @show_gravatar = true
         @navigation_static_links = {}
         @navigation_static_label = nil
-        @asset_source = (defined?(Webpacker) ? :webpacker : :sprockets)
+        @asset_source = nil
         @parent_controller = '::ActionController::Base'
         @forgery_protection_settings = {with: :exception}
         RailsAdmin::Config::Actions.reset

@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
   spec.summary = 'Admin for Rails'
   spec.version = RailsAdmin::Version
   spec.post_install_message = '
-    ### Upgrading from 2.x.x to 3.x.x ###
+    ### Upgrading RailsAdmin from 2.x.x to 3.x.x ###
 
     Due to introduction of Webpack/Webpacker support, some additional dependencies and configuration will be needed.
     Running `bin/rails g rails_admin:install` will suggest required changes, based on the current setup of your app.

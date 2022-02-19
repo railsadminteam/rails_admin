@@ -105,6 +105,7 @@ RSpec.configure do |config|
 
     DatabaseCleaner.start
     RailsAdmin::Config.reset
+    RailsAdmin::Config.asset_source = CI_ASSET
   end
 
   config.after(:each) do
