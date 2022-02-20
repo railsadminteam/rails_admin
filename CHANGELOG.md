@@ -4,6 +4,20 @@
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0.rc...HEAD)
 
+## [3.0.0.rc2](https://github.com/railsadminteam/rails_admin/tree/v3.0.0.rc2) - 2022-02-20
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0.rc...v3.0.0.rc2)
+
+### Added
+
+- Some improvements to make the upgrade process more friendlier ([#3471](https://github.com/railsadminteam/rails_admin/pull/3471), [3771542](https://github.com/railsadminteam/rails_admin/commit/377154268257d3753093dcd3dd2fd79b7438b9aa), [3b04a96](https://github.com/railsadminteam/rails_admin/commit/3b04a9616169d568b1a6cee26becf9bfea0ee386))
+
+### Fixed
+
+- Fix 'Save and add another', 'Save and edit', 'Cancel' buttons didn't work right ([ac0a563](https://github.com/railsadminteam/rails_admin/commit/ac0a563a0bf91bf33c693e19717148ed77f843fd), [#3468](https://github.com/railsadminteam/rails_admin/issues/3468))
+- Fix failing to precompile assets when the database connection is unavailable ([#3470](https://github.com/railsadminteam/rails_admin/pull/3470), [#3469](https://github.com/railsadminteam/rails_admin/issues/3469))
+- Fix custom theme overrides not working ([3d7f3b3](https://github.com/railsadminteam/rails_admin/commit/3d7f3b33a1ca6fabbd8606bb178babae930cce25), [#3466](https://github.com/railsadminteam/rails_admin/issues/3466))
+
 ## [3.0.0.rc](https://github.com/railsadminteam/rails_admin/tree/v3.0.0.rc) - 2022-02-06
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0.beta2...v3.0.0.rc)
