@@ -12,8 +12,12 @@ module RailsAdmin
     desc 'RailsAdmin installation generator'
 
     def install
-      namespace = ask_for('Where do you want to mount rails_admin?', 'admin', _namespace)
-      route("mount RailsAdmin::Engine => '/#{namespace}', as: 'rails_admin'")
+      if File.read(File.join(destination_root, 'config/routes.rb')).include?('mount RailsAdmin::Engine')
+        display "Skipped route addition, since it's already there"
+      else
+        namespace = ask_for('Where do you want to mount rails_admin?', 'admin', _namespace)
+        route("mount RailsAdmin::Engine => '/#{namespace}', as: 'rails_admin'")
+      end
       if File.exist? File.join(destination_root, 'config/initializers/rails_admin.rb')
         insert_into_file 'config/initializers/rails_admin.rb', "  config.asset_source = :#{asset}\n", after: "RailsAdmin.config do |config|\n"
       else
