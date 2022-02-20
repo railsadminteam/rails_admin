@@ -5,7 +5,7 @@ require 'generators/rails_admin/install_generator'
 
 RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
   destination File.expand_path('../dummy_app/tmp/generator', __dir__)
-  arguments ['admin']
+  arguments ['admin', "--asset=#{CI_ASSET}", '--force']
 
   before do
     prepare_destination
@@ -16,6 +16,10 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
       Rails.application.routes.draw do
         # empty
       end
+    RUBY
+    File.write(File.join(destination_root, 'Rakefile'), <<-RUBY.gsub(/^ {4}/, ''))
+    desc 'Stub for testing'
+    task 'css:install:sass'
     RUBY
   end
 
@@ -46,11 +50,26 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
             contains 'import "rails_admin/src/rails_admin/base"'
           end
           file 'app/javascript/stylesheets/rails_admin.scss' do
-            contains '@import "~rails_admin/src/rails_admin/styles/base"'
+            contains '@import "rails_admin/src/rails_admin/styles/base"'
           end
         when :sprockets
           file 'Gemfile' do
             contains 'sassc-rails'
+          end
+        when :importmap
+          file 'app/javascript/rails_admin.js' do
+            contains 'import "rails_admin/src/rails_admin/base"'
+          end
+          file 'app/assets/stylesheets/rails_admin.scss' do
+            contains '@import "rails_admin/src/rails_admin/styles/base"'
+          end
+          file 'config/importmap.rails_admin.rb' do
+            contains 'pin "rails_admin", preload: true'
+            contains 'pin "rails_admin/src/rails_admin/base", to: "https://ga.jspm.io/npm:rails_admin@'
+            contains 'pin "bootstrap", to: "https://ga.jspm.io/npm:bootstrap@'
+          end
+          file 'config/initializers/assets.rb' do
+            contains 'Rails.root.join("node_modules/@fortawesome/fontawesome-free/webfonts")'
           end
         end
       end,

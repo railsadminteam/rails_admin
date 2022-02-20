@@ -7,6 +7,9 @@
 # Ignore bundler config
 /.bundle
 
+/app/assets/builds/*
+!/app/assets/builds/.keep
+
 # Ignore the default SQLite database.
 /db/*.sqlite3
 

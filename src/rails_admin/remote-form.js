@@ -1,7 +1,7 @@
 import Rails from "@rails/ujs";
 import jQuery from "jquery";
-import "jquery-ui/ui/widget";
-import * as bootstrap from "bootstrap/dist/js/bootstrap.esm";
+import "jquery-ui/ui/widget.js";
+import * as bootstrap from "bootstrap";
 
 (function ($) {
   $.widget("ra.remoteForm", {

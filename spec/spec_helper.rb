@@ -98,7 +98,7 @@ RSpec.configure do |config|
   end
 
   config.before(:all) do
-    Webpacker.instance.compiler.compile if defined?(Webpacker)
+    Webpacker.instance.compiler.compile if CI_ASSET == :webpacker
   end
 
   config.before do |example|

@@ -1,6 +1,6 @@
 import jQuery from "jquery";
-import "jquery-ui/ui/widgets/sortable";
-import * as bootstrap from "bootstrap/dist/js/bootstrap.esm";
+import "jquery-ui/ui/widgets/sortable.js";
+import * as bootstrap from "bootstrap";
 import flatpickr from "flatpickr";
 import I18n from "./i18n";
 

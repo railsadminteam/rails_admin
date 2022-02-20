@@ -10,10 +10,12 @@ module RailsAdmin
   class Engine < Rails::Engine
     isolate_namespace RailsAdmin
 
+    attr_accessor :importmap
+
     config.action_dispatch.rescue_responses['RailsAdmin::ActionNotAllowed'] = :forbidden
 
     initializer 'RailsAdmin precompile hook', group: :all do |app|
-      if app.config.respond_to?(:assets)
+      if defined?(Sprockets)
         app.config.assets.precompile += %w[
           rails_admin/application.js
           rails_admin/application.css
@@ -22,6 +24,7 @@ module RailsAdmin
         require 'rails_admin/support/esmodule_preprocessor'
         Sprockets.register_preprocessor 'application/javascript', RailsAdmin::ESModulePreprocessor
       end
+      self.importmap = Importmap::Map.new.draw(app.root.join('config/importmap.rails_admin.rb')) if defined?(Importmap)
     end
 
     initializer 'RailsAdmin reload config in development' do |app|
