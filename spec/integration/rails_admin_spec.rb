@@ -52,7 +52,7 @@ RSpec.describe RailsAdmin, type: :request do
   describe 'custom theming' do
     before { visit dashboard_path }
 
-    if RailsAdmin.config.asset_source == :sprockets
+    if CI_ASSET == :sprockets
       it 'applies the style overridden by assets in the application', js: true do
         expect(find('.navbar-brand small').style('opacity')).to eq({'opacity' => '0.99'})
       end
