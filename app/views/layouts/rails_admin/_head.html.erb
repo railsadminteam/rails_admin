@@ -15,6 +15,15 @@
 <% when :webpack %>
   <%= stylesheet_link_tag "rails_admin.css", media: :all, data: {'turbo-track': 'reload'} %>
   <%= javascript_include_tag "rails_admin.js", async: true, data: {'turbo-track': 'reload'} %>
+<% when :importmap %>
+  <%= stylesheet_link_tag "rails_admin.css", media: :all, data: {'turbo-track': 'reload'} %>
+  <%= javascript_inline_importmap_tag(RailsAdmin::Engine.importmap.to_json(resolver: self)) %>
+  <%= javascript_importmap_module_preload_tags(RailsAdmin::Engine.importmap) %>
+  <%= javascript_importmap_shim_nonce_configuration_tag %>
+  <%= javascript_importmap_shim_tag %>
+  <%= # Preload jQuery and make it global, unless jQuery UI fails to initialize
+      tag.script "import jQuery from 'jquery'; window.jQuery = jQuery;".html_safe, type: "module" %>
+  <%= javascript_import_module_tag 'rails_admin' %>
 <% else
      raise "Unknown asset_source: #{RailsAdmin::config.asset_source}"
    end %>

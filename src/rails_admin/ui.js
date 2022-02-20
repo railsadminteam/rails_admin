@@ -1,5 +1,5 @@
 import jQuery from "jquery";
-import "jquery-ui/ui/effect";
+import "jquery-ui/ui/effect.js";
 import I18n from "./i18n";
 
 (function ($) {

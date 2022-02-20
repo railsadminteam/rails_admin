@@ -13,6 +13,8 @@ module RailsAdmin
     def initialize; end
 
     def call(input)
+      return unless RailsAdmin.config.asset_source == :sprockets
+
       data = input[:data]
 
       if input[:filename].start_with? RailsAdmin::Engine.root.join('src').to_s

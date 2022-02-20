@@ -1,5 +1,5 @@
 import jQuery from "jquery";
-import * as bootstrap from "bootstrap/dist/js/bootstrap.esm";
+import * as bootstrap from "bootstrap";
 
 (function ($) {
   $(document).ready(function () {

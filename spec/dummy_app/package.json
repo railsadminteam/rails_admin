@@ -4,11 +4,14 @@
   "version": "0.1.0",
   "dependencies": {
     "@rails/webpacker": "5.4.3",
+    "rails_admin": "file:../../",
     "webpack": "^4.46.0",
-    "webpack-cli": "^3.3.12",
-    "rails_admin": "file:../../"
+    "webpack-cli": "^3.3.12"
   },
   "devDependencies": {
     "webpack-dev-server": "^3"
+  },
+  "scripts": {
+    "build:css": "sass ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css --no-source-map --load-path=node_modules"
   }
 }

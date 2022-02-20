@@ -18,8 +18,11 @@ require 'action_text/engine' if CI_ORM == :active_record
 case CI_ASSET
 when :webpacker
   require 'webpacker'
-else
-  require "#{CI_ASSET}/railtie"
+when :sprockets
+  require 'sprockets/railtie'
+when :importmap
+  require 'sprockets/railtie'
+  require 'importmap-rails'
 end
 
 # Require the gems listed in Gemfile, including any gems
@@ -39,5 +42,6 @@ module DummyApp
     config.active_record.time_zone_aware_types = %i[datetime time] if CI_ORM == :active_record
     config.active_storage.service = :local if defined?(ActiveStorage)
     config.active_storage.replace_on_assign_to_many = false if defined?(ActiveStorage) && ActiveStorage.version < Gem::Version.create('6.1')
+    config.importmap.cache_sweepers << RailsAdmin::Engine.root.join('src') if config.respond_to? :importmap
   end
 end

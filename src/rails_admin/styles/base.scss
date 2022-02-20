@@ -7,17 +7,17 @@
 
 /***  Libraries  ***/
 
-@import "~flatpickr/dist/flatpickr";
+@import "flatpickr/dist/flatpickr";
 
 /*** Font-awesome ***/
 
-$fa-font-path: "~@fortawesome/fontawesome-free/webfonts";
-@import "~@fortawesome/fontawesome-free/scss/solid";
-@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts" !default;
+@import "@fortawesome/fontawesome-free/scss/solid";
+@import "@fortawesome/fontawesome-free/scss/fontawesome";
 
 /***  Bootstrap  ***/
 
-@import "~bootstrap/scss/bootstrap";
+@import "bootstrap/scss/bootstrap";
 
 /***  RailsAdmin  ***/
 

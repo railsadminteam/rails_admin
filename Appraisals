@@ -70,6 +70,7 @@ end
 
 appraise 'rails-7.0' do
   gem 'rails', '~> 7.0.0'
+  gem 'importmap-rails', require: false
   gem 'sassc-rails', '~> 2.1'
   gem 'devise', '~> 4.8'
 
