@@ -20,17 +20,24 @@ module RailsAdmin
     end
 
     def edit_user_link
-      return nil unless _current_user.respond_to?(:email)
-      return nil unless abstract_model = RailsAdmin.config(_current_user.class).abstract_model
+      return nil unless _current_user.try(:email).present?
+      return nil unless (abstract_model = RailsAdmin.config(_current_user.class).abstract_model)
 
-      content = [
-        RailsAdmin::Config.show_gravatar && _current_user.email.present? && image_tag("#{request.ssl? ? 'https://secure' : 'http://www'}.gravatar.com/avatar/#{Digest::MD5.hexdigest _current_user.email}?s=30", alt: ''),
-        content_tag(:span, _current_user.email),
-      ].compact.join.html_safe
-      if (edit_action = RailsAdmin::Config::Actions.find(:edit, controller: controller, abstract_model: abstract_model, object: _current_user)).try(:authorized?)
-        link_to content, rails_admin.url_for(action: edit_action.action_name, model_name: abstract_model.to_param, id: _current_user.id, controller: 'rails_admin/main'), class: 'nav-link'
+      edit_action = action(:edit, abstract_model, _current_user)
+      authorized = edit_action.try(:authorized?)
+      content = edit_user_link_label
+
+      if authorized
+        edit_url = rails_admin.url_for(
+          action_name: edit_action.action_name,
+          model_name: abstract_model.to_param,
+          controller: 'rails_admin/main',
+          id: _current_user.id,
+        )
+
+        link_to content, edit_url, class: 'nav-link'
       else
-        content_tag :span, content
+        content_tag :span, content, class: 'nav-link'
       end
     end
 
@@ -205,6 +212,22 @@ module RailsAdmin
         MSG
       end
       raise e
+    end
+
+  private
+
+    def edit_user_link_label
+      [
+        RailsAdmin::Config.show_gravatar &&
+          image_tag(gravatar_url(_current_user.email), alt: ''),
+
+        content_tag(:span, _current_user.email),
+
+      ].filter(&:present?).join.html_safe
+    end
+
+    def gravatar_url(email)
+      "https://secure.gravatar.com/avatar/#{Digest::MD5.hexdigest email}?s=30"
     end
   end
 end

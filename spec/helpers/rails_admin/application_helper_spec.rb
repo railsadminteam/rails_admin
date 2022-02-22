@@ -461,47 +461,69 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
     end
 
     describe '#edit_user_link' do
-      it "don't include email column" do
-        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:player))
-        result = helper.edit_user_link
-        expect(result).to eq nil
+      let(:current_user) { FactoryBot.create :user, email: 'admin@example.com' }
+      let(:gravatar_image_tag) { '<img alt="" src="https://secure.gravatar.com/avatar/e64c7d89f26bd1972efa854d13d7dd61?s=30" />' }
+
+      subject { helper.edit_user_link }
+
+      before do
+        expect(helper).to receive(:_current_user).at_least(:once) { current_user }
       end
 
-      it 'include email column' do
-        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:user))
-        result = helper.edit_user_link
-        expect(result).to match('href')
+      context 'without email column' do
+        let(:current_user) { FactoryBot.create :player }
+
+        it { should be_nil }
       end
 
-      it 'show gravatar' do
-        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:user))
-        result = helper.edit_user_link
-        expect(result).to include('gravatar')
-      end
-
-      it "don't show gravatar" do
-        RailsAdmin.config do |config|
-          config.show_gravatar = false
-        end
-
-        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:user))
-        result = helper.edit_user_link
-        expect(result).not_to include('gravatar')
-      end
-
-      context 'when the user is not authorized to perform edit' do
-        let(:user) { FactoryBot.create(:user) }
+      context 'gravatar enabled' do
         before do
-          allow_any_instance_of(RailsAdmin::Config::Actions::Edit).to receive(:authorized?).and_return(false)
-          allow(helper).to receive(:_current_user).and_return(user)
+          RailsAdmin.config { |config| config.show_gravatar = true }
         end
 
-        it 'show gravatar and email without a link' do
-          result = helper.edit_user_link
-          expect(result).to include('gravatar')
-          expect(result).to include(user.email)
-          expect(result).not_to match('href')
+        it { should match 'href' }
+        it { should match %r{href=".[^"]+/admin/user\?action_name=edit&amp;id=#{current_user.id}"} }
+
+        it { should include 'gravatar' }
+        it { should include gravatar_image_tag }
+
+        it { should include current_user.email }
+      end
+
+      context 'gravatar disabled' do
+        before do
+          RailsAdmin.config { |config| config.show_gravatar = false }
         end
+
+        it { should_not include 'gravatar' }
+      end
+
+      context 'when the user is not authorized to perform edit, gravatar enabled' do
+        before do
+          RailsAdmin.config { |config| config.show_gravatar = true }
+          allow_any_instance_of(RailsAdmin::Config::Actions::Edit).to receive(:authorized?).and_return(false)
+        end
+
+        it { should_not match 'href' }
+
+        it { should include 'gravatar' }
+        it { should include gravatar_image_tag }
+
+        it { should include current_user.email }
+      end
+
+      context 'when the user is not authorized to perform edit, gravatar disabled' do
+        before do
+          RailsAdmin.config { |config| config.show_gravatar = false }
+          allow_any_instance_of(RailsAdmin::Config::Actions::Edit).to receive(:authorized?).and_return(false)
+        end
+
+        it { should_not match 'href' }
+
+        it { should_not include 'gravatar' }
+
+        it { should include current_user.email }
+        it { should include "<span>#{current_user.email}</span>" }
       end
     end
   end
