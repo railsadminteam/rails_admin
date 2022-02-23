@@ -80,6 +80,12 @@ RSpec.describe 'Export action', type: :request do
     is_expected.to have_content @player.team.name
   end
 
+  it 'works with Turbo Drive enabled', js: true do
+    visit export_path(model_name: 'player')
+    page.execute_script 'console.error = function(error) { throw error }'
+    expect { find_button('Export to csv').trigger('click') }.not_to raise_error
+  end
+
   it 'exports polymorphic fields the easy way for now' do
     visit export_path(model_name: 'comment')
     select "<comma> ','", from: 'csv_options_generator_col_sep'

@@ -1,6 +1,6 @@
 <% params = request.params.except(:action, :controller, :utf8, :page, :per_page, :format, :authenticity_token) %>
 <% visible_fields = @model_config.export.with(view: self, object: @abstract_model.model.new, controller: self.controller).visible_fields %>
-<%= form_tag export_path(params.merge(all: true)), method: 'post', class: "main" do %>
+<%= form_tag export_path(params.merge(all: true)), method: 'post', class: "main", data: {turbo: false} do %>
   <input name="send_data" type="hidden" value="true" />
   <fieldset id="fields_to_export" class="mb-3">
     <legend>
