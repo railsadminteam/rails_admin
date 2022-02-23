@@ -80,7 +80,7 @@ import I18n from "./i18n";
       .each(function () {
         $(this).siblings(".control-group").hide();
       });
-    $(".form-actions .extra_buttons button")
+    $('button[name][type="submit"]')
       .attr("type", "button")
       .on("click", function () {
         var form = $(this).closest("form");

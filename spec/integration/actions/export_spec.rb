@@ -112,6 +112,18 @@ RSpec.describe 'Export action', type: :request do
     end
   end
 
+  context 'on cancel' do
+    before do
+      @player = FactoryBot.create :player
+      visit export_path(model_name: 'player')
+    end
+
+    it 'does nothing', js: true do
+      find_button('Cancel').trigger('click')
+      is_expected.to have_text 'No actions were taken'
+    end
+  end
+
   describe 'bulk export' do
     it 'is supported' do
       visit index_path(model_name: 'player')

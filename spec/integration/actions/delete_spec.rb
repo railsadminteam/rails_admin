@@ -131,12 +131,12 @@ RSpec.describe 'Delete action', type: :request do
     before do
       @player = FactoryBot.create :player
       visit delete_path(model_name: 'player', id: @player.id)
-      click_button 'Cancel'
-      @player = RailsAdmin::AbstractModel.new('Player').first
     end
 
-    it 'does not destroy an object' do
-      expect(@player).to be
+    it 'does not destroy an object', js: true do
+      find_button('Cancel').trigger('click')
+      is_expected.to have_text 'No actions were taken'
+      expect(RailsAdmin::AbstractModel.new('Player').first).to be
     end
   end
 

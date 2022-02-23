@@ -72,16 +72,15 @@ RSpec.describe 'BulkDelete action', type: :request do
       @players = Array.new(3) { FactoryBot.create(:player) }
       @delete_ids = @players[0..1].collect(&:id)
 
-      # NOTE: This uses an internal, unsupported capybara API which could break at any moment. We
-      # should refactor this test so that it either A) uses capybara's supported API (only GET
-      # requests via visit) or B) just uses Rack::Test (and doesn't use capybara for browser
-      # interaction like click_button).
-      page.driver.browser.reset_host!
-      page.driver.browser.process :post, bulk_action_path(bulk_action: 'bulk_delete', model_name: 'player', bulk_ids: @delete_ids, '_method' => 'post')
-      click_button 'Cancel'
+      visit index_path(model_name: 'player')
+      @delete_ids.each { |id| find(%(input[name="bulk_ids[]"][value="#{id}"])).click }
+      click_link 'Selected items'
+      click_link 'Delete selected Players'
     end
 
-    it 'does not delete records' do
+    it 'does not delete records', js: true do
+      find_button('Cancel').trigger('click')
+      is_expected.to have_text 'No actions were taken'
       expect(RailsAdmin::AbstractModel.new('Player').count).to eq(3)
     end
   end
