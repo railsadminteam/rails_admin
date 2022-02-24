@@ -222,7 +222,6 @@ module RailsAdmin
           image_tag(gravatar_url(_current_user.email), alt: ''),
 
         content_tag(:span, _current_user.email),
-
       ].filter(&:present?).join.html_safe
     end
 
