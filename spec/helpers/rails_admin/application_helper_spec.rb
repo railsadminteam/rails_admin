@@ -502,6 +502,18 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
           expect(result).to include(user.email)
           expect(result).not_to match('href')
         end
+
+        it 'without gravatar and email without a link' do
+          RailsAdmin.config do |config|
+            config.show_gravatar = false
+          end
+
+          result = helper.edit_user_link
+          expect(result).not_to include('gravatar')
+          expect(result).not_to match('href')
+          expect(result).to include(user.email)
+          expect(result).to match("<span class=\"nav-link\"><span>#{user.email}</span></span>")
+        end
       end
     end
   end
