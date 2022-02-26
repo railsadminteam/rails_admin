@@ -12,6 +12,7 @@
     "webpack-dev-server": "^3"
   },
   "scripts": {
+    "build": "webpack --config webpack.config.js",
     "build:css": "sass ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css --no-source-map --load-path=node_modules"
   }
 }
