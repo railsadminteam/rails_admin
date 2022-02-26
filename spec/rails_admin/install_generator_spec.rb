@@ -61,6 +61,7 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
             contains 'import "rails_admin/src/rails_admin/base"'
           end
           file 'app/assets/stylesheets/rails_admin.scss' do
+            contains '$fa-font-path: ".";'
             contains '@import "rails_admin/src/rails_admin/styles/base"'
           end
           file 'config/importmap.rails_admin.rb' do
@@ -70,6 +71,21 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
           end
           file 'config/initializers/assets.rb' do
             contains 'Rails.root.join("node_modules/@fortawesome/fontawesome-free/webfonts")'
+          end
+          file 'package.json' do
+            contains 'sass ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css'
+          end
+        when :webpack
+          file 'app/javascript/rails_admin.js' do
+            contains 'import "rails_admin/src/rails_admin/base"'
+          end
+          file 'app/assets/stylesheets/rails_admin.scss' do
+            contains '$fa-font-path: ".";'
+            contains '@import "rails_admin/src/rails_admin/styles/base"'
+          end
+          file 'package.json' do
+            contains 'webpack --config webpack.config.js'
+            contains 'sass ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css'
           end
         end
       end,

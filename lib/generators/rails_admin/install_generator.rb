@@ -10,7 +10,7 @@ module RailsAdmin
     include Generators::Utils::InstanceMethods
 
     argument :_namespace, type: :string, required: false, desc: 'RailsAdmin url namespace'
-    class_option :asset, type: :string, required: false, default: nil, desc: 'Asset delivery method [options: webpacker, sprockets, importmap]'
+    class_option :asset, type: :string, required: false, default: nil, desc: 'Asset delivery method [options: webpacker, webpack, sprockets, importmap]'
     desc 'RailsAdmin installation generator'
 
     def install
@@ -47,6 +47,8 @@ module RailsAdmin
 
       if defined?(Webpacker)
         'webpacker'
+      elsif Rails.root.join('webpack.config.js').exist?
+        'webpack'
       elsif Rails.root.join('config/importmap.rb').exist?
         'importmap'
       else
@@ -65,10 +67,16 @@ module RailsAdmin
     end
 
     def configure_for_webpack
-      run "yarn add rails_admin@#{RailsAdmin::Version.js} css-loader mini-css-extract-plugin sass sass-loader"
+      run "yarn add rails_admin@#{RailsAdmin::Version.js}"
       template 'rails_admin.js', 'app/javascript/rails_admin.js'
-      template 'rails_admin.scss.erb', 'app/javascript/rails_admin.scss'
-      template 'webpack.config.js', 'webpack.config.js'
+      webpack_config = File.join(destination_root, 'webpack.config.js')
+      marker = %r{application: ["']./app/javascript/application.js["']}
+      if File.exist?(webpack_config) && File.read(webpack_config) =~ marker
+        insert_into_file 'webpack.config.js', %(,\n    rails_admin: "./app/javascript/rails_admin.js"), after: marker
+      else
+        say 'Add `rails_admin: "./app/javascript/rails_admin.js"` to the entry section in your webpack.config.js.', :red
+      end
+      setup_css({'build' => 'webpack --config webpack.config.js'})
     end
 
     def configure_for_importmap
@@ -79,7 +87,7 @@ module RailsAdmin
       setup_css
     end
 
-    def setup_css
+    def setup_css(additional_script_entries = {})
       gem 'cssbundling-rails'
       rake 'css:install:sass'
 
@@ -91,23 +99,27 @@ module RailsAdmin
       else
         add_file 'config/initializers/assets.rb', asset_config
       end
+      add_scripts(additional_script_entries.merge({'build:css' => 'sass ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css --no-source-map --load-path=node_modules'}))
+    end
 
-      display 'Add build:css script'
-      build_script = 'sass ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css --no-source-map --load-path=node_modules'
+    def add_scripts(entries)
+      display 'Add scripts to package.json'
       package = begin
         JSON.parse(File.read(File.join(destination_root, 'package.json')))
       rescue Errno::ENOENT, JSON::ParserError
         {}
       end
-      if package['scripts'] && package['scripts']['build:css']
+      if package['scripts'] && (package['scripts'].keys & entries.keys).any?
         say <<-MESSAGE.gsub(/^ {10}/, ''), :red
-          Append or merge into existing "scripts": { "build:css": "#{build_script}" } to your package.json.
-          For example, if you're already have application.sass.css for the sass build, the resulting script would look like:
+          You need to merge "scripts": #{JSON.pretty_generate(entries)} into the existing scripts in your package.json .
+          Taking 'build:css' as an example, if you're already have application.sass.css for the sass build, the resulting script would look like:
             sass ./app/assets/stylesheets/application.sass.scss:./app/assets/builds/application.css ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css --no-source-map --load-path=node_modules
         MESSAGE
       else
         package['scripts'] ||= {}
-        package['scripts']['build:css'] = build_script
+        entries.each do |entry, build_script|
+          package['scripts'][entry] = build_script
+        end
         add_file 'package.json', JSON.pretty_generate(package)
       end
     end

@@ -4,14 +4,14 @@
 <meta content="NONE,NOARCHIVE" name="robots"/>
 <%= csrf_meta_tag %>
 <% case RailsAdmin::config.asset_source
-   when :webpacker %>
-  <%= stylesheet_pack_tag "rails_admin" %>
-  <%= javascript_pack_tag "rails_admin", async: true %>
-<% when :webpack, :sprockets %>
+   when :sprockets %>
   <% handle_asset_dependency_error do %>
     <%= stylesheet_link_tag "rails_admin/application.css", media: :all %>
     <%= javascript_include_tag "rails_admin/application.js", async: true %>
   <% end %>
+<% when :webpacker %>
+  <%= stylesheet_pack_tag "rails_admin" %>
+  <%= javascript_pack_tag "rails_admin", async: true %>
 <% when :importmap %>
   <%= stylesheet_link_tag "rails_admin.css", media: :all %>
   <%= javascript_inline_importmap_tag(RailsAdmin::Engine.importmap.to_json(resolver: self)) %>
@@ -21,6 +21,9 @@
   <%= # Preload jQuery and make it global, unless jQuery UI fails to initialize
       tag.script "import jQuery from 'jquery'; window.jQuery = jQuery;".html_safe, type: "module" %>
   <%= javascript_import_module_tag 'rails_admin' %>
+<% when :webpack %>
+  <%= stylesheet_link_tag "rails_admin.css", media: :all %>
+  <%= javascript_include_tag "rails_admin.js", async: true %>
 <% else
      raise "Unknown asset_source: #{RailsAdmin::config.asset_source}"
    end %>
