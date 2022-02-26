@@ -101,7 +101,12 @@ RSpec.configure do |config|
   end
 
   config.before do |example|
-    DatabaseCleaner.strategy = CI_ORM == :mongoid || example.metadata[:js] ? :deletion : :transaction
+    DatabaseCleaner.strategy =
+      if CI_ORM == :mongoid || example.metadata[:js]
+        :deletion
+      else
+        :transaction
+      end
 
     DatabaseCleaner.start
     RailsAdmin::Config.reset

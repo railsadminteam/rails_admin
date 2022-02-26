@@ -13,9 +13,8 @@ module RailsAdmin
 
     def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params, pagination = !(params[:associated_collection] || params[:all] || params[:bulk_ids]))
       scope = model_config.scope
-      if auth_scope = @authorization_adapter&.query(auth_scope_key, model_config.abstract_model)
-        scope = scope.merge(auth_scope)
-      end
+      auth_scope = @authorization_adapter&.query(auth_scope_key, model_config.abstract_model)
+      scope = scope.merge(auth_scope) if auth_scope
       scope = scope.instance_eval(&additional_scope) if additional_scope
       get_collection(model_config, scope, pagination)
     end

@@ -25,32 +25,34 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
     Dir.chdir(destination_root) do
       run_generator
     end
-    expect(destination_root).to have_structure {
-      directory 'config' do
-        directory 'initializers' do
-          file 'rails_admin.rb' do
-            contains 'RailsAdmin.config'
-            contains 'asset_source ='
+    expect(destination_root).to(
+      have_structure do
+        directory 'config' do
+          directory 'initializers' do
+            file 'rails_admin.rb' do
+              contains 'RailsAdmin.config'
+              contains 'asset_source ='
+            end
+          end
+          file 'routes.rb' do
+            contains "mount RailsAdmin::Engine => '/admin', as: 'rails_admin'"
           end
         end
-        file 'routes.rb' do
-          contains "mount RailsAdmin::Engine => '/admin', as: 'rails_admin'"
+        case CI_ASSET
+        when :webpacker
+          file 'app/javascript/packs/rails_admin.js' do
+            contains 'import "rails_admin/src/rails_admin/base"'
+          end
+          file 'app/javascript/stylesheets/rails_admin.scss' do
+            contains '@import "~rails_admin/src/rails_admin/styles/base"'
+          end
+        when :sprockets
+          file 'Gemfile' do
+            contains 'sassc-rails'
+          end
         end
-      end
-      case CI_ASSET
-      when :webpacker
-        file 'app/javascript/packs/rails_admin.js' do
-          contains 'import "rails_admin/src/rails_admin/base"'
-        end
-        file 'app/javascript/stylesheets/rails_admin.scss' do
-          contains '@import "~rails_admin/src/rails_admin/styles/base"'
-        end
-      when :sprockets
-        file 'Gemfile' do
-          contains 'sassc-rails'
-        end
-      end
-    }
+      end,
+    )
   end
 
   it 'inserts asset_source option to RailsAdmin Initializer' do

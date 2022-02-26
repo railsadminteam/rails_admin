@@ -13,7 +13,8 @@ module RailsAdmin
       end
 
       def get(id, scope = scoped)
-        return unless object = scope.where(primary_key => id).first
+        object = scope.where(primary_key => id).first
+        return unless object
 
         object.extend(ObjectExtension)
       end
