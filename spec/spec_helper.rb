@@ -18,7 +18,6 @@ SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, SimpleCov::Formatte
 SimpleCov.start do
   add_filter '/spec/'
   add_filter '/vendor/bundle/'
-  minimum_coverage(CI_ORM == :mongoid ? 90.05 : 91.21)
 end
 
 SimpleCov::Formatter::LcovFormatter.config do |c|

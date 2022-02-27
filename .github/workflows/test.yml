@@ -111,7 +111,7 @@ jobs:
           yarn install
           cd ../../
       - name: Run tests
-        run: bundle exec rspec
+        run: bundle exec rspec spec/helpers/rails_admin/application_helper_spec.rb
       - name: Coveralls Parallel
         if: ${{ github.repository_owner == 'railsadminteam' }}
         uses: coverallsapp/github-action@master
