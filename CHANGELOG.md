@@ -2,7 +2,19 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0.rc...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0.rc3...HEAD)
+
+## [3.0.0.rc3](https://github.com/railsadminteam/rails_admin/tree/v3.0.0.rc3) - 2022-02-27
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0.rc2...v3.0.0.rc3)
+
+### Fixed
+
+- Fix the style of list scope tabs ([#3477](https://github.com/railsadminteam/rails_admin/pull/3477))
+- Fix rake tasks executed twice ([7d56cd6](https://github.com/railsadminteam/rails_admin/commit/7d56cd6af2d468cca44af5211559af0e744f5cb4))
+- Fix the style of the header user link when show_gravatar is false ([#3475](https://github.com/railsadminteam/rails_admin/pull/3475))
+- Fix 'Cancel' button for delete/bulk_delete action also didn't work ([1fa8486](https://github.com/railsadminteam/rails_admin/commit/1fa8486ead39596e9e0ac62a945fb0aed63929a8), [#3468](https://github.com/railsadminteam/rails_admin/issues/3468))
+- Fix failing to export after introducing Turbo Drive ([c749d93](https://github.com/railsadminteam/rails_admin/commit/c749d939e29434937e8558bcb1f3e219fe98c69d), [#3461 (comment)](https://github.com/railsadminteam/rails_admin/pull/3461#issuecomment-1048588801))
 
 ## [3.0.0.rc2](https://github.com/railsadminteam/rails_admin/tree/v3.0.0.rc2) - 2022-02-20
 
