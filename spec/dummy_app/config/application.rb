@@ -41,6 +41,11 @@ module DummyApp
     config.i18n.load_path += Dir[Rails.root.join('app', 'locales', '*.{rb,yml}').to_s]
     config.active_record.time_zone_aware_types = %i[datetime time] if CI_ORM == :active_record
     config.active_storage.service = :local if defined?(ActiveStorage)
-    config.importmap.cache_sweepers << RailsAdmin::Engine.root.join('src') if config.respond_to? :importmap
+
+    case CI_ASSET
+    when :importmap
+      config.assets.paths << RailsAdmin::Engine.root.join('src')
+      config.importmap.cache_sweepers << RailsAdmin::Engine.root.join('src')
+    end
   end
 end
