@@ -16,7 +16,8 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
         ["#{name}_attachment".to_sym, "#{name}_blob".to_sym]
       end
     children_fields = associations.map do |child_name|
-      next unless child_association = parent.abstract_model.associations.detect { |p| p.name.to_sym == child_name }
+      child_association = parent.abstract_model.associations.detect { |p| p.name.to_sym == child_name }
+      next unless child_association
 
       child_field = fields.detect { |f| f.name == child_name } || RailsAdmin::Config::Fields.default_factory.call(parent, child_association, fields)
       child_field.hide unless field == child_field

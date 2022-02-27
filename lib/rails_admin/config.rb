@@ -39,7 +39,7 @@ module RailsAdmin
       attr_accessor :included_models
 
       # Fields to be hidden in show, create and update views
-      attr_accessor :default_hidden_fields
+      attr_reader :default_hidden_fields
 
       # Default items per page value used if a model level option has not
       # been configured

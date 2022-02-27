@@ -58,7 +58,8 @@ module RailsAdmin
           end
 
           register_instance_option :formatted_value do
-            if time = (value || default_value)
+            time = (value || default_value)
+            if time
               ::I18n.l(time, format: strftime_format)
             else
               ''.html_safe

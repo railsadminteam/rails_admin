@@ -12,7 +12,8 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
     fields << field
     children_fields = []
     columns.each do |children_column_name|
-      next unless child_properties = parent.abstract_model.properties.detect { |p| p.name.to_s == children_column_name.to_s }
+      child_properties = parent.abstract_model.properties.detect { |p| p.name.to_s == children_column_name.to_s }
+      next unless child_properties
 
       children_field = fields.detect { |f| f.name == children_column_name } || RailsAdmin::Config::Fields.default_factory.call(parent, child_properties, fields)
       children_field.hide unless field == children_field

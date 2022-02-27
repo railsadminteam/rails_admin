@@ -49,7 +49,7 @@ module RailsAdmin
           created_at: :created_at,
           message: :event,
         }.freeze
-        E_VERSION_MODEL_NOT_SET = <<-EOS.strip_heredoc.freeze
+        E_VERSION_MODEL_NOT_SET = <<-ERROR.strip_heredoc.freeze
           Please set up PaperTrail's version model explicitly.
 
               config.audit_with :paper_trail, 'User', 'PaperTrail::Version'
@@ -58,7 +58,7 @@ module RailsAdmin
           (https://github.com/paper-trail-gem/paper_trail#6a-custom-version-classes)
           that configuration will take precedence over what you specify in
           `audit_with`.
-        EOS
+        ERROR
 
         def self.setup
           raise 'PaperTrail not found' unless defined?(::PaperTrail)
