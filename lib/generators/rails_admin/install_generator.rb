@@ -8,7 +8,7 @@ module RailsAdmin
     include Generators::Utils::InstanceMethods
 
     argument :_namespace, type: :string, required: false, desc: 'RailsAdmin url namespace'
-    class_option :asset, type: :string, required: false, default: nil, desc: 'Asset delivery method [options: webpack, webpacker, sprockets]'
+    class_option :asset, type: :string, required: false, default: nil, desc: 'Asset delivery method [options: webpacker, sprockets]'
     desc 'RailsAdmin installation generator'
 
     def install
@@ -39,9 +39,7 @@ module RailsAdmin
     def asset
       return options['asset'] if options['asset']
 
-      if Rails.root.join('webpack.config.js').exist?
-        'webpack'
-      elsif defined?(Webpacker)
+      if defined?(Webpacker)
         'webpacker'
       else
         'sprockets'
