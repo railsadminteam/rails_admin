@@ -52,7 +52,7 @@ module RailsAdmin
             when '%z' # Time zone as hour and minute offset from UTC (e.g. +0900)
               Time.zone.formatted_offset(false)
             else
-              FLATPICKR_TRANSLATIONS[match] or raise <<-MSG.gsub(/^\s{16}/, '')
+              FLATPICKR_TRANSLATIONS[match] or raise <<~MSG
                 Unsupported strftime directive '#{match}' was found. Please consider explicitly setting flatpickr_format instance option for the field.
                   field(:name_of_field) { flatpickr_format '...' }
               MSG

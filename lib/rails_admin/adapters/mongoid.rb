@@ -54,7 +54,7 @@ module RailsAdmin
         scope
       rescue NoMethodError => e
         if /page/.match?(e.message)
-          e = e.exception <<-ERROR.gsub(/^\s{12}/, '')
+          e = e.exception <<~ERROR
             #{e.message}
             If you don't have kaminari-mongoid installed, add `gem 'kaminari-mongoid'` to your Gemfile.
           ERROR

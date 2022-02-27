@@ -12,10 +12,10 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
     File.write(File.join(destination_root, 'package.json'), '{"license": "MIT"}')
     FileUtils.touch File.join(destination_root, 'Gemfile')
     FileUtils.mkdir_p(File.join(destination_root, 'config/initializers'))
-    File.write(File.join(destination_root, 'config/routes.rb'), <<-RUBY.gsub(/^ {4}/, ''))
-    Rails.application.routes.draw do
-      # empty
-    end
+    File.write(File.join(destination_root, 'config/routes.rb'), <<~RUBY)
+      Rails.application.routes.draw do
+        # empty
+      end
     RUBY
   end
 
@@ -58,10 +58,10 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
   end
 
   it 'inserts asset_source option to RailsAdmin Initializer' do
-    File.write(File.join(destination_root, 'config/initializers/rails_admin.rb'), <<-RUBY.gsub(/^ {4}/, ''))
-    RailsAdmin.config do |config|
-      # empty
-    end
+    File.write(File.join(destination_root, 'config/initializers/rails_admin.rb'), <<~RUBY)
+      RailsAdmin.config do |config|
+        # empty
+      end
     RUBY
     Dir.chdir(destination_root) do
       run_generator

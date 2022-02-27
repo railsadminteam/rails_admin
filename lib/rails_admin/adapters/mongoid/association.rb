@@ -113,10 +113,10 @@ module RailsAdmin
         def nested_options
           nested = nested_attributes_options.try { |o| o[name] }
           if !nested && %i[embeds_one embeds_many].include?(macro.to_sym) && !cyclic?
-            raise <<-MSG.gsub(/^\s+/, '')
-            Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,
-            because embedded model doesn't have top-level access.
-            Please add `accepts_nested_attributes_for :#{association.name}' line to `#{model}' model.
+            raise <<~MSG
+              Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,
+              because embedded model doesn't have top-level access.
+              Please add `accepts_nested_attributes_for :#{association.name}' line to `#{model}' model.
             MSG
           end
 
