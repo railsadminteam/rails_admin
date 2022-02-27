@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'RailsAdmin CanCanCan Authorization', type: :request do

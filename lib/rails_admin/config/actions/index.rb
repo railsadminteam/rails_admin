@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'activemodel-serializers-xml'
 
 module RailsAdmin

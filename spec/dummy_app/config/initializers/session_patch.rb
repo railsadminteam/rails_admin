@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'action_dispatch/middleware/session/abstract_store'
 
 # When ORM was switched, but another ORM's model class still exists in session

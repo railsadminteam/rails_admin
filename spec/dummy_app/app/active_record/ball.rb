@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Ball < ActiveRecord::Base
   has_one :comment, as: :commentable
 

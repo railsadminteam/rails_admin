@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RailsAdmin
   module ApplicationHelper
     def authorized?(action_name, abstract_model = nil, object = nil)

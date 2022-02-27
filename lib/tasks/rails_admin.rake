@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :rails_admin do
   desc 'Install rails_admin'
   task :install do

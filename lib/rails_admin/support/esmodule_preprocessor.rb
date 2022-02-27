@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RailsAdmin
   class ESModulePreprocessor
     def self.instance

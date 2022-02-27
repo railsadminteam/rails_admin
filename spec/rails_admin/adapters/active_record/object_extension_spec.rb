@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'RailsAdmin::Adapters::ActiveRecord::ObjectExtension', active_record: true do

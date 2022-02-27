@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'nested_form/builder_mixin'
 
 module RailsAdmin

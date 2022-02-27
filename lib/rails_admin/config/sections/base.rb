@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/config/proxyable'
 require 'rails_admin/config/configurable'
 require 'rails_admin/config/inspectable'

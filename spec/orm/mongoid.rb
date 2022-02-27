@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/adapters/mongoid'
 
 Paperclip.logger = Logger.new(nil)

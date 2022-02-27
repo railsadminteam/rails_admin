@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/config/fields/types/action_text'
 require 'rails_admin/config/fields/types/active_record_enum'
 require 'rails_admin/config/fields/types/active_storage'

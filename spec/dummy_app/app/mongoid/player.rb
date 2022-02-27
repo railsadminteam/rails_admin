@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Player
   include Mongoid::Document
   include Mongoid::Timestamps

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails/generators'
 require 'rails_admin/version'
 require File.expand_path('utils', __dir__)

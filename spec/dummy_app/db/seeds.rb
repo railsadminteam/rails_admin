@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'mlb'
 
 user_model     = RailsAdmin::AbstractModel.new(User)

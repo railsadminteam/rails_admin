@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_record'
 require 'rails_admin/adapters/active_record/association'
 require 'rails_admin/adapters/active_record/object_extension'

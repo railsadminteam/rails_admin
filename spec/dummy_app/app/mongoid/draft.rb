@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Draft
   include Mongoid::Document
   include Mongoid::Timestamps

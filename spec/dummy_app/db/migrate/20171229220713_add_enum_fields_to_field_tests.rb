@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddEnumFieldsToFieldTests < ActiveRecord::Migration[5.0]
   def change
     add_column :field_tests, :string_enum_field,  :string

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TwoLevel
   module Namespaced
     class PolymorphicAssociationTest

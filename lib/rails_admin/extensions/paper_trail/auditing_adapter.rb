@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/core_ext/string/strip'
 
 module RailsAdmin
@@ -49,7 +51,7 @@ module RailsAdmin
           created_at: :created_at,
           message: :event,
         }.freeze
-        E_VERSION_MODEL_NOT_SET = <<-ERROR.strip_heredoc.freeze
+        E_VERSION_MODEL_NOT_SET = <<-ERROR.strip_heredoc
           Please set up PaperTrail's version model explicitly.
 
               config.audit_with :paper_trail, 'User', 'PaperTrail::Version'

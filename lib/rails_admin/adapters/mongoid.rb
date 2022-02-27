@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'mongoid'
 require 'rails_admin/config/sections/list'
 require 'rails_admin/adapters/mongoid/association'
