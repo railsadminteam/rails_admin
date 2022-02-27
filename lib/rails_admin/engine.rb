@@ -42,10 +42,6 @@ module RailsAdmin
       end
     end
 
-    rake_tasks do
-      Dir[File.join(File.dirname(__FILE__), '../tasks/*.rake')].each { |f| load f }
-    end
-
     # Check for required middlewares, users may forget to use them in Rails API mode
     config.after_initialize do |app|
       has_session_store = app.config.middleware.to_a.any? do |m|
