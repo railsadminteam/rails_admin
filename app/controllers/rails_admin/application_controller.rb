@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/abstract_model'
 
 module RailsAdmin

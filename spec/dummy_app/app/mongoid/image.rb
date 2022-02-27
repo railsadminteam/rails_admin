@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Image
   include Mongoid::Document
   include Mongoid::Paperclip

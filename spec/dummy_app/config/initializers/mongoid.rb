@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if CI_ORM == :mongoid
   filename =
     if Mongoid.respond_to?(:belongs_to_required_by_default=)

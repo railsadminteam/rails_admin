@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/adapters/active_record'
 
 ActiveRecord::Base.connection.data_sources.each do |table|

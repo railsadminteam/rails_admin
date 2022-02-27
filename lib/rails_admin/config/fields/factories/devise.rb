@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/config/fields'
 require 'rails_admin/config/fields/types'
 require 'rails_admin/config/fields/types/password'

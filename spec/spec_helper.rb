@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Configure Rails Envinronment
 ENV['RAILS_ENV'] = 'test'
 CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym

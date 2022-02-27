@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RailsAdmin
   class HashHelper
     def self.symbolize(obj)

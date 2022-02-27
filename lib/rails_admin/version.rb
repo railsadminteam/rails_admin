@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module RailsAdmin
   class Version
     MAJOR = 3
     MINOR = 0
     PATCH = 0
-    PRE = 'rc3'.freeze
+    PRE = 'rc3'
 
     class << self
       # @return [String]

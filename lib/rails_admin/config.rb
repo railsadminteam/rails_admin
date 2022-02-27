@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/config/model'
 require 'rails_admin/config/sections/list'
 require 'active_support/core_ext/module/attribute_accessors'
@@ -260,7 +262,7 @@ module RailsAdmin
       def asset_source
         @asset_source ||=
           begin
-            warn <<-MSG.gsub(/^ +/, '').freeze
+            warn <<-MSG.gsub(/^ +/, '')
               [Warning] After upgrading RailsAdmin to 3.x you haven't set asset_source yet, using :sprockets as the default.
               To suppress this message, run 'rails rails_admin:install' to setup the asset delivery method suitable to you.
             MSG

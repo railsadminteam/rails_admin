@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UpdateActiveStorageTables < ActiveRecord::Migration[5.0]
   def change
     add_column :active_storage_blobs, :service_name, :string, null: false, default: 'local'

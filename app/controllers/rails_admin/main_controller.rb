@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RailsAdmin
   class MainController < RailsAdmin::ApplicationController
     include ActionView::Helpers::TextHelper

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RailsAdmin
   module Config
     # Defines a visibility configuration

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateHistoriesTable < ActiveRecord::Migration[5.0]
   def self.up
     create_table :histories do |t|

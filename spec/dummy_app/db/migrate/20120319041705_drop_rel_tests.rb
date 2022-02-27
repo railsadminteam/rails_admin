@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DropRelTests < ActiveRecord::Migration[5.0]
   def self.up
     drop_table :rel_tests

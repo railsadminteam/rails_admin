@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RailsAdmin
   module MainHelper
     def rails_admin_form_for(*args, &block)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do

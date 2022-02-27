@@ -1,4 +1,5 @@
 # encoding: utf-8
+# frozen_string_literal: true
 
 require 'mini_magick'
 class CarrierwaveUploader < CarrierWave::Uploader::Base

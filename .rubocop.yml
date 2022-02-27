@@ -168,9 +168,6 @@ Style/Encoding:
 Style/EndlessMethod:
   Enabled: true
 
-Style/FrozenStringLiteralComment:
-  Enabled: false
-
 Style/HashConversion:
   Enabled: true
 

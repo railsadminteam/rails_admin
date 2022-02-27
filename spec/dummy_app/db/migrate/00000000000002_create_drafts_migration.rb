@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateDraftsMigration < ActiveRecord::Migration[5.0]
   def self.up
     create_table :drafts do |t|
