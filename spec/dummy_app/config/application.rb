@@ -43,5 +43,10 @@ module DummyApp
     config.active_storage.service = :local if defined?(ActiveStorage)
     config.active_storage.replace_on_assign_to_many = false if defined?(ActiveStorage) && ActiveStorage.version < Gem::Version.create('6.1')
     config.importmap.cache_sweepers << RailsAdmin::Engine.root.join('src') if config.respond_to? :importmap
+
+    if CI_ASSET == :importmap
+      config.assets.paths << RailsAdmin::Engine.root.join('src')
+      config.importmap.cache_sweepers << RailsAdmin::Engine.root.join('src')
+    end
   end
 end
