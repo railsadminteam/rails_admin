@@ -96,8 +96,8 @@
     <ul class="nav nav-tabs" id="scope_selector">
       <% @model_config.list.scopes.each_with_index do |scope, index| %>
         <% scope = '_all' if scope.nil? %>
-        <li class="<%= 'active' if scope.to_s == params[:scope] || (params[:scope].blank? && index == 0) %>">
-          <a href="<%= index_path(params.merge(scope: scope, page: nil)) %>">
+        <li class="nav-item">
+          <a href="<%= index_path(params.merge(scope: scope, page: nil)) %>" class="nav-link <%= 'active' if scope.to_s == params[:scope] || (params[:scope].blank? && index == 0) %>">           
             <%= I18n.t("admin.scopes.#{@abstract_model.to_param}.#{scope}", default: I18n.t("admin.scopes.#{scope}", default: scope.to_s.titleize)) %>
           </a>
         </li>
