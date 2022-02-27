@@ -992,7 +992,7 @@ RSpec.describe 'Index action', type: :request do
       expect(find('#scope_selector li:nth-child(2)')).to have_content('Red')
       expect(find('#scope_selector li:nth-child(3)')).to have_content('White')
       expect(find('#scope_selector li:last')).to have_content('White')
-      expect(find('#scope_selector li.active')).to have_content('All')
+      expect(find('#scope_selector li a.active')).to have_content('All')
     end
 
     it 'shows only scoped records' do
@@ -1003,14 +1003,14 @@ RSpec.describe 'Index action', type: :request do
       is_expected.to have_content(@teams[3].name)
 
       visit index_path(model_name: 'team', scope: 'red')
-      expect(find('#scope_selector li.active')).to have_content('Red')
+      expect(find('#scope_selector li a.active')).to have_content('Red')
       is_expected.to have_content(@teams[0].name)
       is_expected.to have_content(@teams[1].name)
       is_expected.to have_no_content(@teams[2].name)
       is_expected.to have_no_content(@teams[3].name)
 
       visit index_path(model_name: 'team', scope: 'white')
-      expect(find('#scope_selector li.active')).to have_content('White')
+      expect(find('#scope_selector li a.active')).to have_content('White')
       is_expected.to have_no_content(@teams[0].name)
       is_expected.to have_no_content(@teams[1].name)
       is_expected.to have_content(@teams[2].name)
@@ -1042,7 +1042,7 @@ RSpec.describe 'Index action', type: :request do
           expect(find('#scope_selector li:nth-child(2)')).to have_content('krasnyj')
           expect(find('#scope_selector li:nth-child(3)')).to have_content('White')
           expect(find('#scope_selector li:last')).to have_content('White')
-          expect(find('#scope_selector li.active')).to have_content('every')
+          expect(find('#scope_selector li a.active')).to have_content('every')
         end
       end
 
@@ -1062,7 +1062,7 @@ RSpec.describe 'Index action', type: :request do
           expect(find('#scope_selector li:nth-child(2)')).to have_content('kr')
           expect(find('#scope_selector li:nth-child(3)')).to have_content('White')
           expect(find('#scope_selector li:last')).to have_content('White')
-          expect(find('#scope_selector li.active')).to have_content('any')
+          expect(find('#scope_selector li a.active')).to have_content('any')
         end
       end
     end
