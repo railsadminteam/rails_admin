@@ -262,7 +262,7 @@ module RailsAdmin
       def asset_source
         @asset_source ||=
           begin
-            warn <<-MSG.gsub(/^ +/, '')
+            warn <<~MSG
               [Warning] After upgrading RailsAdmin to 3.x you haven't set asset_source yet, using :sprockets as the default.
               To suppress this message, run 'rails rails_admin:install' to setup the asset delivery method suitable to you.
             MSG

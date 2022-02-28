@@ -208,7 +208,7 @@ module RailsAdmin
       yield
     rescue LoadError => e
       if /sassc/.match?(e.message)
-        e = e.exception <<-MSG.gsub(/^\s{10}/, '')
+        e = e.exception <<~MSG
           #{e.message}
           RailsAdmin requires the gem sassc-rails, make sure to put `gem 'sassc-rails'` to Gemfile.
         MSG

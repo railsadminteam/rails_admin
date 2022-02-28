@@ -303,13 +303,13 @@ module RailsAdmin
         def value
           bindings[:object].safe_send(name)
         rescue NoMethodError => e
-          raise e.exception <<-ERROR.gsub(/^\s{10}/, '')
-          #{e.message}
-          If you want to use a RailsAdmin virtual field(= a field without corresponding instance method),
-          you should declare 'formatted_value' in the field definition.
-            field :#{name} do
-              formatted_value{ bindings[:object].call_some_method }
-            end
+          raise e.exception <<~ERROR
+            #{e.message}
+            If you want to use a RailsAdmin virtual field(= a field without corresponding instance method),
+            you should declare 'formatted_value' in the field definition.
+              field :#{name} do
+                formatted_value{ bindings[:object].call_some_method }
+              end
           ERROR
         end
 
