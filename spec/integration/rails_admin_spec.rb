@@ -150,6 +150,17 @@ RSpec.describe RailsAdmin, type: :request do
     end
   end
 
+  describe 'Turbo Drive', js: true do
+    let(:player) { FactoryBot.create :player }
+
+    it 'does not trigger JS errors by going away from and back to RailsAdmin' do
+      visit show_path(model_name: 'player', id: player.id)
+      click_link 'Show in app'
+      click_link 'Back to admin'
+      is_expected.to have_content 'Details for Player'
+    end
+  end
+
   context 'with invalid model name' do
     it "redirects to dashboard and inform the user the model wasn't found" do
       visit '/admin/whatever'

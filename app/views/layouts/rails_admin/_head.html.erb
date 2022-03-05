@@ -5,12 +5,12 @@
 <%= csrf_meta_tag %>
 <% case RailsAdmin::config.asset_source
    when :webpacker %>
-  <%= stylesheet_pack_tag "rails_admin" %>
-  <%= javascript_pack_tag "rails_admin", async: true %>
+  <%= stylesheet_pack_tag "rails_admin", data: {'turbo-track': 'reload'} %>
+  <%= javascript_pack_tag "rails_admin", async: true, data: {'turbo-track': 'reload'} %>
 <% when :webpack, :sprockets %>
   <% handle_asset_dependency_error do %>
-    <%= stylesheet_link_tag "rails_admin/application.css", media: :all %>
-    <%= javascript_include_tag "rails_admin/application.js", async: true %>
+    <%= stylesheet_link_tag "rails_admin/application.css", media: :all, data: {'turbo-track': 'reload'} %>
+    <%= javascript_include_tag "rails_admin/application.js", async: true, data: {'turbo-track': 'reload'} %>
   <% end %>
 <% else
      raise "Unknown asset_source: #{RailsAdmin::config.asset_source}"

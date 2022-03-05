@@ -11,4 +11,5 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 //= require rails-ujs
+//= require turbo
 //= require_tree .

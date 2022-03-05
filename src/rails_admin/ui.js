@@ -98,6 +98,10 @@ import I18n from "./i18n";
     $.each($("#filters_box").data("options"), function () {
       $.filters.append(this);
     });
+    // Workaround for https://github.com/heartcombo/devise/issues/5458
+    $("a[data-method]").on("click", function (event) {
+      window.Turbo.session.drive = false;
+    });
   });
 
   $(document).on("click", ".bulk-link", function (event) {
