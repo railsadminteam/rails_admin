@@ -69,6 +69,8 @@ module RailsAdmin
 
       # Force route reload, since it doesn't reflect RailsAdmin action configuration yet
       app.reload_routes!
+
+      RailsAdmin::Version.warn_with_js_version
     end
   end
 end
