@@ -11,7 +11,7 @@ module RailsAdmin
     config.action_dispatch.rescue_responses['RailsAdmin::ActionNotAllowed'] = :forbidden
 
     initializer 'RailsAdmin precompile hook', group: :all do |app|
-      if app.config.respond_to?(:assets)
+      if defined?(Sprockets)
         app.config.assets.precompile += %w[
           rails_admin/application.js
           rails_admin/application.css
