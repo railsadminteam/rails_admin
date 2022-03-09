@@ -10,16 +10,18 @@
             <%= fieldset.help %>
           </p>
         <% end %>
-        <dl>
+        <div class="list-group">
           <% fields.each_with_index do |field, index| %>
-            <dt>
-              <span class="<%= field.type_css_class %> <%= field.css_class %> label label-info">
-                <%= field.label %>
-              </span>
-            </dt>
-            <dd class="well">
-              <%= field.pretty_value %>
-            </dd>
+            <div class="list-group-item border-0 <%= field.type_css_class %> <%= field.css_class %>">
+              <div class="card">
+                <h5 class="card-header bg-light">
+                  <%= field.label %>
+                </h5>
+                <div class="card-body">
+                  <%= field.pretty_value %>
+                </div>
+              </div>
+            </div>
           <% end %>
         </dl>
       </div>
