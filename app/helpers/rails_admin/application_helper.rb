@@ -171,7 +171,7 @@ module RailsAdmin
               else
                 'javascript:void(0)'
               end
-            content_tag(:a, label, {href: href, target: action.link_target, class: ['nav-link', current_action?(action) && 'active', !action.enabled? && 'disabled'].compact})
+            content_tag(:a, label, {href: href, target: action.link_target, class: ['nav-link', current_action?(action) && 'active', !action.enabled? && 'disabled'].compact}.merge(action.turbo? ? {} : {data: {turbo: 'false'}}))
           else
             content_tag(:span, label)
           end

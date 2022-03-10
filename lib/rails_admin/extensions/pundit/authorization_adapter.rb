@@ -9,7 +9,7 @@ module RailsAdmin
       class AuthorizationAdapter
         # This method is called first time only and used for setup
         def self.setup
-          RailsAdmin::Extensions::ControllerExtension.include ::Pundit
+          RailsAdmin::Extensions::ControllerExtension.include defined?(::Pundit::Authorization) ? ::Pundit::Authorization : ::Pundit
         end
 
         # See the +authorize_with+ config method for where the initialization happens.

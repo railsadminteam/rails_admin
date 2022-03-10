@@ -8,6 +8,7 @@ appraise 'rails-6.0' do
   group :test do
     gem 'cancancan', '~> 3.0'
     gem 'kt-paperclip'
+    gem 'pundit', '~> 2.1.0'
     gem 'rspec-rails', '>= 4.0.0.beta2'
     gem 'shrine', '~> 3.0'
   end

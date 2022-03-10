@@ -4,6 +4,7 @@ require 'kaminari'
 require 'nested_form'
 require 'rails'
 require 'rails_admin'
+require 'rails_admin/version'
 require 'turbo-rails'
 
 module RailsAdmin
@@ -13,7 +14,7 @@ module RailsAdmin
     config.action_dispatch.rescue_responses['RailsAdmin::ActionNotAllowed'] = :forbidden
 
     initializer 'RailsAdmin precompile hook', group: :all do |app|
-      if app.config.respond_to?(:assets)
+      if defined?(Sprockets)
         app.config.assets.precompile += %w[
           rails_admin/application.js
           rails_admin/application.css
@@ -71,6 +72,8 @@ module RailsAdmin
 
       # Force route reload, since it doesn't reflect RailsAdmin action configuration yet
       app.reload_routes!
+
+      RailsAdmin::Version.warn_with_js_version
     end
   end
 end
