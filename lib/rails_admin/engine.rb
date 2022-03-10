@@ -2,6 +2,7 @@ require 'kaminari'
 require 'nested_form'
 require 'rails'
 require 'rails_admin'
+require 'rails_admin/version'
 require 'turbo-rails'
 
 module RailsAdmin
