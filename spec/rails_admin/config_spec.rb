@@ -327,6 +327,24 @@ RSpec.describe RailsAdmin::Config do
       end
     end
 
+    context 'when a block is not provided' do
+      let(:model) { described_class.model(Team) }
+      it 'returns the model config' do
+        expect(model).to be_a(RailsAdmin::Config::Model)
+      end
+    end
+
+    context 'when a block is provided' do
+      let(:model) do
+        described_class.model(Team) do
+          field :fans
+        end
+      end
+      it 'does not return the model config' do
+        expect(model).to be_nil
+      end
+    end
+
     context 'when model expanded' do
       before do
         described_class.model(Team) do
@@ -387,6 +405,7 @@ RSpec.describe RailsAdmin::Config do
       end
     end
     before { RailsAdmin::Config.instance_variable_set(:@initialized, false) }
+    before { RailsAdmin::Config.instance_variable_set(:@initializing, false) }
     after do
       RailsAdmin::Config.instance_variable_set(:@initialized, true)
       RailsAdmin::Config.instance_variable_set(:@deferred_blocks, [])
@@ -443,6 +462,11 @@ RSpec.describe RailsAdmin::Config do
     it 're-applies the configuration from the initializer' do
       RailsAdmin::Config.reload!
       expect(RailsAdmin::Config.model(Team).fields.find { |f| f.name == :color }.type).to eq :color
+    end
+
+    it 'does not immediately apply model configuration' do
+      expect(RailsAdmin::Config).not_to receive(:initialize!)
+      RailsAdmin::Config.reload!
     end
 
     it "applies the initializer's configuration first, then models' configurations" do

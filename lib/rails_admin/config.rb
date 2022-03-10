@@ -24,6 +24,7 @@ module RailsAdmin
 
     # Variables to track initialization process
     @initialized = false
+    @initializing = false
     @deferred_blocks = []
 
     class << self
@@ -87,6 +88,9 @@ module RailsAdmin
 
       # Finish initialization by executing deferred configuration blocks
       def initialize!
+        return if @initializing
+
+        @initializing = true
         @deferred_blocks.each { |block| block.call(self) }
         @deferred_blocks.clear
         @initialized = true
@@ -226,6 +230,7 @@ module RailsAdmin
 
       # pool of all found model names from the whole application
       def models_pool
+        initialize!
         (viable_models - excluded_models.collect(&:to_s)).uniq.sort
       end
 
@@ -238,7 +243,7 @@ module RailsAdmin
       #
       # If a block is given it is evaluated in the context of configuration instance.
       #
-      # Returns given model's configuration
+      # Otherwise returns given model's configuration.
       #
       # @see RailsAdmin::Config.registry
       def model(entity, &block)
@@ -254,9 +259,24 @@ module RailsAdmin
             entity.class.name.to_sym
           end
 
-        @registry[key] ||= RailsAdmin::Config::Model.new(entity)
-        @registry[key].instance_eval(&block) if block && @registry[key].abstract_model
-        @registry[key]
+        # When a block is provided defer evaluation until initialize so that:
+        #
+        # 1) performing configuration in the initializer does not attempt to
+        #    autoload model classes, and
+        # 2) model config blocks run after models are fully loaded and
+        #    associations are defined.
+        #
+        # Do not defer when called without a block as the model must be returned.
+        if block
+          RailsAdmin::Config.apply do
+            m = model(entity)
+            m.instance_eval(&block) if @registry[key].abstract_model
+          end
+          nil
+        else
+          initialize!
+          @registry[key] ||= RailsAdmin::Config::Model.new(entity)
+        end
       end
 
       def asset_source
@@ -318,6 +338,8 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config.registry
       def reset
+        @initialized = @initializing = false
+        @deferred_blocks.clear
         @compact_show_view = true
         @browser_validations = true
         @authenticate = nil
@@ -356,10 +378,8 @@ module RailsAdmin
 
       # Perform reset, then load RailsAdmin initializer again
       def reload!
-        @initialized = false
         reset
         load RailsAdmin::Engine.config.initializer_path
-        initialize!
       end
 
       # Get all models that are configured as visible sorted by their weight and label.
