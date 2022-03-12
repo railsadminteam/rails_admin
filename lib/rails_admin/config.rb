@@ -260,14 +260,15 @@ module RailsAdmin
       end
 
       def asset_source
-        @asset_source ||=
-          begin
-            warn <<~MSG
-              [Warning] After upgrading RailsAdmin to 3.x you haven't set asset_source yet, using :sprockets as the default.
-              To suppress this message, run 'rails rails_admin:install' to setup the asset delivery method suitable to you.
-            MSG
-            :sprockets
-          end
+        @asset_source = if defined?(Webpacker)
+          :webpacker
+        elsif Rails.root.join('webpack.config.js').exist?
+          :webpack
+        elsif Rails.root.join('config/importmap.rb').exist?
+          :importmap
+        else
+          :sprockets
+        end
       end
 
       def default_hidden_fields=(fields)

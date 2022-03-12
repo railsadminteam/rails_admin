@@ -45,15 +45,7 @@ module RailsAdmin
     def asset
       return options['asset'] if options['asset']
 
-      if defined?(Webpacker)
-        'webpacker'
-      elsif Rails.root.join('webpack.config.js').exist?
-        'webpack'
-      elsif Rails.root.join('config/importmap.rb').exist?
-        'importmap'
-      else
-        'sprockets'
-      end
+      RailsAdmin::Config::asset_source.to_s
     end
 
     def configure_for_sprockets
@@ -88,7 +80,7 @@ module RailsAdmin
     end
 
     def setup_css(additional_script_entries = {})
-      gem 'cssbundling-rails'
+      gem 'cssbundling-rails' unless defined?(Cssbundling) == 'constant'
       rake 'css:install:sass'
 
       @fa_font_path = '.'
