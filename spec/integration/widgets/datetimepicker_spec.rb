@@ -68,7 +68,6 @@ RSpec.describe 'Datetimepicker widget', type: :request, js: true do
       visit new_path(model_name: 'field_test', field_test: {datetime_field: '2021-01-02T03:45:00'})
       expect(find('[name="field_test[datetime_field]"]', visible: false).value).to eq '2021-01-02T03:45:00'
       expect(find('#field_test_datetime_field + input').value).to eq 'samedi 02 janvier 2021 03:45'
-      pending 'flatpickr date parsing does not work well with a localized string'
       find('#field_test_datetime_field + input').set 'mercredi 03 février 2021 04:55'
       expect(find('[name="field_test[datetime_field]"]', visible: false).value).to eq '2021-02-03T04:55:00'
     end

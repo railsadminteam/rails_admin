@@ -1,4 +1,4 @@
-/* flatpickr v4.6.9, @license MIT */
+/* flatpickr v4.6.11, @license MIT */
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
     typeof define === 'function' && define.amd ? define(factory) :
@@ -208,8 +208,9 @@
         var t;
         return function () {
             var _this = this;
+            var args = arguments;
             clearTimeout(t);
-            t = setTimeout(function () { return fn.apply(_this, arguments); }, wait);
+            t = setTimeout(function () { return fn.apply(_this, args); }, wait);
         };
     }
     var arrayify = function (obj) {
@@ -279,7 +280,7 @@
             dateObj.setMonth(locale.months.longhand.indexOf(monthName));
         },
         G: function (dateObj, hour) {
-            dateObj.setHours(parseFloat(hour));
+            dateObj.setHours((dateObj.getHours() >= 12 ? 12 : 0) + parseFloat(hour));
         },
         H: function (dateObj, hour) {
             dateObj.setHours(parseFloat(hour));
@@ -312,7 +313,7 @@
             dateObj.setDate(parseFloat(day));
         },
         h: function (dateObj, hour) {
-            dateObj.setHours(parseFloat(hour));
+            dateObj.setHours((dateObj.getHours() >= 12 ? 12 : 0) + parseFloat(hour));
         },
         i: function (dateObj, minutes) {
             dateObj.setMinutes(parseFloat(minutes));
@@ -339,13 +340,13 @@
         },
     };
     var tokenRegex = {
-        D: "(\\w+)",
-        F: "(\\w+)",
+        D: "",
+        F: "",
         G: "(\\d\\d|\\d)",
         H: "(\\d\\d|\\d)",
         J: "(\\d\\d|\\d)\\w+",
         K: "",
-        M: "(\\w+)",
+        M: "",
         S: "(\\d\\d|\\d)",
         U: "(.+)",
         W: "(\\d\\d|\\d)",
@@ -355,7 +356,7 @@
         h: "(\\d\\d|\\d)",
         i: "(\\d\\d|\\d)",
         j: "(\\d\\d|\\d)",
-        l: "(\\w+)",
+        l: "",
         m: "(\\d\\d|\\d)",
         n: "(\\d\\d|\\d)",
         s: "(\\d\\d|\\d)",
@@ -469,17 +470,15 @@
                     parsedDate = new Date();
                     timeless = true;
                 }
+                else if (config && config.parseDate) {
+                    parsedDate = config.parseDate(date, format);
+                }
                 else if (/Z$/.test(datestr) ||
                     /GMT$/.test(datestr) // datestrings w/ timezone
-                )
+                ) {
                     parsedDate = new Date(date);
-                else if (config && config.parseDate)
-                    parsedDate = config.parseDate(date, format);
+                }
                 else {
-                    parsedDate =
-                        !config || !config.noCalendar
-                            ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0)
-                            : new Date(new Date().setHours(0, 0, 0, 0));
                     var matched = void 0, ops = [];
                     for (var i = 0, matchIndex = 0, regexStr = ""; i < format.length; i++) {
                         var token_1 = format[i];
@@ -497,11 +496,15 @@
                         }
                         else if (!isBackSlash)
                             regexStr += "."; // don't really care
-                        ops.forEach(function (_a) {
-                            var fn = _a.fn, val = _a.val;
-                            return (parsedDate = fn(parsedDate, val, locale) || parsedDate);
-                        });
                     }
+                    parsedDate =
+                        !config || !config.noCalendar
+                            ? new Date(new Date().getFullYear(), 0, 1, 0, 0, 0, 0)
+                            : new Date(new Date().setHours(0, 0, 0, 0));
+                    ops.forEach(function (_a) {
+                        var fn = _a.fn, val = _a.val;
+                        return (parsedDate = fn(parsedDate, val, locale) || parsedDate);
+                    });
                     parsedDate = matched ? parsedDate : undefined;
                 }
             }
@@ -528,6 +531,13 @@
     }
     var isBetween = function (ts, ts1, ts2) {
         return ts > Math.min(ts1, ts2) && ts < Math.max(ts1, ts2);
+    };
+    var calculateSecondsSinceMidnight = function (hours, minutes, seconds) {
+        return hours * 3600 + minutes * 60 + seconds;
+    };
+    var parseSeconds = function (secondsSinceMidnight) {
+        var hours = Math.floor(secondsSinceMidnight / 3600), minutes = (secondsSinceMidnight - hours * 3600) / 60;
+        return [hours, minutes, secondsSinceMidnight - hours * 3600 - minutes * 60];
     };
     var duration = {
         DAY: 86400000,
@@ -600,10 +610,13 @@
         self.changeYear = changeYear;
         self.clear = clear;
         self.close = close;
+        self.onMouseOver = onMouseOver;
         self._createElement = createElement;
+        self.createDay = createDay;
         self.destroy = destroy;
         self.isEnabled = isEnabled;
         self.jumpToDate = jumpToDate;
+        self.updateValue = updateValue;
         self.open = open;
         self.redraw = redraw;
         self.set = set;
@@ -651,6 +664,10 @@
                 positionCalendar();
             }
             triggerEvent("onReady");
+        }
+        function getClosestActiveElement() {
+            var _a;
+            return ((_a = self.calendarContainer) === null || _a === void 0 ? void 0 : _a.getRootNode()).activeElement || document.activeElement;
         }
         function bindToInstance(fn) {
             return fn.bind(self);
@@ -741,25 +758,40 @@
                     self.latestSelectedDateObj &&
                     compareDates(self.latestSelectedDateObj, self.config.maxDate, true) ===
                         0);
-            if (limitMaxHours) {
-                var maxTime = self.config.maxTime !== undefined
-                    ? self.config.maxTime
-                    : self.config.maxDate;
-                hours = Math.min(hours, maxTime.getHours());
-                if (hours === maxTime.getHours())
-                    minutes = Math.min(minutes, maxTime.getMinutes());
-                if (minutes === maxTime.getMinutes())
-                    seconds = Math.min(seconds, maxTime.getSeconds());
+            if (self.config.maxTime !== undefined &&
+                self.config.minTime !== undefined &&
+                self.config.minTime > self.config.maxTime) {
+                var minBound = calculateSecondsSinceMidnight(self.config.minTime.getHours(), self.config.minTime.getMinutes(), self.config.minTime.getSeconds());
+                var maxBound = calculateSecondsSinceMidnight(self.config.maxTime.getHours(), self.config.maxTime.getMinutes(), self.config.maxTime.getSeconds());
+                var currentTime = calculateSecondsSinceMidnight(hours, minutes, seconds);
+                if (currentTime > maxBound && currentTime < minBound) {
+                    var result = parseSeconds(minBound);
+                    hours = result[0];
+                    minutes = result[1];
+                    seconds = result[2];
+                }
             }
-            if (limitMinHours) {
-                var minTime = self.config.minTime !== undefined
-                    ? self.config.minTime
-                    : self.config.minDate;
-                hours = Math.max(hours, minTime.getHours());
-                if (hours === minTime.getHours() && minutes < minTime.getMinutes())
-                    minutes = minTime.getMinutes();
-                if (minutes === minTime.getMinutes())
-                    seconds = Math.max(seconds, minTime.getSeconds());
+            else {
+                if (limitMaxHours) {
+                    var maxTime = self.config.maxTime !== undefined
+                        ? self.config.maxTime
+                        : self.config.maxDate;
+                    hours = Math.min(hours, maxTime.getHours());
+                    if (hours === maxTime.getHours())
+                        minutes = Math.min(minutes, maxTime.getMinutes());
+                    if (minutes === maxTime.getMinutes())
+                        seconds = Math.min(seconds, maxTime.getSeconds());
+                }
+                if (limitMinHours) {
+                    var minTime = self.config.minTime !== undefined
+                        ? self.config.minTime
+                        : self.config.minDate;
+                    hours = Math.max(hours, minTime.getHours());
+                    if (hours === minTime.getHours() && minutes < minTime.getMinutes())
+                        minutes = minTime.getMinutes();
+                    if (minutes === minTime.getMinutes())
+                        seconds = Math.max(seconds, minTime.getSeconds());
+                }
             }
             setHours(hours, minutes, seconds);
         }
@@ -768,7 +800,7 @@
          */
         function setHoursFromDate(dateObj) {
             var date = dateObj || self.latestSelectedDateObj;
-            if (date) {
+            if (date && date instanceof Date) {
                 setHours(date.getHours(), date.getMinutes(), date.getSeconds());
             }
         }
@@ -821,7 +853,7 @@
                 return element.forEach(function (el) { return bind(el, event, handler, options); });
             element.addEventListener(event, handler, options);
             self._handlers.push({
-                remove: function () { return element.removeEventListener(event, handler); },
+                remove: function () { return element.removeEventListener(event, handler, options); },
             });
         }
         function triggerChange() {
@@ -849,7 +881,10 @@
                     if (self.config.mode === "range")
                         onMouseOver(getEventTarget(e));
                 });
-            bind(window.document.body, "keydown", onKeyDown);
+            bind(self._input, "keydown", onKeyDown);
+            if (self.calendarContainer !== undefined) {
+                bind(self.calendarContainer, "keydown", onKeyDown);
+            }
             if (!self.config.inline && !self.config.static)
                 bind(window, "resize", debouncedResize);
             if (window.ontouchstart !== undefined)
@@ -881,7 +916,6 @@
                 if (self.amPM !== undefined) {
                     bind(self.amPM, "click", function (e) {
                         updateTime(e);
-                        triggerChange();
                     });
                 }
             }
@@ -1009,7 +1043,7 @@
                     : window.document.body).appendChild(self.calendarContainer);
         }
         function createDay(className, date, dayNumber, i) {
-            var dateIsEnabled = isEnabled(date, true), dayElement = createElement("span", "flatpickr-day " + className, date.getDate().toString());
+            var dateIsEnabled = isEnabled(date, true), dayElement = createElement("span", className, date.getDate().toString());
             dayElement.dateObj = date;
             dayElement.$i = i;
             dayElement.setAttribute("aria-label", self.formatDate(date, self.config.ariaDateFormat));
@@ -1097,11 +1131,12 @@
             return undefined;
         }
         function focusOnDay(current, offset) {
-            var dayFocused = isInView(document.activeElement || document.body);
+            var activeElement = getClosestActiveElement();
+            var dayFocused = isInView(activeElement || document.body);
             var startElem = current !== undefined
                 ? current
                 : dayFocused
-                    ? document.activeElement
+                    ? activeElement
                     : self.selectedDateElem !== undefined && isInView(self.selectedDateElem)
                         ? self.selectedDateElem
                         : self.todayDateElem !== undefined && isInView(self.todayDateElem)
@@ -1124,16 +1159,16 @@
             var dayNumber = prevMonthDays + 1 - firstOfMonth, dayIndex = 0;
             // prepend days from the ending of previous month
             for (; dayNumber <= prevMonthDays; dayNumber++, dayIndex++) {
-                days.appendChild(createDay(prevMonthDayClass, new Date(year, month - 1, dayNumber), dayNumber, dayIndex));
+                days.appendChild(createDay("flatpickr-day " + prevMonthDayClass, new Date(year, month - 1, dayNumber), dayNumber, dayIndex));
             }
             // Start at 1 since there is no 0th day
             for (dayNumber = 1; dayNumber <= daysInMonth; dayNumber++, dayIndex++) {
-                days.appendChild(createDay("", new Date(year, month, dayNumber), dayNumber, dayIndex));
+                days.appendChild(createDay("flatpickr-day", new Date(year, month, dayNumber), dayNumber, dayIndex));
             }
             // append days from the next month
             for (var dayNum = daysInMonth + 1; dayNum <= 42 - firstOfMonth &&
                 (self.config.showMonths === 1 || dayIndex % 7 !== 0); dayNum++, dayIndex++) {
-                days.appendChild(createDay(nextMonthDayClass, new Date(year, month + 1, dayNum % daysInMonth), dayNum, dayIndex));
+                days.appendChild(createDay("flatpickr-day " + nextMonthDayClass, new Date(year, month + 1, dayNum % daysInMonth), dayNum, dayIndex));
             }
             //updateNavigationCurrentMonth();
             var dayContainer = createElement("div", "dayContainer");
@@ -1504,8 +1539,6 @@
             });
         }
         function isCalendarElem(elem) {
-            if (self.config.appendTo && self.config.appendTo.contains(elem))
-                return true;
             return self.calendarContainer.contains(elem);
         }
         function documentClick(e) {
@@ -1521,17 +1554,18 @@
                         e.path.indexOf &&
                         (~e.path.indexOf(self.input) ||
                             ~e.path.indexOf(self.altInput)));
-                var lostFocus = e.type === "blur"
-                    ? isInput &&
-                        e.relatedTarget &&
-                        !isCalendarElem(e.relatedTarget)
-                    : !isInput &&
-                        !isCalendarElement &&
-                        !isCalendarElem(e.relatedTarget);
+                var lostFocus = !isInput &&
+                    !isCalendarElement &&
+                    !isCalendarElem(e.relatedTarget);
                 var isIgnored = !self.config.ignoredFocusElements.some(function (elem) {
                     return elem.contains(eventTarget_1);
                 });
                 if (lostFocus && isIgnored) {
+                    if (self.config.allowInput) {
+                        self.setDate(self._input.value, false, self.config.altInput
+                            ? self.config.altFormat
+                            : self.config.dateFormat);
+                    }
                     if (self.timeContainer !== undefined &&
                         self.minuteElement !== undefined &&
                         self.hourElement !== undefined &&
@@ -1542,10 +1576,8 @@
                     self.close();
                     if (self.config &&
                         self.config.mode === "range" &&
-                        self.selectedDates.length === 1) {
+                        self.selectedDates.length === 1)
                         self.clear(false);
-                        self.redraw();
-                    }
                 }
             }
         }
@@ -1656,6 +1688,7 @@
                     self.setDate(self._input.value, true, eventTarget === self.altInput
                         ? self.config.altFormat
                         : self.config.dateFormat);
+                    self.close();
                     return eventTarget.blur();
                 }
                 else {
@@ -1692,9 +1725,10 @@
                     case 39:
                         if (!isTimeObj && !isInput) {
                             e.preventDefault();
+                            var activeElement = getClosestActiveElement();
                             if (self.daysContainer !== undefined &&
                                 (allowInput === false ||
-                                    (document.activeElement && isInView(document.activeElement)))) {
+                                    (activeElement && isInView(activeElement)))) {
                                 var delta_1 = e.keyCode === 39 ? 1 : -1;
                                 if (!e.ctrlKey)
                                     focusOnDay(undefined, delta_1);
@@ -1781,10 +1815,11 @@
                 triggerEvent("onKeyDown", e);
             }
         }
-        function onMouseOver(elem) {
+        function onMouseOver(elem, cellClass) {
+            if (cellClass === void 0) { cellClass = "flatpickr-day"; }
             if (self.selectedDates.length !== 1 ||
                 (elem &&
-                    (!elem.classList.contains("flatpickr-day") ||
+                    (!elem.classList.contains(cellClass) ||
                         elem.classList.contains("flatpickr-disabled"))))
                 return;
             var hoverDate = elem
@@ -1802,43 +1837,38 @@
                         maxRange = t;
                 }
             }
-            for (var m = 0; m < self.config.showMonths; m++) {
-                var month = self.daysContainer.children[m];
-                var _loop_1 = function (i, l) {
-                    var dayElem = month.children[i], date = dayElem.dateObj;
-                    var timestamp = date.getTime();
-                    var outOfRange = (minRange > 0 && timestamp < minRange) ||
-                        (maxRange > 0 && timestamp > maxRange);
-                    if (outOfRange) {
-                        dayElem.classList.add("notAllowed");
-                        ["inRange", "startRange", "endRange"].forEach(function (c) {
-                            dayElem.classList.remove(c);
-                        });
-                        return "continue";
-                    }
-                    else if (containsDisabled && !outOfRange)
-                        return "continue";
-                    ["startRange", "inRange", "endRange", "notAllowed"].forEach(function (c) {
+            var hoverableCells = Array.from(self.rContainer.querySelectorAll("*:nth-child(-n+" + self.config.showMonths + ") > ." + cellClass));
+            hoverableCells.forEach(function (dayElem) {
+                var date = dayElem.dateObj;
+                var timestamp = date.getTime();
+                var outOfRange = (minRange > 0 && timestamp < minRange) ||
+                    (maxRange > 0 && timestamp > maxRange);
+                if (outOfRange) {
+                    dayElem.classList.add("notAllowed");
+                    ["inRange", "startRange", "endRange"].forEach(function (c) {
                         dayElem.classList.remove(c);
                     });
-                    if (elem !== undefined) {
-                        elem.classList.add(hoverDate <= self.selectedDates[0].getTime()
-                            ? "startRange"
-                            : "endRange");
-                        if (initialDate < hoverDate && timestamp === initialDate)
-                            dayElem.classList.add("startRange");
-                        else if (initialDate > hoverDate && timestamp === initialDate)
-                            dayElem.classList.add("endRange");
-                        if (timestamp >= minRange &&
-                            (maxRange === 0 || timestamp <= maxRange) &&
-                            isBetween(timestamp, initialDate, hoverDate))
-                            dayElem.classList.add("inRange");
-                    }
-                };
-                for (var i = 0, l = month.children.length; i < l; i++) {
-                    _loop_1(i, l);
+                    return;
                 }
-            }
+                else if (containsDisabled && !outOfRange)
+                    return;
+                ["startRange", "inRange", "endRange", "notAllowed"].forEach(function (c) {
+                    dayElem.classList.remove(c);
+                });
+                if (elem !== undefined) {
+                    elem.classList.add(hoverDate <= self.selectedDates[0].getTime()
+                        ? "startRange"
+                        : "endRange");
+                    if (initialDate < hoverDate && timestamp === initialDate)
+                        dayElem.classList.add("startRange");
+                    else if (initialDate > hoverDate && timestamp === initialDate)
+                        dayElem.classList.add("endRange");
+                    if (timestamp >= minRange &&
+                        (maxRange === 0 || timestamp <= maxRange) &&
+                        isBetween(timestamp, initialDate, hoverDate))
+                        dayElem.classList.add("inRange");
+                }
+            });
         }
         function onResize() {
             if (self.isOpen && !self.config.static && !self.config.inline)
@@ -2031,6 +2061,10 @@
                 : self.config.locale !== "default"
                     ? flatpickr.l10ns[self.config.locale]
                     : undefined));
+            tokenRegex.D = "(" + self.l10n.weekdays.shorthand.join("|") + ")";
+            tokenRegex.l = "(" + self.l10n.weekdays.longhand.join("|") + ")";
+            tokenRegex.M = "(" + self.l10n.months.shorthand.join("|") + ")";
+            tokenRegex.F = "(" + self.l10n.months.longhand.join("|") + ")";
             tokenRegex.K = "(" + self.l10n.amPM[0] + "|" + self.l10n.amPM[1] + "|" + self.l10n.amPM[0].toLowerCase() + "|" + self.l10n.amPM[1].toLowerCase() + ")";
             var userConfig = __assign(__assign({}, instanceConfig), JSON.parse(JSON.stringify(element.dataset || {})));
             if (userConfig.time_24hr === undefined &&
@@ -2111,6 +2145,8 @@
             var editableSheet = null;
             for (var i = 0; i < document.styleSheets.length; i++) {
                 var sheet = document.styleSheets[i];
+                if (!sheet.cssRules)
+                    continue;
                 try {
                     sheet.cssRules;
                 }
@@ -2224,6 +2260,7 @@
             showMonths: [buildMonths, setCalendarWidth, buildWeekdays],
             minDate: [jumpToDate],
             maxDate: [jumpToDate],
+            positionElement: [updatePositionElement],
             clickOpens: [
                 function () {
                     if (self.config.clickOpens === true) {
@@ -2395,6 +2432,9 @@
             }
             if (!self.config.allowInput)
                 self._input.setAttribute("readonly", "readonly");
+            updatePositionElement();
+        }
+        function updatePositionElement() {
             self._positionElement = self.config.positionElement || self._input;
         }
         function setupMobile() {
@@ -2465,7 +2505,8 @@
         }
         function isDateSelected(date) {
             for (var i = 0; i < self.selectedDates.length; i++) {
-                if (compareDates(self.selectedDates[i], date) === 0)
+                var selectedDate = self.selectedDates[i];
+                if (selectedDate instanceof Date && compareDates(selectedDate, date) === 0)
                     return "" + i;
             }
             return false;
@@ -2675,6 +2716,68 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global['ar-dz'] = {}));
+}(this, (function (exports) { 'use strict';
+
+  var fp = typeof window !== "undefined" && window.flatpickr !== undefined
+      ? window.flatpickr
+      : {
+          l10ns: {},
+      };
+  var AlgerianArabic = {
+      weekdays: {
+          shorthand: ["أحد", "اثنين", "ثلاثاء", "أربعاء", "خميس", "جمعة", "سبت"],
+          longhand: [
+              "الأحد",
+              "الاثنين",
+              "الثلاثاء",
+              "الأربعاء",
+              "الخميس",
+              "الجمعة",
+              "السبت",
+          ],
+      },
+      months: {
+          shorthand: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+          longhand: [
+              "جانفي",
+              "فيفري",
+              "مارس",
+              "أفريل",
+              "ماي",
+              "جوان",
+              "جويليه",
+              "أوت",
+              "سبتمبر",
+              "أكتوبر",
+              "نوفمبر",
+              "ديسمبر",
+          ],
+      },
+      firstDayOfWeek: 0,
+      rangeSeparator: " إلى ",
+      weekAbbreviation: "Wk",
+      scrollTitle: "قم بالتمرير للزيادة",
+      toggleTitle: "اضغط للتبديل",
+      yearAriaLabel: "سنة",
+      monthAriaLabel: "شهر",
+      hourAriaLabel: "ساعة",
+      minuteAriaLabel: "دقيقة",
+      time_24hr: true,
+  };
+  fp.l10ns.ar = AlgerianArabic;
+  var arDz = fp.l10ns;
+
+  exports.AlgerianArabic = AlgerianArabic;
+  exports.default = arDz;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
+
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.ar = {}));
 }(this, (function (exports) { 'use strict';
 
@@ -2713,7 +2816,17 @@
               "ديسمبر",
           ],
       },
-      rangeSeparator: " - ",
+      firstDayOfWeek: 6,
+      rangeSeparator: " إلى ",
+      weekAbbreviation: "Wk",
+      scrollTitle: "قم بالتمرير للزيادة",
+      toggleTitle: "اضغط للتبديل",
+      amPM: ["ص", "م"],
+      yearAriaLabel: "سنة",
+      monthAriaLabel: "شهر",
+      hourAriaLabel: "ساعة",
+      minuteAriaLabel: "دقيقة",
+      time_24hr: false,
   };
   fp.l10ns.ar = Arabic;
   var ar = fp.l10ns;
@@ -2784,6 +2897,7 @@
       rangeSeparator: " bis ",
       scrollTitle: "Zum Ändern scrollen",
       toggleTitle: "Zum Umschalten klicken",
+      time_24hr: true,
   };
   fp.l10ns.at = Austria;
   var at = fp.l10ns;
@@ -3217,6 +3331,7 @@
           }
       },
       firstDayOfWeek: 1,
+      rangeSeparator: " a ",
       time_24hr: true,
   };
   fp.l10ns.cat = fp.l10ns.ca = Catalan;
@@ -3224,6 +3339,75 @@
 
   exports.Catalan = Catalan;
   exports.default = cat;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
+
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.ckb = {}));
+}(this, (function (exports) { 'use strict';
+
+  var fp = typeof window !== "undefined" && window.flatpickr !== undefined
+      ? window.flatpickr
+      : {
+          l10ns: {},
+      };
+  var Kurdish = {
+      weekdays: {
+          shorthand: ["یەکشەممە", "دووشەممە", "سێشەممە", "چوارشەممە", "پێنجشەممە", "هەینی", "شەممە"],
+          longhand: [
+              "یەکشەممە",
+              "دووشەممە",
+              "سێشەممە",
+              "چوارشەممە",
+              "پێنجشەممە",
+              "هەینی",
+              "شەممە",
+          ],
+      },
+      months: {
+          shorthand: [
+              "ڕێبەندان",
+              "ڕەشەمە",
+              "نەورۆز",
+              "گوڵان",
+              "جۆزەردان",
+              "پووشپەڕ",
+              "گەلاوێژ",
+              "خەرمانان",
+              "ڕەزبەر",
+              "گەڵاڕێزان",
+              "سەرماوەز",
+              "بەفرانبار",
+          ],
+          longhand: [
+              "ڕێبەندان",
+              "ڕەشەمە",
+              "نەورۆز",
+              "گوڵان",
+              "جۆزەردان",
+              "پووشپەڕ",
+              "گەلاوێژ",
+              "خەرمانان",
+              "ڕەزبەر",
+              "گەڵاڕێزان",
+              "سەرماوەز",
+              "بەفرانبار",
+          ],
+      },
+      firstDayOfWeek: 6,
+      ordinal: function () {
+          return "";
+      },
+  };
+  fp.l10ns.ckb = Kurdish;
+  var ckb = fp.l10ns;
+
+  exports.Kurdish = Kurdish;
+  exports.default = ckb;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
@@ -3929,45 +4113,45 @@
   var Finnish = {
       firstDayOfWeek: 1,
       weekdays: {
-          shorthand: ["Su", "Ma", "Ti", "Ke", "To", "Pe", "La"],
+          shorthand: ["su", "ma", "ti", "ke", "to", "pe", "la"],
           longhand: [
-              "Sunnuntai",
-              "Maanantai",
-              "Tiistai",
-              "Keskiviikko",
-              "Torstai",
-              "Perjantai",
-              "Lauantai",
+              "sunnuntai",
+              "maanantai",
+              "tiistai",
+              "keskiviikko",
+              "torstai",
+              "perjantai",
+              "lauantai",
           ],
       },
       months: {
           shorthand: [
-              "Tammi",
-              "Helmi",
-              "Maalis",
-              "Huhti",
-              "Touko",
-              "Kesä",
-              "Heinä",
-              "Elo",
-              "Syys",
-              "Loka",
-              "Marras",
-              "Joulu",
+              "tammi",
+              "helmi",
+              "maalis",
+              "huhti",
+              "touko",
+              "kesä",
+              "heinä",
+              "elo",
+              "syys",
+              "loka",
+              "marras",
+              "joulu",
           ],
           longhand: [
-              "Tammikuu",
-              "Helmikuu",
-              "Maaliskuu",
-              "Huhtikuu",
-              "Toukokuu",
-              "Kesäkuu",
-              "Heinäkuu",
-              "Elokuu",
-              "Syyskuu",
-              "Lokakuu",
-              "Marraskuu",
-              "Joulukuu",
+              "tammikuu",
+              "helmikuu",
+              "maaliskuu",
+              "huhtikuu",
+              "toukokuu",
+              "kesäkuu",
+              "heinäkuu",
+              "elokuu",
+              "syyskuu",
+              "lokakuu",
+              "marraskuu",
+              "joulukuu",
           ],
       },
       ordinal: function () {
@@ -4234,8 +4418,8 @@
               "Μάρ",
               "Απρ",
               "Μάι",
-              "Ιού",
-              "Ιού",
+              "Ιούν",
+              "Ιούλ",
               "Αύγ",
               "Σεπ",
               "Οκτ",
@@ -4266,6 +4450,10 @@
       scrollTitle: "Μετακυλήστε για προσαύξηση",
       toggleTitle: "Κάντε κλικ για αλλαγή",
       amPM: ["ΠΜ", "ΜΜ"],
+      yearAriaLabel: "χρόνος",
+      monthAriaLabel: "μήνας",
+      hourAriaLabel: "ώρα",
+      minuteAriaLabel: "λεπτό",
   };
   fp.l10ns.gr = Greek;
   var gr = fp.l10ns;
@@ -4545,6 +4733,93 @@
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.hy = {}));
+}(this, (function (exports) { 'use strict';
+
+  var fp = typeof window !== "undefined" && window.flatpickr !== undefined
+      ? window.flatpickr
+      : {
+          l10ns: {},
+      };
+  var Armenian = {
+      weekdays: {
+          shorthand: [
+              "Կիր",
+              "Երկ",
+              "Երք",
+              "Չրք",
+              "Հնգ",
+              "Ուրբ",
+              "Շբթ",
+          ],
+          longhand: [
+              "Կիրակի",
+              "Եկուշաբթի",
+              "Երեքշաբթի",
+              "Չորեքշաբթի",
+              "Հինգշաբթի",
+              "Ուրբաթ",
+              "Շաբաթ",
+          ],
+      },
+      months: {
+          shorthand: [
+              "Հնվ",
+              "Փտր",
+              "Մար",
+              "Ապր",
+              "Մայ",
+              "Հնս",
+              "Հլս",
+              "Օգս",
+              "Սեպ",
+              "Հոկ",
+              "Նմբ",
+              "Դեկ",
+          ],
+          longhand: [
+              "Հունվար",
+              "Փետրվար",
+              "Մարտ",
+              "Ապրիլ",
+              "Մայիս",
+              "Հունիս",
+              "Հուլիս",
+              "Օգոստոս",
+              "Սեպտեմբեր",
+              "Հոկտեմբեր",
+              "Նոյեմբեր",
+              "Դեկտեմբեր",
+          ],
+      },
+      firstDayOfWeek: 1,
+      ordinal: function () {
+          return "";
+      },
+      rangeSeparator: " — ",
+      weekAbbreviation: "ՇԲՏ",
+      scrollTitle: "Ոլորեք՝ մեծացնելու համար",
+      toggleTitle: "Սեղմեք՝ փոխելու համար",
+      amPM: ["ՄԿ", "ԿՀ"],
+      yearAriaLabel: "Տարի",
+      monthAriaLabel: "Ամիս",
+      hourAriaLabel: "Ժամ",
+      minuteAriaLabel: "Րոպե",
+      time_24hr: true,
+  };
+  fp.l10ns.hy = Armenian;
+  var hy = fp.l10ns;
+
+  exports.Armenian = Armenian;
+  exports.default = hy;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
+
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.id = {}));
 }(this, (function (exports) { 'use strict';
 
@@ -4672,7 +4947,17 @@
                 "ديسمبر",
             ],
         },
-        rangeSeparator: " - ",
+        firstDayOfWeek: 6,
+        rangeSeparator: " إلى ",
+        weekAbbreviation: "Wk",
+        scrollTitle: "قم بالتمرير للزيادة",
+        toggleTitle: "اضغط للتبديل",
+        amPM: ["ص", "م"],
+        yearAriaLabel: "سنة",
+        monthAriaLabel: "شهر",
+        hourAriaLabel: "ساعة",
+        minuteAriaLabel: "دقيقة",
+        time_24hr: false,
     };
     fp.l10ns.ar = Arabic;
     fp.l10ns;
@@ -4730,6 +5015,7 @@
         rangeSeparator: " bis ",
         scrollTitle: "Zum Ändern scrollen",
         toggleTitle: "Zum Umschalten klicken",
+        time_24hr: true,
     };
     fp$1.l10ns.at = Austria;
     fp$1.l10ns;
@@ -5085,12 +5371,69 @@
             }
         },
         firstDayOfWeek: 1,
+        rangeSeparator: " a ",
         time_24hr: true,
     };
     fp$7.l10ns.cat = fp$7.l10ns.ca = Catalan;
     fp$7.l10ns;
 
     var fp$8 = typeof window !== "undefined" && window.flatpickr !== undefined
+        ? window.flatpickr
+        : {
+            l10ns: {},
+        };
+    var Kurdish = {
+        weekdays: {
+            shorthand: ["یەکشەممە", "دووشەممە", "سێشەممە", "چوارشەممە", "پێنجشەممە", "هەینی", "شەممە"],
+            longhand: [
+                "یەکشەممە",
+                "دووشەممە",
+                "سێشەممە",
+                "چوارشەممە",
+                "پێنجشەممە",
+                "هەینی",
+                "شەممە",
+            ],
+        },
+        months: {
+            shorthand: [
+                "ڕێبەندان",
+                "ڕەشەمە",
+                "نەورۆز",
+                "گوڵان",
+                "جۆزەردان",
+                "پووشپەڕ",
+                "گەلاوێژ",
+                "خەرمانان",
+                "ڕەزبەر",
+                "گەڵاڕێزان",
+                "سەرماوەز",
+                "بەفرانبار",
+            ],
+            longhand: [
+                "ڕێبەندان",
+                "ڕەشەمە",
+                "نەورۆز",
+                "گوڵان",
+                "جۆزەردان",
+                "پووشپەڕ",
+                "گەلاوێژ",
+                "خەرمانان",
+                "ڕەزبەر",
+                "گەڵاڕێزان",
+                "سەرماوەز",
+                "بەفرانبار",
+            ],
+        },
+        firstDayOfWeek: 6,
+        ordinal: function () {
+            return "";
+        },
+    };
+    fp$8.l10ns.ckb = Kurdish;
+    fp$8.l10ns;
+
+    var fp$9 = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -5150,10 +5493,10 @@
         yearAriaLabel: "Rok",
         time_24hr: true,
     };
-    fp$8.l10ns.cs = Czech;
-    fp$8.l10ns;
+    fp$9.l10ns.cs = Czech;
+    fp$9.l10ns;
 
-    var fp$9 = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$a = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -5231,10 +5574,10 @@
         },
         time_24hr: true,
     };
-    fp$9.l10ns.cy = Welsh;
-    fp$9.l10ns;
+    fp$a.l10ns.cy = Welsh;
+    fp$a.l10ns;
 
-    var fp$a = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$b = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -5290,10 +5633,10 @@
         weekAbbreviation: "uge",
         time_24hr: true,
     };
-    fp$a.l10ns.da = Danish;
-    fp$a.l10ns;
+    fp$b.l10ns.da = Danish;
+    fp$b.l10ns;
 
-    var fp$b = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$c = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -5348,8 +5691,8 @@
         toggleTitle: "Zum Umschalten klicken",
         time_24hr: true,
     };
-    fp$b.l10ns.de = German;
-    fp$b.l10ns;
+    fp$c.l10ns.de = German;
+    fp$c.l10ns;
 
     var english = {
         weekdays: {
@@ -5423,7 +5766,7 @@
         time_24hr: false,
     };
 
-    var fp$c = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$d = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -5481,10 +5824,10 @@
         },
         time_24hr: true,
     };
-    fp$c.l10ns.eo = Esperanto;
-    fp$c.l10ns;
+    fp$d.l10ns.eo = Esperanto;
+    fp$d.l10ns;
 
-    var fp$d = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$e = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -5539,10 +5882,10 @@
         rangeSeparator: " a ",
         time_24hr: true,
     };
-    fp$d.l10ns.es = Spanish;
-    fp$d.l10ns;
+    fp$e.l10ns.es = Spanish;
+    fp$e.l10ns;
 
-    var fp$e = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$f = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -5600,10 +5943,10 @@
         toggleTitle: "Klõpsa, et vahetada",
         time_24hr: true,
     };
-    fp$e.l10ns.et = Estonian;
-    fp$e.l10ns;
+    fp$f.l10ns.et = Estonian;
+    fp$f.l10ns;
 
-    var fp$f = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$g = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -5656,10 +5999,10 @@
             return "";
         },
     };
-    fp$f.l10ns.fa = Persian;
-    fp$f.l10ns;
+    fp$g.l10ns.fa = Persian;
+    fp$g.l10ns;
 
-    var fp$g = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$h = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -5667,45 +6010,45 @@
     var Finnish = {
         firstDayOfWeek: 1,
         weekdays: {
-            shorthand: ["Su", "Ma", "Ti", "Ke", "To", "Pe", "La"],
+            shorthand: ["su", "ma", "ti", "ke", "to", "pe", "la"],
             longhand: [
-                "Sunnuntai",
-                "Maanantai",
-                "Tiistai",
-                "Keskiviikko",
-                "Torstai",
-                "Perjantai",
-                "Lauantai",
+                "sunnuntai",
+                "maanantai",
+                "tiistai",
+                "keskiviikko",
+                "torstai",
+                "perjantai",
+                "lauantai",
             ],
         },
         months: {
             shorthand: [
-                "Tammi",
-                "Helmi",
-                "Maalis",
-                "Huhti",
-                "Touko",
-                "Kesä",
-                "Heinä",
-                "Elo",
-                "Syys",
-                "Loka",
-                "Marras",
-                "Joulu",
+                "tammi",
+                "helmi",
+                "maalis",
+                "huhti",
+                "touko",
+                "kesä",
+                "heinä",
+                "elo",
+                "syys",
+                "loka",
+                "marras",
+                "joulu",
             ],
             longhand: [
-                "Tammikuu",
-                "Helmikuu",
-                "Maaliskuu",
-                "Huhtikuu",
-                "Toukokuu",
-                "Kesäkuu",
-                "Heinäkuu",
-                "Elokuu",
-                "Syyskuu",
-                "Lokakuu",
-                "Marraskuu",
-                "Joulukuu",
+                "tammikuu",
+                "helmikuu",
+                "maaliskuu",
+                "huhtikuu",
+                "toukokuu",
+                "kesäkuu",
+                "heinäkuu",
+                "elokuu",
+                "syyskuu",
+                "lokakuu",
+                "marraskuu",
+                "joulukuu",
             ],
         },
         ordinal: function () {
@@ -5713,10 +6056,10 @@
         },
         time_24hr: true,
     };
-    fp$g.l10ns.fi = Finnish;
-    fp$g.l10ns;
+    fp$h.l10ns.fi = Finnish;
+    fp$h.l10ns;
 
-    var fp$h = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$i = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -5775,10 +6118,10 @@
         yearAriaLabel: "Ár",
         time_24hr: true,
     };
-    fp$h.l10ns.fo = Faroese;
-    fp$h.l10ns;
+    fp$i.l10ns.fo = Faroese;
+    fp$i.l10ns;
 
-    var fp$i = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$j = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -5838,10 +6181,10 @@
         toggleTitle: "Cliquer pour basculer",
         time_24hr: true,
     };
-    fp$i.l10ns.fr = French;
-    fp$i.l10ns;
+    fp$j.l10ns.fr = French;
+    fp$j.l10ns;
 
-    var fp$j = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$k = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -5866,8 +6209,8 @@
                 "Μάρ",
                 "Απρ",
                 "Μάι",
-                "Ιού",
-                "Ιού",
+                "Ιούν",
+                "Ιούλ",
                 "Αύγ",
                 "Σεπ",
                 "Οκτ",
@@ -5898,11 +6241,15 @@
         scrollTitle: "Μετακυλήστε για προσαύξηση",
         toggleTitle: "Κάντε κλικ για αλλαγή",
         amPM: ["ΠΜ", "ΜΜ"],
+        yearAriaLabel: "χρόνος",
+        monthAriaLabel: "μήνας",
+        hourAriaLabel: "ώρα",
+        minuteAriaLabel: "λεπτό",
     };
-    fp$j.l10ns.gr = Greek;
-    fp$j.l10ns;
+    fp$k.l10ns.gr = Greek;
+    fp$k.l10ns;
 
-    var fp$k = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$l = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -5945,10 +6292,10 @@
         rangeSeparator: " אל ",
         time_24hr: true,
     };
-    fp$k.l10ns.he = Hebrew;
-    fp$k.l10ns;
+    fp$l.l10ns.he = Hebrew;
+    fp$l.l10ns;
 
-    var fp$l = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$m = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -5997,10 +6344,10 @@
             ],
         },
     };
-    fp$l.l10ns.hi = Hindi;
-    fp$l.l10ns;
+    fp$m.l10ns.hi = Hindi;
+    fp$m.l10ns;
 
-    var fp$m = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$n = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -6051,10 +6398,10 @@
         },
         time_24hr: true,
     };
-    fp$m.l10ns.hr = Croatian;
-    fp$m.l10ns;
+    fp$n.l10ns.hr = Croatian;
+    fp$n.l10ns;
 
-    var fp$n = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$o = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -6112,10 +6459,84 @@
         rangeSeparator: " - ",
         time_24hr: true,
     };
-    fp$n.l10ns.hu = Hungarian;
-    fp$n.l10ns;
+    fp$o.l10ns.hu = Hungarian;
+    fp$o.l10ns;
 
-    var fp$o = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$p = typeof window !== "undefined" && window.flatpickr !== undefined
+        ? window.flatpickr
+        : {
+            l10ns: {},
+        };
+    var Armenian = {
+        weekdays: {
+            shorthand: [
+                "Կիր",
+                "Երկ",
+                "Երք",
+                "Չրք",
+                "Հնգ",
+                "Ուրբ",
+                "Շբթ",
+            ],
+            longhand: [
+                "Կիրակի",
+                "Եկուշաբթի",
+                "Երեքշաբթի",
+                "Չորեքշաբթի",
+                "Հինգշաբթի",
+                "Ուրբաթ",
+                "Շաբաթ",
+            ],
+        },
+        months: {
+            shorthand: [
+                "Հնվ",
+                "Փտր",
+                "Մար",
+                "Ապր",
+                "Մայ",
+                "Հնս",
+                "Հլս",
+                "Օգս",
+                "Սեպ",
+                "Հոկ",
+                "Նմբ",
+                "Դեկ",
+            ],
+            longhand: [
+                "Հունվար",
+                "Փետրվար",
+                "Մարտ",
+                "Ապրիլ",
+                "Մայիս",
+                "Հունիս",
+                "Հուլիս",
+                "Օգոստոս",
+                "Սեպտեմբեր",
+                "Հոկտեմբեր",
+                "Նոյեմբեր",
+                "Դեկտեմբեր",
+            ],
+        },
+        firstDayOfWeek: 1,
+        ordinal: function () {
+            return "";
+        },
+        rangeSeparator: " — ",
+        weekAbbreviation: "ՇԲՏ",
+        scrollTitle: "Ոլորեք՝ մեծացնելու համար",
+        toggleTitle: "Սեղմեք՝ փոխելու համար",
+        amPM: ["ՄԿ", "ԿՀ"],
+        yearAriaLabel: "Տարի",
+        monthAriaLabel: "Ամիս",
+        hourAriaLabel: "Ժամ",
+        minuteAriaLabel: "Րոպե",
+        time_24hr: true,
+    };
+    fp$p.l10ns.hy = Armenian;
+    fp$p.l10ns;
+
+    var fp$q = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -6162,10 +6583,10 @@
         time_24hr: true,
         rangeSeparator: " - ",
     };
-    fp$o.l10ns.id = Indonesian;
-    fp$o.l10ns;
+    fp$q.l10ns.id = Indonesian;
+    fp$q.l10ns;
 
-    var fp$p = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$r = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -6222,10 +6643,10 @@
         yearAriaLabel: "Ár",
         time_24hr: true,
     };
-    fp$p.l10ns.is = Icelandic;
-    fp$p.l10ns;
+    fp$r.l10ns.is = Icelandic;
+    fp$r.l10ns;
 
-    var fp$q = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$s = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -6281,10 +6702,10 @@
         toggleTitle: "Clicca per cambiare",
         time_24hr: true,
     };
-    fp$q.l10ns.it = Italian;
-    fp$q.l10ns;
+    fp$s.l10ns.it = Italian;
+    fp$s.l10ns;
 
-    var fp$r = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$t = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -6340,10 +6761,10 @@
         hourAriaLabel: "時間",
         minuteAriaLabel: "分",
     };
-    fp$r.l10ns.ja = Japanese;
-    fp$r.l10ns;
+    fp$t.l10ns.ja = Japanese;
+    fp$t.l10ns;
 
-    var fp$s = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$u = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -6403,10 +6824,10 @@
         yearAriaLabel: "წელი",
         time_24hr: true,
     };
-    fp$s.l10ns.ka = Georgian;
-    fp$s.l10ns;
+    fp$u.l10ns.ka = Georgian;
+    fp$u.l10ns;
 
-    var fp$t = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$v = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -6458,11 +6879,12 @@
             return "일";
         },
         rangeSeparator: " ~ ",
+        amPM: ["오전", "오후"],
     };
-    fp$t.l10ns.ko = Korean;
-    fp$t.l10ns;
+    fp$v.l10ns.ko = Korean;
+    fp$v.l10ns;
 
-    var fp$u = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$w = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -6521,10 +6943,10 @@
         yearAriaLabel: "ឆ្នាំ",
         time_24hr: true,
     };
-    fp$u.l10ns.km = Khmer;
-    fp$u.l10ns;
+    fp$w.l10ns.km = Khmer;
+    fp$w.l10ns;
 
-    var fp$v = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$x = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -6583,10 +7005,10 @@
         amPM: ["ТД", "ТК"],
         yearAriaLabel: "Жыл",
     };
-    fp$v.l10ns.kz = Kazakh;
-    fp$v.l10ns;
+    fp$x.l10ns.kz = Kazakh;
+    fp$x.l10ns;
 
-    var fp$w = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$y = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -6644,10 +7066,10 @@
         toggleTitle: "Perjungti laiko formatą",
         time_24hr: true,
     };
-    fp$w.l10ns.lt = Lithuanian;
-    fp$w.l10ns;
+    fp$y.l10ns.lt = Lithuanian;
+    fp$y.l10ns;
 
-    var fp$x = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$z = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -6699,10 +7121,10 @@
         rangeSeparator: " līdz ",
         time_24hr: true,
     };
-    fp$x.l10ns.lv = Latvian;
-    fp$x.l10ns;
+    fp$z.l10ns.lv = Latvian;
+    fp$z.l10ns;
 
-    var fp$y = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$A = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -6755,10 +7177,10 @@
         rangeSeparator: " до ",
         time_24hr: true,
     };
-    fp$y.l10ns.mk = Macedonian;
-    fp$y.l10ns;
+    fp$A.l10ns.mk = Macedonian;
+    fp$A.l10ns;
 
-    var fp$z = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$B = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -6802,19 +7224,19 @@
         rangeSeparator: "-с ",
         time_24hr: true,
     };
-    fp$z.l10ns.mn = Mongolian;
-    fp$z.l10ns;
+    fp$B.l10ns.mn = Mongolian;
+    fp$B.l10ns;
 
-    var fp$A = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$C = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
         };
     var Malaysian = {
         weekdays: {
-            shorthand: ["Min", "Isn", "Sel", "Rab", "Kha", "Jum", "Sab"],
+            shorthand: ["Aha", "Isn", "Sel", "Rab", "Kha", "Jum", "Sab"],
             longhand: [
-                "Minggu",
+                "Ahad",
                 "Isnin",
                 "Selasa",
                 "Rabu",
@@ -6858,9 +7280,9 @@
             return "";
         },
     };
-    fp$A.l10ns;
+    fp$C.l10ns;
 
-    var fp$B = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$D = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -6914,10 +7336,10 @@
         },
         time_24hr: true,
     };
-    fp$B.l10ns.my = Burmese;
-    fp$B.l10ns;
+    fp$D.l10ns.my = Burmese;
+    fp$D.l10ns;
 
-    var fp$C = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$E = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -6977,10 +7399,71 @@
             return "de";
         },
     };
-    fp$C.l10ns.nl = Dutch;
-    fp$C.l10ns;
+    fp$E.l10ns.nl = Dutch;
+    fp$E.l10ns;
 
-    var fp$D = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$F = typeof window !== 'undefined' && window.flatpickr !== undefined
+        ? window.flatpickr
+        : {
+            l10ns: {},
+        };
+    var NorwegianNynorsk = {
+        weekdays: {
+            shorthand: ['Sø.', 'Må.', 'Ty.', 'On.', 'To.', 'Fr.', 'La.'],
+            longhand: [
+                'Søndag',
+                'Måndag',
+                'Tysdag',
+                'Onsdag',
+                'Torsdag',
+                'Fredag',
+                'Laurdag',
+            ],
+        },
+        months: {
+            shorthand: [
+                'Jan',
+                'Feb',
+                'Mars',
+                'Apr',
+                'Mai',
+                'Juni',
+                'Juli',
+                'Aug',
+                'Sep',
+                'Okt',
+                'Nov',
+                'Des',
+            ],
+            longhand: [
+                'Januar',
+                'Februar',
+                'Mars',
+                'April',
+                'Mai',
+                'Juni',
+                'Juli',
+                'August',
+                'September',
+                'Oktober',
+                'November',
+                'Desember',
+            ],
+        },
+        firstDayOfWeek: 1,
+        rangeSeparator: ' til ',
+        weekAbbreviation: 'Veke',
+        scrollTitle: 'Scroll for å endre',
+        toggleTitle: 'Klikk for å veksle',
+        time_24hr: true,
+        ordinal: function () {
+            return '.';
+        },
+    };
+    fp$F.l10ns.nn = NorwegianNynorsk;
+    fp$F.l10ns;
+
+    var fp$G = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -7038,10 +7521,10 @@
             return ".";
         },
     };
-    fp$D.l10ns.no = Norwegian;
-    fp$D.l10ns;
+    fp$G.l10ns.no = Norwegian;
+    fp$G.l10ns;
 
-    var fp$E = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$H = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -7091,10 +7574,10 @@
         },
         time_24hr: true,
     };
-    fp$E.l10ns.pa = Punjabi;
-    fp$E.l10ns;
+    fp$H.l10ns.pa = Punjabi;
+    fp$H.l10ns;
 
-    var fp$F = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$I = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -7152,10 +7635,10 @@
             return ".";
         },
     };
-    fp$F.l10ns.pl = Polish;
-    fp$F.l10ns;
+    fp$I.l10ns.pl = Polish;
+    fp$I.l10ns;
 
-    var fp$G = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$J = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -7206,10 +7689,10 @@
         rangeSeparator: " até ",
         time_24hr: true,
     };
-    fp$G.l10ns.pt = Portuguese;
-    fp$G.l10ns;
+    fp$J.l10ns.pt = Portuguese;
+    fp$J.l10ns;
 
-    var fp$H = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$K = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -7263,10 +7746,10 @@
             return "";
         },
     };
-    fp$H.l10ns.ro = Romanian;
-    fp$H.l10ns;
+    fp$K.l10ns.ro = Romanian;
+    fp$K.l10ns;
 
-    var fp$I = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$L = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -7326,10 +7809,10 @@
         yearAriaLabel: "Год",
         time_24hr: true,
     };
-    fp$I.l10ns.ru = Russian;
-    fp$I.l10ns;
+    fp$L.l10ns.ru = Russian;
+    fp$L.l10ns;
 
-    var fp$J = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$M = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -7379,10 +7862,10 @@
         },
         time_24hr: true,
     };
-    fp$J.l10ns.si = Sinhala;
-    fp$J.l10ns;
+    fp$M.l10ns.si = Sinhala;
+    fp$M.l10ns;
 
-    var fp$K = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$N = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -7437,10 +7920,10 @@
             return ".";
         },
     };
-    fp$K.l10ns.sk = Slovak;
-    fp$K.l10ns;
+    fp$N.l10ns.sk = Slovak;
+    fp$N.l10ns;
 
-    var fp$L = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$O = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -7495,10 +7978,10 @@
             return ".";
         },
     };
-    fp$L.l10ns.sl = Slovenian;
-    fp$L.l10ns;
+    fp$O.l10ns.sl = Slovenian;
+    fp$O.l10ns;
 
-    var fp$M = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$P = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -7548,10 +8031,10 @@
         },
         time_24hr: true,
     };
-    fp$M.l10ns.sq = Albanian;
-    fp$M.l10ns;
+    fp$P.l10ns.sq = Albanian;
+    fp$P.l10ns;
 
-    var fp$N = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$Q = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -7604,10 +8087,10 @@
         rangeSeparator: " do ",
         time_24hr: true,
     };
-    fp$N.l10ns.sr = Serbian;
-    fp$N.l10ns;
+    fp$Q.l10ns.sr = Serbian;
+    fp$Q.l10ns;
 
-    var fp$O = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$R = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -7616,56 +8099,57 @@
         firstDayOfWeek: 1,
         weekAbbreviation: "v",
         weekdays: {
-            shorthand: ["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"],
+            shorthand: ["sön", "mån", "tis", "ons", "tor", "fre", "lör"],
             longhand: [
-                "Söndag",
-                "Måndag",
-                "Tisdag",
-                "Onsdag",
-                "Torsdag",
-                "Fredag",
-                "Lördag",
+                "söndag",
+                "måndag",
+                "tisdag",
+                "onsdag",
+                "torsdag",
+                "fredag",
+                "lördag",
             ],
         },
         months: {
             shorthand: [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "Maj",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Okt",
-                "Nov",
-                "Dec",
+                "jan",
+                "feb",
+                "mar",
+                "apr",
+                "maj",
+                "jun",
+                "jul",
+                "aug",
+                "sep",
+                "okt",
+                "nov",
+                "dec",
             ],
             longhand: [
-                "Januari",
-                "Februari",
-                "Mars",
-                "April",
-                "Maj",
-                "Juni",
-                "Juli",
-                "Augusti",
-                "September",
-                "Oktober",
-                "November",
-                "December",
+                "januari",
+                "februari",
+                "mars",
+                "april",
+                "maj",
+                "juni",
+                "juli",
+                "augusti",
+                "september",
+                "oktober",
+                "november",
+                "december",
             ],
         },
+        rangeSeparator: ' till ',
         time_24hr: true,
         ordinal: function () {
             return ".";
         },
     };
-    fp$O.l10ns.sv = Swedish;
-    fp$O.l10ns;
+    fp$R.l10ns.sv = Swedish;
+    fp$R.l10ns;
 
-    var fp$P = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$S = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -7722,10 +8206,10 @@
             return "";
         },
     };
-    fp$P.l10ns.th = Thai;
-    fp$P.l10ns;
+    fp$S.l10ns.th = Thai;
+    fp$S.l10ns;
 
-    var fp$Q = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$T = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -7784,10 +8268,10 @@
         amPM: ["ÖÖ", "ÖS"],
         time_24hr: true,
     };
-    fp$Q.l10ns.tr = Turkish;
-    fp$Q.l10ns;
+    fp$T.l10ns.tr = Turkish;
+    fp$T.l10ns;
 
-    var fp$R = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$U = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -7838,10 +8322,10 @@
         },
         time_24hr: true,
     };
-    fp$R.l10ns.uk = Ukrainian;
-    fp$R.l10ns;
+    fp$U.l10ns.uk = Ukrainian;
+    fp$U.l10ns;
 
-    var fp$S = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$V = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -7901,10 +8385,10 @@
         yearAriaLabel: "Йил",
         time_24hr: true,
     };
-    fp$S.l10ns.uz = Uzbek;
-    fp$S.l10ns;
+    fp$V.l10ns.uz = Uzbek;
+    fp$V.l10ns;
 
-    var fp$T = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$W = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -7964,10 +8448,10 @@
         yearAriaLabel: "Yil",
         time_24hr: true,
     };
-    fp$T.l10ns["uz_latn"] = UzbekLatin;
-    fp$T.l10ns;
+    fp$W.l10ns["uz_latn"] = UzbekLatin;
+    fp$W.l10ns;
 
-    var fp$U = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$X = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -8018,10 +8502,10 @@
         firstDayOfWeek: 1,
         rangeSeparator: " đến ",
     };
-    fp$U.l10ns.vn = Vietnamese;
-    fp$U.l10ns;
+    fp$X.l10ns.vn = Vietnamese;
+    fp$X.l10ns;
 
-    var fp$V = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$Y = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -8074,10 +8558,10 @@
         scrollTitle: "滚动切换",
         toggleTitle: "点击切换 12/24 小时时制",
     };
-    fp$V.l10ns.zh = Mandarin;
-    fp$V.l10ns;
+    fp$Y.l10ns.zh = Mandarin;
+    fp$Y.l10ns;
 
-    var fp$W = typeof window !== "undefined" && window.flatpickr !== undefined
+    var fp$Z = typeof window !== "undefined" && window.flatpickr !== undefined
         ? window.flatpickr
         : {
             l10ns: {},
@@ -8130,8 +8614,8 @@
         scrollTitle: "滾動切換",
         toggleTitle: "點擊切換 12/24 小時時制",
     };
-    fp$W.l10ns.zh_tw = MandarinTraditional;
-    fp$W.l10ns;
+    fp$Z.l10ns.zh_tw = MandarinTraditional;
+    fp$Z.l10ns;
 
     var l10n = {
         ar: Arabic,
@@ -8142,6 +8626,7 @@
         bn: Bangla,
         bs: Bosnian,
         ca: Catalan,
+        ckb: Kurdish,
         cat: Catalan,
         cs: Czech,
         cy: Welsh,
@@ -8161,6 +8646,7 @@
         hi: Hindi,
         hr: Croatian,
         hu: Hungarian,
+        hy: Armenian,
         id: Indonesian,
         is: Icelandic,
         it: Italian,
@@ -8176,6 +8662,7 @@
         ms: Malaysian,
         my: Burmese,
         nl: Dutch,
+        nn: NorwegianNynorsk,
         no: Norwegian,
         pa: Punjabi,
         pl: Polish,
@@ -8630,6 +9117,7 @@
           return "일";
       },
       rangeSeparator: " ~ ",
+      amPM: ["오전", "오후"],
   };
   fp.l10ns.ko = Korean;
   var ko = fp.l10ns;
@@ -9000,9 +9488,9 @@
       };
   var Malaysian = {
       weekdays: {
-          shorthand: ["Min", "Isn", "Sel", "Rab", "Kha", "Jum", "Sab"],
+          shorthand: ["Aha", "Isn", "Sel", "Rab", "Kha", "Jum", "Sab"],
           longhand: [
-              "Minggu",
+              "Ahad",
               "Isnin",
               "Selasa",
               "Rabu",
@@ -9196,6 +9684,80 @@
 
   exports.Dutch = Dutch;
   exports.default = nl;
+
+  Object.defineProperty(exports, '__esModule', { value: true });
+
+})));
+
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.nn = {}));
+}(this, (function (exports) { 'use strict';
+
+  var fp = typeof window !== 'undefined' && window.flatpickr !== undefined
+      ? window.flatpickr
+      : {
+          l10ns: {},
+      };
+  var NorwegianNynorsk = {
+      weekdays: {
+          shorthand: ['Sø.', 'Må.', 'Ty.', 'On.', 'To.', 'Fr.', 'La.'],
+          longhand: [
+              'Søndag',
+              'Måndag',
+              'Tysdag',
+              'Onsdag',
+              'Torsdag',
+              'Fredag',
+              'Laurdag',
+          ],
+      },
+      months: {
+          shorthand: [
+              'Jan',
+              'Feb',
+              'Mars',
+              'Apr',
+              'Mai',
+              'Juni',
+              'Juli',
+              'Aug',
+              'Sep',
+              'Okt',
+              'Nov',
+              'Des',
+          ],
+          longhand: [
+              'Januar',
+              'Februar',
+              'Mars',
+              'April',
+              'Mai',
+              'Juni',
+              'Juli',
+              'August',
+              'September',
+              'Oktober',
+              'November',
+              'Desember',
+          ],
+      },
+      firstDayOfWeek: 1,
+      rangeSeparator: ' til ',
+      weekAbbreviation: 'Veke',
+      scrollTitle: 'Scroll for å endre',
+      toggleTitle: 'Klikk for å veksle',
+      time_24hr: true,
+      ordinal: function () {
+          return '.';
+      },
+  };
+  fp.l10ns.nn = NorwegianNynorsk;
+  var nn = fp.l10ns;
+
+  exports.NorwegianNynorsk = NorwegianNynorsk;
+  exports.default = nn;
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
@@ -10054,47 +10616,48 @@
       firstDayOfWeek: 1,
       weekAbbreviation: "v",
       weekdays: {
-          shorthand: ["Sön", "Mån", "Tis", "Ons", "Tor", "Fre", "Lör"],
+          shorthand: ["sön", "mån", "tis", "ons", "tor", "fre", "lör"],
           longhand: [
-              "Söndag",
-              "Måndag",
-              "Tisdag",
-              "Onsdag",
-              "Torsdag",
-              "Fredag",
-              "Lördag",
+              "söndag",
+              "måndag",
+              "tisdag",
+              "onsdag",
+              "torsdag",
+              "fredag",
+              "lördag",
           ],
       },
       months: {
           shorthand: [
-              "Jan",
-              "Feb",
-              "Mar",
-              "Apr",
-              "Maj",
-              "Jun",
-              "Jul",
-              "Aug",
-              "Sep",
-              "Okt",
-              "Nov",
-              "Dec",
+              "jan",
+              "feb",
+              "mar",
+              "apr",
+              "maj",
+              "jun",
+              "jul",
+              "aug",
+              "sep",
+              "okt",
+              "nov",
+              "dec",
           ],
           longhand: [
-              "Januari",
-              "Februari",
-              "Mars",
-              "April",
-              "Maj",
-              "Juni",
-              "Juli",
-              "Augusti",
-              "September",
-              "Oktober",
-              "November",
-              "December",
+              "januari",
+              "februari",
+              "mars",
+              "april",
+              "maj",
+              "juni",
+              "juli",
+              "augusti",
+              "september",
+              "oktober",
+              "november",
+              "december",
           ],
       },
+      rangeSeparator: ' till ',
       time_24hr: true,
       ordinal: function () {
           return ".";
