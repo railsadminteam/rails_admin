@@ -23,9 +23,12 @@ module RailsAdmin
     DEFAULT_CURRENT_USER = proc {}
 
     # Variables to track initialization process
-    @initialized = false
-    @initializing = false
-    @deferred_blocks = []
+    @initialized_core = false
+    @initializing_core = false
+    @deferred_core_blocks = []
+    @initialized_models = false
+    @initializing_models = false
+    @deferred_model_blocks = []
 
     class << self
       # Application title, can be an array of two elements
@@ -86,22 +89,42 @@ module RailsAdmin
       # Set where RailsAdmin fetches JS/CSS from, defaults to :sprockets
       attr_writer :asset_source
 
-      # Finish initialization by executing deferred configuration blocks
-      def initialize!
-        return if @initializing
+      # Finish initialization by executing deferred non-model configuration blocks
+      def initialize_core!
+        return if @initializing_core
 
-        @initializing = true
-        @deferred_blocks.each { |block| block.call(self) }
-        @deferred_blocks.clear
-        @initialized = true
+        @initializing_core = true
+        @deferred_core_blocks.each { |block| block.call(self) }
+        @deferred_core_blocks.clear
+        @initialized_core = true
       end
 
-      # Evaluate the given block either immediately or lazily, based on initialization status.
-      def apply(&block)
-        if @initialized
+      # Evaluate the given non-model block either immediately or lazily, based on initialization status.
+      def apply_core(&block)
+        if @initialized_core
           yield(self)
         else
-          @deferred_blocks << block
+          @deferred_core_blocks << block
+        end
+      end
+
+      # Finish initialization by executing deferred model configuration blocks
+      def initialize_models!
+        return if @initializing_models
+
+        initialize_core!
+        @initializing_models = true
+        @deferred_model_blocks.each { |block| block.call(self) }
+        @deferred_model_blocks.clear
+        @initialized_models = true
+      end
+
+      # Evaluate the given model block either immediately or lazily, based on initialization status.
+      def apply_model(&block)
+        if @initialized_models
+          yield(self)
+        else
+          @deferred_model_blocks << block
         end
       end
 
@@ -230,7 +253,7 @@ module RailsAdmin
 
       # pool of all found model names from the whole application
       def models_pool
-        initialize!
+        initialize_models!
         (viable_models - excluded_models.collect(&:to_s)).uniq.sort
       end
 
@@ -268,13 +291,13 @@ module RailsAdmin
         #
         # Do not defer when called without a block as the model must be returned.
         if block
-          RailsAdmin::Config.apply do
+          RailsAdmin::Config.apply_model do
             m = model(entity)
             m.instance_eval(&block) if @registry[key].abstract_model
           end
           nil
         else
-          initialize!
+          initialize_models!
           @registry[key] ||= RailsAdmin::Config::Model.new(entity)
         end
       end
@@ -338,8 +361,10 @@ module RailsAdmin
       #
       # @see RailsAdmin::Config.registry
       def reset
-        @initialized = @initializing = false
-        @deferred_blocks.clear
+        @initialized_core = @initializing_core = false
+        @deferred_core_blocks.clear
+        @initialized_models = @initializing_models = false
+        @deferred_model_blocks.clear
         @compact_show_view = true
         @browser_validations = true
         @authenticate = nil
@@ -380,6 +405,7 @@ module RailsAdmin
       def reload!
         reset
         load RailsAdmin::Engine.config.initializer_path
+        initialize_core!
       end
 
       # Get all models that are configured as visible sorted by their weight and label.

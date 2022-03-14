@@ -395,8 +395,8 @@ RSpec.describe RailsAdmin::Config do
     end
   end
 
-  describe '.apply' do
-    subject { RailsAdmin::Config.apply(&block) }
+  describe '.apply_core' do
+    subject { RailsAdmin::Config.apply_core(&block) }
     let(:block) do
       proc do |config|
         config.model Team do
@@ -404,32 +404,35 @@ RSpec.describe RailsAdmin::Config do
         end
       end
     end
-    before { RailsAdmin::Config.instance_variable_set(:@initialized, false) }
-    before { RailsAdmin::Config.instance_variable_set(:@initializing, false) }
-    after do
-      RailsAdmin::Config.instance_variable_set(:@initialized, true)
-      RailsAdmin::Config.instance_variable_set(:@deferred_blocks, [])
-    end
+    after { RailsAdmin::Config.reset }
 
     it "doesn't evaluate the block immediately" do
       expect_any_instance_of(RailsAdmin::Config::Model).not_to receive(:register_instance_option)
       subject
     end
 
-    it 'evaluates block when initialize! is finished' do
+    it "doesn't evaluate the block when initialize_core! is finished" do
+      expect_any_instance_of(RailsAdmin::Config::Model).not_to receive(:register_instance_option).with('parameter')
+      subject
+      RailsAdmin::Config.initialize_core!
+    end
+
+    it 'evaluates block when initialize_models! is finished' do
       expect_any_instance_of(RailsAdmin::Config::Model).to receive(:register_instance_option).with('parameter')
       subject
-      RailsAdmin::Config.initialize!
+      RailsAdmin::Config.initialize_models!
     end
 
     it 'evaluates config block only once' do
       expect_any_instance_of(RailsAdmin::Config::Model).to receive(:register_instance_option).once.with('parameter')
       subject
-      RailsAdmin::Config.initialize!
-      RailsAdmin::Config.initialize!
+      RailsAdmin::Config.initialize_models!
+      RailsAdmin::Config.initialize_models!
     end
 
     context 'with a non-existent class' do
+      before { RailsAdmin::Config.reset }
+
       let(:block) do
         proc do |config|
           config.model UnknownClass do
@@ -465,7 +468,7 @@ RSpec.describe RailsAdmin::Config do
     end
 
     it 'does not immediately apply model configuration' do
-      expect(RailsAdmin::Config).not_to receive(:initialize!)
+      expect(RailsAdmin::Config).not_to receive(:initialize_models!)
       RailsAdmin::Config.reload!
     end
 

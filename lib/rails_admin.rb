@@ -29,9 +29,7 @@ module RailsAdmin
     if entity
       RailsAdmin::Config.model(entity, &block)
     elsif block_given?
-      # Immediately evaluate non-model (initializer) config. It's needed to
-      # properly configure routes when there are custom actions.
-      yield RailsAdmin::Config
+      RailsAdmin::Config.apply_core(&block)
     else
       RailsAdmin::Config
     end
