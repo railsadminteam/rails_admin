@@ -271,7 +271,7 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
       end
 
       controller(RailsAdmin::MainController) do
-        include ::Pundit
+        include defined?(::Pundit::Authorization) ? ::Pundit::Authorization : ::Pundit
         after_action :verify_authorized
       end
 
