@@ -114,7 +114,7 @@ import I18n from "./i18n";
     event.preventDefault();
     $("#filters_box").html("");
     $("hr.filters_box").hide();
-    $(this).parent().siblings("input[type='search']").val("");
+    $(this).siblings("input[type='search']").val("");
     $(this).parents("form").submit();
   });
 

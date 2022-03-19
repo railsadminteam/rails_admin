@@ -76,6 +76,13 @@ RSpec.describe 'Index action', type: :request do
       end
     end
 
+    it 'allows to clear the search query box', js: true do
+      visit index_path(model_name: 'player', query: @players[0].name)
+      is_expected.not_to have_content(@players[1].name)
+      find_button('Reset filters').click
+      is_expected.to have_content(@players[1].name)
+    end
+
     it 'allows to filter on one attribute' do
       RailsAdmin.config Player do
         list do
