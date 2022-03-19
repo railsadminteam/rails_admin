@@ -830,6 +830,13 @@ RSpec.describe 'Index action', type: :request do
         expect(find("tbody tr:nth-child(#{i + 1})")).to have_content(name)
       end
     end
+
+    it 'can be activated by clicking the table header', js: true do
+      visit index_path(model_name: 'player')
+      find('th.header', text: 'Name').trigger('click')
+      is_expected.to have_css('th.name_field.headerSortDown')
+      expect(all('tbody td.name_field').map(&:text)).to eq @players.map(&:name).sort
+    end
   end
 
   context 'on listing as compact json' do

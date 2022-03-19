@@ -118,6 +118,11 @@ import I18n from "./i18n";
     $(this).parents("form").submit();
   });
 
+  $(document).on("click", "th.header", function (event) {
+    event.preventDefault();
+    window.Turbo.visit($(this).data("href"));
+  });
+
   $(document).on(
     "click",
     "#fields_to_export label input#check_all",
