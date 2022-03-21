@@ -3,7 +3,7 @@ module RailsAdmin
     MAJOR = 3
     MINOR = 0
     PATCH = 0
-    PRE = 'rc4'.freeze
+    PRE = nil
 
     class << self
       # @return [String]

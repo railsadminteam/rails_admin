@@ -14,12 +14,6 @@
 
 RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
 
-## Announcements
-
-### [Action required] Security issue
-
-**RailsAdmin 2.0.1, 2.0.0 and up to 1.4.2 have been reported to have XSS vulnerability.** We strongly recommend that you upgrade RailsAdmin to 2.0.2 (and higher) or 1.4.3 as soon as possible, if you are on those versions. See [d72090ec](https://github.com/railsadminteam/rails_admin/commit/d72090ec6a07c3b9b7b48ab50f3d405f91ff4375) for the detail.
-
 ## Getting started
 
 - Check out [the docs][docs].
@@ -45,7 +39,7 @@ RailsAdmin is a Rails engine that provides an easy-to-use interface for managing
 
 ## Installation
 
-1. On your gemfile: `gem 'rails_admin', ['>= 3.0.0.rc4', '< 4']`
+1. On your gemfile: `gem 'rails_admin', '~> 3.0'`
 2. Run `bundle install`
 3. Run `rails g rails_admin:install`
 4. Provide a namespace for the routes when asked

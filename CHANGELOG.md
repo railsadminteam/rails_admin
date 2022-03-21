@@ -2,7 +2,16 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0.rc4...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0...HEAD)
+
+## [3.0.0](https://github.com/railsadminteam/rails_admin/tree/v3.0.0) - 2022-03-21
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0.rc4...v3.0.0)
+
+### Fixed
+
+- Fix table sorting not working ([83a0c88](https://github.com/railsadminteam/rails_admin/commit/83a0c889f1de38a0b24c412b0f0f7484add86b29), [#3497](https://github.com/railsadminteam/rails_admin/issues/3497))
+- Fix reset button by the query box not working ([4a583e9](https://github.com/railsadminteam/rails_admin/commit/4a583e924c5bef6bfc46d6a49ab751c2323ba23e))
 
 ## [3.0.0.rc4](https://github.com/railsadminteam/rails_admin/tree/v3.0.0.rc4) - 2022-03-13
 
