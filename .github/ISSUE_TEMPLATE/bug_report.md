@@ -19,6 +19,7 @@ A clear and concise description of what you expected to happen.
 
 - `rails` version:
 - `rails_admin` version:
+- `rails_admin` npm package version:
 - full stack trace (if there's an exception)
 
 Add any other context about the problem here.
