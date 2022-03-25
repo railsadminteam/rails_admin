@@ -32,6 +32,12 @@ RSpec.describe 'HistoryIndex action', type: :request, active_record: true do
     is_expected.to have_css(%([href="/admin/paper_trail_test/#{paper_trail_test.id}"]), count: 11)
   end
 
+  it 'supports sorting', js: true do
+    visit history_index_path(model_name: 'paper_trail_test')
+    find('th.header', text: 'Item').click
+    is_expected.to have_css('th.item.headerSortDown')
+  end
+
   context "when Kaminari's custom param_name is set" do
     before { Kaminari.config.param_name = :pagina }
     after { Kaminari.config.param_name = :page }

@@ -2,7 +2,35 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0.rc3...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0...HEAD)
+
+## [3.0.0](https://github.com/railsadminteam/rails_admin/tree/v3.0.0) - 2022-03-21
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0.rc4...v3.0.0)
+
+### Fixed
+
+- Fix table sorting not working ([83a0c88](https://github.com/railsadminteam/rails_admin/commit/83a0c889f1de38a0b24c412b0f0f7484add86b29), [#3497](https://github.com/railsadminteam/rails_admin/issues/3497))
+- Fix reset button by the query box not working ([4a583e9](https://github.com/railsadminteam/rails_admin/commit/4a583e924c5bef6bfc46d6a49ab751c2323ba23e))
+
+## [3.0.0.rc4](https://github.com/railsadminteam/rails_admin/tree/v3.0.0.rc4) - 2022-03-13
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0.rc3...v3.0.0.rc4)
+
+### Added
+
+- Instruct users on potential issues with npm package installation ([2b0594c](https://github.com/railsadminteam/rails_admin/commit/2b0594c6824eb4eed217cbab9477639b61eb99db), [c7a74f1](https://github.com/railsadminteam/rails_admin/commit/c7a74f1ce7a040b8c87b24fe1907ddd9088bf1e5))
+
+### Changed
+
+- Upgrade vendorized Flatpickr to 4.6.11 ([7f8c831](https://github.com/railsadminteam/rails_admin/commit/7f8c831b9aa407987ba89191c21040e2e72e366e))
+
+### Fixed
+
+- Fix not utilizing full browser width after Bootstrap 5 upgrade ([#3493](https://github.com/railsadminteam/rails_admin/pull/3493))
+- Fix the style for show views broken on Bootstrap 5 upgrade ([#3491](https://github.com/railsadminteam/rails_admin/pull/3491))
+- Fix Pundit 2.2 deprecation for not using Pundit::Authorization ([e38eb46](https://github.com/railsadminteam/rails_admin/commit/e38eb46ffe79cd866c34b837dd4cfbb65361558f))
+- Fix JS issues when navigating across the main app and RailsAdmin ([eb4a185](https://github.com/railsadminteam/rails_admin/commit/eb4a18558e9d8c69aeea3fd733f5dc251f3f79f9), [#3484](https://github.com/railsadminteam/rails_admin/pull/3484))
 
 ## [3.0.0.rc3](https://github.com/railsadminteam/rails_admin/tree/v3.0.0.rc3) - 2022-02-27
 
