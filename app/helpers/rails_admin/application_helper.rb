@@ -94,7 +94,7 @@ module RailsAdmin
       actions(:root).select(&:show_in_sidebar).group_by(&:sidebar_label).collect do |label, nodes|
         li_stack = nodes.map do |node|
           url = rails_admin.url_for(action: node.action_name, controller: 'rails_admin/main')
-          nav_icon = node.link_icon ? %(<i class="#{node.link_icon}"></i>).html_safe : ''
+          nav_icon = node.link_icon ? %(<i class="#{node.link_icon}"></i> ).html_safe : ''
           content_tag :li do
             link_to nav_icon + " " + wording_for(:menu, node), url, class: "nav-link"
           end
@@ -121,7 +121,7 @@ module RailsAdmin
         model_param = abstract_model.to_param
         url         = rails_admin.url_for(action: :index, controller: 'rails_admin/main', model_name: model_param)
         level_class = " nav-level-#{level}" if level > 0
-        nav_icon = node.navigation_icon ? %(<i class="#{node.navigation_icon}"></i>).html_safe : ''
+        nav_icon = node.navigation_icon ? %(<i class="#{node.navigation_icon}"></i> ).html_safe : ''
         li = content_tag :li, data: {model: model_param} do
           link_to nav_icon + node.label_plural, url, class: "nav-link#{level_class}"
         end
