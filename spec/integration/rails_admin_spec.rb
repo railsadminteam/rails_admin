@@ -110,9 +110,9 @@ RSpec.describe RailsAdmin, type: :request do
       is_expected.to have_content 'Log out'
     end
 
-    it 'has label-danger class on log out link' do
+    it 'has bg-danger class on log out link' do
       visit dashboard_path
-      is_expected.to have_selector('.label-danger')
+      is_expected.to have_selector('.bg-danger')
     end
 
     it 'has links for actions which are marked as show_in_navigation' do

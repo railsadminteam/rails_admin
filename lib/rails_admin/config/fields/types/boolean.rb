@@ -33,7 +33,7 @@ module RailsAdmin
           end
 
           register_instance_option :pretty_value do
-            %(<span class="label label-#{css_classes[form_value]}">#{labels[form_value]}</span>).html_safe
+            %(<span class="badge bg-#{css_classes[form_value]}">#{labels[form_value]}</span>).html_safe
           end
 
           register_instance_option :export_value do
