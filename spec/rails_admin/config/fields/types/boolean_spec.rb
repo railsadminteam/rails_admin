@@ -13,9 +13,9 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Boolean do
 
   describe '#pretty_value' do
     {
-      false => %(<span class="label label-danger"><span class="fas fa-times"></span></span>),
-      true => %(<span class="label label-success"><span class="fas fa-check"></span></span>),
-      nil => %(<span class="label label-default"><span class="fas fa-minus"></span></span>),
+      false => %(<span class="badge bg-danger"><span class="fas fa-times"></span></span>),
+      true => %(<span class="badge bg-success"><span class="fas fa-check"></span></span>),
+      nil => %(<span class="badge bg-default"><span class="fas fa-minus"></span></span>),
     }.each do |field_value, expected_result|
       context "when field value is '#{field_value.inspect}'" do
         let(:test_object) { FieldTest.new(boolean_field: field_value) }

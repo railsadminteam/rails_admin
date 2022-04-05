@@ -17,7 +17,9 @@
     <% end %>
     <% if logout_path.present? %>
       <li class="nav-item">
-        <%= link_to t('admin.misc.log_out'), logout_path, method: logout_method, class: 'nav-link label label-danger', data: {turbo: 'false'} %>
+        <%= link_to logout_path, method: logout_method, class: 'nav-link', data: {turbo: 'false'} do %>
+          <span class="badge bg-danger"><%= t('admin.misc.log_out') %></span>
+        <% end %>
       </li>
     <% end %>
   <% end %>
