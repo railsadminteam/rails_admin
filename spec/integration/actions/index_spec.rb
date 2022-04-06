@@ -1083,6 +1083,32 @@ RSpec.describe 'Index action', type: :request do
     end
   end
 
+  describe 'with default_scope' do
+    before do
+      RailsAdmin.config do |config|
+        config.model Team do
+          list do
+            default_scope :red
+          end
+        end
+      end
+      @teams = [
+        FactoryBot.create(:team, color: 'red'),
+        FactoryBot.create(:team, color: 'red'),
+        FactoryBot.create(:team, color: 'white'),
+        FactoryBot.create(:team, color: 'black'),
+      ]
+    end
+
+    it 'shows only scoped records' do
+      visit index_path(model_name: 'team')
+      is_expected.to have_content(@teams[0].name)
+      is_expected.to have_content(@teams[1].name)
+      is_expected.to have_no_content(@teams[2].name)
+      is_expected.to have_no_content(@teams[3].name)
+    end
+  end
+
   describe 'row CSS class' do
     before do
       RailsAdmin.config do |config|

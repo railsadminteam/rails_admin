@@ -34,6 +34,10 @@ module RailsAdmin
           parent.abstract_model.primary_key
         end
 
+        register_instance_option :default_scope do
+          :all
+        end
+
         register_instance_option :scopes do
           []
         end

@@ -33,14 +33,22 @@ module RailsAdmin
         register_instance_option :controller do
           proc do
             @objects ||= list_entries
+            scope_to_use = :all
 
+            # If the user configured a default_scope, we use it
+            scope_to_use = @model_config.list.default_scope.to_sym if @model_config.list.default_scope.present?
+
+            # If the user configured a list of scope, we will override the one above
             unless @model_config.list.scopes.empty?
               if params[:scope].blank?
-                @objects = @objects.send(@model_config.list.scopes.first) unless @model_config.list.scopes.first.nil?
+                scope_to_use = @model_config.list.scopes.first unless @model_config.list.scopes.first.nil?
               elsif @model_config.list.scopes.collect(&:to_s).include?(params[:scope])
-                @objects = @objects.send(params[:scope].to_sym)
+                scope_to_use = params[:scope].to_sym
               end
             end
+
+            # Now, we filter the objects
+            @objects = @objects.send(scope_to_use)
 
             respond_to do |format|
               format.html do
