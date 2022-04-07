@@ -230,16 +230,6 @@ RailsAdmin.config do |config|
 end
 ```
 
-This can also be used for achieving `unscoped` list view(i.e. ignoring `default_scope`):
-```ruby
-RailsAdmin.config do |config|
-  config.model 'Player' do
-    list do
-      scopes [:unscoped]
-    end
-  end
-end
-```
 ### Limited pagination
 
 It allows to avoid `count(*)` query which take a lot of resources on big tables.
