@@ -166,3 +166,30 @@ end
 ```
 
 **Note**: In versions prior to `v1.0.0.rc`, successive invocations of `config.model` to the same model would _replace_ the configuration block rather than adding to it--meaning that the above block gets ignored for any model that also has a config block in the model class. (This was fixed by [#2670](https://github.com/sferik/rails_admin/pull/2670).)
+
+## Changing the model scope
+
+From the version 3.0.0, you can customize the model's scope to be used by RailsAdmin by setting the `scope` configuration option.
+
+```ruby
+RailsAdmin.config do |config|
+  config.model Team do
+    scope { Team.any_in(color: %w[red blue]) }
+  end
+end
+```
+
+This can also be useful for canceling the effect of `default_scope` which is enforced in a model.
+
+```ruby
+class Team < ActiveRecord::Base
+  ...
+  default_scope { where(deleted_at: nil) }
+end
+
+RailsAdmin.config do |config|
+  config.model Team do
+    scope { Team.unscoped }
+  end
+end
+```
