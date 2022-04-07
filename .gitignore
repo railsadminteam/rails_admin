@@ -4,6 +4,7 @@
 *.swp
 .bundle
 .idea/
+.vscode/
 .rvmrc
 .sass-cache
 .yardoc

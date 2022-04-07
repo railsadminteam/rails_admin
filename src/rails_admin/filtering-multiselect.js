@@ -1,7 +1,6 @@
 import jQuery from "jquery";
 import "jquery-ui/ui/widget";
 import I18n from "./i18n";
-
 (function ($) {
   $.widget("ra.filteringMultiselect", {
     _cache: {},
@@ -112,15 +111,11 @@ import I18n from "./i18n";
       }
       if (this.options.sortable) {
         this.up = $(
-          '<a href="#" class="fas fa-chevron-circle-up ra-multiselect-item-up">' +
-            this.options.regional.up +
-            "</a>"
-        );
+          '<a href="#" class="fas fa-chevron-circle-up ra-multiselect-item-up"></a>'
+        ).attr("title", this.options.regional.up);
         this.down = $(
-          '<a href="#" class="fas fa-chevron-circle-down ra-multiselect-item-down">' +
-            this.options.regional.down +
-            "</a>"
-        );
+          '<a href="#" class="fas fa-chevron-circle-down ra-multiselect-item-down"></a>'
+        ).attr("title", this.options.regional.down);
         columns.center.append(this.up).append(this.down);
       }
 
