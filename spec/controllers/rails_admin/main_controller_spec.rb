@@ -42,6 +42,26 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
       end
     end
 
+    context 'when default sort_by points to a field with a table reference for sortable' do
+      before do
+        RailsAdmin.config('Player') do
+          base do
+            field :name do
+              sortable 'teams.name'
+            end
+          end
+
+          list do
+            sort_by :name
+          end
+        end
+      end
+
+      it 'returns the query referenced in the sortable' do
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: 'teams.name', sort_reverse: true)
+      end
+    end
+
     it 'works with belongs_to associations with label method virtual' do
       controller.params = {sort: 'parent_category', model_name: 'categories'}
       expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq(sort: 'categories.parent_category_id', sort_reverse: true)
@@ -227,7 +247,7 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
       controller.params = {model_name: 'team'}
     end
 
-    it 'performs eager-loading with `eagar_load true`' do
+    it 'performs eager-loading with `eager_load true`' do
       RailsAdmin.config Team do
         field :players do
           eager_load true
@@ -237,7 +257,7 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
       controller.send(:get_collection, model_config, nil, false).to_a
     end
 
-    it 'performs eager-loading with custom eagar_load value' do
+    it 'performs eager-loading with custom eager_load value' do
       RailsAdmin.config Team do
         field :players do
           eager_load players: :draft
