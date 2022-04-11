@@ -1,5 +1,3 @@
-RailsAdmin uses a sass release of bootstrap for CSS, and bootstrap/jquery-ui for JS.
-
 ### For custom theming (application scoped), simply override these files in your app:
 
 ```
@@ -8,9 +6,12 @@ app/assets/stylesheets/rails_admin/custom/theming.scss
 app/assets/stylesheets/rails_admin/custom/variables.scss
 app/assets/javascripts/rails_admin/custom/ui.js
 ```
+
+📝 RailsAdmin 3.x uses Bootstrap 5, prior releases use Bootstrap 3
+
 Don't forget to re-compile your assets or simply delete the content of your `tmp/cache` folder. Some additional steps might be required, as others reported here: https://github.com/sferik/rails_admin/issues/738#issuecomment-26615578
 
-RailsAdmin uses jquery-pjax (https://github.com/defunkt/jquery-pjax) to load pages instead normal HTTP requests, use ` $(document).on('rails_admin.dom_ready', function(){ /* your js code here */ }); ` instead jQuery's default on ready function ` $(function(){ /* your js code here */ }); ` to check if page is loaded. It will work to both normal and pjax requests.
+RailsAdmin 2.x and below uses jquery-pjax (https://github.com/defunkt/jquery-pjax) to load pages instead normal HTTP requests, use ` $(document).on('rails_admin.dom_ready', function(){ /* your js code here */ }); ` instead jQuery's default on ready function ` $(function(){ /* your js code here */ }); ` to check if page is loaded. It will work to both normal and pjax requests.
 
 ### To create a distributable theme
 
