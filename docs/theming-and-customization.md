@@ -11,7 +11,27 @@ app/assets/javascripts/rails_admin/custom/ui.js
 
 Don't forget to re-compile your assets or simply delete the content of your `tmp/cache` folder. Some additional steps might be required, as others reported here: https://github.com/sferik/rails_admin/issues/738#issuecomment-26615578
 
-RailsAdmin 2.x and below uses jquery-pjax (https://github.com/defunkt/jquery-pjax) to load pages instead normal HTTP requests, use ` $(document).on('rails_admin.dom_ready', function(){ /* your js code here */ }); ` instead jQuery's default on ready function ` $(function(){ /* your js code here */ }); ` to check if page is loaded. It will work to both normal and pjax requests.
+### For custom JavaScript code
+
+RailsAdmin 2.x and below uses jquery-pjax (https://github.com/defunkt/jquery-pjax) to load pages instead of normal HTTP requests.
+
+Use this event to check that the page is loaded before executing your code:
+
+```javascript
+$(document).on('rails_admin.dom_ready', function() { 
+  /* your js code here */
+});
+``` 
+
+RailsAdmin 3.x uses Turbo Drive (https://turbo.hotwired.dev/) to load pages instead of normal HTTP requests.
+
+Use this event to check that the page is loaded before executing your code:
+
+```javascript
+$(document).on('turbo:load turbo:render', function() {
+  /* your js code here */ 
+});
+```
 
 ### To create a distributable theme
 
