@@ -42,6 +42,16 @@ body.rails_admin {
     > li > a {
       padding: ($navbar-padding-y / 2) ($grid-gutter-width / 2);
 
+      &.active {
+        background-color: map-get($theme-colors, primary);
+        color: color-contrast(map-get($theme-colors, primary));
+      }
+
+      &:hover {
+        background-color: map-get($theme-colors, primary);
+        color: color-contrast(map-get($theme-colors, primary));
+      }
+
       &.nav-level-1 {
         padding-left: $grid-gutter-width;
       }
