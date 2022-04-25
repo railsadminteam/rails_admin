@@ -5,7 +5,7 @@
   </head>
   <body class="rails_admin">
     <div data-i18n-options="<%= I18n.t("admin.js").to_json %>" id="admin-js"></div>
-    <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-primary border-bottom">
+    <nav class="navbar navbar-expand-md fixed-top <%= RailsAdmin::Config.navbar_css_classes.join(' ') %>">
       <%= render "layouts/rails_admin/navigation" %>
     </nav>
     <div class="container-fluid">
