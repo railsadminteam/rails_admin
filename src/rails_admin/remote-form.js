@@ -105,9 +105,8 @@ import * as bootstrap from "bootstrap/dist/js/bootstrap.esm";
       document.dispatchEvent(event);
 
       form.bind("ajax:complete", function (event) {
-        var data = event.detail[0],
-          status = event.detail[1];
-        if (status == "OK") {
+        var data = event.detail[0];
+        if (data.status == 200) {
           var json = $.parseJSON(data.responseText);
           var option =
             '<option value="' +
