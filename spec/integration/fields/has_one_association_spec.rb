@@ -22,7 +22,7 @@ RSpec.describe 'HasOneAssociation field', type: :request do
     end
 
     it 'creates an object with correct associations' do
-      post new_path(model_name: 'player', player: {name: 'Jackie Robinson', number: 42, position: 'Second baseman', draft_id: @draft.id})
+      post new_path(model_name: 'player', player: FactoryBot.attributes_for(:player).merge(name: 'Jackie Robinson', draft_id: @draft.id))
       @player = Player.where(name: 'Jackie Robinson').first
       @draft.reload
       expect(@player.draft).to eq(@draft)
