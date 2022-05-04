@@ -120,10 +120,12 @@ module RailsAdmin
         abstract_model = node.abstract_model
         model_param = abstract_model.to_param
         url         = rails_admin.url_for(action: :index, controller: 'rails_admin/main', model_name: model_param)
-        level_class = " nav-level-#{level}" if level > 0
-        nav_icon = node.navigation_icon ? %(<i class="#{node.navigation_icon}"></i> ).html_safe : ''
+        nav_icon = node.navigation_icon ? %(<i class="#{node.navigation_icon}"></i>).html_safe : ''
+        css_classes = ['nav-link']
+        css_classes.push("nav-level-#{level}") if level > 0
+        css_classes.push('active') if defined?(@action) && current_action?(@action, model_param)
         li = content_tag :li, data: {model: model_param} do
-          link_to nav_icon + node.label_plural, url, class: "nav-link#{level_class}"
+          link_to nav_icon + " " + node.label_plural, url, class: css_classes.join(' ')
         end
         child_nodes = parent_groups[abstract_model.model_name]
         child_nodes ? li + navigation(parent_groups, child_nodes, level + 1) : li
