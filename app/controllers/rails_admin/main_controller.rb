@@ -59,13 +59,15 @@ module RailsAdmin
       params[:return_to].presence && params[:return_to].include?(request.host) && (params[:return_to] != request.fullpath) ? params[:return_to] : index_path
     end
 
+    # rubocop:disable Metrics/CyclomaticComplexity
     def get_sort_hash(model_config)
       abstract_model = model_config.abstract_model
       field = model_config.list.fields.detect { |f| f.name.to_s == params[:sort] }
+      # If no sort param, default to the `sort_by` specified in the list config
+      field ||= model_config.list.possible_fields.detect { |f| f.name == model_config.list.sort_by.to_sym }
 
       column =
         if field.nil? || field.sortable == false # use default sort, asked field does not exist or is not sortable
-          field = model_config.list.possible_fields.detect { |f| f.name == model_config.list.sort_by.to_sym }
           "#{abstract_model.table_name}.#{model_config.list.sort_by}"
         elsif field.sortable == true # use the given field
           "#{abstract_model.table_name}.#{field.name}"
@@ -82,6 +84,7 @@ module RailsAdmin
       params[:sort_reverse] ||= 'false'
       {sort: column, sort_reverse: (params[:sort_reverse] == (field&.sort_reverse&.to_s || 'true'))}
     end
+    # rubocop:enable Metrics/CyclomaticComplexity
 
     def redirect_to_on_success
       notice = I18n.t('admin.flash.successful', name: @model_config.label, action: I18n.t("admin.actions.#{@action.key}.done"))
