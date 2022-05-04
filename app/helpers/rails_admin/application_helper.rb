@@ -125,7 +125,7 @@ module RailsAdmin
         css_classes.push("nav-level-#{level}") if level > 0
         css_classes.push('active') if defined?(@action) && current_action?(@action, model_param)
         li = content_tag :li, data: {model: model_param} do
-          link_to nav_icon + node.label_plural, url, class: css_classes.join(' ')
+          link_to nav_icon + " " + node.label_plural, url, class: css_classes.join(' ')
         end
         child_nodes = parent_groups[abstract_model.model_name]
         child_nodes ? li + navigation(parent_groups, child_nodes, level + 1) : li

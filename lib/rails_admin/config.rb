@@ -75,6 +75,9 @@ module RailsAdmin
       # @see RailsAdmin.config
       attr_reader :registry
 
+      # Bootstrap CSS classes used for Navigation bar
+      attr_accessor :navbar_css_classes
+
       # show Gravatar in Navigation bar
       attr_accessor :show_gravatar
 
@@ -336,6 +339,7 @@ module RailsAdmin
         @label_methods = %i[name title]
         @main_app_name = proc { [Rails.application.engine_name.titleize.chomp(' Application'), 'Admin'] }
         @registry = {}
+        @navbar_css_classes = %w[navbar-dark bg-primary border-bottom]
         @show_gravatar = true
         @navigation_static_links = {}
         @navigation_static_label = nil

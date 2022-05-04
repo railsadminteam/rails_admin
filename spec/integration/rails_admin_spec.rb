@@ -61,6 +61,20 @@ RSpec.describe RailsAdmin, type: :request do
     end
   end
 
+  describe 'navbar css class' do
+    it 'is set by default' do
+      expect(RailsAdmin.config.navbar_css_classes).to eq(%w[navbar-dark bg-primary border-bottom])
+    end
+
+    it 'can be configured' do
+      RailsAdmin.config do |config|
+        config.navbar_css_classes = %w[navbar-light border-bottom]
+      end
+      visit dashboard_path
+      is_expected.to have_css('nav.navbar.navbar-light.border-bottom')
+    end
+  end
+
   describe '_current_user' do # https://github.com/railsadminteam/rails_admin/issues/549
     it 'is accessible from the list view' do
       RailsAdmin.config Player do
