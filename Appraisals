@@ -38,7 +38,7 @@ appraise 'rails-6.1' do
   gem 'rails', '~> 6.1.0'
   gem 'sassc-rails', '~> 2.1'
   gem 'devise', '~> 4.7'
-  gem 'turbo-rails', platform: :jruby, github: 'mshibuya/turbo-rails', branch: 'fix/breaking-in-non-zeitwerk-env'
+  gem 'turbo-rails', platform: :jruby, github: 'hotwired/turbo-rails'
 
   group :test do
     gem 'cancancan', '~> 3.2'
