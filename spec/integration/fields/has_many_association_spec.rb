@@ -184,4 +184,75 @@ RSpec.describe 'HasManyAssociation field', type: :request do
       end
     end
   end
+
+  context 'with composite foreign keys', composite_primary_keys: true do
+    let(:fan) { FactoryBot.create(:fan) }
+    let!(:fanships) { FactoryBot.create_list(:fanship, 3) }
+
+    describe 'via default field' do
+      before do
+        RailsAdmin.config Fan do
+          field :name
+          field :fanships
+        end
+      end
+
+      it 'shows the current selection' do
+        visit edit_path(model_name: 'fan', id: fanships[0].fan.id)
+        is_expected.to have_select('Fanships', selected: "Fanship ##{fanships[0].id}")
+      end
+
+      it 'allows update' do
+        visit edit_path(model_name: 'fan', id: fan.id)
+        select("Fanship ##{fanships[0].id}", from: 'Fanships')
+        select("Fanship ##{fanships[1].id}", from: 'Fanships')
+        click_button 'Save'
+        is_expected.to have_content 'Fan successfully updated'
+        expect(fan.reload.fanships.map(&:team_id)).to match_array fanships.map(&:team_id)[0..1]
+      end
+    end
+
+    describe 'via remote-sourced field' do
+      before do
+        RailsAdmin.config Fan do
+          field :name
+          field :fanships do
+            associated_collection_cache_all false
+          end
+        end
+      end
+
+      it 'allows update', js: true do
+        visit edit_path(model_name: 'fan', id: fan.id)
+        find('input.ra-multiselect-search').set('F')
+        find('.ra-multiselect-collection option', text: "Fanship ##{fanships[0].id}").select_option
+        find('.ra-multiselect-collection option', text: "Fanship ##{fanships[1].id}").select_option
+        find('.ra-multiselect-item-add').click
+        click_button 'Save'
+        is_expected.to have_content 'Fan successfully updated'
+        expect(fan.reload.fanships.map(&:team_id)).to match_array fanships.map(&:team_id)[0..1]
+      end
+    end
+
+    describe 'via nested field' do
+      let!(:team) { FactoryBot.create :team }
+      let!(:fanships) { FactoryBot.create_list(:fanship, 2, fan: fan) }
+      before do
+        RailsAdmin.config NestedFan do
+          field :name
+          field :fanships
+        end
+      end
+
+      it 'allows update' do
+        visit edit_path(model_name: 'nested_fan', id: fan.id)
+        select(team.name, from: 'nested_fan_fanships_attributes_0_team_id')
+        fill_in 'nested_fan_fanships_attributes_1_since', with: '2020-01-23'
+        click_button 'Save'
+        is_expected.to have_content 'Nested fan successfully updated'
+        expect(fan.fanships[0].team).to eq team
+        expect(fan.fanships[1].since).to eq Date.new(2020, 1, 23)
+      end
+    end
+  end
 end

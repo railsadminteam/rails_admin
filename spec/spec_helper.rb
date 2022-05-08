@@ -107,4 +107,6 @@ RSpec.configure do |config|
       config.filter_run_excluding orm => true
     end
   end
+
+  config.filter_run_excluding composite_primary_keys: true unless defined?(CompositePrimaryKeys)
 end

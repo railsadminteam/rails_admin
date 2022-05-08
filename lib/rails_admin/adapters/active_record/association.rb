@@ -23,6 +23,14 @@ module RailsAdmin
           association.macro
         end
 
+        def field_type
+          if polymorphic?
+            :polymorphic_association
+          else
+            :"#{association.macro}_association"
+          end
+        end
+
         def klass
           if options[:polymorphic]
             polymorphic_parents(:active_record, model.name.to_s, name) || []

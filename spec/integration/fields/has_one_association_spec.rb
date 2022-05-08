@@ -97,4 +97,75 @@ RSpec.describe 'HasOneAssociation field', type: :request do
       end
     end
   end
+
+  context 'with composite foreign keys', composite_primary_keys: true do
+    let(:fan) { FactoryBot.create(:fan) }
+    let!(:fanship) { FactoryBot.create(:fanship, fan: fan) }
+
+    describe 'via default field' do
+      before do
+        RailsAdmin.config Fan do
+          field :name
+          field :fanship
+        end
+      end
+
+      it 'allows create' do
+        visit new_path(model_name: 'fan')
+        fill_in 'Name', with: 'someone'
+        select("Fanship ##{fanship.id}", from: 'Fanship')
+        click_button 'Save'
+        is_expected.to have_content 'Fan successfully created'
+        expect(Fan.where(name: 'someone').first.fanship.team_id).to eq fanship.team_id
+      end
+
+      it 'shows the current selection' do
+        visit edit_path(model_name: 'fan', id: fanship.fan_id)
+        is_expected.to have_select('Fanship', selected: "Fanship ##{fanship.id}")
+      end
+    end
+
+    describe 'via remote-sourced field' do
+      before do
+        RailsAdmin.config Fan do
+          field :name
+          field :fanship do
+            associated_collection_cache_all false
+          end
+        end
+      end
+
+      it 'allows create', js: true do
+        visit new_path(model_name: 'fan')
+        fill_in 'Name', with: 'someone'
+        find('.fanship_field input.ra-filtering-select-input').set(fanship.fan_id)
+        page.execute_script("document.querySelector('.fanship_field input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
+        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+        page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Fanship ##{fanship.id}")).click()}
+        click_button 'Save'
+        is_expected.to have_content 'Fan successfully created'
+        expect(Fan.where(name: 'someone').first.fanship.team_id).to eq fanship.team_id
+      end
+    end
+
+    describe 'via nested field' do
+      let!(:team) { FactoryBot.create :team }
+      before do
+        RailsAdmin.config NestedFan do
+          field :name
+          field :fanship
+        end
+      end
+
+      it 'allows update' do
+        visit edit_path(model_name: 'nested_fan', id: fanship.fan_id)
+        select(team.name, from: 'Team')
+        fill_in 'Since', with: '2020-01-23'
+        click_button 'Save'
+        is_expected.to have_content 'Nested fan successfully updated'
+        expect(fan.fanship.team).to eq team
+        expect(fan.fanship.since).to eq Date.new(2020, 1, 23)
+      end
+    end
+  end
 end

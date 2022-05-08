@@ -20,7 +20,7 @@ module RailsAdmin
           end
 
           def selected_id
-            value.try :id
+            value.try(:id).try(:to_s)
           end
 
           def method_name

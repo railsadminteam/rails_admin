@@ -29,12 +29,8 @@ module RailsAdmin
             true
           end
 
-          def associated_primary_key
-            association.primary_key
-          end
-
           def selected_id
-            bindings[:object].send(association.key_accessor)
+            bindings[:object].safe_send(association.key_accessor)
           end
 
           def method_name

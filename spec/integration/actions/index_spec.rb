@@ -324,6 +324,14 @@ RSpec.describe 'Index action', type: :request do
   end
 
   describe 'fields' do
+    before do
+      if defined?(CompositePrimaryKeys)
+        RailsAdmin.config Fan do
+          configure(:fanships) { hide }
+          configure(:fanship) { hide }
+        end
+      end
+    end
     it 'shows all by default' do
       visit index_path(model_name: 'fan')
       expect(all('th').collect(&:text).delete_if { |t| /^\n*$/ =~ t }).
@@ -1184,6 +1192,20 @@ RSpec.describe 'Index action', type: :request do
       cols = all('th').collect(&:text)
       expect(cols[0..3]).to eq(all_team_columns[1..4])
       expect(cols).to contain_exactly(*all_team_columns[1..])
+    end
+  end
+
+  context 'with composite_primary_keys', composite_primary_keys: true do
+    let!(:fanships) { FactoryBot.create_list(:fanship, 3) }
+
+    it 'shows the list' do
+      visit index_path(model_name: 'fanship')
+      expect(all('th').collect(&:text)[0..3]).to eq(['', 'Fan', 'Team', 'Since'])
+      fanships.each do |fanship|
+        is_expected.to have_content fanship.fan.name
+        is_expected.to have_content fanship.team.name
+      end
+      is_expected.to have_content '3 fanships'
     end
   end
 end
