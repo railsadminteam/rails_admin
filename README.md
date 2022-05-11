@@ -1,6 +1,6 @@
 # RailsAdmin
 
-RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.
+RailsAdmin-Test is a Rails engine that provides an easy-to-use interface for managing your data.
 
 [![Build Status](https://secure.travis-ci.org/sferik/rails_admin.png)](http://travis-ci.org/sferik/rails_admin)
 
