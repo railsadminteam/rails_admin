@@ -14,6 +14,10 @@ module RailsAdmin
               {resize_to_limit: [100, 100]}
             end
 
+            register_instance_option :keep_value do
+              value.signed_id
+            end
+
             register_instance_option :delete_value do
               value.id
             end
@@ -41,6 +45,10 @@ module RailsAdmin
 
           register_instance_option :attachment_class do
             ActiveStorageAttachment
+          end
+
+          register_instance_option :keep_method do
+            method_name if ::ActiveStorage.replace_on_assign_to_many
           end
 
           register_instance_option :delete_method do

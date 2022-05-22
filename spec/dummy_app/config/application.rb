@@ -38,5 +38,6 @@ module DummyApp
     config.i18n.load_path += Dir[Rails.root.join('app', 'locales', '*.{rb,yml}').to_s]
     config.active_record.time_zone_aware_types = %i[datetime time] if CI_ORM == :active_record
     config.active_storage.service = :local if defined?(ActiveStorage)
+    config.active_storage.replace_on_assign_to_many = false if defined?(ActiveStorage) && ActiveStorage.version < Gem::Version.create('6.1')
   end
 end
