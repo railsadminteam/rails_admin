@@ -72,4 +72,51 @@ RSpec.describe 'BelongsToAssociation field', type: :request do
       end
     end
   end
+
+  context 'with composite foreign keys', composite_primary_keys: true do
+    let!(:fanship) { FactoryBot.create(:fanship) }
+    let(:favorite_player) { FactoryBot.create(:favorite_player) }
+
+    describe 'via default field' do
+      it 'allows update' do
+        visit edit_path(model_name: 'favorite_player', id: favorite_player.id)
+        is_expected.to have_select('Fanship', selected: "Fanship ##{favorite_player.fanship.id}")
+        select("Fanship ##{fanship.id}", from: 'Fanship')
+        click_button 'Save'
+        is_expected.to have_content 'Favorite player successfully updated'
+        expect(FavoritePlayer.all.map(&:fanship)).to eq [fanship]
+      end
+    end
+
+    describe 'via remote-sourced field' do
+      before do
+        RailsAdmin.config FavoritePlayer do
+          field :fanship do
+            associated_collection_cache_all false
+          end
+        end
+      end
+
+      it 'allows update', js: true do
+        visit edit_path(model_name: 'favorite_player', id: favorite_player.id)
+        find('.fanship_field input.ra-filtering-select-input').set(fanship.fan_id)
+        page.execute_script("document.querySelector('.fanship_field input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
+        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+        page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Fanship ##{fanship.id}")).click()}
+        click_button 'Save'
+        is_expected.to have_content 'Favorite player successfully updated'
+        expect(FavoritePlayer.all.map(&:fanship)).to eq [fanship]
+      end
+    end
+
+    describe 'via nested field' do
+      it 'allows update' do
+        visit edit_path(model_name: 'nested_favorite_player', id: favorite_player.id)
+        fill_in 'Since', with: '2020-01-23'
+        click_button 'Save'
+        is_expected.to have_content 'Nested favorite player successfully updated'
+        expect(favorite_player.reload.fanship.since).to eq Date.new(2020, 1, 23)
+      end
+    end
+  end
 end

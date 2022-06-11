@@ -60,14 +60,13 @@ module RailsAdmin
     end
 
     def get_sort_hash(model_config)
-      abstract_model = model_config.abstract_model
       field = model_config.list.fields.detect { |f| f.name.to_s == params[:sort] }
       # If no sort param, default to the `sort_by` specified in the list config
-      field ||= model_config.list.possible_fields.detect { |f| f.name == model_config.list.sort_by.to_sym }
+      field ||= model_config.list.possible_fields.detect { |f| f.name == model_config.list.sort_by.try(:to_sym) }
 
       column =
         if field.nil? || field.sortable == false # use default sort, asked field does not exist or is not sortable
-          "#{abstract_model.table_name}.#{model_config.list.sort_by}"
+          model_config.list.sort_by
         else
           field.sort_column
         end

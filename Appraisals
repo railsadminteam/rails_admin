@@ -85,3 +85,21 @@ appraise 'rails-7.0' do
     gem 'paper_trail', '>= 12.0'
   end
 end
+
+appraise 'composite_primary_keys' do
+  gem 'rails', '~> 7.0.0'
+  gem 'sassc-rails', '~> 2.1'
+  gem 'devise', '~> 4.8'
+
+  group :test do
+    gem 'cancancan', '~> 3.2'
+    gem 'kt-paperclip'
+    gem 'rspec-rails', '>= 4.0.0.beta2'
+    gem 'shrine', '~> 3.0'
+  end
+
+  group :active_record do
+    gem 'composite_primary_keys'
+    gem 'paper_trail', '>= 12.0'
+  end
+end

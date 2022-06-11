@@ -194,4 +194,17 @@ RSpec.describe 'New action', type: :request do
       is_expected.to have_css('button[name="_save"]:disabled')
     end
   end
+
+  context 'with composite_primary_keys', composite_primary_keys: true do
+    let!(:fan) { FactoryBot.create(:fan) }
+    let!(:team) { FactoryBot.create(:team) }
+
+    it 'creates an object' do
+      visit new_path(model_name: 'fanship')
+      select(fan.name, from: 'Fan')
+      select(team.name, from: 'Team')
+      expect { click_button 'Save' }.to change { Fanship.count }.by(1)
+      expect(Fanship.first.attributes.fetch_values('fan_id', 'team_id')).to eq [fan.id, team.id]
+    end
+  end
 end

@@ -127,6 +127,11 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
         expect(abstract_model.all(bulk_ids: @players[0..1].collect(&:id))).to match_array @players[0..1]
       end
 
+      it 'supports retrieval by bulk_ids with composite_primary_keys', composite_primary_keys: true do
+        expect(RailsAdmin::AbstractModel.new(Fanship).all(bulk_ids: ['1,2', '3,4']).to_sql).
+          to include 'WHERE ("fans_teams"."fan_id" = 1 AND "fans_teams"."team_id" = 2 OR "fans_teams"."fan_id" = 3 AND "fans_teams"."team_id" = 4)'
+      end
+
       it 'supports pagination' do
         expect(abstract_model.all(sort: 'id', page: 2, per: 1)).to eq(@players[-2, 1])
         expect(abstract_model.all(sort: 'id', page: 1, per: 2)).to eq(@players[-2, 2].reverse)
@@ -134,6 +139,9 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
       it 'supports ordering' do
         expect(abstract_model.all(sort: 'id', sort_reverse: true)).to eq(@players.sort)
+        expect(abstract_model.all(sort: %w[id name], sort_reverse: true).to_sql.tr('`', '"')).to include('ORDER BY "players"."id" ASC, "players"."name" ASC')
+        expect(abstract_model.all(include: :team, sort: {players: :name, teams: :name}, sort_reverse: true).to_sql.tr('`', '"')).to include('ORDER BY "players"."name" ASC, "teams"."name" ASC')
+        expect { abstract_model.all(sort: 1, sort_reverse: true) }.to raise_error ArgumentError, /Unsupported/
       end
 
       it 'supports querying' do

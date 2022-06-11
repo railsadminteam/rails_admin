@@ -8,7 +8,7 @@
 
   xhr = !field.associated_collection_cache_all
 
-  collection = xhr ? [[field.formatted_value, field.selected_id]] : controller.list_entries(config, :index, field.associated_collection_scope, false).map { |o| [o.send(field.associated_object_label_method), o.send(field.associated_primary_key)] }
+  collection = xhr ? [[field.formatted_value, field.selected_id]] : controller.list_entries(config, :index, field.associated_collection_scope, false).map { |o| [o.send(field.associated_object_label_method), o.send(field.associated_primary_key).to_s] }
 
   js_data = {
     xhr: xhr,

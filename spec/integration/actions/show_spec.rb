@@ -457,4 +457,14 @@ RSpec.describe 'Show action', type: :request do
       is_expected.to have_selector('.card-body', text: 'anything')
     end
   end
+
+  context 'with composite_primary_keys', composite_primary_keys: true do
+    let(:fanship) { FactoryBot.create(:fanship) }
+
+    it 'shows the object' do
+      visit show_path(model_name: 'fanship', id: fanship.id)
+      is_expected.to have_link(fanship.fan.name)
+      is_expected.to have_link(fanship.team.name)
+    end
+  end
 end

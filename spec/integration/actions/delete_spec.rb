@@ -172,4 +172,15 @@ RSpec.describe 'Delete action', type: :request do
       expect(URI.parse(page.current_url).path).to eq(delete_path(model_name: 'player', id: @player.id))
     end
   end
+
+  context 'with composite_primary_keys', composite_primary_keys: true do
+    let(:fanship) { FactoryBot.create(:fanship) }
+
+    it 'deletes the object' do
+      visit delete_path(model_name: 'fanship', id: fanship.id)
+      click_button "Yes, I'm sure"
+      is_expected.to have_content('Fanship successfully deleted')
+      expect(Fanship.all).to be_empty
+    end
+  end
 end

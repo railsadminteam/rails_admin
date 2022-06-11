@@ -861,4 +861,15 @@ RSpec.describe 'Edit action', type: :request do
       end.to change { record.reload.open }.from(nil).to(true)
     end
   end
+
+  context 'with composite_primary_keys', composite_primary_keys: true do
+    let(:fanship) { FactoryBot.create(:fanship) }
+
+    it 'edits the object' do
+      visit edit_path(model_name: 'fanship', id: fanship.id)
+      fill_in 'Since', with: '2000-01-23'
+      click_button 'Save'
+      expect { fanship.reload }.to change { fanship.since }.from(nil).to(Date.new(2000, 1, 23))
+    end
+  end
 end

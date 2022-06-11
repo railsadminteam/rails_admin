@@ -101,8 +101,13 @@ module RailsAdmin
 
     def initialize_active_record
       @adapter = :active_record
-      require 'rails_admin/adapters/active_record'
-      extend Adapters::ActiveRecord
+      if defined?(::CompositePrimaryKeys)
+        require 'rails_admin/adapters/composite_primary_keys'
+        extend Adapters::CompositePrimaryKeys
+      else
+        require 'rails_admin/adapters/active_record'
+        extend Adapters::ActiveRecord
+      end
     end
 
     def initialize_mongoid

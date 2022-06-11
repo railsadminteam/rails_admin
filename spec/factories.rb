@@ -44,6 +44,16 @@ FactoryBot.define do
     sequence(:name) { |n| "Fan #{n}" }
   end
 
+  factory :fanship do
+    association :fan
+    association :team
+  end
+
+  factory :favorite_player do
+    association :fanship
+    association :player
+  end
+
   factory :user do
     sequence(:email) { |n| "username_#{n}@example.com" }
     sequence(:password) { |_n| 'password' }

@@ -10,7 +10,7 @@ RSpec.describe 'Export action', type: :request do
 
   it 'exports to CSV' do
     visit export_path(model_name: 'player')
-    click_button 'Export to json'
+    click_button 'Export to csv'
     is_expected.to have_content player.name
   end
 
@@ -157,6 +157,17 @@ RSpec.describe 'Export action', type: :request do
         csv = CSV.parse page.driver.response.body
         expect(csv.flatten).to match_array %w[Content something anything]
       end
+    end
+  end
+
+  context 'with composite_primary_keys', composite_primary_keys: true do
+    let!(:fanship) { FactoryBot.create(:fanship) }
+
+    it 'exports to CSV' do
+      visit export_path(model_name: 'fanship')
+      click_button 'Export to csv'
+      is_expected.to have_content fanship.fan.name
+      is_expected.to have_content fanship.team.name
     end
   end
 end

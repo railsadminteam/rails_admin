@@ -36,6 +36,14 @@ module RailsAdmin
           end
         end
 
+        def field_type
+          if polymorphic?
+            :polymorphic_association
+          else
+            :"#{type}_association"
+          end
+        end
+
         def klass
           if polymorphic? && %i[referenced_in belongs_to].include?(macro)
             polymorphic_parents(:mongoid, model.name, name) || []

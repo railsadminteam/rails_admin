@@ -107,6 +107,14 @@ module RailsAdmin
       (@dom_name ||= {})[field.name] ||= %(#{@object_name}#{options[:index] && "[#{options[:index]}]"}[#{field.method_name}]#{field.is_a?(Config::Fields::Association) && field.multiple? ? '[]' : ''})
     end
 
+    def hidden_field(method, options = {})
+      if method == :id
+        super method, {value: object.id.to_s}
+      else
+        super
+      end
+    end
+
   protected
 
     def generator_action(action, nested)

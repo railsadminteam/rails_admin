@@ -86,4 +86,19 @@ RSpec.describe 'BulkDelete action', type: :request do
       expect(RailsAdmin::AbstractModel.new('Player').count).to eq(3)
     end
   end
+
+  context 'with composite_primary_keys', composite_primary_keys: true do
+    let!(:fanships) { FactoryBot.create_list(:fanship, 3) }
+
+    it 'provides check boxes for bulk operation' do
+      visit index_path(model_name: 'fanship')
+      fanships.each { |fanship| is_expected.to have_css(%(input[name="bulk_ids[]"][value="#{fanship.id}"])) }
+    end
+
+    it 'deletes selected records' do
+      delete(bulk_delete_path(bulk_action: 'bulk_delete', model_name: 'fanship', bulk_ids: fanships[0..1].map { |fanship| fanship.id.to_s }))
+      expect(flash[:success]).to match(/2 Fanships successfully deleted/)
+      expect(Fanship.all).to eq fanships[2..2]
+    end
+  end
 end

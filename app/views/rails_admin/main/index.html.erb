@@ -140,7 +140,7 @@
             <tr class="<%= @abstract_model.param_key %>_row <%= @model_config.list.with(object: object).row_css_class %>">
               <% if checkboxes %>
                 <td class="sticky">
-                  <%= check_box_tag "bulk_ids[]", object.id, false %>
+                  <%= check_box_tag "bulk_ids[]", object.id.to_s, false %>
                 </td>
               <% end %>
               <% properties.map{ |property| property.bind(:object, object) }.each do |property| %>
