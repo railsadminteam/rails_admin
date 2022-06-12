@@ -44,7 +44,7 @@ module RailsAdmin
         [*name].each { |field_name| field(field_name, type, false, &block) }
       end
 
-      # include fields by name and apply an optionnal block to each (through a call to fields),
+      # include fields by name and apply an optional block to each (through a call to fields),
       # or include fields by conditions if no field names
       def include_fields(*field_names, &block)
         if field_names.empty?

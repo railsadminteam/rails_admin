@@ -264,8 +264,8 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
         recursively_embeds_many
       end
 
-      expect { RailsAdmin::AbstractModel.new(MongoEmbedsOne).associations.first.nested_options }.to raise_error(RuntimeError, "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embedded' line to `MongoEmbedsOne' model.\n")
-      expect { RailsAdmin::AbstractModel.new(MongoEmbedsMany).associations.first.nested_options }.to raise_error(RuntimeError, "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embeddeds' line to `MongoEmbedsMany' model.\n")
+      expect { RailsAdmin::AbstractModel.new(MongoEmbedsOne).associations.first.nested_options }.to raise_error(RuntimeError, "Embedded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embedded' line to `MongoEmbedsOne' model.\n")
+      expect { RailsAdmin::AbstractModel.new(MongoEmbedsMany).associations.first.nested_options }.to raise_error(RuntimeError, "Embedded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embeddeds' line to `MongoEmbedsMany' model.\n")
       expect { RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsOne).associations.first.nested_options }.not_to raise_error
       expect { RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsMany).associations.first.nested_options }.not_to raise_error
     end

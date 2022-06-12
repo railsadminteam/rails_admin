@@ -22,7 +22,7 @@ module RailsAdmin
 
       # Registry of field factories.
       #
-      # Field factory is an anonymous function that recieves the parent object,
+      # Field factory is an anonymous function that receives the parent object,
       # an array of field properties and an array of fields already instantiated.
       #
       # If the factory returns true then that property will not be run through

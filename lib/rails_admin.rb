@@ -19,7 +19,7 @@ module RailsAdmin
   #
   # If only a block is passed it is stored to initializer stack to be evaluated
   # on first request in production mode and on each request in development. If
-  # initialization has already occured (in other words RailsAdmin.setup has
+  # initialization has already occurred (in other words RailsAdmin.setup has
   # been called) the block will be added to stack and evaluated at once.
   #
   # Otherwise returns RailsAdmin::Config class.
