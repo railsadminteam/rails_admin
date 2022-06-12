@@ -5,6 +5,7 @@ module.exports = {
   mode: "production",
   devtool: "source-map",
   entry: {
+    application: "./app/javascript/application.js",
     rails_admin: "./app/javascript/rails_admin.js",
   },
   output: {

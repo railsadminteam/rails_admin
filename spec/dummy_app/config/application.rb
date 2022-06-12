@@ -18,7 +18,7 @@ require 'action_text/engine' if CI_ORM == :active_record
 case CI_ASSET
 when :webpacker
   require 'webpacker'
-when :sprockets
+when :sprockets, :webpack
   require 'sprockets/railtie'
 when :importmap
   require 'sprockets/railtie'
@@ -42,11 +42,23 @@ module DummyApp
     config.active_record.time_zone_aware_types = %i[datetime time] if CI_ORM == :active_record
     config.active_storage.service = :local if defined?(ActiveStorage)
     config.active_storage.replace_on_assign_to_many = false if defined?(ActiveStorage) && ActiveStorage.version < Gem::Version.create('6.1')
-    config.importmap.cache_sweepers << RailsAdmin::Engine.root.join('src') if config.respond_to? :importmap
 
-    if CI_ASSET == :importmap
+    case CI_ASSET
+    when :webpack
+      config.assets.precompile += %w[rails_admin.js rails_admin.css]
+    when :importmap
       config.assets.paths << RailsAdmin::Engine.root.join('src')
+      config.assets.precompile += %w[rails_admin.js rails_admin.css]
       config.importmap.cache_sweepers << RailsAdmin::Engine.root.join('src')
+    end
+
+    initializer :ignore_unused_assets_path, after: :append_assets_path, group: :all do |app|
+      case CI_ASSET
+      when :webpack, :importmap
+        app.config.assets.paths.delete(Rails.root.join('app', 'assets', 'javascripts').to_s)
+      when :sprockets
+        app.config.assets.paths.delete(Rails.root.join('app', 'assets', 'builds').to_s)
+      end
     end
   end
 end

@@ -2,7 +2,7 @@
 
 default: &default
   source_path: app/javascript
-  source_entry_path: packs
+  source_entry_path: .
   public_root_path: public
   public_output_path: packs
   cache_path: tmp/cache/webpacker
@@ -16,7 +16,7 @@ default: &default
   cache_manifest: false
 
   # Extract and emit a css file
-  extract_css: false
+  extract_css: true
 
   static_assets_extensions:
     - .jpg

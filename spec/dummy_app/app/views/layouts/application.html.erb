@@ -2,8 +2,15 @@
 <html>
 <head>
   <title>DummyApp</title>
-  <%= stylesheet_link_tag    "application", media: "all" %>
-  <%= javascript_include_tag "application" %>
+  <% case CI_ASSET %>
+  <% when :webpacker %>
+    <%= javascript_pack_tag "application" %>
+  <% when :importmap %>
+    <%= javascript_importmap_tags %>
+  <% else %>
+    <%= stylesheet_link_tag    "application", media: "all" %>
+    <%= javascript_include_tag "application" %>
+  <% end %>
   <%= csrf_meta_tags %>
 </head>
 <body>
