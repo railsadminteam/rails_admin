@@ -63,8 +63,8 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
         class ConditionalValidationTest < Tableless
           column :foo, :varchar
           column :bar, :varchar
-          validates :foo, presence: true, if: :presisted?
-          validates :bar, presence: true, unless: :presisted?
+          validates :foo, presence: true, if: :persisted?
+          validates :bar, presence: true, unless: :persisted?
         end
       end
 

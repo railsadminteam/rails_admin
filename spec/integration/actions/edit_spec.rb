@@ -428,13 +428,13 @@ RSpec.describe 'Edit action', type: :request do
           field :name do
             read_only true
             formatted_value do
-              "I'm outputed in the form"
+              "I'm outputted in the form"
             end
           end
         end
       end
       visit new_path(model_name: 'team')
-      is_expected.to have_content("I'm outputed in the form")
+      is_expected.to have_content("I'm outputted in the form")
     end
 
     it 'is hideable' do

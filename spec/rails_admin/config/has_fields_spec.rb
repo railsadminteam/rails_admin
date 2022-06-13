@@ -83,7 +83,7 @@ RSpec.describe RailsAdmin::Config::HasFields do
       end
     end
 
-    it "does not cause FrozenError by changing exiting field's tye" do
+    it "does not cause FrozenError by changing exiting field's type" do
       # Reference the fields for readonly
       config.edit.send(:_fields, true)
 

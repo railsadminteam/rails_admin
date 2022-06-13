@@ -72,9 +72,9 @@ RSpec.describe RailsAdmin::Config do
 
     it 'can be configured' do
       RailsAdmin.config do |config|
-        config.main_app_name = %w[stati c value]
+        config.main_app_name = %w[static value]
       end
-      expect(RailsAdmin.config.main_app_name).to eq(%w[stati c value])
+      expect(RailsAdmin.config.main_app_name).to eq(%w[static value])
     end
   end
 

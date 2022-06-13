@@ -353,7 +353,7 @@ module RailsAdmin
         end
 
         def parse_input(_params)
-          # overriden
+          # overridden
         end
 
         def inverse_of
