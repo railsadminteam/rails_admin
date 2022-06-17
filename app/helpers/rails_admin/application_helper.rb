@@ -31,7 +31,7 @@ module RailsAdmin
 
       if authorized
         edit_url = rails_admin.url_for(
-          action_name: edit_action.action_name,
+          action: edit_action.action_name,
           model_name: abstract_model.to_param,
           controller: 'rails_admin/main',
           id: _current_user.id,
