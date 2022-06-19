@@ -7,6 +7,7 @@ gem "devise", "~> 4.8"
 gem "rails", "~> 7.0.0"
 gem "webpacker", require: false
 gem "webrick", "~> 1.7"
+gem "importmap-rails", require: false
 gem "sassc-rails", "~> 2.1"
 
 group :active_record do

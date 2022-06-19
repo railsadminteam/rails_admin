@@ -11,19 +11,9 @@ module RailsAdmin
   class Engine < Rails::Engine
     isolate_namespace RailsAdmin
 
-    config.action_dispatch.rescue_responses['RailsAdmin::ActionNotAllowed'] = :forbidden
+    attr_accessor :importmap
 
-    initializer 'RailsAdmin precompile hook', group: :all do |app|
-      if defined?(Sprockets)
-        app.config.assets.precompile += %w[
-          rails_admin/application.js
-          rails_admin/application.css
-        ]
-        app.config.assets.paths << RailsAdmin::Engine.root.join('src')
-        require 'rails_admin/support/esmodule_preprocessor'
-        Sprockets.register_preprocessor 'application/javascript', RailsAdmin::ESModulePreprocessor
-      end
-    end
+    config.action_dispatch.rescue_responses['RailsAdmin::ActionNotAllowed'] = :forbidden
 
     initializer 'RailsAdmin reload config in development' do |app|
       config.initializer_path = app.root.join('config/initializers/rails_admin.rb')
@@ -42,6 +32,30 @@ module RailsAdmin
           reloader.execute_if_updated { require_unload_lock! }
         end
         reloader.execute
+      end
+    end
+
+    initializer 'RailsAdmin apply configuration', after: :eager_load! do |app|
+      RailsAdmin::Config.initialize!
+
+      # Force route reload, since it doesn't reflect RailsAdmin action configuration yet
+      app.reload_routes!
+    end
+
+    initializer 'RailsAdmin precompile hook', group: :all, after: 'RailsAdmin apply configuration' do |app|
+      case RailsAdmin.config.asset_source
+      when :sprockets
+        if defined?(Sprockets)
+          app.config.assets.precompile += %w[
+            rails_admin/application.js
+            rails_admin/application.css
+          ]
+          app.config.assets.paths << RailsAdmin::Engine.root.join('src')
+          require 'rails_admin/support/esmodule_preprocessor'
+          Sprockets.register_preprocessor 'application/javascript', RailsAdmin::ESModulePreprocessor
+        end
+      when :importmap
+        self.importmap = Importmap::Map.new.draw(app.root.join('config/importmap.rails_admin.rb'))
       end
     end
 
@@ -67,11 +81,6 @@ module RailsAdmin
           to config/application.rb.
         ERROR
       end
-
-      RailsAdmin::Config.initialize!
-
-      # Force route reload, since it doesn't reflect RailsAdmin action configuration yet
-      app.reload_routes!
 
       RailsAdmin::Version.warn_with_js_version
     end

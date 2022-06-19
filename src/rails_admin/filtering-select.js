@@ -1,6 +1,6 @@
 import jQuery from "jquery";
-import "jquery-ui/ui/widget";
-import "jquery-ui/ui/widgets/autocomplete";
+import "jquery-ui/ui/widget.js";
+import "jquery-ui/ui/widgets/autocomplete.js";
 import I18n from "./i18n";
 
 (function ($) {
