@@ -463,58 +463,54 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
     end
 
     describe '#edit_user_link' do
-      it "don't include email column" do
-        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:player))
-        result = helper.edit_user_link
-        expect(result).to eq nil
+      subject { helper.edit_user_link }
+      let(:user) { FactoryBot.create(:user) }
+      before { allow(helper).to receive(:_current_user).and_return(user) }
+
+      it 'shows the edit action link of the user' do
+        is_expected.to match(%r{href="[^"]+/admin/user/#{user.id}/edit"})
       end
 
-      it 'include email column' do
-        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:user))
-        result = helper.edit_user_link
-        expect(result).to match('href')
+      it 'shows the gravatar icon' do
+        is_expected.to include('gravatar')
       end
 
-      it 'show gravatar' do
-        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:user))
-        result = helper.edit_user_link
-        expect(result).to include('gravatar')
-      end
+      context "when the user doesn't have the email column" do
+        let(:user) { FactoryBot.create(:player) }
 
-      it "don't show gravatar" do
-        RailsAdmin.config do |config|
-          config.show_gravatar = false
+        it 'shows nothing' do
+          is_expected.to be nil
         end
+      end
 
-        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:user))
-        result = helper.edit_user_link
-        expect(result).not_to include('gravatar')
+      context 'when gravatar is disabled' do
+        before { RailsAdmin.config.show_gravatar = false }
+
+        it "doesn't show the gravatar icon" do
+          is_expected.not_to include('gravatar')
+        end
       end
 
       context 'when the user is not authorized to perform edit' do
-        let(:user) { FactoryBot.create(:user) }
         before do
           allow_any_instance_of(RailsAdmin::Config::Actions::Edit).to receive(:authorized?).and_return(false)
-          allow(helper).to receive(:_current_user).and_return(user)
         end
 
-        it 'show gravatar and email without a link' do
-          result = helper.edit_user_link
-          expect(result).to include('gravatar')
-          expect(result).to include(user.email)
-          expect(result).not_to match('href')
+        it 'shows gravatar and email without a link' do
+          is_expected.to include('gravatar')
+          is_expected.to include(user.email)
+          is_expected.not_to match('href')
         end
 
-        it 'without gravatar and email without a link' do
+        it 'shows only email without a link when gravatar is disabled' do
           RailsAdmin.config do |config|
             config.show_gravatar = false
           end
 
-          result = helper.edit_user_link
-          expect(result).not_to include('gravatar')
-          expect(result).not_to match('href')
-          expect(result).to include(user.email)
-          expect(result).to match("<span class=\"nav-link\"><span>#{user.email}</span></span>")
+          is_expected.not_to include('gravatar')
+          is_expected.not_to match('href')
+          is_expected.to include(user.email)
+          is_expected.to match("<span class=\"nav-link\"><span>#{user.email}</span></span>")
         end
       end
     end
