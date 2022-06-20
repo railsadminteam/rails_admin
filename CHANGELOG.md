@@ -2,7 +2,33 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.0.beta...HEAD)
+
+## [3.1.0.beta](https://github.com/railsadminteam/rails_admin/tree/v3.1.0.beta) - 2022-06-20
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.0.0...v3.1.0.beta)
+
+### Added
+
+- Support Importmap and Webpack, via [importmap-rails](https://github.com/rails/importmap-rails) / [jsbundling-rails](https://github.com/rails/jsbundling-rails) and [cssbundling-rails](https://github.com/rails/cssbundling-rails) ([#3488](https://github.com/railsadminteam/rails_admin/pull/3488))
+- Support [Composite Primary Keys](https://github.com/composite-primary-keys/composite_primary_keys) gem ([#3527](https://github.com/railsadminteam/rails_admin/pull/3527))
+- Allow configuration of Navbar css class ([126f7ac](https://github.com/railsadminteam/rails_admin/commit/126f7ac79b2ce7846cbbed7bbca1cc26dfe46fb6), [#3507](https://github.com/railsadminteam/rails_admin/issues/3507))
+
+### Changed
+
+- Update vendorized jQuery to 3.6.0 ([#3524](https://github.com/railsadminteam/rails_admin/pull/3524))
+- Enable frozen string literals across the project ([#3483](https://github.com/railsadminteam/rails_admin/pull/3483))
+
+### Fixed
+
+- Fix edit user link in the top navigation pointing to wrong URL ([#3531](https://github.com/railsadminteam/rails_admin/pull/3531))
+- Fix MultipleActiveStorage field deleting previous attachments when updating a record in Rails 7.0 ([974c54a](https://github.com/railsadminteam/rails_admin/commit/974c54a2a3372690ca189f6e7e90ce365bcd4ff5), [#3520](https://github.com/railsadminteam/rails_admin/issues/3520))
+- Fix remote form submission breaking when used with HTTP/2 ([#3515](https://github.com/railsadminteam/rails_admin/pull/3515))
+- Fix to maintain 2.x hover / active behavior for side navigation links ([#3511](https://github.com/railsadminteam/rails_admin/pull/3511))
+- Fix default sort by behavior when `list.sort_by` points to a field with a table reference for `:sortable` ([#3509](https://github.com/railsadminteam/rails_admin/pull/3509), [9959925](https://github.com/railsadminteam/rails_admin/commit/9959925e49812d6fdaf7341ede4b1d66d926e8d8))
+- Fix to insert whitespace after sidebar navigation icon to maintain visual consistency ([#3504](https://github.com/railsadminteam/rails_admin/pull/3504))
+- Fix orderable multiselect buttons not rendered correctly ([#3506](https://github.com/railsadminteam/rails_admin/pull/3506))
+- Fix to use badges instead of labels, which are removed in Bootstrap 5 ([#3503](https://github.com/railsadminteam/rails_admin/pull/3503))
 
 ## [3.0.0](https://github.com/railsadminteam/rails_admin/tree/v3.0.0) - 2022-03-21
 
