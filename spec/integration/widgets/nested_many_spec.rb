@@ -80,6 +80,31 @@ RSpec.describe 'Nested many widget', type: :request, js: true do
     is_expected.to have_no_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
   end
 
+  it 'is closable after adding a new item' do
+    visit new_path(model_name: 'field_test')
+    within('#field_test_nested_field_tests_attributes_field') do
+      find('.add_nested_fields').click
+      expect(page).to have_selector('.tab-content.collapse.show')
+      expect(page).to have_selector('.nav .nav-link.active', visible: true)
+      expect(page).to have_selector('.fields.tab-pane.active', visible: true)
+      find(':scope > .controls .toggler').click
+      expect(page).not_to have_selector('.tab-content.collapse.show')
+      expect(page).not_to have_selector('.nav .nav-link.active', visible: true)
+      expect(page).not_to have_selector('.fields.tab-pane.active', visible: true)
+    end
+  end
+
+  it 'closes after removing all items' do
+    visit new_path(model_name: 'field_test')
+    within('#field_test_nested_field_tests_attributes_field') do
+      find('.add_nested_fields').click
+      expect(page).to have_selector('.tab-content.collapse.show')
+      find(':scope > .tab-content > .fields > .remove_nested_fields', visible: false).click
+      expect(page).not_to have_selector('.nav .nav-link.active', visible: true)
+      expect(page).not_to have_selector('.fields.tab-pane.active', visible: true)
+    end
+  end
+
   context 'with nested_attributes_options given' do
     before do
       allow(FieldTest.nested_attributes_options).to receive(:[]).with(any_args).

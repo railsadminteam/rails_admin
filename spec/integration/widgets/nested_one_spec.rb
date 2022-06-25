@@ -45,6 +45,28 @@ RSpec.describe 'Nested one widget', type: :request, js: true do
     expect(field_test.reload.comment).to be_nil
   end
 
+  it 'is closable after adding a new item' do
+    visit new_path(model_name: 'field_test')
+    within('#field_test_comment_attributes_field') do
+      find('.add_nested_fields').click
+      expect(page).to have_selector('.tab-content.collapse.show')
+      expect(page).to have_selector('.fields.tab-pane.active', visible: true)
+      find(':scope > .controls .toggler').click
+      expect(page).not_to have_selector('.tab-content.collapse.show')
+      expect(page).not_to have_selector('.fields.tab-pane.active', visible: true)
+    end
+  end
+
+  it 'closes after removing the item' do
+    visit new_path(model_name: 'field_test')
+    within('#field_test_comment_attributes_field') do
+      find('.add_nested_fields').click
+      expect(page).to have_selector('.tab-content.collapse.show')
+      find(':scope > .tab-content > .fields > .remove_nested_fields', visible: false).click
+      expect(page).not_to have_selector('.fields.tab-pane.active', visible: true)
+    end
+  end
+
   context 'when XSS attack is attempted' do
     it 'does not break on adding a new item' do
       allow(I18n).to receive(:t).and_call_original

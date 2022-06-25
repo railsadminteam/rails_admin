@@ -44,9 +44,9 @@ import * as bootstrap from "bootstrap";
       bootstrap.Tab.getOrCreateInstance(element).show();
     });
     if (!one_to_one) {
-      nav.filter(":hidden").show("slow");
+      new bootstrap.Collapse(nav[0], { toggle: false }).show();
     }
-    content.filter(":hidden").show("slow");
+    new bootstrap.Collapse(content[0], { toggle: false }).show();
     toggler
       .addClass("active")
       .removeClass("disabled")
@@ -87,7 +87,9 @@ import * as bootstrap from "bootstrap";
       });
     current_li.remove();
     if (nav.children().length === 0) {
-      nav.filter(":visible").hide("slow");
+      new bootstrap.Collapse(controls.siblings(".tab-content")[0], {
+        toggle: false,
+      }).hide();
       toggler
         .removeClass("active")
         .addClass("disabled")
