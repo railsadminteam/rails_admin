@@ -766,6 +766,22 @@ RSpec.describe 'Edit action', type: :request do
     end
   end
 
+  context 'with a submit button with custom value', js: true do
+    before do
+      @player = FactoryBot.create :player
+
+      visit edit_path(model_name: 'player', id: @player.id)
+
+      execute_script %{$('.form-actions [name="_save"]').attr('name', 'player[name]').attr('value', 'Jackie Robinson')}
+      find_button('Save').trigger('click')
+    end
+
+    it 'submits the value' do
+      @player.reload
+      expect(@player.name).to eq('Jackie Robinson')
+    end
+  end
+
   context 'with missing object' do
     before do
       put edit_path(model_name: 'player', id: 1), params: {player: {name: 'Jackie Robinson', number: 42, position: 'Second baseman'}}

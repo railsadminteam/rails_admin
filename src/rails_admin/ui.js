@@ -92,7 +92,7 @@ import I18n from "./i18n";
           $("<input />")
             .attr("type", "hidden")
             .attr("name", $(this).attr("name"))
-            .attr("value", true)
+            .attr("value", $(this).attr("value"))
         );
         if ($(this).is("[formnovalidate]")) {
           form.attr("novalidate", true);
