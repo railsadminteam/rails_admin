@@ -92,7 +92,7 @@ module RailsAdmin
         end
 
         def read_only?
-          (klass.all.instance_eval(&scope).readonly_value if scope.is_a? Proc) ||
+          (klass.all.instance_exec(&scope).readonly_value if scope.is_a?(Proc) && scope.arity == 0) ||
             association.nested? ||
             false
         end

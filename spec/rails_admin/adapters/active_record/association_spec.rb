@@ -20,7 +20,8 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record:
     end
 
     class ARCategory < Tableless
-      has_and_belongs_to_many :a_r_posts
+      has_and_belongs_to_many :a_r_posts, -> { readonly }
+      has_and_belongs_to_many :scoped_posts, ->(category) { where(id: category.id) }, class_name: 'ARPost'
       belongs_to :librarian, polymorphic: true
     end
 
@@ -172,6 +173,22 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record:
       expect(subject.inverse_of).to be_nil
       expect(subject.read_only?).to be_falsey
       expect(subject.nested_options).to be_nil
+    end
+
+    context 'with a scope given' do
+      subject { @category.associations.detect { |a| a.name == :a_r_posts } }
+
+      it 'does not break' do
+        expect(subject.read_only?).to be_truthy
+      end
+    end
+
+    context 'with a scope that receives an argument given' do
+      subject { @category.associations.detect { |a| a.name == :scoped_posts } }
+
+      it 'ignores the scope' do
+        expect(subject.read_only?).to be_falsey
+      end
     end
   end
 
