@@ -5,6 +5,9 @@
   </head>
   <body class="rails_admin">
     <div data-i18n-options="<%= I18n.t("admin.js").to_json %>" id="admin-js"></div>
+    <div class="badge bg-warning" id="loading" style="display:none; position:fixed; right:20px; bottom:20px; z-index:100000">
+      <%= t('admin.loading') %>
+    </div>
     <nav class="navbar navbar-expand-md fixed-top <%= RailsAdmin::Config.navbar_css_classes.join(' ') %>">
       <%= render "layouts/rails_admin/navigation" %>
     </nav>
