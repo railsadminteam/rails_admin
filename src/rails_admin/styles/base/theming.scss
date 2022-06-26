@@ -313,6 +313,9 @@ body.rails_admin {
       }
     }
   }
+  .pagination .page-item {
+    white-space: nowrap;
+  }
 }
 
 @media screen and (min-width: map-get($grid-breakpoints, "sm")) {
