@@ -383,7 +383,7 @@ RSpec.describe RailsAdmin::Config do
         field :name
       end
       RailsAdmin.config Team do
-        field :color, :hidden
+        field :color, :integer
       end
     end
 
@@ -392,18 +392,9 @@ RSpec.describe RailsAdmin::Config do
       expect(RailsAdmin::Config.model(Player).fields.map(&:name)).to include :number
     end
 
-    it 're-applies the configuration from the initializer' do
+    it 'reloads the configuration from the initializer' do
       RailsAdmin::Config.reload!
-      expect(RailsAdmin::Config.model(Team).fields.find { |f| f.name == :color }.type).to eq :color
-    end
-
-    it "applies the initializer's configuration first, then models' configurations" do
-      Team.rails_admin do
-        field :color, :integer
-      end
-
-      RailsAdmin::Config.reload!
-      expect(RailsAdmin::Config.model(Team).fields.find { |f| f.name == :color }.type).to eq :integer
+      expect(RailsAdmin::Config.model(Team).fields.find { |f| f.name == :color }.type).to eq :hidden
     end
   end
 end

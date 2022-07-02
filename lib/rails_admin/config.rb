@@ -229,7 +229,7 @@ module RailsAdmin
           case entity
           when RailsAdmin::AbstractModel
             entity.model.try(:name).try :to_sym
-          when Class
+          when Class, ConstLoadSuppressor::ConstProxy
             entity.name.to_sym
           when String, Symbol
             entity.to_sym
@@ -237,7 +237,7 @@ module RailsAdmin
             entity.class.name.to_sym
           end
 
-        @registry[key] ||= RailsAdmin::Config::LazyModel.new(entity)
+        @registry[key] ||= RailsAdmin::Config::LazyModel.new(key.to_s)
         @registry[key].add_deferred_block(&block) if block
         @registry[key]
       end
@@ -245,11 +245,14 @@ module RailsAdmin
       def asset_source
         @asset_source ||=
           begin
-            warn <<~MSG
-              [Warning] After upgrading RailsAdmin to 3.x you haven't set asset_source yet, using :sprockets as the default.
-              To suppress this message, run 'rails rails_admin:install' to setup the asset delivery method suitable to you.
-            MSG
-            :sprockets
+            detected = defined?(Sprockets) ? :sprockets : :invalid
+            unless ARGV.join(' ').include? 'rails_admin:install'
+              warn <<~MSG
+                [Warning] After upgrading RailsAdmin to 3.x you haven't set asset_source yet, using :#{detected} as the default.
+                To suppress this message, run 'rails rails_admin:install' to setup the asset delivery method suitable to you.
+              MSG
+            end
+            detected
           end
       end
 

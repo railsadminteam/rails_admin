@@ -8,11 +8,15 @@ module RailsAdmin
       def initialize(entity, &block)
         @entity = entity
         @deferred_blocks = [*block]
-        @existing_blocks = []
+        @initialized = false
       end
 
       def add_deferred_block(&block)
-        @deferred_blocks << block
+        if @initialized
+          @model.instance_eval(&block)
+        else
+          @deferred_blocks << block
+        end
       end
 
       def target
@@ -48,13 +52,13 @@ module RailsAdmin
         # to guarantee that blocks from 'config/initializers' evaluate before
         # blocks defined within a model class.
         unless @deferred_blocks.empty?
-          @existing_blocks += @deferred_blocks
-          @existing_blocks.
+          @deferred_blocks.
             partition { |block| block.source_location.first =~ %r{config/initializers} }.
             flatten.
             each { |block| @model.instance_eval(&block) }
           @deferred_blocks = []
         end
+        @initialized = true
         @model
       end
 
