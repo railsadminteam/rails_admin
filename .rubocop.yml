@@ -15,7 +15,7 @@ AllCops:
   SuggestExtensions: false
   TargetRubyVersion: 2.6
 
-Gemspec/DateAssignment:
+Gemspec/DeprecatedAttributeAssignment:
   Enabled: true
 
 Layout/AccessModifierIndentation:
