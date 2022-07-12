@@ -183,6 +183,7 @@ import * as bootstrap from "bootstrap";
         new bootstrap.Modal(widget.dialog[0], {
           keyboard: true,
           backdrop: true,
+          focus: false,
           show: true,
         }).show();
       }
