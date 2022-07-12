@@ -39,7 +39,10 @@ module DummyApp
     config.eager_load_paths += %W[#{config.root}/app/#{CI_ORM}/eager_loaded]
     config.autoload_paths += %W[#{config.root}/lib]
     config.i18n.load_path += Dir[Rails.root.join('app', 'locales', '*.{rb,yml}').to_s]
-    config.active_record.time_zone_aware_types = %i[datetime time] if CI_ORM == :active_record
+    if CI_ORM == :active_record
+      config.active_record.time_zone_aware_types = %i[datetime time]
+      config.active_record.yaml_column_permitted_classes = [Symbol] if config.active_record.respond_to?(:yaml_column_permitted_classes=)
+    end
     config.active_storage.service = :local if defined?(ActiveStorage)
     config.active_storage.replace_on_assign_to_many = false if defined?(ActiveStorage) && ActiveStorage.version < Gem::Version.create('6.1')
 
