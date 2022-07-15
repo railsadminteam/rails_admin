@@ -98,7 +98,7 @@ jobs:
           bundler-cache: true
           cache-version: gems-${{ hashFiles('Gemfile', 'gemfiles/*.gemfile') }}
         env:
-          MAKE: make --jobs 4
+          MAKEFLAGS: make --jobs 4
           BUNDLE_WITHOUT: development
       - name: Set up Node
         uses: actions/setup-node@v3
