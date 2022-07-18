@@ -36,7 +36,7 @@ module DummyApp
     # -- all .rb files in that directory are automatically loaded.
     config.load_defaults Rails.version[0, 3]
     config.eager_load_paths.reject! { |p| p =~ %r{/app/([^/]+)} && !%W[controllers jobs locales mailers #{CI_ORM}].include?(Regexp.last_match[1]) }
-    config.eager_load_paths += %W[#{config.root}/app/#{CI_ORM}/eager_loaded]
+    config.eager_load_paths += %W[#{config.root}/app/eager_loaded]
     config.autoload_paths += %W[#{config.root}/lib]
     config.i18n.load_path += Dir[Rails.root.join('app', 'locales', '*.{rb,yml}').to_s]
     if CI_ORM == :active_record

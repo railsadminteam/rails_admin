@@ -36,8 +36,10 @@ module RailsAdmin
           case entity
           when RailsAdmin::AbstractModel
             entity
-          when Class, String, Symbol
+          when Class, String
             RailsAdmin::AbstractModel.new(entity)
+          when Symbol
+            RailsAdmin::AbstractModel.new(entity.to_s)
           else
             RailsAdmin::AbstractModel.new(entity.class)
           end

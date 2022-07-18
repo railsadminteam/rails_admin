@@ -28,4 +28,8 @@ class Team < ActiveRecord::Base
   scope :green, -> { where(color: 'red') }
   scope :red, -> { where(color: 'red') }
   scope :white, -> { where(color: 'white') }
+
+  rails_admin do
+    field :color, :color
+  end
 end
