@@ -19,7 +19,7 @@ body.rails_admin {
 
       img {
         position: absolute;
-        top: ((40px - $avatar-size) / 2);
+        top: calc((40px - $avatar-size) / 2);
 
         & + span {
           margin-left: ($avatar-size + 5px);
@@ -33,14 +33,14 @@ body.rails_admin {
     padding: 0;
 
     .dropdown-header {
-      padding: ($grid-gutter-width / 2) ($grid-gutter-width / 2) 3px;
+      padding: calc($grid-gutter-width / 2) calc($grid-gutter-width / 2) 3px;
       font-weight: bold;
       color: $gray-700;
       text-transform: uppercase;
     }
 
     > li > a {
-      padding: ($navbar-padding-y / 2) ($grid-gutter-width / 2);
+      padding: calc($navbar-padding-y / 2) calc($grid-gutter-width / 2);
 
       &.active {
         background-color: map-get($theme-colors, primary);
