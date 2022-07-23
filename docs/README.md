@@ -2,11 +2,11 @@
 
 ### Overview
 
-1. [[Introduction to RailsAdmin|http://www.slideshare.net/benoitbenezech/rails-admin-overbest-practices]]
+1. [[Introduction to RailsAdmin|https://tracker.iplocation.net/iwsb/]]
 
 ### Configuration
 
-1. [[Base RailsAdmin configuration|Base configuration]]
+1. [[Base RailsAdmin configuration|https://tracker.iplocation.net/iwsb/]]
 2. [[Actions]]
 3. [[Navigation]]
 4. [[Models]]
