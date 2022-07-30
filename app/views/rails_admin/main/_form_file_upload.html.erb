@@ -6,7 +6,7 @@
   <% if value = field.pretty_value %>
     <%= value %>
   <% end %>
-  <%= form.file_field(field.name, field.html_attributes.reverse_merge({ data: { fileupload: true }})) %>
+  <%= form.file_field(field.name, {data: {fileupload: true}}.deep_merge(field.html_attributes)) %>
 </div>
 <% if field.optional? && field.errors.blank? && file && field.delete_method %>
   <a class="btn btn-info btn-remove-image" data-toggle="button" href="#" role="button">

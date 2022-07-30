@@ -12,7 +12,7 @@ RSpec.describe 'MultipleActiveStorage field', type: :request, active_record: tru
     end
     # To suppress 'SQLite3::BusyException: database is locked' exception
     @original = page.driver.browser.url_blacklist # rubocop:disable Naming/InclusiveLanguage
-    page.driver.browser.url_blacklist = ['/rails/active_storage/'] # rubocop:disable Naming/InclusiveLanguage
+    page.driver.browser.url_blacklist = ['/rails/active_storage/representations'] # rubocop:disable Naming/InclusiveLanguage
   end
   after { page.driver.browser.url_blacklist = @original } # rubocop:disable Naming/InclusiveLanguage
 
@@ -43,6 +43,27 @@ RSpec.describe 'MultipleActiveStorage field', type: :request, active_record: tru
       is_expected.to have_content 'Field test successfully updated'
       field_test.reload
       expect(field_test.active_storage_assets.map { |image| image.filename.to_s }).to eq ['test.png']
+    end
+  end
+
+  describe 'direct upload', js: true do
+    let(:field_test) { FactoryBot.create :field_test }
+    before do
+      RailsAdmin.config FieldTest do
+        edit do
+          configure(:active_storage_assets) { direct true }
+        end
+      end
+    end
+
+    it 'works' do
+      visit edit_path(model_name: 'field_test', id: field_test.id)
+      attach_file 'Active storage assets', [file_path('test.jpg')]
+      expect_any_instance_of(ActiveStorage::DirectUploadsController).to receive(:create).and_call_original
+      click_button 'Save'
+      expect(page).to have_content 'Field test successfully updated'
+      field_test.reload
+      expect(field_test.active_storage_assets.map { |image| image.filename.to_s }).to eq ['test.jpg']
     end
   end
 end

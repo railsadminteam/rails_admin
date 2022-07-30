@@ -14,7 +14,7 @@
     <% end %>
   </div>
 <% end %>
-<%= form.file_field(field.name, field.html_attributes.reverse_merge({ data: { :"multiple-fileupload" => true }, multiple: true })) %>
+<%= form.file_field(field.name, { data: { :"multiple-fileupload" => true }, multiple: true }.deep_merge(field.html_attributes)) %>
 <% if field.cache_method %>
   <%= form.hidden_field(field.cache_method) %>
 <% end %>

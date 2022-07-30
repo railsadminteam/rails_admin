@@ -58,6 +58,18 @@ module RailsAdmin
           register_instance_option :eager_load do
             {"#{name}_attachments": :blob}
           end
+
+          register_instance_option :direct? do
+            false
+          end
+
+          register_instance_option :html_attributes do
+            {
+              required: required? && !value.present?,
+            }.merge(
+              direct? && {data: {direct_upload_url: bindings[:view].main_app.rails_direct_uploads_url}} || {},
+            )
+          end
         end
       end
     end

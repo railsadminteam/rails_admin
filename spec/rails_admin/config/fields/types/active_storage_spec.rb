@@ -93,5 +93,35 @@ if defined?(ActiveStorage)
         expect(field.eager_load).to eq({active_storage_asset_attachment: :blob})
       end
     end
+
+    describe '#direct' do
+      let(:view) { double }
+      let(:field) do
+        RailsAdmin.config('FieldTest').fields.detect do |f|
+          f.name == :active_storage_asset
+        end.with(view: view)
+      end
+      before do
+        allow(view).to receive_message_chain(:main_app, :rails_direct_uploads_url) { 'http://www.example.com/rails/active_storage/direct_uploads' }
+      end
+
+      context 'when false' do
+        it "doesn't put the direct upload url in html_attributes" do
+          expect(field.html_attributes[:data]&.[](:direct_upload_url)).to be_nil
+        end
+      end
+
+      context 'when true' do
+        before do
+          RailsAdmin.config FieldTest do
+            field(:active_storage_asset) { direct true }
+          end
+        end
+
+        it 'puts the direct upload url in html_attributes' do
+          expect(field.html_attributes[:data]&.[](:direct_upload_url)).to eq 'http://www.example.com/rails/active_storage/direct_uploads'
+        end
+      end
+    end
   end
 end

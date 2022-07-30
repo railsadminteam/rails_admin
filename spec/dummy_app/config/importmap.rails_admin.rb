@@ -8,6 +8,7 @@ pin '@hotwired/turbo', to: 'https://ga.jspm.io/npm:@hotwired/turbo@7.1.0/dist/tu
 pin '@hotwired/turbo-rails', to: 'https://ga.jspm.io/npm:@hotwired/turbo-rails@7.1.3/app/javascript/turbo/index.js'
 pin '@popperjs/core', to: 'https://ga.jspm.io/npm:@popperjs/core@2.11.5/dist/esm/popper.js'
 pin '@rails/actioncable/src', to: 'https://ga.jspm.io/npm:@rails/actioncable@7.0.2/src/index.js'
+pin '@rails/activestorage', to: 'https://ga.jspm.io/npm:@rails/activestorage@7.0.3-1/app/assets/javascripts/activestorage.esm.js'
 pin '@rails/ujs', to: 'https://ga.jspm.io/npm:@rails/ujs@6.1.4/lib/assets/compiled/rails-ujs.js'
 pin 'bootstrap', to: 'https://ga.jspm.io/npm:bootstrap@5.1.3/dist/js/bootstrap.esm.js'
 pin 'flatpickr', to: 'https://ga.jspm.io/npm:flatpickr@4.6.13/dist/flatpickr.js'
