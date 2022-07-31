@@ -7,9 +7,13 @@ import I18n from "./i18n";
     $("#list [name='bulk_ids[]']").prop("checked", $(this).is(":checked"));
   });
 
-  $(document).on("turbo:click", function () {
-    return $("#loading").show();
-  });
+  $(document)
+    .on("turbo:click", function () {
+      return $("#loading").show();
+    })
+    .on("turbo:before-render", function () {
+      return $("#loading").hide();
+    });
 
   $(document).on("click", "[data-bs-target]", function () {
     if (!$(this).hasClass("disabled")) {
