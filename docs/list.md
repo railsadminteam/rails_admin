@@ -246,6 +246,27 @@ RailsAdmin.config do |config|
 end
 ```
 
+### Sticky fields
+
+You can make fields stick to the left, without affected by the horizontal scrolling.
+
+```ruby
+RailsAdmin.config do |config|
+  config.model 'Player' do
+    list do
+      configure :id do
+        sticky true
+      end
+      configure :name do
+        sticky true
+      end
+    end
+  end
+end
+```
+
+![image](https://user-images.githubusercontent.com/486678/183049250-fd8ce8ff-6587-4b77-9656-17ce2a71191f.png)
+
 
 [[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/sections/list.rb]]
 
