@@ -89,7 +89,7 @@ module RailsAdmin
         else
           defined = field_names.collect { |field_name| _fields.detect { |f| f.name == field_name } }
         end
-        defined.collect do |f|
+        defined.compact.collect do |f|
           unless f.defined
             f.defined = true
             f.order = _fields.count(&:defined)
