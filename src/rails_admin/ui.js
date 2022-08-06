@@ -9,10 +9,30 @@ import I18n from "./i18n";
 
   $(document)
     .on("turbo:click", function () {
-      return $("#loading").show();
+      $("#loading").show();
     })
-    .on("turbo:before-render", function () {
-      return $("#loading").hide();
+    .on("turbo:before-render", function (event) {
+      document
+        .querySelectorAll('.sidebar .btn-toggle[aria-expanded="false"]')
+        .forEach((element) => {
+          const newButton = event.detail.newBody.querySelector(
+            `.sidebar [data-bs-target="${element.dataset.bsTarget}"]`
+          );
+          const newMenu = event.detail.newBody.querySelector(
+            element.dataset.bsTarget
+          );
+          if (newButton) {
+            newButton.parentNode.replaceChild(
+              element.cloneNode(true),
+              newButton
+            );
+          }
+          if (newMenu) {
+            newMenu.classList.remove("show");
+          }
+        });
+
+      $("#loading").hide();
     });
 
   $(document).on("click", "[data-bs-target]", function () {

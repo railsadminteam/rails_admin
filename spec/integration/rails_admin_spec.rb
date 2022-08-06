@@ -75,6 +75,27 @@ RSpec.describe RailsAdmin, type: :request do
     end
   end
 
+  describe 'sidebar navigation', js: true do
+    it 'is collapsible' do
+      visit dashboard_path
+      is_expected.to have_css('.sidebar .nav-link', text: 'Players')
+      click_button 'Navigation'
+      is_expected.to have_css('.sidebar .btn-toggle.collapsed')
+      is_expected.not_to have_css('.sidebar #navigation.show')
+      is_expected.not_to have_css('.sidebar .nav-link', text: 'Players')
+    end
+
+    it 'persists over a page transition' do
+      visit dashboard_path
+      click_button 'Navigation'
+      is_expected.to have_css('.sidebar .btn-toggle.collapsed')
+      is_expected.not_to have_css('.sidebar #navigation.show')
+      find('.player_links .show a').trigger('click')
+      is_expected.to have_content 'List of Players'
+      is_expected.not_to have_css('.sidebar .nav-link', text: 'Players')
+    end
+  end
+
   describe '_current_user' do # https://github.com/railsadminteam/rails_admin/issues/549
     it 'is accessible from the list view' do
       RailsAdmin.config Player do
