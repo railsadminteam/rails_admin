@@ -117,7 +117,7 @@ module RailsAdmin
         direction = options[:sort_reverse] ? :asc : :desc
         case options[:sort]
         when String, Symbol
-          scope.reorder("#{options[:sort]} #{direction}")
+          scope.reorder("#{options[:sort]} #{direction}, #{table_name}.#{primary_key} #{direction}")
         when Array
           scope.reorder(options[:sort].zip(Array.new(options[:sort].size) { direction }).to_h)
         when Hash

@@ -139,6 +139,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
       it 'supports ordering' do
         expect(abstract_model.all(sort: 'id', sort_reverse: true)).to eq(@players.sort)
+        expect(abstract_model.all(sort: 'name', sort_reverse: true).to_sql.tr('`', '"')).to include('ORDER BY name asc, players.id asc')
         expect(abstract_model.all(sort: %w[id name], sort_reverse: true).to_sql.tr('`', '"')).to include('ORDER BY "players"."id" ASC, "players"."name" ASC')
         expect(abstract_model.all(include: :team, sort: {players: :name, teams: :name}, sort_reverse: true).to_sql.tr('`', '"')).to include('ORDER BY "players"."name" ASC, "teams"."name" ASC')
         expect { abstract_model.all(sort: 1, sort_reverse: true) }.to raise_error ArgumentError, /Unsupported/
