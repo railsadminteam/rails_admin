@@ -169,6 +169,7 @@ import flatpickr from "flatpickr";
         case "string":
         case "text":
         case "belongs_to_association":
+        case "has_one_association":
           control = $(
             '<select class="switch-additional-fieldsets form-control form-control-sm"></select>'
           )

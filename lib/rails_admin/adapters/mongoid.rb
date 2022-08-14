@@ -201,7 +201,7 @@ module RailsAdmin
         case target_association.type
         when :belongs_to, :has_and_belongs_to_many
           [{target_association.foreign_key.to_s => {'$in' => model.where('$or' => conditions).all.collect { |r| r.send(target_association.primary_key) }}}]
-        when :has_many
+        when :has_many, :has_one
           [{target_association.primary_key.to_s => {'$in' => model.where('$or' => conditions).all.collect { |r| r.send(target_association.foreign_key) }}}]
         end
       end

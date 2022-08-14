@@ -157,4 +157,22 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
       expect(find('[name^="f[time_field]"][name$="[v][]"]', match: :first, visible: false).value).to eq '2000-01-01T14:00:00'
     end
   end
+
+  describe 'for has_one association field' do
+    before do
+      RailsAdmin.config Player do
+        field :draft do
+          searchable :college
+        end
+      end
+    end
+
+    it 'is filterable' do
+      visit index_path(model_name: 'player')
+      click_link 'Add filter'
+      click_link 'Draft'
+      expect(page).to have_css '[name^="f[draft]"][name$="[o]"]'
+      expect(page).to have_css '[name^="f[draft]"][name$="[v]"]'
+    end
+  end
 end
