@@ -310,7 +310,11 @@ RSpec.describe 'RailsAdmin CanCanCan Authorization', type: :request do
 
   describe 'with a custom admin ability' do
     before do
-      RailsAdmin.config { |c| c.authorize_with :cancancan, AdminAbility }
+      RailsAdmin.config do |c|
+        c.authorize_with :cancancan do
+          ability_class { AdminAbility }
+        end
+      end
       @user = FactoryBot.create :user
       login_as @user
     end

@@ -5,7 +5,7 @@ require 'spec_helper'
 RSpec.describe 'RailsAdmin PaperTrail auditing', active_record: true do
   before(:each) do
     RailsAdmin.config do |config|
-      config.audit_with :paper_trail, 'User', 'PaperTrail::Version'
+      config.audit_with :paper_trail
     end
   end
 
@@ -59,7 +59,7 @@ RSpec.describe 'RailsAdmin PaperTrail auditing', active_record: true do
 
       describe 'model history fetch with auditing adapter' do
         before(:all) do
-          @adapter = RailsAdmin::Extensions::PaperTrail::AuditingAdapter.new(nil, 'User', 'PaperTrail::Version')
+          @adapter = RailsAdmin::Extensions::PaperTrail::AuditingAdapter.new(nil)
         end
 
         it 'fetches on page of history' do

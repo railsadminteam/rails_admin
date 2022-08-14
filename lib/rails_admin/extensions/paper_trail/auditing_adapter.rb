@@ -51,16 +51,26 @@ module RailsAdmin
           created_at: :created_at,
           message: :event,
         }.freeze
+        E_USER_CLASS_NOT_SET = <<~ERROR
+          Please set up PaperTrail's user class explicitly.
+
+              config.audit_with :paper_trail do
+                user_class { User }
+              end
+        ERROR
         E_VERSION_MODEL_NOT_SET = <<~ERROR
           Please set up PaperTrail's version model explicitly.
 
-              config.audit_with :paper_trail, 'User', 'PaperTrail::Version'
+              config.audit_with :paper_trail do
+                version_class { PaperTrail::Version }
+              end
 
           If you have configured a model to use a custom version class
           (https://github.com/paper-trail-gem/paper_trail#6a-custom-version-classes)
-          that configuration will take precedence over what you specify in
-          `audit_with`.
+          that configuration will take precedence over what you specify in `audit_with`.
         ERROR
+
+        include RailsAdmin::Config::Configurable
 
         def self.setup
           raise 'PaperTrail not found' unless defined?(::PaperTrail)
@@ -68,26 +78,32 @@ module RailsAdmin
           RailsAdmin::Extensions::ControllerExtension.include ControllerExtension
         end
 
-        def initialize(controller, user_class = 'User', version_class = '::Version')
+        def initialize(controller, user_class_name = nil, version_class_name = nil, &block)
           @controller = controller
           @controller&.send(:set_paper_trail_whodunnit)
-          begin
-            @user_class = user_class.to_s.constantize
-          rescue NameError
-            raise "Please set up Papertrail's user model explicitly. Ex: config.audit_with :paper_trail, 'User'"
-          end
 
-          begin
-            @version_class = version_class.to_s.constantize
-          rescue NameError
-            raise E_VERSION_MODEL_NOT_SET
-          end
+          user_class { user_class_name.to_s.constantize } if user_class_name
+          version_class { version_class_name.to_s.constantize } if version_class_name
+
+          instance_eval(&block) if block
+        end
+
+        register_instance_option :user_class do
+          User
+        rescue NameError
+          raise E_USER_CLASS_NOT_SET
+        end
+
+        register_instance_option :version_class do
+          PaperTrail::Version
+        rescue NameError
+          raise E_VERSION_MODEL_NOT_SET
         end
 
         def latest(count = 100)
-          @version_class.
+          version_class.
             order(id: :desc).includes(:item).limit(count).
-            collect { |version| VersionProxy.new(version, @user_class) }
+            collect { |version| VersionProxy.new(version, user_class) }
         end
 
         def delete_object(_object, _model, _user)
@@ -133,7 +149,7 @@ module RailsAdmin
             current_page,
           ).per(per_page)
           versions.each do |version|
-            paginated_proxies << VersionProxy.new(version, @user_class)
+            paginated_proxies << VersionProxy.new(version, user_class)
           end
           paginated_proxies
         end
@@ -159,7 +175,7 @@ module RailsAdmin
         # has_paper_trail versions: { class_name: 'MyVersion' }
         # ```
         def version_class_for(model)
-          model.paper_trail_options.dig(:versions, :class_name).try(:constantize) || @version_class
+          model.paper_trail.version_class
         end
       end
     end

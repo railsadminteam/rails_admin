@@ -2,22 +2,23 @@
 
 require 'spec_helper'
 
-RSpec.describe RailsAdmin::Extensions::PaperTrail::VersionProxy do
-  describe '#username' do
-    subject { described_class.new(version, user_class).username }
+RSpec.describe RailsAdmin::Extensions::PaperTrail::AuditingAdapter, active_record: true do
+  let(:controller) { double(set_paper_trail_whodunnit: nil) }
 
-    let(:version) { double(whodunnit: :the_user) }
-    let(:user_class) { double(find: user) }
-
-    context 'when found user has email' do
-      let(:user) { double(email: :mail) }
-      it { is_expected.to eq(:mail) }
+  describe '#initialize' do
+    it 'accepts the user and version classes as arguments' do
+      adapter = described_class.new(controller, User::Confirmed, Trail)
+      expect(adapter.user_class).to eq User::Confirmed
+      expect(adapter.version_class).to eq Trail
     end
 
-    context 'when found user does not have email' do
-      let(:user) { double } # no email method
-
-      it { is_expected.to eq(:the_user) }
+    it 'supports block DSL' do
+      adapter = described_class.new(controller) do
+        user_class User::Confirmed
+        version_class Trail
+      end
+      expect(adapter.user_class).to eq User::Confirmed
+      expect(adapter.version_class).to eq Trail
     end
   end
 end

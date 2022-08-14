@@ -119,7 +119,7 @@ module RailsAdmin
           klass = RailsAdmin::AUDITING_ADAPTERS[extension]
           klass.setup if klass.respond_to? :setup
           @audit = proc do
-            @auditing_adapter = klass.new(*([self] + args).compact)
+            @auditing_adapter = klass.new(*([self] + args).compact, &block)
           end
         elsif block
           @audit = block
@@ -156,7 +156,7 @@ module RailsAdmin
           klass = RailsAdmin::AUTHORIZATION_ADAPTERS[extension]
           klass.setup if klass.respond_to? :setup
           @authorize = proc do
-            @authorization_adapter = klass.new(*([self] + args).compact)
+            @authorization_adapter = klass.new(*([self] + args).compact, &block)
           end
         elsif block
           @authorize = block

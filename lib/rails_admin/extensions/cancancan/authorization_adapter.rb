@@ -9,16 +9,31 @@ module RailsAdmin
           def current_ability
             # use _current_user instead of default current_user so it works with
             # whatever current user method is defined with RailsAdmin
-            @current_ability ||= @ability.new(_current_user)
+            @current_ability ||= ability_class.new(_current_user)
           end
         end
 
+        include RailsAdmin::Config::Configurable
+
+        def self.setup
+          RailsAdmin::Extensions::ControllerExtension.include ControllerExtension
+        end
+
         # See the +authorize_with+ config method for where the initialization happens.
-        def initialize(controller, ability = ::Ability)
+        def initialize(controller, ability = nil, &block)
           @controller = controller
-          @controller.instance_variable_set '@ability', ability
-          @controller.extend ControllerExtension
+          ability_class { ability } if ability
+          instance_eval(&block) if block
+
+          adapter = self
+          ControllerExtension.define_method(:ability_class) do
+            adapter.ability_class
+          end
           @controller.current_ability.authorize! :access, :rails_admin
+        end
+
+        register_instance_option :ability_class do
+          Ability
         end
 
         # This method is called in every controller action and should raise an exception
