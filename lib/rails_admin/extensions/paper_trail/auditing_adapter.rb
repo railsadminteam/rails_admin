@@ -100,9 +100,13 @@ module RailsAdmin
           raise E_VERSION_MODEL_NOT_SET
         end
 
+        register_instance_option :sort_by do
+          {id: :desc}
+        end
+
         def latest(count = 100)
           version_class.
-            order(id: :desc).includes(:item).limit(count).
+            order(sort_by).includes(:item).limit(count).
             collect { |version| VersionProxy.new(version, user_class) }
         end
 
@@ -130,18 +134,18 @@ module RailsAdmin
 
         # - model - a RailsAdmin::AbstractModel
         def listing_for_model_or_object(model, object, query, sort, sort_reverse, all, page, per_page)
-          if sort.present?
-            sort = COLUMN_MAPPING[sort.to_sym]
-          else
-            sort = :created_at
-            sort_reverse = 'true'
-          end
+          sort =
+            if sort.present?
+              {COLUMN_MAPPING[sort.to_sym] => sort_reverse ? :desc : :asc}
+            else
+              sort_by
+            end
 
           current_page = page.presence || '1'
 
           versions = object.nil? ? versions_for_model(model) : object.public_send(model.model.versions_association_name)
           versions = versions.where('event LIKE ?', "%#{query}%") if query.present?
-          versions = versions.order(sort_reverse == 'true' ? "#{sort} DESC" : sort)
+          versions = versions.order(sort)
           versions = all ? versions : versions.send(Kaminari.config.page_method_name, current_page).per(per_page)
           paginated_proxies = Kaminari.paginate_array([], total_count: versions.try(:total_count) || versions.count)
           paginated_proxies = paginated_proxies.send(
