@@ -10,6 +10,10 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
     super action, params: params
   end
 
+  before do
+    controller.instance_variable_set :@action, RailsAdmin::Config::Actions.find(:index)
+  end
+
   describe '#check_for_cancel' do
     before do
       allow(controller).to receive(:back_or_index) { raise StandardError.new('redirected back') }
@@ -265,6 +269,24 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
       end
       expect(abstract_model).to receive(:all).with(hash_including(include: [{players: :draft}]), nil).once.and_call_original
       controller.send(:get_collection, model_config, nil, false).to_a
+    end
+
+    context 'on export' do
+      before do
+        controller.instance_variable_set :@action, RailsAdmin::Config::Actions.find(:export)
+      end
+
+      it 'uses the export section' do
+        RailsAdmin.config Team do
+          export do
+            field :players do
+              eager_load true
+            end
+          end
+        end
+        expect(abstract_model).to receive(:all).with(hash_including(include: [:players]), nil).once.and_call_original
+        controller.send(:get_collection, model_config, nil, false).to_a
+      end
     end
   end
 

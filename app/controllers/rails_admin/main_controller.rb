@@ -123,7 +123,8 @@ module RailsAdmin
     end
 
     def get_collection(model_config, scope, pagination)
-      eager_loads = model_config.list.fields.flat_map(&:eager_load_values)
+      section = @action.key == :export ? model_config.export : model_config.list
+      eager_loads = section.fields.flat_map(&:eager_load_values)
       options = {}
       options = options.merge(page: (params[Kaminari.config.param_name] || 1).to_i, per: (params[:per] || model_config.list.items_per_page)) if pagination
       options = options.merge(include: eager_loads) unless eager_loads.blank?
