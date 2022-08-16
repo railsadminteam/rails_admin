@@ -83,6 +83,9 @@
               <i class="fas fa-times"></i>
             </button>
           </div>
+          <% if @model_config.list.search_help.present? %>
+            <div class="form-text"><%= @model_config.list.search_help %></div>
+          <% end %>
         </div>
         <div class="col-sm-6 text-end">
           <% if export_action %>

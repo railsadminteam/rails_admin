@@ -3,14 +3,42 @@
 module RailsAdmin
   module Config
     module ConstLoadSuppressor
-      def suppress_const_load
-        original = Object.method(:const_missing)
-        Object.define_singleton_method(:const_missing) do |name|
-          ConstProxy.new(name.to_s)
+      class << self
+        @original_const_missing = nil
+
+        def suppressing
+          raise 'Constant Loading is already suppressed' if @original_const_missing
+
+          begin
+            @original_const_missing = Object.method(:const_missing)
+            intercept_const_missing
+            yield
+          ensure
+            Object.define_singleton_method(:const_missing, @original_const_missing)
+            @original_const_missing = nil
+          end
         end
-        yield
-      ensure
-        Object.define_singleton_method(:const_missing, original)
+
+        def allowing
+          if @original_const_missing
+            begin
+              Object.define_singleton_method(:const_missing, @original_const_missing)
+              yield
+            ensure
+              intercept_const_missing
+            end
+          else
+            yield
+          end
+        end
+
+      private
+
+        def intercept_const_missing
+          Object.define_singleton_method(:const_missing) do |name|
+            ConstProxy.new(name.to_s)
+          end
+        end
       end
 
       class ConstProxy < BasicObject

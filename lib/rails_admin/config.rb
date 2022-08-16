@@ -270,10 +270,12 @@ module RailsAdmin
         @parent_controller = name
 
         if defined?(RailsAdmin::ApplicationController) || defined?(RailsAdmin::MainController)
-          RailsAdmin.send(:remove_const, :ApplicationController)
-          RailsAdmin.send(:remove_const, :MainController)
-          load RailsAdmin::Engine.root.join('app/controllers/rails_admin/application_controller.rb')
-          load RailsAdmin::Engine.root.join('app/controllers/rails_admin/main_controller.rb')
+          RailsAdmin::Config::ConstLoadSuppressor.allowing do
+            RailsAdmin.send(:remove_const, :ApplicationController)
+            RailsAdmin.send(:remove_const, :MainController)
+            load RailsAdmin::Engine.root.join('app/controllers/rails_admin/application_controller.rb')
+            load RailsAdmin::Engine.root.join('app/controllers/rails_admin/main_controller.rb')
+          end
         end
       end
 

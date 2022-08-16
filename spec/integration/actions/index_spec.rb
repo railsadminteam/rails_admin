@@ -321,6 +321,16 @@ RSpec.describe 'Index action', type: :request do
         },
       ]
     end
+
+    it 'shows the help text below the search box' do
+      RailsAdmin.config Player do
+        list do
+          search_help 'Use this box to search!'
+        end
+      end
+      visit index_path(model_name: 'player')
+      is_expected.to have_css('.form-text', text: /Use this box/)
+    end
   end
 
   describe 'fields' do

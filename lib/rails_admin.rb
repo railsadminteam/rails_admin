@@ -32,7 +32,7 @@ module RailsAdmin
     if entity
       RailsAdmin::Config.model(entity, &block)
     elsif block_given?
-      suppress_const_load { yield(RailsAdmin::Config) }
+      RailsAdmin::Config::ConstLoadSuppressor.suppressing { yield(RailsAdmin::Config) }
     else
       RailsAdmin::Config
     end

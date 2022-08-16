@@ -29,18 +29,22 @@ body.rails_admin {
   }
 
   /* Sidebar navigation */
-  .btn-toggle-nav {
+  .sidebar.btn-toggle-nav {
     padding: 0;
 
-    .dropdown-header {
-      padding: calc($grid-gutter-width / 2) calc($grid-gutter-width / 2) 3px;
+    .btn-toggle {
+      margin-top: calc(#{$grid-gutter-width} / 2);
+      padding: 3px calc(#{$grid-gutter-width} / 2);
       font-weight: bold;
-      color: $gray-700;
-      text-transform: uppercase;
+      color: $gray-600;
     }
 
-    > li > a {
-      padding: calc($navbar-padding-y / 2) calc($grid-gutter-width / 2);
+    .btn-toggle[aria-expanded="true"] {
+      color: $gray-700;
+    }
+
+    .btn-toggle-nav > li > a {
+      padding: calc(#{$navbar-padding-y} / 2) calc(#{$grid-gutter-width} / 2);
 
       &.active {
         background-color: map-get($theme-colors, primary);
@@ -320,7 +324,7 @@ body.rails_admin {
 
 @media screen and (min-width: map-get($grid-breakpoints, "sm")) {
   body.rails_admin {
-    .btn-toggle-nav {
+    .sidebar.btn-toggle-nav {
       position: fixed;
       top: $nav-link-height + $navbar-padding-y * 2;
       bottom: 0;
