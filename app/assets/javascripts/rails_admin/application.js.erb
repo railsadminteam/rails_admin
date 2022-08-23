@@ -19,3 +19,11 @@
 //=  require 'rails_admin/sidescroll'
 //=  require 'rails_admin/ui'
 //=  require 'rails_admin/custom/ui'
+
+<% if defined?(ActiveStorage) %>
+//= require activestorage
+<% end %>
+<% if defined?(ActionText) && Rails.gem_version >= Gem::Version.new('7.0') %>
+//= require trix
+//= require actiontext
+<% end %>

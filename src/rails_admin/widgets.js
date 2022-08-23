@@ -489,6 +489,11 @@ import I18n from "./i18n";
       return content.find("trix-editor").each(function () {
         if (!window.Trix) {
           options = $(this).data("options");
+          if (options.warn_dynamic_load) {
+            console.warn(
+              "ActionText assets should be loaded statically. Follow instructions in https://github.com/railsadminteam/rails_admin/wiki/ActionText"
+            );
+          }
           $("head").append(
             '<link href="' +
               options["csspath"] +

@@ -22,6 +22,10 @@ module RailsAdmin
             "https://cdnjs.cloudflare.com/ajax/libs/trix/#{version}/trix.js"
           end
 
+          register_instance_option :warn_dynamic_load do
+            true
+          end
+
           register_instance_option :partial do
             :form_action_text
           end

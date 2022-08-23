@@ -217,6 +217,15 @@ module RailsAdmin
       raise e
     end
 
+    # Workaround for https://github.com/rails/rails/issues/31325
+    def image_tag(source, options = {})
+      if %w[ActiveStorage::Variant ActiveStorage::VariantWithRecord ActiveStorage::Preview].include? source.class.to_s
+        super main_app.route_for(ActiveStorage.resolve_model_to_route, source), options
+      else
+        super
+      end
+    end
+
   private
 
     def edit_user_link_label
