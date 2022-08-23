@@ -43,8 +43,8 @@ module RailsAdmin
           rails_admin/application.css
         ]
         app.config.assets.paths << RailsAdmin::Engine.root.join('src')
-        require 'rails_admin/support/esmodule_preprocessor'
-        Sprockets.register_preprocessor 'application/javascript', RailsAdmin::ESModulePreprocessor
+        require 'rails_admin/support/es_module_processor'
+        Sprockets.register_bundle_processor 'application/javascript', RailsAdmin::Support::ESModuleProcessor
       when :importmap
         self.importmap = Importmap::Map.new.draw(app.root.join('config/importmap.rails_admin.rb'))
       end

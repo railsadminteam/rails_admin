@@ -9,7 +9,7 @@
     <%= javascript_importmap_tags %>
   <% else %>
     <%= stylesheet_link_tag    "application", media: "all" %>
-    <%= javascript_include_tag "application" %>
+    <%= javascript_include_tag "application", type: 'module' %>
   <% end %>
   <%= csrf_meta_tags %>
 </head>
