@@ -79,12 +79,14 @@ import I18n from "./i18n";
     }
   );
 
-  document.addEventListener("turbo:load", function () {
+  function triggerDomReady() {
     I18n.init($("html").attr("lang"), $("#admin-js").data("i18nOptions"));
 
     const event = new CustomEvent("rails_admin.dom_ready");
     document.dispatchEvent(event);
-  });
+  }
+  $(document).ready(triggerDomReady);
+  document.addEventListener("turbo:render", triggerDomReady);
 
   document.addEventListener("rails_admin.dom_ready", function () {
     $(".nav.nav-pills li.active").removeClass("active");

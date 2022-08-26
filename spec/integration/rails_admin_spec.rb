@@ -196,6 +196,14 @@ RSpec.describe RailsAdmin, type: :request do
       click_link 'Back to admin'
       is_expected.to have_content 'Details for Player'
     end
+
+    it 'triggers rails_admin.dom_ready right after a validation error' do
+      visit edit_path(model_name: 'player', id: player.id)
+      fill_in 'player[name]', with: 'on steroids'
+      find_button('Save').trigger 'click'
+      is_expected.to have_content 'Player failed to be updated'
+      is_expected.to have_css '.filtering-select[data-input-for="player_team_id"]'
+    end
   end
 
   context 'with invalid model name' do
