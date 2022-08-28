@@ -774,6 +774,7 @@ RSpec.describe 'Edit action', type: :request do
 
       execute_script %{$('.form-actions [name="_save"]').attr('name', 'player[name]').attr('value', 'Jackie Robinson')}
       find_button('Save').trigger('click')
+      is_expected.to have_text 'Player successfully updated'
     end
 
     it 'submits the value' do

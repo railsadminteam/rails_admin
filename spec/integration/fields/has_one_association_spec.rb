@@ -76,6 +76,7 @@ RSpec.describe 'HasOneAssociation field', type: :request do
       visit edit_path(model_name: 'managing_user', id: user.id)
       select(team.name, from: 'Team')
       click_button 'Save'
+      is_expected.to have_content 'Managing user successfully updated'
       expect(ManagingUser.first.team).to eq team
     end
 
@@ -93,6 +94,7 @@ RSpec.describe 'HasOneAssociation field', type: :request do
         expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
         page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("#{team.name}")).click()}
         click_button 'Save'
+        is_expected.to have_content 'Managing user successfully updated'
         expect(ManagingUser.first.team).to eq team
       end
     end

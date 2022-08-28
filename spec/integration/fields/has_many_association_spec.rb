@@ -164,6 +164,7 @@ RSpec.describe 'HasManyAssociation field', type: :request do
       expect(find("select#managing_user_team_ids option[value=\"#{teams[0].id}\"]")).to have_content teams[0].name
       select(teams[1].name, from: 'Teams')
       click_button 'Save'
+      is_expected.to have_content 'Managing user successfully updated'
       expect(ManagingUser.first.teams).to match_array teams
     end
 
@@ -180,6 +181,7 @@ RSpec.describe 'HasManyAssociation field', type: :request do
         find('.ra-multiselect-collection option', text: teams[1].name).select_option
         find('.ra-multiselect-item-add').click
         click_button 'Save'
+        is_expected.to have_content 'Managing user successfully updated'
         expect(ManagingUser.first.teams).to match_array teams
       end
     end

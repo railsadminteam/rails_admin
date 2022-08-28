@@ -5,6 +5,18 @@ require 'spec_helper'
 RSpec.describe 'Remote form widget', type: :request, js: true do
   subject { page }
 
+  describe 'modal' do
+    it 'supports focusing on sub-modals' do
+      visit new_path(model_name: 'division')
+      click_link 'Add a new League'
+      is_expected.to have_content 'New League'
+      is_expected.not_to have_css '#modal.modal-static'
+      execute_script %($(document.body).append($('<div id="sub-modal" class="modal d-block"><input type="text" /></div>')))
+      find('#sub-modal input').click
+      is_expected.to have_css '#sub-modal input:focus'
+    end
+  end
+
   context 'with filtering select widget' do
     let(:league) { FactoryBot.create :league }
     let(:division) { FactoryBot.create :division, league: league }
@@ -119,7 +131,7 @@ RSpec.describe 'Remote form widget', type: :request, js: true do
       is_expected.to have_content 'New Field test'
       attach_file 'Carrierwave asset', file_path('test.jpg')
       find('#modal .save-action').click
-      is_expected.to have_css('#modal.fade')
+      is_expected.to have_css('option', text: /FieldTest #/, visible: false)
       expect(FieldTest.first.carrierwave_asset.file.size).to eq 1575
     end
   end

@@ -20,7 +20,7 @@ RSpec.describe 'RailsAdmin Devise Authentication', type: :request do
     fill_in 'Email', with: user.email
     fill_in 'Password', with: 'password'
     click_button 'Log in'
-    is_expected.to have_content 'Site Administration'
+    is_expected.to have_css 'body.rails_admin'
   end
 
   it 'supports logging-out', js: true do
