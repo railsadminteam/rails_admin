@@ -18,6 +18,16 @@ module RailsAdmin
             params[name] = parse_value(params[name]) if params[name]
           end
 
+          register_instance_option :filter_operators do
+            %w[default between today yesterday this_week last_week] + (required? ? [] : %w[_separator _not_null _null])
+          end
+
+          def filter_options
+            super.merge(
+              datetimepicker_options: datepicker_options,
+            )
+          end
+
           register_instance_option :date_format do
             :long
           end

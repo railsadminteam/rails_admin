@@ -78,6 +78,10 @@ module RailsAdmin
           !virtual? || children_fields.first || false
         end
 
+        register_instance_option :search_operator do
+          RailsAdmin::Config.default_search_operator
+        end
+
         register_instance_option :queryable? do
           !virtual?
         end
@@ -86,8 +90,22 @@ module RailsAdmin
           !!searchable
         end
 
-        register_instance_option :search_operator do
-          @search_operator ||= RailsAdmin::Config.default_search_operator
+        register_instance_option :filter_operators do
+          []
+        end
+
+        register_instance_option :default_filter_operator do
+          nil
+        end
+
+        def filter_options
+          {
+            label: label,
+            name: name,
+            operator: default_filter_operator,
+            operators: filter_operators,
+            type: type,
+          }
         end
 
         # serials and dates are reversed in list, which is more natural (last modified items first).
@@ -240,10 +258,6 @@ module RailsAdmin
         # columns mapped (belongs_to, paperclip, etc.). First one is used for searching/sorting by default
         register_instance_option :children_fields do
           []
-        end
-
-        register_instance_option :default_filter_operator do
-          nil
         end
 
         register_instance_option :eager_load do

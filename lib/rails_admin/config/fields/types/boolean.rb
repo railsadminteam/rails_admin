@@ -24,6 +24,10 @@ module RailsAdmin
             }
           end
 
+          register_instance_option :filter_operators do
+            %w[_discard true false] + (required? ? [] : %w[_separator _present _blank])
+          end
+
           register_instance_option :nullable? do
             properties&.nullable?
           end

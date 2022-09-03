@@ -9,6 +9,10 @@ module RailsAdmin
         class BelongsToAssociation < RailsAdmin::Config::Fields::Association
           RailsAdmin::Config::Fields::Types.register(self)
 
+          register_instance_option :filter_operators do
+            %w[_discard like not_like is starts_with ends_with] + (required? ? [] : %w[_separator _present _blank])
+          end
+
           register_instance_option :formatted_value do
             (o = value) && o.send(associated_model_config.object_label_method)
           end

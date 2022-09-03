@@ -26,26 +26,11 @@
       </a>
       <ul class="dropdown-menu dropdown-menu-end" id="filters">
         <% filterable_fields.each do |field| %>
-          <%
-            field_options = case field.type
-                            when :enum
-                              options_for_select(field.with(object: @abstract_model.model.new).enum)
-                            else
-                              ''
-                            end
-          %>
           <li>
             <a
               href="#"
               class="dropdown-item"
-              data-field-label="<%= field.label %>"
-              data-field-name="<%= field.name %>"
-              data-field-operator="<%= field.default_filter_operator %>"
-              data-field-options="<%= "#{field_options}" %>"
-              data-field-required="<%= field.required.to_s %>"
-              data-field-type="<%= field.type %>"
-              data-field-value=""
-              data-field-datetimepicker-options="<%= field.try(:datepicker_options).try(:to_json) %>"
+              data-options="<%= field.with(view: self).filter_options.to_json %>"
             >
               <%= field.label %>
             </a>

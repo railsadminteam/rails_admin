@@ -67,6 +67,25 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
     end
   end
 
+  it 'supports limiting filter operators' do
+    RailsAdmin.config Player do
+      list do
+        field :name do
+          filter_operators %w[is starts_with _present]
+        end
+      end
+    end
+
+    visit index_path(model_name: 'player')
+    is_expected.to have_no_css('#filters_box .filter')
+    click_link 'Add filter'
+    click_link 'Name'
+
+    within(:select, name: /f\[name\]\[\d+\]\[o\]/) do
+      expect(page.all('option').map(&:value)).to eq %w[is starts_with _present]
+    end
+  end
+
   describe 'for boolean field' do
     before do
       RailsAdmin.config FieldTest do
@@ -133,9 +152,10 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
       visit index_path(model_name: 'team')
       click_link 'Add filter'
       click_link 'Color'
-      expect(all('.select-single option').map(&:text)).to include 'white', 'black', 'red', 'green', 'blu<e>é'
+      expect(all('#filters_box option').map(&:text)).to include 'white', 'black', 'red', 'green', 'blu<e>é'
       find('.filter .switch-select .fa-plus').click
-      expect(all('.select-multiple option').map(&:text)).to include 'white', 'black', 'red', 'green', 'blu<e>é'
+      expect(find('#filters_box select')['multiple']).to be true
+      expect(find('#filters_box select')['name']).to match(/\[\]$/)
     end
   end
 

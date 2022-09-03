@@ -324,7 +324,7 @@ RSpec.describe 'Index action', type: :request do
           type: 'string',
           value: '',
           operator: 'is',
-          required: true,
+          operators: %w[_discard like not_like is starts_with ends_with],
         },
         {
           index: 2,
@@ -333,7 +333,7 @@ RSpec.describe 'Index action', type: :request do
           type: 'belongs_to_association',
           value: '',
           operator: nil,
-          required: false,
+          operators: %w[_discard like not_like is starts_with ends_with _separator _present _blank],
         },
       ]
     end

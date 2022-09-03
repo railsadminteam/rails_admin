@@ -10,6 +10,10 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types.register(self)
 
+          register_instance_option :filter_operators do
+            %w[_discard like not_like is starts_with ends_with] + (required? ? [] : %w[_separator _present _blank])
+          end
+
           register_instance_option :partial do
             nested_form ? :form_nested_one : :form_filtering_select
           end

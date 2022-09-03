@@ -7,98 +7,54 @@ import flatpickr from "flatpickr";
 
   $.filters = filters = {
     append: function (options) {
-      options = options || {};
       var field_label = options["label"];
       var field_name = options["name"];
       var field_type = options["type"];
-      var field_value = options["value"];
+      var field_value = options["value"] || "";
       var field_operator = options["operator"];
-      var select_options = options["select_options"];
-      var required = options["required"];
+      var operators = options["operators"];
       var index = options["index"];
       var value_name = "f[" + field_name + "][" + index + "][v]";
       var operator_name = "f[" + field_name + "][" + index + "][o]";
       var control = null;
       var additional_control = null;
 
+      if (operators.length > 0) {
+        control = $(
+          '<select class="form-control form-control-sm"></select>'
+        ).prop("name", operator_name);
+
+        operators.forEach((operator) => {
+          var element = this.build_operator(operator, options);
+          if (!element) {
+            return;
+          }
+          if (element.prop("value") === field_operator) {
+            element.prop("selected", true);
+          }
+          control.append(element);
+        });
+
+        if (control.find("[data-additional-fieldset]").length > 0) {
+          control.addClass("switch-additional-fieldsets");
+        }
+      }
+
       switch (field_type) {
         case "boolean":
-          control = $('<select class="form-control form-control-sm"></select>')
-            .prop("name", value_name)
-            .append('<option value="_discard">...</option>')
-            .append(
-              $('<option value="true"></option>')
-                .prop("selected", field_value == "true")
-                .text(I18n.t("true"))
-            )
-            .append(
-              $('<option value="false"></option>')
-                .prop("selected", field_value == "false")
-                .text(I18n.t("false"))
-            );
-          if (!required) {
-            control.append([
-              '<option disabled="disabled">---------</option>',
-              $('<option value="_present"></option>')
-                .prop("selected", field_value == "_present")
-                .text(I18n.t("is_present")),
-              $('<option value="_blank"></option>')
-                .prop("selected", field_value == "_blank")
-                .text(I18n.t("is_blank")),
-            ]);
-          }
+          control &&
+            control
+              .prop("name", value_name)
+              .find("option")
+              .each(function () {
+                if ($(this).attr("value") === field_value)
+                  $(this).attr("selected", true);
+              });
           break;
         case "date":
         case "datetime":
         case "timestamp":
         case "time":
-          control =
-            control ||
-            $(
-              '<select class="switch-additional-fieldsets form-control form-control-sm"></select>'
-            )
-              .prop("name", operator_name)
-              .append(
-                $(
-                  '<option data-additional-fieldset="default" value="default"></option>'
-                )
-                  .prop("selected", field_operator == "default")
-                  .text(I18n.t(field_type == "time" ? "time" : "date"))
-              )
-              .append(
-                $(
-                  '<option data-additional-fieldset="between" value="between"></option>'
-                )
-                  .prop("selected", field_operator == "between")
-                  .text(I18n.t("between_and_"))
-              );
-          if (field_type != "time") {
-            control.append([
-              $('<option value="today"></option>')
-                .prop("selected", field_operator == "today")
-                .text(I18n.t("today")),
-              $('<option value="yesterday"></option>')
-                .prop("selected", field_operator == "yesterday")
-                .text(I18n.t("yesterday")),
-              $('<option value="this_week"></option>')
-                .prop("selected", field_operator == "this_week")
-                .text(I18n.t("this_week")),
-              $('<option value="last_week"></option>')
-                .prop("selected", field_operator == "last_week")
-                .text(I18n.t("last_week")),
-            ]);
-          }
-          if (!required) {
-            control.append([
-              '<option disabled="disabled">---------</option>',
-              $('<option value="_not_null"></option>')
-                .prop("selected", field_operator == "_not_null")
-                .text(I18n.t("is_present")),
-              $('<option value="_null"></option>')
-                .prop("selected", field_operator == "_null")
-                .text(I18n.t("is_blank")),
-            ]);
-          }
           additional_control = $.map(
             [undefined, "-∞", "∞"],
             function (placeholder, index) {
@@ -126,102 +82,34 @@ import flatpickr from "flatpickr";
           );
           break;
         case "enum":
-          var multiple_values = field_value instanceof Array ? true : false;
-          control = $(
-            '<select class="select-single form-control form-control-sm"></select>'
-          )
-            .css("display", multiple_values ? "none" : "inline-block")
-            .prop("name", multiple_values ? undefined : value_name)
-            .data("name", value_name)
-            .append('<option value="_discard">...</option>')
-            .append(
-              required
-                ? []
-                : [
-                    $('<option value="_present"></option>')
-                      .prop("selected", field_value == "_present")
-                      .text(I18n.t("is_present")),
-                    $('<option value="_blank"></option>')
-                      .prop("selected", field_value == "_blank")
-                      .text(I18n.t("is_blank")),
-                    '<option disabled="disabled">---------</option>',
-                  ]
-            )
-            .append(select_options)
-            .add(
-              $(
-                '<select multiple="multiple" class="select-multiple form-control form-control-sm"></select>'
-              )
-                .css("display", multiple_values ? "inline-block" : "none")
-                .prop("name", multiple_values ? value_name + "[]" : undefined)
-                .data("name", value_name + "[]")
-                .append(select_options)
-            )
-            .add(
-              $('<a href="#" class="switch-select"></a>').append(
-                $("<i></i>").addClass(
-                  "fas fa-" + (multiple_values ? "minus" : "plus")
+          if (control) {
+            var multiple = field_value instanceof Array;
+            control = control
+              .prop("name", multiple ? value_name + "[]" : value_name)
+              .prop("multiple", multiple)
+              .add(
+                $('<a href="#" class="switch-select"></a>').append(
+                  $("<i></i>").addClass(
+                    "fas fa-" + (multiple ? "minus" : "plus")
+                  )
                 )
+              );
+            control.find("option").each(function () {
+              const value = $(this).attr("value");
+              if (
+                multiple ? field_value.includes(value) : value === field_value
               )
-            );
+                $(this).attr("selected", true);
+            });
+            if (multiple)
+              control.find("option[value^=_],option[disabled]").hide();
+          }
           break;
         case "citext":
         case "string":
         case "text":
         case "belongs_to_association":
         case "has_one_association":
-          control = $(
-            '<select class="switch-additional-fieldsets form-control form-control-sm"></select>'
-          )
-            .prop("value", field_operator)
-            .prop("name", operator_name)
-            .append('<option value="_discard">...</option>')
-            .append(
-              $(
-                '<option data-additional-fieldset="additional-fieldset" value="like"></option>'
-              )
-                .prop("selected", field_operator == "like")
-                .text(I18n.t("contains"))
-            )
-            .append(
-              $(
-                '<option data-additional-fieldset="additional-fieldset" value="not_like"></option>'
-              )
-                .prop("selected", field_operator == "not_like")
-                .text(I18n.t("does_not_contain"))
-            )
-            .append(
-              $(
-                '<option data-additional-fieldset="additional-fieldset" value="is"></option>'
-              )
-                .prop("selected", field_operator == "is")
-                .text(I18n.t("is_exactly"))
-            )
-            .append(
-              $(
-                '<option data-additional-fieldset="additional-fieldset" value="starts_with"></option>'
-              )
-                .prop("selected", field_operator == "starts_with")
-                .text(I18n.t("starts_with"))
-            )
-            .append(
-              $(
-                '<option data-additional-fieldset="additional-fieldset" value="ends_with"></option>'
-              )
-                .prop("selected", field_operator == "ends_with")
-                .text(I18n.t("ends_with"))
-            );
-          if (!required) {
-            control.append([
-              '<option disabled="disabled">---------</option>',
-              $('<option value="_present"></option>')
-                .prop("selected", field_operator == "_present")
-                .text(I18n.t("is_present")),
-              $('<option value="_blank"></option>')
-                .prop("selected", field_operator == "_blank")
-                .text(I18n.t("is_blank")),
-            ]);
-          }
           additional_control = $(
             '<input class="additional-fieldset form-control form-control-sm" type="text" />'
           )
@@ -237,35 +125,6 @@ import flatpickr from "flatpickr";
         case "integer":
         case "decimal":
         case "float":
-          control = $(
-            '<select class="switch-additional-fieldsets form-control form-control-sm"></select>'
-          )
-            .prop("name", operator_name)
-            .append(
-              $(
-                '<option data-additional-fieldset="default" value="default"></option>'
-              )
-                .prop("selected", field_operator == "default")
-                .text(I18n.t("number"))
-            )
-            .append(
-              $(
-                '<option data-additional-fieldset="between" value="between"></option>'
-              )
-                .prop("selected", field_operator == "between")
-                .text(I18n.t("between_and_"))
-            );
-          if (!required) {
-            control.append([
-              '<option disabled="disabled">---------</option>',
-              $('<option value="_not_null"></option>')
-                .prop("selected", field_operator == "_not_null")
-                .text(I18n.t("is_present")),
-              $('<option value="_null"></option>')
-                .prop("selected", field_operator == "_null")
-                .text(I18n.t("is_blank")),
-            ]);
-          }
           additional_control = $(
             '<input class="additional-fieldset default form-control form-control-sm" type="text" />'
           )
@@ -348,21 +207,114 @@ import flatpickr from "flatpickr";
 
       $("hr.filters_box:hidden").show("slow");
     },
+    build_operator: function (operator, options) {
+      if (operator instanceof Object) {
+        var element = $("<option></option>");
+        element.text(operator.label);
+        delete operator.label;
+        for (const key in operator) {
+          element.attr(key, operator[key]);
+        }
+        return element;
+      }
+      switch (operator) {
+        case "_discard":
+          return $('<option value="_discard">...</option>');
+        case "_separator":
+          return $('<option disabled="disabled">---------</option>');
+        case "_present":
+          return $('<option value="_present"></option>').text(
+            I18n.t("is_present")
+          );
+        case "_blank":
+          return $('<option value="_blank"></option>').text(I18n.t("is_blank"));
+        case "_not_null":
+          return $('<option value="_not_null"></option>').text(
+            I18n.t("is_present")
+          );
+        case "_null":
+          return $('<option value="_null"></option>').text(I18n.t("is_blank"));
+
+        case "true":
+          return $('<option value="true"></option>').text(I18n.t("true"));
+        case "false":
+          return $('<option value="false"></option>').text(I18n.t("false"));
+
+        case "today":
+          return $('<option value="today"></option>').text(I18n.t("today"));
+        case "yesterday":
+          return $('<option value="yesterday"></option>').text(
+            I18n.t("yesterday")
+          );
+        case "this_week":
+          return $('<option value="this_week"></option>').text(
+            I18n.t("this_week")
+          );
+        case "last_week":
+          return $('<option value="last_week"></option>').text(
+            I18n.t("last_week")
+          );
+
+        case "like":
+          return $(
+            '<option data-additional-fieldset="additional-fieldset" value="like"></option>'
+          ).text(I18n.t("contains"));
+        case "not_like":
+          return $(
+            '<option data-additional-fieldset="additional-fieldset" value="not_like"></option>'
+          ).text(I18n.t("does_not_contain"));
+        case "is":
+          return $(
+            '<option data-additional-fieldset="additional-fieldset" value="is"></option>'
+          ).text(I18n.t("is_exactly"));
+        case "starts_with":
+          return $(
+            '<option data-additional-fieldset="additional-fieldset" value="starts_with"></option>'
+          ).text(I18n.t("starts_with"));
+        case "ends_with":
+          return $(
+            '<option data-additional-fieldset="additional-fieldset" value="ends_with"></option>'
+          ).text(I18n.t("ends_with"));
+
+        case "default":
+          var label;
+          switch (options.type) {
+            case "date":
+            case "datetime":
+            case "timestamp":
+              label = I18n.t("date");
+              break;
+            case "time":
+              label = I18n.t("time");
+              break;
+            case "integer":
+            case "decimal":
+            case "float":
+              label = I18n.t("number");
+              break;
+          }
+          return $(
+            '<option data-additional-fieldset="default" value="default"></option>'
+          ).text(label);
+        case "between":
+          return $(
+            '<option data-additional-fieldset="between" value="between"></option>'
+          ).text(I18n.t("between_and_"));
+
+        default:
+          return null;
+      }
+    },
   };
 
   $(document).on("click", "#filters a", function (e) {
     e.preventDefault();
-    $.filters.append({
-      label: $(this).data("field-label"),
-      name: $(this).data("field-name"),
-      type: $(this).data("field-type"),
-      value: $(this).data("field-value"),
-      operator: $(this).data("field-operator"),
-      select_options: $(this).data("field-options"),
-      required: $(this).data("field-required"),
-      index: $.now().toString().slice(6, 11),
-      datetimepicker_options: $(this).data("field-datetimepicker-options"),
-    });
+    $.filters.append(
+      $.extend(
+        { index: $.now().toString().slice(6, 11) },
+        $(this).data("options")
+      )
+    );
   });
 
   $(document).on("click", "#filters_box .delete", function (e) {
@@ -375,12 +327,15 @@ import flatpickr from "flatpickr";
 
   $(document).on("click", "#filters_box .switch-select", function (e) {
     e.preventDefault();
-    var selected_select = $(this).siblings("select:visible");
-    var not_selected_select = $(this).siblings("select:hidden");
-    not_selected_select
-      .attr("name", not_selected_select.data("name"))
-      .show("slow");
-    selected_select.attr("name", null).hide("slow");
+    var select = $(this).siblings("select");
+    select.attr("multiple", !select.attr("multiple"));
+    select.attr(
+      "name",
+      select.attr("multiple")
+        ? select.attr("name") + "[]"
+        : select.attr("name").replace(/\[\]$/, "")
+    );
+    select.find("option[value^=_],option[disabled]").toggle();
     $(this).find("i").toggleClass("fa-plus fa-minus");
   });
 

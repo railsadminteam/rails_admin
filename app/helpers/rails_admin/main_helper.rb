@@ -42,7 +42,6 @@ module RailsAdmin
     def ordered_filter_options
       if ordered_filters
         @ordered_filter_options ||= ordered_filters.map do |duplet|
-          options = {index: duplet[0]}
           filter_for_field = duplet[1]
           filter_name = filter_for_field.keys.first
           filter_hash = filter_for_field.values.first
@@ -50,20 +49,11 @@ module RailsAdmin
             raise "#{filter_name} is not currently filterable; filterable fields are #{filterable_fields.map(&:name).join(', ')}"
           end
 
-          case field.type
-          when :enum
-            options[:select_options] = options_for_select(field.with(object: @abstract_model.model.new).enum, filter_hash['v'])
-          when :date, :datetime, :time
-            options[:datetimepicker_options] = field.datepicker_options
-          end
-          options[:label] = field.label
-          options[:name]  = field.name
-          options[:type]  = field.type
-          options[:value] = filter_hash['v']
-          options[:label] = field.label
-          options[:operator] = filter_hash['o'] || field.default_filter_operator
-          options[:required] = field.required
-          options
+          field.filter_options.merge(
+            index: duplet[0],
+            operator: filter_hash['o'] || field.default_filter_operator,
+            value: filter_hash['v'],
+          )
         end
       end
     end
