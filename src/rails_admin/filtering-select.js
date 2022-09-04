@@ -216,11 +216,20 @@ import I18n from "./i18n";
         minLength: this.options.minLength,
         source: this._getSourceFunction(this.options.source),
         select: function (event, ui) {
-          var option = $("<option>")
-            .attr("value", ui.item.id)
-            .attr("selected", "selected")
-            .text(ui.item.value);
-          self.element.html(option).trigger("change", ui.item.id);
+          var option = self.element.find(
+            `option[value="${CSS.escape(ui.item.id)}"]`
+          );
+          self.element.find("option[selected]").attr("selected", false);
+          if (option.length > 0) {
+            option.attr("selected", "selected");
+          } else {
+            option = $("<option>")
+              .attr("value", ui.item.id)
+              .attr("selected", true)
+              .text(ui.item.value);
+            self.element.append(option);
+          }
+          self.element.trigger("change", ui.item.id);
           self._trigger("selected", event, {
             item: option,
           });

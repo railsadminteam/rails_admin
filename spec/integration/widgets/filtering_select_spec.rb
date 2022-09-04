@@ -99,6 +99,18 @@ RSpec.describe 'Filtering select widget', type: :request, js: true do
     expect(all(:css, 'input.ra-filtering-select-input').count).to eq 1
   end
 
+  it 'does not lose options on browser back' do
+    visit edit_path(model_name: 'player', id: player.id)
+    find('.team_field .dropdown-toggle').click
+    find('li.ui-menu-item a', text: /Clear/).click
+    click_link 'Show'
+    is_expected.to have_content 'Details for Player'
+    page.go_back
+    find('.team_field input.ra-filtering-select-input').set('Los')
+    page.execute_script("document.querySelector('.team_field input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
+    is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: 'Los Angeles Dodgers')
+  end
+
   context 'when using remote requests' do
     before do
       RailsAdmin.config Player do
