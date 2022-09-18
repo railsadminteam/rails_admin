@@ -1,4 +1,38 @@
-### For custom theming (application scoped), simply override these files in your app:
+The content of this page applies to RailsAdmin 3.x.
+Pre-3.x users should refer to [[Theming and customization for RailsAdmin 2.x and earlier]].
+
+# Theming
+
+Since RailsAdmin is built on top of the Web frontend framework [[Bootstrap|https://getbootstrap.com/]], it can be integrated easily with Bootstrap themes out there. There's one limitation though, your application needs to use [an asset delivery method](https://github.com/railsadminteam/rails_admin/wiki/Base-configuration#asset-delivery) other than Sprockets since this setup relies on the NPM ecosystem.
+
+Let's take [Bootswatch](https://bootswatch.com/) as an example here. First you install the NPM package:
+
+```bash
+$ yarn add bootswatch
+```
+
+Then you add following content into your RailsAdmin stylesheet, located in either `app/javascript/stylesheets/rails_admin.scss` or `app/assets/stylesheets/rails_admin.scss`.
+
+
+```diff
++ @import "bootswatch/dist/journal/variables";
+  @import "rails_admin/src/rails_admin/styles/base.scss";
++ @import "bootswatch/dist/journal/bootswatch";
+```
+
+This way you'll get the [Bootswatch Journal](https://bootswatch.com/journal/)-themed RailsAdmin.
+
+<img src="https://user-images.githubusercontent.com/486678/148493782-4b730372-4dd8-4533-b120-b05669610820.png" width="50%" />
+
+
+
+# Customization
+
+There are 2 ways of customizing RailsAdmin frontend by injecting user-defined JavaScript codes and stylesheets, depending on the asset delivery method.
+
+## Sprockets
+
+For customization, simply override these files in your app:
 
 ```
 app/assets/stylesheets/rails_admin/custom/mixins.scss
@@ -7,99 +41,25 @@ app/assets/stylesheets/rails_admin/custom/variables.scss
 app/assets/javascripts/rails_admin/custom/ui.js
 ```
 
-📝 RailsAdmin 3.x uses Bootstrap 5, prior releases use Bootstrap 3
+SCSS files are meant to be used for following purposes:
+
+* modify all the mixins provided by rails_admin and bootstrap and add others for you to use in `mixins.scss`. (available mixins [[here|https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_mixins.scss]])
+* modify all the variables provided by rails_admin and bootstrap and add others for you to use in `variables.scss`. Note that the variables in `variables.scss` are imported before Bootstrap's variables which all have set the [[!default|http://sass-lang.com/documentation/file.SASS_REFERENCE.html#variable_defaults_]] flag. This effectively means that you can customize chained variables by just assigning a custom value to the first one instead of the need to  override each single one. E.g. you do not have to override `$btn-success-bg`, `$label-succes-bg` and `$progress-bar-success-bg` but only assign a custom value to `$brand-success`. (available variables [[here|https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss]])
+* In `theming.scss`, you can use all mixins and variables. (your owns, Bootstrap's and RailsAdmin's)
 
 Don't forget to re-compile your assets or simply delete the content of your `tmp/cache` folder. Some additional steps might be required, as others reported here: https://github.com/sferik/rails_admin/issues/738#issuecomment-26615578
 
-### For custom JavaScript code
 
-RailsAdmin 2.x and below uses jquery-pjax (https://github.com/defunkt/jquery-pjax) to load pages instead of normal HTTP requests.
+## Non-Sprockets setup
 
-Use this event to check that the page is loaded before executing your code:
+Upon the RailsAdmin installation, the installer will generate files `rails_admin.js` and `rails_admin.scss` (location will vary depending on [the asset delivery method](https://github.com/railsadminteam/rails_admin/wiki/Base-configuration#asset-delivery)). You can freely add your custom code or import a new dependency there.
+
+## Working with JavaScript code
+
+RailsAdmin 3.x uses Turbo Drive (https://turbo.hotwired.dev/) to load pages instead of normal HTTP requests. That means your HTML-interacting code can't simply use jQuery's `$(document).ready` or wait for `DOMContentLoaded`. Instead, you can hook to the custom JavaScript event which RailsAdmin triggers when the page content is ready.
 
 ```javascript
 $(document).on('rails_admin.dom_ready', function() { 
   /* your js code here */
 });
 ``` 
-
-RailsAdmin 3.x uses Turbo Drive (https://turbo.hotwired.dev/) to load pages instead of normal HTTP requests.
-
-Use this event to check that the page is loaded before executing your code:
-
-```javascript
-$(document).on('turbo:load turbo:render', function() {
-  /* your js code here */ 
-});
-```
-
-### To create a distributable theme
-
-```
-rails plugin new rails_admin_<__THEME_NAME__> -m https://gist.githubusercontent.com/bbenezech/1523639/raw/42579a263c219d111c03936f93ff25a7d8999bda/rails_admin_theme_creator --skip-gemfile --skip-bundle -T -O --full
-```
-
-Then add to your application `Gemfile` (before RailsAdmin):
-
-```ruby
-gem 'rails_admin_<__THEME_NAME__>', :path => '../rails_admin_<__THEME_NAME__>'
-```
-
-Inside your rails\_admin application `config/application.rb`, just after `Bundler.require`:
-
-```ruby
-ENV['RAILS_ADMIN_THEME'] = '<__THEME_NAME__>'
-```
-
-This will allow for convenient live development testing.
-
-Please follow the convention: `rails_admin_` prefix for all RailsAdmin related gems.
-
-Once done, upload it on Github with a valid gemspec (change authors, email and project descriptions) to share your work.
-
-### CSS
-
-Put all the real theming in `theming.css.scss`. It can be regular CSS, LESS or [[SCSS|http://sass-lang.com/]]
-
-Note that if you choose to use SCSS, you can:
-
-* modify all the mixins provided by rails_admin and bootstrap and add others for you to use in `mixins.scss`. (available mixins [[here|https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_mixins.scss]])
-* modify all the variables provided by rails_admin and bootstrap and add others for you to use in `variables.scss`. Note that the variables in `variables.scss` are imported before Bootstrap's variables which all have set the [[!default|http://sass-lang.com/documentation/file.SASS_REFERENCE.html#variable_defaults_]] flag. This effectively means that you can customize chained variables by just assigning a custom value to the first one instead of the need to  override each single one. E.g. you do not have to override `$btn-success-bg`, `$label-succes-bg` and `$progress-bar-success-bg` but only assign a custom value to `$brand-success`. (available variables [[here|https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss]])
-* In `theming.scss`:
-  * use all mixins and variables. (your owns, Bootstrap's and RailsAdmin's)
-  * include any other .scss file with `@import rails_admin/themes/__THEME_NAME__/my_scss_file` and organize your the rest of your theme the way you want.
-
-### JS
-
-Use anything you want that the asset pipeline supports: regular JS, includes, Coffee, ..
-
-### Images
-
-You can use any image available to the asset pipeline.
-
-### Use a theme
-
-In your `Gemfile`:
-```ruby
-gem 'rails_admin_example_theme', :git => 'git://github.com/bbenezech/rails_admin_example_theme.git'
-```
-
-Inside `config/application.rb`, just after `Bundler.require`:
-
-```ruby
-ENV['RAILS_ADMIN_THEME'] = 'example_theme'
-```
-
-### Resources:
-
-* [[Bootstrap|http://twitter.github.com/bootstrap/]]
-* [[Bootstrap Sass|https://github.com/thomas-mcdonald/bootstrap-sass]]
-
-### Existing themes:
-
-* [[Example theme|https://github.com/bbenezech/rails_admin_example_theme]]: technical stub you can use for bootstrapping. Everything should look painfully greenish.
-* [[Flatly theme|https://github.com/konjoot/rails_admin_flatly_theme]]: Bootstrap 2 flatly theme.
-* [[Rails Admin Material|https://github.com/blocknotes/rails_admin_material]]: A Material design theme.
-* [[Rollincode theme|https://github.com/rollincode/rails_admin_theme]]: Bootstrap 3 flat theme.
-* [[SoftwareBrothers theme|https://github.com/SoftwareBrothers/rails_admin_softwarebrothers_theme]]: SoftwareBrothers theme
-* Designer, or feel like one? Add your own.
