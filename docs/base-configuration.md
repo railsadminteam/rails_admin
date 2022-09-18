@@ -41,7 +41,7 @@ $ rails g rails_admin:install --asset=webpacker
 Following files will be created in your application to be picked up by Webpacker:
 
 - `app/javascript/packs/rails_admin.js` - JavaScript file to be used by RailsAdmin
-- `app/assets/stylesheets/rails_admin.scss` - SCSS file to build the RailsAdmin stylesheet
+- `app/javascript/stylesheets/rails_admin.scss` - SCSS file to build the RailsAdmin stylesheet
 
 ### ImportMap
 
