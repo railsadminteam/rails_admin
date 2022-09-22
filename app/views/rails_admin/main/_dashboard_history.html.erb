@@ -12,7 +12,7 @@
       </th>
     </tr>
   </thead>
-  <tbody>
+  <tbody class="table-group-divider">
     <% @history.each do |t| %>
       <% abstract_model = RailsAdmin.config(t.table).abstract_model %>
       <tr>

@@ -38,7 +38,7 @@
       <% end %>
     </tr>
   </thead>
-  <tbody>
+  <tbody class="table-group-divider">
     <% @history.each_with_index do |object, index| %>
       <tr>
         <% unless object.created_at.nil? %>

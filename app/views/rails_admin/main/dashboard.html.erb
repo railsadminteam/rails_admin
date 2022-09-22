@@ -14,7 +14,7 @@
         <th class="shrink controls"></th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="table-group-divider">
       <% @abstract_models.each do |abstract_model| %>
         <% if authorized? :index, abstract_model %>
           <% index_path = index_path(model_name: abstract_model.to_param) %>
@@ -42,7 +42,7 @@
               </div>
             </td>
             <td class="links">
-              <ul class="inline list-inline">
+              <ul class="nav d-inline list-inline">
                 <%= menu_for :collection, abstract_model, nil, true %>
               </ul>
             </td>

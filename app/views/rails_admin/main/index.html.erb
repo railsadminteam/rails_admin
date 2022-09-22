@@ -123,7 +123,7 @@
             <th class="last shrink"></th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="table-group-divider">
           <% @objects.each do |object| %>
             <tr class="<%= @abstract_model.param_key %>_row <%= @model_config.list.with(object: object).row_css_class %>">
               <% if checkboxes %>
@@ -138,7 +138,7 @@
                 </td>
               <% end %>
               <td class="last links ra-sidescroll-frozen">
-                <ul class="inline list-inline">
+                <ul class="nav d-inline list-inline">
                   <%= menu_for :member, @abstract_model, object, true %>
                 </ul>
               </td>
