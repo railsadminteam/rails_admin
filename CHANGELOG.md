@@ -2,7 +2,41 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.0.beta...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.0.rc...HEAD)
+
+## [3.1.0.rc](https://github.com/railsadminteam/rails_admin/tree/v3.1.0.rc) - 2022-09-22
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.0.beta...v3.1.0.rc)
+
+### Added
+
+- Add ability to limit filter operators ([be9a75e](https://github.com/railsadminteam/rails_admin/commit/be9a75e504edd9a754157a4ddba590e8a5d14149))
+- Support filtering has_one associations ([9657774](https://github.com/railsadminteam/rails_admin/commit/9657774b423912357d8ad8a476b644bb4e36dc30))
+- Add ability to set default order of PaperTrail versions ([a1c4c67](https://github.com/railsadminteam/rails_admin/commit/a1c4c673041642ae2a2aa07e3f0555e17be9d940), [#3095](https://github.com/railsadminteam/rails_admin/pull/3095))
+- Add block-style DSL support for extension adapters ([951b708](https://github.com/railsadminteam/rails_admin/commit/951b70878cb007d54b4a7aeadd708d4c7668727b))
+- Make sidebar navigation collapsible ([e8cb8ed](https://github.com/railsadminteam/rails_admin/commit/e8cb8edd39246bf75ed72295b7832faf5056367c), [#3198](https://github.com/railsadminteam/rails_admin/pull/3198))
+- Add ability to show a help text under the search box ([94f16fb](https://github.com/railsadminteam/rails_admin/commit/94f16fb5fdfdaa867173e95820583a68e5a306c5))
+- Support for ActiveStorage direct uploads ([e13c7e2](https://github.com/railsadminteam/rails_admin/commit/e13c7e23f789ed2a575eff01b75e52a41cc930b7), [#3296](https://github.com/railsadminteam/rails_admin/issues/3296))
+
+### Changed
+
+- Load ActionText assets statically to enable full-featured setup ([458d0fb](https://github.com/railsadminteam/rails_admin/commit/458d0fb56d79d4fa0a252ad1ca715fd0a3b4b900), [#3251](https://github.com/railsadminteam/rails_admin/issues/3251), [#3386](https://github.com/railsadminteam/rails_admin/issues/3386))
+- Change ES Module processing not to affect non-RailsAdmin assets ([f8219bf](https://github.com/railsadminteam/rails_admin/commit/f8219bf3bc508c5e42f5d044cf6355a56726f8b2))
+- Change RailsAdmin initialization process to evaluate the config block immediately but load constants lazily ([#3541](https://github.com/railsadminteam/rails_admin/pull/3541), [33e9214](https://github.com/railsadminteam/rails_admin/commit/33e92147214975cddace61737cbbde3117663efe))
+- Restore the loading indicator back ([32e6b14](https://github.com/railsadminteam/rails_admin/commit/32e6b1463ecf66b38e6fdc7924426d9753d71eab), [b9ee7f0](https://github.com/railsadminteam/rails_admin/commit/b9ee7f0c202abc7c09726bdaa28536e7ec25127e), [#3500](https://github.com/railsadminteam/rails_admin/issues/3500))
+
+### Fixed
+
+- Fix Bootstrap 5.2 compatibility ([ef76fce](https://github.com/railsadminteam/rails_admin/commit/ef76fcea0b23aed04f6568448cd157ccc9ba30a0))
+- Fix filtering select widget options being empty on browser back ([3cffc00](https://github.com/railsadminteam/rails_admin/commit/3cffc0002079bc9d515dc0f3b31513c7166aa2b9))
+- Fix RailsAdmin widgets not activated after a validation error ([a604da5](https://github.com/railsadminteam/rails_admin/commit/a604da5670378e57da7b5492afad40e4f4ad083d))
+- Fix export action didn't use export section for eager loading ([4cc3f30](https://github.com/railsadminteam/rails_admin/commit/4cc3f304cc0bc4a7dbaf41a6e4e12ecbdbba6e22), [#1954](https://github.com/railsadminteam/rails_admin/issues/1954))
+- Fix Dart Sass 2.0 division deprecations ([#3544](https://github.com/railsadminteam/rails_admin/pull/3544), [3a177c2](https://github.com/railsadminteam/rails_admin/commit/3a177c2e8c1b1d782186ee5bbb3c0d44cc4c0060))
+- Fix unable to focus elements on modals opened from remote forms ([#3539](https://github.com/railsadminteam/rails_admin/pull/3539), [#3538](https://github.com/railsadminteam/rails_admin/issues/3538))
+- Improve pagination appearance on smaller screens ([a2e366e](https://github.com/railsadminteam/rails_admin/commit/a2e366e8839c9046b9f9fde219875a05bc1a66bb), [#3516](https://github.com/railsadminteam/rails_admin/issues/3516))
+- Fix the value of submit buttons being lost on submission ([60e1150](https://github.com/railsadminteam/rails_admin/commit/60e115053ea34fa42c3099464106cf6e58dbfa03), [#3513](https://github.com/railsadminteam/rails_admin/issues/3513))
+- Fix breaking with a has_and_belongs_to_many association with scope given ([c2bf6db](https://github.com/railsadminteam/rails_admin/commit/c2bf6db41a97b46741bc41b56fd9700c8bdfc9e4), [#2067](https://github.com/railsadminteam/rails_admin/issues/2067))
+- Fix nested fields don't toggle properly after pushing 'Add a new ...' button ([d1f1154](https://github.com/railsadminteam/rails_admin/commit/d1f115425c4a8d119fdeb37802fe472ae278918d), [#3528](https://github.com/railsadminteam/rails_admin/issues/3528))
 
 ## [3.1.0.beta](https://github.com/railsadminteam/rails_admin/tree/v3.1.0.beta) - 2022-06-20
 
