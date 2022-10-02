@@ -2,7 +2,15 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.0.rc...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.0.rc2...HEAD)
+
+## [3.1.0.rc2](https://github.com/railsadminteam/rails_admin/tree/v3.1.0.rc2) - 2022-10-02
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.0.rc...v3.1.0.rc2)
+
+### Fixed
+
+- Fix sidebar style broken in attempt to support Bootstrap 5.2 ([d7abba4](https://github.com/railsadminteam/rails_admin/commit/d7abba4e8a2e380b4d7f8fb3b37302300af63de5), [#3553](https://github.com/railsadminteam/rails_admin/issues/3553))
 
 ## [3.1.0.rc](https://github.com/railsadminteam/rails_admin/tree/v3.1.0.rc) - 2022-09-22
 
