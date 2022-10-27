@@ -21,7 +21,7 @@ import flatpickr from "flatpickr";
 
       if (operators.length > 0) {
         control = $(
-          '<select class="form-control form-control-sm"></select>'
+          '<select class="form-control form-select form-select-sm"></select>'
         ).prop("name", operator_name);
 
         operators.forEach((operator) => {
