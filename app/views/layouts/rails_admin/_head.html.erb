@@ -6,15 +6,15 @@
 <% case RailsAdmin::config.asset_source
    when :webpacker %>
   <%= stylesheet_pack_tag "rails_admin", data: {'turbo-track': 'reload'} %>
-  <%= javascript_pack_tag "rails_admin", async: true, data: {'turbo-track': 'reload'} %>
+  <%= javascript_pack_tag "rails_admin", defer: true, data: {'turbo-track': 'reload'} %>
 <% when :sprockets %>
   <% handle_asset_dependency_error do %>
     <%= stylesheet_link_tag "rails_admin/application.css", media: :all, data: {'turbo-track': 'reload'} %>
-    <%= javascript_include_tag "rails_admin/application.js", async: true, data: {'turbo-track': 'reload'} %>
+    <%= javascript_include_tag "rails_admin/application.js", defer: true, data: {'turbo-track': 'reload'} %>
   <% end %>
 <% when :webpack %>
   <%= stylesheet_link_tag "rails_admin.css", media: :all, data: {'turbo-track': 'reload'} %>
-  <%= javascript_include_tag "rails_admin.js", async: true, data: {'turbo-track': 'reload'} %>
+  <%= javascript_include_tag "rails_admin.js", defer: true, data: {'turbo-track': 'reload'} %>
 <% when :importmap %>
   <%= stylesheet_link_tag "rails_admin.css", media: :all, data: {'turbo-track': 'reload'} %>
   <%= javascript_inline_importmap_tag(RailsAdmin::Engine.importmap.to_json(resolver: self)) %>
