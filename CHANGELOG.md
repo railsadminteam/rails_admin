@@ -2,7 +2,16 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.0.rc2...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.0...HEAD)
+
+## [3.1.0](https://github.com/railsadminteam/rails_admin/tree/v3.1.0) - 2022-11-06
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.0.rc2...v3.1.0)
+
+### Fixed
+
+- Fix to use defer instead of async to ensure script loading order ([2a40976](https://github.com/railsadminteam/rails_admin/commit/2a409764b13a4e23fc848725c604d318e3375484), [#3513](https://github.com/railsadminteam/rails_admin/issues/3513))
+- Improve filter method select box appearance ([#3559](https://github.com/railsadminteam/rails_admin/pull/3559))
 
 ## [3.1.0.rc2](https://github.com/railsadminteam/rails_admin/tree/v3.1.0.rc2) - 2022-10-02
 
