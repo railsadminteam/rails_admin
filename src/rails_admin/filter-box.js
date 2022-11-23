@@ -172,7 +172,7 @@ import flatpickr from "flatpickr";
       }
 
       var filterContainerId = field_name + "-" + index + "-filter-container";
-      $("p#" + filterContainerId).remove();
+      $("#" + filterContainerId).remove();
 
       var $content = $("<div>")
         .attr("id", filterContainerId)

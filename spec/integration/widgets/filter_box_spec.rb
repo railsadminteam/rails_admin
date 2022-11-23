@@ -86,6 +86,19 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
     end
   end
 
+  it 'does not cause duplication when using browser back' do
+    RailsAdmin.config Player do
+      field :name
+    end
+
+    visit index_path(model_name: 'player', f: {name: {'1' => {v: 'a'}}})
+    find(%([href$="/admin/player/export"])).click
+    is_expected.to have_content 'Export Players'
+    page.go_back
+    is_expected.to have_content 'List of Players'
+    expect(all(:css, '#filters_box div.filter').count).to eq 1
+  end
+
   describe 'for boolean field' do
     before do
       RailsAdmin.config FieldTest do
