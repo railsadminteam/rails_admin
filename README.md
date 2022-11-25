@@ -84,8 +84,7 @@ known issues][troubleshoot].
 
 [troubleshoot]: https://github.com/railsadminteam/rails_admin/wiki/Troubleshoot
 
-If you still have a question, you can ask the [official RailsAdmin mailing
-list][list].
+If you still have a question, you can ask the [official RailsAdmin mailing list][list].
 
 [list]: http://groups.google.com/group/rails_admin
 
