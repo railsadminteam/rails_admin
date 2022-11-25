@@ -57,7 +57,7 @@ module RailsAdmin
 
           # If it's a boolean create an alias for it and remove question mark
           if option_name.end_with?('?')
-            scope.send(:define_method, "#{(+option_name).chop!}?") do
+            scope.send(:define_method, "#{option_name.chop!}?") do
               send(option_name)
             end
           end
