@@ -54,12 +54,12 @@ jobs:
             orm: mongoid
             adapter: sqlite3
             asset: sprockets
-          - ruby: jruby
+          - ruby: jruby-9.3
             gemfile: gemfiles/rails_6.1.gemfile
             orm: active_record
             adapter: mysql2
             asset: sprockets
-          - ruby: jruby
+          - ruby: jruby-9.3
             gemfile: gemfiles/rails_6.1.gemfile
             orm: mongoid
             adapter: sqlite3
