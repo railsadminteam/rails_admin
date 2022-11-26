@@ -71,13 +71,22 @@ module RailsAdmin
 
     def generate_csv_string(options)
       generator_options = (options[:generator] || {}).symbolize_keys.delete_if { |_, value| value.blank? }
-      method = @objects.respond_to?(:find_each) ? :find_each : :each
 
       CSV.generate(**generator_options) do |csv|
         csv << generate_csv_header unless options[:skip_header]
 
-        @objects.send(method) do |object|
-          csv << generate_csv_row(object)
+        if @objects.respond_to?(:page)
+          page_num = 1
+          batch = @objects.page(page_num)
+          while batch.any?
+            batch.each { |object| csv << generate_csv_row(object) }
+            page_num += 1
+            batch = @objects.page(page_num)
+          end
+        else
+          @objects.each do |object|
+            csv << generate_csv_row(object)
+          end
         end
       end
     end
