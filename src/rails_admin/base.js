@@ -1,6 +1,6 @@
 import Rails from "@rails/ujs";
 import "@hotwired/turbo-rails";
-import jQuery from "jquery";
+import "./jquery";
 import "./vendor/jquery_nested_form";
 import "bootstrap";
 
@@ -27,4 +27,3 @@ import "./ui";
 import "./widgets";
 
 Rails.start();
-window.$ = window.jQuery = jQuery;
