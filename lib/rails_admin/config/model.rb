@@ -48,9 +48,7 @@ module RailsAdmin
       end
 
       def excluded?
-        return @excluded if defined?(@excluded)
-
-        @excluded = !RailsAdmin::AbstractModel.all.collect(&:model_name).include?(abstract_model.try(:model_name))
+        @excluded ||= !RailsAdmin::AbstractModel.all.collect(&:model_name).include?(abstract_model.try(:model_name))
       end
 
       def object_label
