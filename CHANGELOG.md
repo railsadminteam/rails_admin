@@ -2,7 +2,26 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.0...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.1...HEAD)
+
+## [3.1.1](https://github.com/railsadminteam/rails_admin/tree/v3.1.1) - 2022-12-18
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.0...v3.1.1)
+
+### Changed
+
+- Relax Font-Awesome dependency to allow Webpacker users to stay on 5.x ([3a7f348](https://github.com/railsadminteam/rails_admin/commit/3a7f34875248e446b48fd76870f0c337fee6dcf9), [#3565](https://github.com/railsadminteam/rails_admin/issues/3565))
+
+### Removed
+
+- Remove unused glphyicon assets ([#3578](https://github.com/railsadminteam/rails_admin/pull/3578))
+
+### Fixed
+
+- Simplify uses of defined? ([#3561](https://github.com/railsadminteam/rails_admin/pull/3561))
+- Define jQuery object in separate file to support esbuild ([#3571](https://github.com/railsadminteam/rails_admin/pull/3571))
+- Fix filter box being duplicated on browser back ([c6b1893](https://github.com/railsadminteam/rails_admin/commit/c6b18934cff3db0768836d799ee1bea54045709c), [#3570](https://github.com/railsadminteam/rails_admin/issues/3570))
+- Fix sidebar menu expanding horizontally, preventing vertical scroll ([9997c10](https://github.com/railsadminteam/rails_admin/commit/9997c1095066aaac39afb27bf8de705cf6ccb1ef), [#3564](https://github.com/railsadminteam/rails_admin/issues/3564))
 
 ## [3.1.0](https://github.com/railsadminteam/rails_admin/tree/v3.1.0) - 2022-11-06
 
