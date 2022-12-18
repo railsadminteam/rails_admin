@@ -146,3 +146,17 @@ The problem was in missing middleware. I have added
 config.middleware.use Rack::MethodOverride
 ```
 to ```/config/application.rb```
+
+***
+### ParserError on Webpacker production asset compilation
+
+You'll see an error like this if you try to use Webpacker 5.x and fontawesome-free 6.x together.
+
+```
+ERROR in ./app/javascript/stylesheets/rails_admin.scss (./node_modules/css-loader/dist/cjs.js??ref--6-1!./node_modules/postcss-loader/src??ref--6-2!./node_modules/sass-loader/dist/cjs.js??ref--6-3!./app/javascript/stylesheets/rails_admin.scss)
+Module build failed (from ./node_modules/postcss-loader/src/index.js):
+ParserError: Syntax Error at line: 1, column 30
+    at /.../app/javascript/stylesheets/rails_admin.scss:9:1271
+```
+
+See [#3565](https://github.com/railsadminteam/rails_admin/issues/3565#issuecomment-1336374214) on how to work around this.
