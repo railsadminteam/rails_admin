@@ -142,7 +142,7 @@
 ### Added
 
 - Support Mongoid's Storage Field Names ([cefa23c](https://github.com/railsadminteam/rails_admin/commit/cefa23c9d23d06dc1134228e142e6f0aa4655c54), [#1745](https://github.com/railsadminteam/rails_admin/issues/1745))
-- Allow save/delete oprations to be disabled based on an object's `#read_only?` status ([9cd7541](https://github.com/railsadminteam/rails_admin/commit/9cd7541a2e6af4ae4941b200840a1474baeb2f06), [#1684](https://github.com/railsadminteam/rails_admin/issues/1684))
+- Allow save/delete operations to be disabled based on an object's `#read_only?` status ([9cd7541](https://github.com/railsadminteam/rails_admin/commit/9cd7541a2e6af4ae4941b200840a1474baeb2f06), [#1684](https://github.com/railsadminteam/rails_admin/issues/1684))
 - Allow customizing model's last created time ([d6d380a](https://github.com/railsadminteam/rails_admin/commit/d6d380a02e955c3b14ff7dc30f1809a2a6cd0f47), [#3010](https://github.com/railsadminteam/rails_admin/issues/3010))
 - Add ability to hide the dashboard history section ([#3189](https://github.com/railsadminteam/rails_admin/pull/3189))
 - Add model scope configuration option, which enables 'unscoped' mode ([8d905f9](https://github.com/railsadminteam/rails_admin/commit/8d905f9e2f1102e8addf324b496720e3fd47bf1d), [#1348](https://github.com/railsadminteam/rails_admin/issues/1348))
