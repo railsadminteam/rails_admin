@@ -25,6 +25,17 @@ You need to manually import Flatpickr locales you want to use:
 + import "flatpickr/dist/l10n/index"; // or all at once
 ```
 
+### For Importmap setup
+In addition to 'Webpack/Webpacker setup' above, you also need to adjust `config/importmap.rails_admin.rb` so the browser can pick up the Flatpickr locale correctly.
+
+```diff
+ pin "bootstrap", to: "https://ga.jspm.io/npm:bootstrap@5.2.3/dist/js/bootstrap.esm.js"
+ pin "flatpickr", to: "https://ga.jspm.io/npm:flatpickr@4.6.13/dist/esm/index.js"
++pin "flatpickr/dist/l10n/fr", to: "https://ga.jspm.io/npm:flatpickr@4.6.13/dist/l10n/fr.js"
+ pin "jquery", to: "https://ga.jspm.io/npm:jquery@3.6.3/dist/jquery.js"
+```
+
+
 ### For Asset pipeline setup
 
 All supported locales are loaded by default, just changing locale value is enough.
