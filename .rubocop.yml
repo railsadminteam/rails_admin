@@ -162,9 +162,6 @@ Style/DoubleNegation:
 Style/EachWithObject:
   Enabled: false
 
-Style/Encoding:
-  Enabled: false
-
 Style/EndlessMethod:
   Enabled: true
 
