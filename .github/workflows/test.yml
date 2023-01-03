@@ -14,11 +14,6 @@ jobs:
         adapter: [sqlite3]
         asset: [webpack]
         include:
-          - ruby: 2.6
-            gemfile: gemfiles/rails_6.0.gemfile
-            orm: active_record
-            adapter: sqlite3
-            asset: sprockets
           - ruby: 2.7
             gemfile: gemfiles/rails_6.1.gemfile
             orm: active_record
@@ -50,16 +45,6 @@ jobs:
             adapter: sqlite3
             asset: sprockets
           - ruby: "3.0"
-            gemfile: gemfiles/rails_6.1.gemfile
-            orm: mongoid
-            adapter: sqlite3
-            asset: sprockets
-          - ruby: jruby-9.3
-            gemfile: gemfiles/rails_6.1.gemfile
-            orm: active_record
-            adapter: mysql2
-            asset: sprockets
-          - ruby: jruby-9.3
             gemfile: gemfiles/rails_6.1.gemfile
             orm: mongoid
             adapter: sqlite3

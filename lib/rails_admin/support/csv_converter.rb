@@ -40,13 +40,6 @@ module RailsAdmin
     end
 
     def to_csv(options = {})
-      if CSV::VERSION == '3.0.2'
-        raise <<~MSG
-          CSV library bundled with Ruby 2.6.0 has encoding issue, please upgrade Ruby to 2.6.1 or later.
-          https://github.com/ruby/csv/issues/62
-        MSG
-      end
-
       options = HashWithIndifferentAccess.new(options)
       encoding_to = Encoding.find(options[:encoding_to]) if options[:encoding_to].present?
 

@@ -13,7 +13,7 @@ AllCops:
     - "vendor/bundle/**/*"
   NewCops: disable
   SuggestExtensions: false
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 2.7
 
 Gemspec/DeprecatedAttributeAssignment:
   Enabled: true
