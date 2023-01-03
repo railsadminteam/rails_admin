@@ -8,7 +8,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.0", 3.1]
+        ruby:
+          - "3.0"
+          - "3.1"
+          - "3.2"
         gemfile: [gemfiles/rails_7.0.gemfile]
         orm: [active_record]
         adapter: [sqlite3]
