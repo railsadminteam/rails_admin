@@ -11,8 +11,21 @@ RSpec.describe RailsAdmin::Config::Model do
     end
 
     it 'returns false when included, true otherwise' do
-      expect(RailsAdmin.config(Player).excluded?).to be_truthy
-      expect(RailsAdmin.config(Comment).excluded?).to be_falsey
+      allow(RailsAdmin::AbstractModel).to receive(:all).and_call_original
+
+      player_config = RailsAdmin.config(Player)
+      expect(player_config.excluded?).to be_truthy
+      expect(RailsAdmin::AbstractModel).to have_received(:all).once
+      # Calling a second time uses the cached value.
+      expect(player_config.excluded?).to be_truthy
+      expect(RailsAdmin::AbstractModel).to have_received(:all).once
+
+      comment_config = RailsAdmin.config(Comment)
+      expect(comment_config.excluded?).to be_falsey
+      expect(RailsAdmin::AbstractModel).to have_received(:all).twice
+      # Calling a second time uses the cached value.
+      expect(comment_config.excluded?).to be_falsey
+      expect(RailsAdmin::AbstractModel).to have_received(:all).twice
     end
   end
 
