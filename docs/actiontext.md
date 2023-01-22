@@ -50,7 +50,7 @@ Add following contents to files within your Rails application.
 
 ```ruby
 pin '@rails/actioncable/src', to: 'https://ga.jspm.io/npm:@rails/actioncable@7.0.4/src/index.js'
-pin '@rails/actiontext', to: 'https://ga.jspm.io/npm:@rails/actiontext@7.0.4/app/javascript/actiontext/index.js'
+pin '@rails/actiontext', to: 'https://ga.jspm.io/npm:@rails/actiontext@7.0.4-1/app/assets/javascripts/actiontext.js'
 pin '@rails/activestorage', to: 'https://ga.jspm.io/npm:@rails/activestorage@7.0.4/app/assets/javascripts/activestorage.esm.js'
 pin 'trix', to: 'https://ga.jspm.io/npm:trix@2.0.0-beta.0/dist/trix.js'
 ```
