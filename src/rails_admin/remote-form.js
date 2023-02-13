@@ -101,8 +101,9 @@ import * as bootstrap from "bootstrap";
         })
         .html(saveButtonText);
 
-      const event = new CustomEvent("rails_admin.dom_ready", { detail: form });
-      document.dispatchEvent(event);
+      document.dispatchEvent(
+        new CustomEvent("rails_admin:dom_ready", { detail: form })
+      );
 
       form.bind("ajax:complete", function (event) {
         var data = event.detail[0];
