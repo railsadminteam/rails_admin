@@ -71,22 +71,6 @@ records--so keep in mind that this configuration option has widespread
 effects.
 
 ```ruby
-RailsAdmin.config do |config|
-  config.model 'Team' do
-    object_label_method do
-      :custom_label_method
-    end
-  end
-
-  def custom_label_method
-    "Team #{self.name}"
-  end
-end
-```
-
-_Edit: The above has been reported not to work properly (see https://github.com/sferik/rails_admin/issues/2030). If you're encountering such a problem try this workaround:_
-
-```ruby
 # config/initializers/rails_admin.rb
 RailsAdmin.config do |config|
   config.model 'Team' do
@@ -94,49 +78,15 @@ RailsAdmin.config do |config|
       :custom_label_method
     end
   end
-  Team.class_eval do
-    def custom_label_method
-      "Team #{self.name}"
-    end
-  end
 end
-```
 
-_Edit_: Solution 2: Add `object_label_method` to `ApplicationRecord` then send `.decorate` method to use Drapper Decorator.
+# app/models/team.rb
+class Team < ActiveRecord::Base
+  ...
 
-Add `object_label_method` method.
-
-```ruby
-  def object_label_method
-    klass = "#{self.class.name}Decorator".classify
-
-    if Object.const_defined? klass
-      object = klass.constantize.send(:decorate, self)
-      if object.respond_to? :object_label
-        object.object_label
-      else
-        id
-      end
-    end
+  def custom_label_method
+    "Team #{self.name}"
   end
-```
-Then add 
-
-```ruby
-class UserDecorator < Draper::Decorator
-  def object_label
-     #...
-  end
-end
-```
-or use `alias_method`
-
-```ruby
-class UserDecorator < Draper::Decorator
-  def display_name
-    ["(#{id})", first_name, last_name].join(' ')
-  end
-  alias_method :object_label, :display_name
 end
 ```
 
