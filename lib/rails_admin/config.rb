@@ -378,6 +378,8 @@ module RailsAdmin
                 end
               end
             end.flatten.reject { |m| m.starts_with?('Concerns::') } # rubocop:disable Style/MultilineBlockChain
+
+          @@system_models + @registry.keys.collect(&:to_s)
         end
       end
 
