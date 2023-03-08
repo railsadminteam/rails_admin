@@ -19,10 +19,10 @@ body.rails_admin {
 
       img {
         position: absolute;
-        top: calc((40px - $avatar-size) / 2);
+        top: calc((40px - #{$avatar-size}) / 2);
 
         & + span {
-          margin-left: ($avatar-size + 5px);
+          margin-left: (#{$avatar-size} + 5px);
         }
       }
     }
