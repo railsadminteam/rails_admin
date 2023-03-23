@@ -197,7 +197,7 @@ RSpec.describe RailsAdmin, type: :request do
       is_expected.to have_content 'Details for Player'
     end
 
-    it 'triggers rails_admin:dom_ready right after a validation error' do
+    it 'triggers rails_admin.dom_ready right after a validation error' do
       visit edit_path(model_name: 'player', id: player.id)
       fill_in 'player[name]', with: 'on steroids'
       find_button('Save').trigger 'click'
@@ -209,7 +209,7 @@ RSpec.describe RailsAdmin, type: :request do
   describe 'dom_ready events', js: true do
     it 'trigger properly' do
       visit dashboard_path
-      expect(evaluate_script('domReadyTriggered')).to match_array %w[plainjs/colon plainjs/dot jquery/colon jquery/dot]
+      expect(evaluate_script('domReadyTriggered')).to match_array %w[plainjs/dot jquery/dot]
     end
   end
 

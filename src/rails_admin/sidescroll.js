@@ -1,7 +1,7 @@
 "use strict";
 
 {
-  document.addEventListener("rails_admin:dom_ready", () => {
+  document.addEventListener("rails_admin.dom_ready", () => {
     const scroller = document.getElementById("sidescroll");
     if (!scroller) {
       return;

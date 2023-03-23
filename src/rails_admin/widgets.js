@@ -5,7 +5,7 @@ import flatpickr from "flatpickr";
 import I18n from "./i18n";
 
 (function ($) {
-  document.addEventListener("rails_admin:dom_ready", function (event) {
+  document.addEventListener("rails_admin.dom_ready", function (event) {
     var $editors,
       array,
       config_options,

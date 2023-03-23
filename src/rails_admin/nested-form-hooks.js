@@ -37,9 +37,8 @@ import * as bootstrap from "bootstrap";
     toggler = controls.find(".toggler");
     nav.append(new_tab);
 
-    document.dispatchEvent(
-      new CustomEvent("rails_admin:dom_ready", { detail: field })
-    );
+    const event = new CustomEvent("rails_admin.dom_ready", { detail: field });
+    document.dispatchEvent(event);
 
     new_tab.children("a").each(function (index, element) {
       bootstrap.Tab.getOrCreateInstance(element).show();
