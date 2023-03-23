@@ -2,7 +2,19 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.1...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.2...HEAD)
+
+## [3.1.2](https://github.com/railsadminteam/rails_admin/tree/v3.1.2) - 2023-03-23
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.1...v3.1.2)
+
+### Fixed
+
+- Fix install failing with importmap setup ([aca22b6](https://github.com/railsadminteam/rails_admin/commit/aca22b6ba1eca1ac618525334cf14fc946e1c99e), [#3609](https://github.com/railsadminteam/rails_admin/issues/3609))
+- Fix to show non-eager-loaded models which are explicitly configured ([87c9d5b](https://github.com/railsadminteam/rails_admin/commit/87c9d5bc5b6ffb423e72054b3cfe8f949c12c178), [#3604](https://github.com/railsadminteam/rails_admin/issues/3604))
+- Fix `rails_admin.dom_ready` event not triggered with jQuery `on` ([2ee43de](https://github.com/railsadminteam/rails_admin/commit/2ee43deb1fa8d3a9e3ea0e589c1687d684e19ad6), [33773d7](https://github.com/railsadminteam/rails_admin/commit/33773d7f8dd43eeb0f6a7c125c4bee170132e5d2), [#3600](https://github.com/railsadminteam/rails_admin/discussions/3600))
+- Restore caching in RailsAdmin::Config::Model#excluded? ([#3587](https://github.com/railsadminteam/rails_admin/pull/3587))
+- Optimize/simplify viable_models file path to class name logic ([#3589](https://github.com/railsadminteam/rails_admin/pull/3589))
 
 ## [3.1.1](https://github.com/railsadminteam/rails_admin/tree/v3.1.1) - 2022-12-18
 
