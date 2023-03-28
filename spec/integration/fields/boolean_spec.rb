@@ -56,7 +56,7 @@ RSpec.describe 'Boolean field', type: :request do
     it 'shows 2 radio buttons' do
       visit new_path(model_name: 'field_test')
       is_expected.to have_content 'New Field test'
-      expect(all('[name="field_test[boolean_field]"]').map { |e| e['value'] }).to eq ['1', '0']
+      expect(all('[name="field_test[boolean_field]"]').map { |e| e['value'] }).to eq %w( 1 0 )
     end
 
     it 'can be updated' do
