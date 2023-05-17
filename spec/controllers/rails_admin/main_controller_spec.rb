@@ -476,21 +476,21 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
       allow(controller).to receive(:index_path).and_return(index_path)
     end
 
-    let(:index_path) { "/"}
+    let(:index_path) { '/' }
 
-    it "returns back to index when return_to is not defined" do
+    it 'returns back to index when return_to is not defined' do
       controller.params = {}
       expect(controller.send(:back_or_index)).to eq(index_path)
     end
 
-    it "returns back to return_to url when return_path does start_with the request.host" do
+    it 'returns back to return_to url when return_path does start_with the request.host' do
       return_to_url = "#{request.host}/teams"
-      controller.params = {return_to: return_to_url}
+      controller.params = { return_to: return_to_url }
       expect(controller.send(:back_or_index)).to eq(return_to_url)
     end
 
-    it "returns back to index when return_path does not start_with the request.host" do
-      controller.params = {return_to:"https://google.com?#{request.host}"}
+    it 'returns back to index when return_path does not start_with the request.host' do
+      controller.params = { return_to:"https://google.com?#{request.host}" }
       expect(controller.send(:back_or_index)).to eq(index_path)
     end
   end
