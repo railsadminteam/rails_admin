@@ -168,6 +168,18 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.read_only?).to be_falsey
       expect(subject.nested_options).to be_nil
     end
+
+    describe 'on a subclass' do
+      before do
+        class MongoReview < MongoComment; end
+        allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w[MongoBlog MongoPost MongoCategory MongoUser MongoProfile MongoComment MongoReview])
+      end
+      subject { RailsAdmin::AbstractModel.new(MongoReview).associations.detect { |a| a.name == :commentable } }
+
+      it 'returns correct target klasses' do
+        expect(subject.klass).to eq [MongoBlog, MongoPost]
+      end
+    end
   end
 
   describe 'polymorphic inverse has_many association' do

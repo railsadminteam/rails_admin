@@ -46,7 +46,7 @@ module RailsAdmin
 
         def klass
           if polymorphic? && %i[referenced_in belongs_to].include?(macro)
-            polymorphic_parents(:mongoid, model.name, name) || []
+            polymorphic_parents(:mongoid, association.inverse_class_name, name) || []
           else
             association.klass
           end
