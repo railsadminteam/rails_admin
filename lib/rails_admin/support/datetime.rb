@@ -21,6 +21,7 @@ module RailsAdmin
         '%-I' => 'h',      # Hour of the day, 12-hour clock (1..12)
         '%k' => 'H',       # Hour of the day, 24-hour clock (0..23)
         '%l' => 'h',       # Hour of the day, 12-hour clock (1..12)
+        '%-l' => 'h',      # Hour of the day, 12-hour clock (1..12)
         '%M' => 'i',       # Minute of the hour (00..59)
         '%-M' => 'i',      # Minute of the hour (00..59)
         '%m' => 'm',       # Month of the year (01..12)
