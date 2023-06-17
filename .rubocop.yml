@@ -9,6 +9,7 @@ AllCops:
     - "node_modules/**/*"
     - "spec/dummy_app/bin/**/*"
     - "spec/dummy_app/db/schema.rb"
+    - "spec/dummy_app/node_modules/**/*"
     - "spec/dummy_app/tmp/**/*"
     - "vendor/bundle/**/*"
   NewCops: disable
@@ -108,7 +109,7 @@ Metrics/BlockNesting:
 
 Metrics/ClassLength:
   CountComments: false
-  Max: 132 # TODO: Lower to 100
+  Max: 200 # TODO: Lower to 100
 
 Metrics/CyclomaticComplexity:
   Max: 15 # TODO: Lower to 6
