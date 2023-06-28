@@ -489,19 +489,49 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
       expect(controller.send(:back_or_index)).to eq(return_to_url)
     end
 
-    it 'returns back to index url when return_to path does not start with protocol' do
+    it 'returns back to return_to url when it contains a path' do
+      return_to_url = '/teams'
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(return_to_url)
+    end
+
+    it 'returns back to index path when return_to path does not start with slash' do
+      return_to_url = 'teams'
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to index path when return_to url does not start with full protocol' do
       return_to_url = "#{request.host}/teams"
       controller.params = {return_to: return_to_url}
       expect(controller.send(:back_or_index)).to eq(index_path)
     end
 
-    it 'returns back to index when return_to url starts with different protocol' do
-      return_to_url = "https://#{request.host}/teams"
+    it 'returns back to index path when return_to url starts with double slash' do
+      return_to_url = "//#{request.host}/teams"
       controller.params = {return_to: return_to_url}
       expect(controller.send(:back_or_index)).to eq(index_path)
     end
 
-    it 'returns back to index when return_to does not start with the same protocol and host' do
+    it 'returns back to index path when return_to url starts with tripple slash' do
+      return_to_url = "///#{request.host}/teams"
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to index path when return_to url does not have host' do
+      return_to_url = 'http:///teams'
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to index path when return_to url starts with different protocol' do
+      return_to_url = "other://#{request.host}/teams"
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to index path when return_to does not start with the same protocol and host' do
       controller.params = {return_to: "http://google.com?#{request.host}"}
       expect(controller.send(:back_or_index)).to eq(index_path)
     end
