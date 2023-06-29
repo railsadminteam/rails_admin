@@ -56,14 +56,11 @@ module RailsAdmin
     end
 
     def back_or_index
-      params[:return_to].presence && allowed_return_to?(params[:return_to]) && (params[:return_to] != request.fullpath) ? params[:return_to] : index_path
+      allowed_return_to?(params[:return_to].to_s) ? params[:return_to] : index_path
     end
 
     def allowed_return_to?(url)
-      return true if url.starts_with?(request.base_url)
-      return false unless url.to_s.start_with?('/')
-
-      !url.to_s.start_with?('//')
+      url != request.fullpath && url.start_with?(request.base_url, '/') && !url.start_with?('//')
     end
 
     def get_sort_hash(model_config)
