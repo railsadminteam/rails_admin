@@ -513,7 +513,7 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
       expect(controller.send(:back_or_index)).to eq(index_path)
     end
 
-    it 'returns back to index path when return_to url starts with tripple slash' do
+    it 'returns back to index path when return_to url starts with triple slash' do
       return_to_url = "///#{request.host}/teams"
       controller.params = {return_to: return_to_url}
       expect(controller.send(:back_or_index)).to eq(index_path)
