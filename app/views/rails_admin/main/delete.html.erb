@@ -1,6 +1,6 @@
 <h4>
   <%= t("admin.form.are_you_sure_you_want_to_delete_the_object", model_name: @abstract_model.pretty_name.downcase) %>
-  &ldquo;<strong><%= @model_config.with(object: @object).object_label %></strong>&rdquo;
+  <q><strong><%= @model_config.with(object: @object).object_label %></strong></q>
   <%= t("admin.form.all_of_the_following_related_items_will_be_deleted") %>
 </h4>
 <ul>
