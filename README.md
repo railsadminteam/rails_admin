@@ -1,13 +1,13 @@
 # RailsAdmin
 
 [![Gem Version](https://img.shields.io/gem/v/rails_admin.svg)][gem]
-[![Build Status](https://img.shields.io/github/workflow/status/railsadminteam/rails_admin/Test)][ghactions]
+[![Build Status](https://github.com/railsadminteam/rails_admin/actions/workflows/test.yml/badge.svg)][ghactions]
 [![Coverage Status](https://img.shields.io/coveralls/railsadminteam/rails_admin.svg)][coveralls]
 [![Code Climate](https://codeclimate.com/github/railsadminteam/rails_admin.svg)][codeclimate]
 [![SemVer](https://api.dependabot.com/badges/compatibility_score?dependency-name=rails_admin&package-manager=bundler&version-scheme=semver)][semver]
 
 [gem]: https://rubygems.org/gems/rails_admin
-[ghactions]: https://github.com/railsadminteam/rails_admin/actions
+[ghactions]: https://github.com/railsadminteam/rails_admin/actions/workflows/test.yml
 [coveralls]: https://coveralls.io/r/railsadminteam/rails_admin
 [codeclimate]: https://codeclimate.com/github/railsadminteam/rails_admin
 [semver]: https://dependabot.com/compatibility-score.html?dependency-name=rails_admin&package-manager=bundler&version-scheme=semver
@@ -98,6 +98,8 @@ This library aims to support and is [tested against][ghactions] the following Ru
 - Ruby 2.6
 - Ruby 2.7
 - Ruby 3.0
+- Ruby 3.1
+- Ruby 3.2
 - [JRuby][]
 
 [jruby]: http://jruby.org/

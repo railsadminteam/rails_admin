@@ -33,7 +33,7 @@ module RailsAdmin
 
         def klass
           if options[:polymorphic]
-            polymorphic_parents(:active_record, model.name.to_s, name) || []
+            polymorphic_parents(:active_record, association.active_record.name.to_s, name) || []
           else
             association.klass
           end

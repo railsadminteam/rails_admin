@@ -206,6 +206,13 @@ RSpec.describe RailsAdmin, type: :request do
     end
   end
 
+  describe 'dom_ready events', js: true do
+    it 'trigger properly' do
+      visit dashboard_path
+      expect(evaluate_script('domReadyTriggered')).to match_array %w[plainjs/dot jquery/dot]
+    end
+  end
+
   context 'with invalid model name' do
     it "redirects to dashboard and inform the user the model wasn't found" do
       visit '/admin/whatever'

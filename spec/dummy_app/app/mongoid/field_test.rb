@@ -65,7 +65,7 @@ class FieldTest
   mount_uploader :carrierwave_asset, CarrierwaveUploader
   # carrierwave-mongoid does not support mount_uploaders yet:
   #   https://github.com/carrierwaveuploader/carrierwave-mongoid/issues/138
-  mount_uploader :carrierwave_assets, CarrierwaveUploader
+  mount_uploaders :carrierwave_assets, CarrierwaveUploader
 
   validates :short_text, length: {maximum: 255}
 end

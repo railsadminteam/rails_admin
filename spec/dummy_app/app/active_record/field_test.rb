@@ -30,7 +30,7 @@ class FieldTest < ActiveRecord::Base
     attr_accessor :remove_active_storage_assets
 
     after_save do
-      Array(remove_active_storage_assets).each { |id| active_storage_assets.find_by_id(id).try(:purge) }
+      Array(remove_active_storage_assets).each { |id| active_storage_assets.find_by_id(id)&.purge }
     end
   end
 

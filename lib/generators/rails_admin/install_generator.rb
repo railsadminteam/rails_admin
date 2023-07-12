@@ -64,6 +64,8 @@ module RailsAdmin
       run "yarn add rails_admin@#{RailsAdmin::Version.js}"
       template 'rails_admin.webpacker.js', 'app/javascript/packs/rails_admin.js'
       template 'rails_admin.scss.erb', 'app/javascript/stylesheets/rails_admin.scss'
+      # To work around https://github.com/railsadminteam/rails_admin/issues/3565
+      add_package_json_field('resolutions', {'rails_admin/@fortawesome/fontawesome-free' => '^5.15.0'})
     end
 
     def configure_for_webpack
@@ -99,28 +101,29 @@ module RailsAdmin
       else
         add_file 'config/initializers/assets.rb', asset_config
       end
-      add_scripts(additional_script_entries.merge({'build:css' => 'sass ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css --no-source-map --load-path=node_modules'}))
+      add_package_json_field('scripts', additional_script_entries.merge({'build:css' => 'sass ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css --no-source-map --load-path=node_modules'}), <<~INSTRUCTION)
+        Taking 'build:css' as an example, if you're already have application.sass.css for the sass build, the resulting script would look like:
+          sass ./app/assets/stylesheets/application.sass.scss:./app/assets/builds/application.css ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css --no-source-map --load-path=node_modules
+      INSTRUCTION
     end
 
-    def add_scripts(entries)
-      display 'Add scripts to package.json'
+    def add_package_json_field(name, entries, instruction = nil)
+      display "Add #{name} to package.json"
       package = begin
         JSON.parse(File.read(File.join(destination_root, 'package.json')))
       rescue Errno::ENOENT, JSON::ParserError
         {}
       end
-      if package['scripts'] && (package['scripts'].keys & entries.keys).any?
-        say <<-MESSAGE.gsub(/^ {10}/, ''), :red
-          You need to merge "scripts": #{JSON.pretty_generate(entries)} into the existing scripts in your package.json .
-          Taking 'build:css' as an example, if you're already have application.sass.css for the sass build, the resulting script would look like:
-            sass ./app/assets/stylesheets/application.sass.scss:./app/assets/builds/application.css ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css --no-source-map --load-path=node_modules
+      if package[name] && (package[name].keys & entries.keys).any?
+        say <<~MESSAGE, :red
+          You need to merge "#{name}": #{JSON.pretty_generate(entries)} into the existing #{name} in your package.json.#{instruction && "\n#{instruction}"}
         MESSAGE
       else
-        package['scripts'] ||= {}
-        entries.each do |entry, build_script|
-          package['scripts'][entry] = build_script
+        package[name] ||= {}
+        entries.each do |entry, value|
+          package[name][entry] = value
         end
-        add_file 'package.json', JSON.pretty_generate(package)
+        add_file 'package.json', "#{JSON.pretty_generate(package)}\n"
       end
     end
   end
