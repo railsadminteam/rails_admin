@@ -166,11 +166,13 @@ RSpec.describe RailsAdmin::CSVConverter do
 
     context 'when objects are ordered' do
       before do
-        FactoryBot.create_list :player, 30
+        FactoryBot.create_list :player, 2 do |player, index|
+          player.name = "Player #{index}"
+        end
         FactoryBot.create :player, name: 'Player zzz'
       end
 
-      let(:objects) { Player.all.order('name desc') }
+      let(:objects) { Player.all.order(name: :desc) }
       let(:options) { {} }
 
       it 'preserves the ordering' do

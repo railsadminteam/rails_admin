@@ -76,16 +76,15 @@ module RailsAdmin
 
         if @objects.respond_to?(:page)
           page_num = 1
-          batch = @objects.page(page_num)
-          while batch.any?
+          loop do
+            batch = @objects.page(page_num)
+            break if batch.blank?
+
             batch.each { |object| csv << generate_csv_row(object) }
             page_num += 1
-            batch = @objects.page(page_num)
           end
         else
-          @objects.each do |object|
-            csv << generate_csv_row(object)
-          end
+          @objects.each { |object| csv << generate_csv_row(object) }
         end
       end
     end
