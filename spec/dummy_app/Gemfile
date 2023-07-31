@@ -32,7 +32,7 @@ gem 'paperclip', '>= 3.4'
 gem 'rails_admin', path: '../../'
 gem 'shrine', '~> 3.0'
 gem 'webpacker', require: false
-gem 'webrick', '~> 1.7'
+gem 'webrick'
 
 # Gems used only for assets and not required
 # in production environments by default.

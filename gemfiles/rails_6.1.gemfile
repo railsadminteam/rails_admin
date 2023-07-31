@@ -7,7 +7,7 @@ gem "devise", "~> 4.7"
 gem "net-smtp", require: false
 gem "rails", "~> 6.1.0"
 gem "webpacker", require: false
-gem "webrick", "~> 1.7"
+gem "webrick"
 gem "sassc-rails", "~> 2.1"
 gem "turbo-rails", platform: :jruby, github: "hotwired/turbo-rails"
 
