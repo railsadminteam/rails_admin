@@ -19,8 +19,8 @@ RailsAdmin is a Rails engine that provides an easy-to-use interface for managing
 - Check out [the docs][docs].
 - Try the [live demo][demo]. ([Source code][dummy_app])
 
-[demo]: http://rails-admin-tb.herokuapp.com/
-[dummy_app]: https://github.com/bbenezech/dummy_app
+[demo]: https://rails-admin.fly.dev/admin/
+[dummy_app]: https://github.com/railsadminteam/rails_admin/tree/master/spec/dummy_app
 [docs]: https://github.com/railsadminteam/rails_admin/wiki
 
 ## Features

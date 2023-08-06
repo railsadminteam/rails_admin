@@ -22,7 +22,7 @@ group :active_record do
 end
 
 gem 'carrierwave', '>= 2.0.0.rc', '< 3.0'
-gem 'cssbundling-rails'
+gem 'cssbundling-rails', require: false
 gem 'devise', '>= 3.2'
 gem 'dragonfly', '~> 1.0'
 gem 'importmap-rails', require: false
