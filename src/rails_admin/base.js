@@ -17,6 +17,7 @@ import "jquery-ui/ui/widget.js";
 import "jquery-ui/ui/widgets/menu.js";
 import "jquery-ui/ui/widgets/mouse.js";
 
+import "./abstract-select";
 import "./filter-box";
 import "./filtering-multiselect";
 import "./filtering-select";

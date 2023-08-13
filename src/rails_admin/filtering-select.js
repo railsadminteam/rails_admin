@@ -6,11 +6,8 @@ import I18n from "./i18n";
 (function ($) {
   "use strict";
 
-  $.widget("ra.filteringSelect", {
+  $.widget("ra.filteringSelect", $.ra.abstractSelect, {
     options: {
-      createQuery: function (query) {
-        return { query: query };
-      },
       minLength: 0,
       searchDelay: 200,
       remote_source: null,

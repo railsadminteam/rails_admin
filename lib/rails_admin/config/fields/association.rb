@@ -56,7 +56,30 @@ module RailsAdmin
         # preload entire associated collection (per associated_collection_scope) on load
         # Be sure to set limit in associated_collection_scope if set is large
         register_instance_option :associated_collection_cache_all do
-          @associated_collection_cache_all ||= (associated_model_config.abstract_model.count < associated_model_limit)
+          @associated_collection_cache_all ||= dynamically_scope_by.blank? && (associated_model_config.abstract_model.count < associated_model_limit)
+        end
+
+        # client-side dynamic scoping
+        register_instance_option :dynamically_scope_by do
+          nil
+        end
+
+        # parses #dynamically_scope_by and returns a Hash in the form of
+        # {[form field name in this model]: [field name in the associated model]}
+        def dynamic_scope_relationships
+          @dynamic_scope_relationships ||=
+            Array.wrap(dynamically_scope_by).flat_map do |field|
+              field.is_a?(Hash) ? field.to_a : [[field, field]]
+            end.map do |field_name, target_name| # rubocop:disable Style/MultilineBlockChain
+              field = section.fields.detect { |f| f.name == field_name }
+              raise "Field '#{field_name}' was given for #dynamically_scope_by but not found in '#{abstract_model.model_name}'" unless field
+
+              target_field = associated_model_config.list.fields.detect { |f| f.name == target_name }
+              raise "Field '#{field_name}' was given for #dynamically_scope_by but not found in '#{associated_model_config.abstract_model.model_name}'" unless target_field
+              raise "Field '#{field_name}' in '#{associated_model_config.abstract_model.model_name}' can't be used for dynamic scoping because it's not filterable" unless target_field.filterable
+
+              [field.method_name, target_name]
+            end.to_h
         end
 
         # determines whether association's elements can be removed
