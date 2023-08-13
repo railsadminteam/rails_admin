@@ -258,8 +258,12 @@ module RailsAdmin
         end
 
         def build_statement_for_boolean
-          return ["(#{@column} IS NULL OR #{@column} = ?)", false] if %w[false f 0].include?(@value)
-          return ["(#{@column} = ?)", true] if %w[true t 1].include?(@value)
+          case @value
+          when 'false', 'f', '0'
+            ["(#{@column} IS NULL OR #{@column} = ?)", false]
+          when 'true', 't', '1'
+            ["(#{@column} = ?)", true]
+          end
         end
 
         def column_for_value(value)
