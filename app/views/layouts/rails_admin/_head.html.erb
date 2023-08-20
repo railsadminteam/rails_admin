@@ -12,6 +12,8 @@
     <%= stylesheet_link_tag "rails_admin/application.css", media: :all, data: {'turbo-track': 'reload'} %>
     <%= javascript_include_tag "rails_admin/application.js", defer: true, data: {'turbo-track': 'reload'} %>
   <% end %>
+<% when :vite %>
+  <%= vite_javascript_tag "rails_admin", defer: true, data: {'turbo-track': 'reload'} %>
 <% when :webpack %>
   <%= stylesheet_link_tag "rails_admin.css", media: :all, data: {'turbo-track': 'reload'} %>
   <%= javascript_include_tag "rails_admin.js", defer: true, data: {'turbo-track': 'reload'} %>
