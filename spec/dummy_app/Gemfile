@@ -31,6 +31,7 @@ gem 'mlb', '>= 0.7', github: 'mshibuya/mlb', branch: 'ruby-3'
 gem 'paperclip', '>= 3.4'
 gem 'rails_admin', path: '../../'
 gem 'shrine', '~> 3.0'
+gem 'vite_rails', require: false
 gem 'webpacker', require: false
 gem 'webrick'
 

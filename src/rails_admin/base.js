@@ -27,4 +27,6 @@ import "./sidescroll";
 import "./ui";
 import "./widgets";
 
-Rails.start();
+if (!window._rails_loaded) {
+  Rails.start();
+}

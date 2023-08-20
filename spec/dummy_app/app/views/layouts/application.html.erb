@@ -7,6 +7,9 @@
     <%= javascript_pack_tag "application" %>
   <% when :importmap %>
     <%= javascript_importmap_tags %>
+  <% when :vite %>
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag 'application' %>
   <% else %>
     <%= stylesheet_link_tag    "application", media: "all" %>
     <%= javascript_include_tag "application", type: 'module' %>

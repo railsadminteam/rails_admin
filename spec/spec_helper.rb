@@ -79,7 +79,12 @@ RSpec.configure do |config|
   end
 
   config.before(:all) do
-    Webpacker.instance.compiler.compile if CI_ASSET == :webpacker
+    case CI_ASSET
+    when :webpacker
+      Webpacker.instance.compiler.compile
+    when :vite
+      ViteRuby.instance.commands.build
+    end
   end
 
   config.before do |example|

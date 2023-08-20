@@ -74,8 +74,9 @@ module RailsAdmin
 
     def configure_for_vite
       vite_source_code_dir = ViteRuby.config.source_code_dir
-      run "yarn add rails_admin@#{RailsAdmin::Version.js}"
+      run "yarn add rails_admin@#{RailsAdmin::Version.js} sass"
       template('rails_admin.vite.js', File.join(vite_source_code_dir, 'entrypoints', 'rails_admin.js'))
+      @fa_font_path = '@fortawesome/fontawesome-free/webfonts'
       template('rails_admin.scss.erb', File.join(vite_source_code_dir, 'stylesheets', 'rails_admin.scss'))
     end
 

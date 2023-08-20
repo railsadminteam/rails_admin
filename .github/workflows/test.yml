@@ -43,6 +43,11 @@ jobs:
             adapter: postgresql
             asset: sprockets
           - ruby: "3.0"
+            gemfile: gemfiles/rails_7.0.gemfile
+            orm: active_record
+            adapter: sqlite3
+            asset: vite
+          - ruby: "3.0"
             gemfile: gemfiles/composite_primary_keys.gemfile
             orm: active_record
             adapter: sqlite3
