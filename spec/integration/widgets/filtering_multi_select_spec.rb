@@ -125,4 +125,41 @@ RSpec.describe 'Filtering multi-select widget', type: :request, js: true do
     is_expected.to have_content 'New Team'
     expect(all(:css, 'input.ra-multiselect-search').count).to eq 1
   end
+
+  describe 'dynamic scoping' do
+    let!(:team) { FactoryBot.create :team, division: FactoryBot.create(:division) }
+    let(:division) { FactoryBot.create(:division) }
+    let!(:teams) { ['Los Angeles Dodgers', 'Texas Rangers'].map { |name| FactoryBot.create :team, name: name, division: division } }
+    before do
+      RailsAdmin.config Team do
+        field :name
+        field :division
+      end
+      RailsAdmin.config Fan do
+        field :division, :enum do
+          enum { Division.pluck(:name, CI_ORM == :active_record ? :custom_id : :id).to_h }
+          def value
+            nil
+          end
+
+          def parse_input(params)
+            params.delete :division
+          end
+        end
+        field :teams do
+          dynamically_scope_by :division
+        end
+      end
+      visit new_path(model_name: 'fan')
+    end
+
+    it 'changes selection candidates based on value of the specified field' do
+      expect(all('#fan_team_ids option', visible: false).map(&:value).filter(&:present?)).to be_empty
+      select division.name, from: 'Division', visible: false
+      find('input.ra-multiselect-search').set('e')
+      page.execute_script("document.querySelector('input.ra-multiselect-search').dispatchEvent(new KeyboardEvent('keydown'))")
+      is_expected.to have_content 'Dodgers'
+      expect(all('.ra-multiselect-collection option').map(&:text)).to match_array ['Los Angeles Dodgers', 'Texas Rangers']
+    end
+  end
 end

@@ -26,13 +26,43 @@ Here are some ways _you_ can contribute:
 
 ### Running tests locally
 
-To run the test suite, you need PhantomJS and ImageMagick (or GraphicsMagick).
+To run the test suite, you need Google Chrome and ImageMagick (or GraphicsMagick).
 
-Example on macOS using Homebrew:
+Example installation on macOS using Homebrew:
 
-    brew cask install phantomjs
-    brew install imagemagick
-    bundle exec rspec
+```bash
+# install imagemagick:
+brew install imagemagick
+# install google chrome with cask:
+brew install brew-cask
+brew cask install google-chrome
+```
+
+Example installation on Ubuntu:
+
+```bash
+# install imagemagick:
+sudo apt update -y && sudo apt install imagemagick -y
+# install google chrome:
+sudo apt update -y && wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo apt install ./google-chrome-stable_current_amd64.deb -y
+```
+
+Then you need to do this one-time setup:
+
+```bash
+bundle install
+yarn install
+# install dependencies for each appraisal:
+bundle exec appraisal install
+# precompile assets in the dummy app:
+cd spec/dummy_app && yarn install && yarn build && yarn build:css && cd -
+```
+
+Then you will be able to run the specs:
+
+```bash
+bundle exec appraisal rails-7.0 rspec
+```
 
 ### Tests run against multiple versions of Rails
 

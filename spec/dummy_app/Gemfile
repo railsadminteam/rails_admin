@@ -22,7 +22,7 @@ group :active_record do
 end
 
 gem 'carrierwave', '>= 2.0.0.rc', '< 3.0'
-gem 'cssbundling-rails'
+gem 'cssbundling-rails', require: false
 gem 'devise', '>= 3.2'
 gem 'dragonfly', '~> 1.0'
 gem 'importmap-rails', require: false
@@ -31,8 +31,9 @@ gem 'mlb', '>= 0.7', github: 'mshibuya/mlb', branch: 'ruby-3'
 gem 'paperclip', '>= 3.4'
 gem 'rails_admin', path: '../../'
 gem 'shrine', '~> 3.0'
+gem 'vite_rails', require: false
 gem 'webpacker', require: false
-gem 'webrick', '~> 1.7'
+gem 'webrick'
 
 # Gems used only for assets and not required
 # in production environments by default.

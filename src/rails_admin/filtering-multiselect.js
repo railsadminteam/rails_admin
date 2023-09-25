@@ -1,13 +1,11 @@
 import jQuery from "jquery";
 import "jquery-ui/ui/widget.js";
 import I18n from "./i18n";
+
 (function ($) {
-  $.widget("ra.filteringMultiselect", {
+  $.widget("ra.filteringMultiselect", $.ra.abstractSelect, {
     _cache: {},
     options: {
-      createQuery: function (query) {
-        return { query: query };
-      },
       sortable: false,
       removable: true,
       regional: {

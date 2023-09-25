@@ -1,6 +1,6 @@
 import Rails from "@rails/ujs";
 import "@hotwired/turbo-rails";
-import jQuery from "jquery";
+import "./jquery";
 import "./vendor/jquery_nested_form";
 import "bootstrap";
 
@@ -17,6 +17,7 @@ import "jquery-ui/ui/widget.js";
 import "jquery-ui/ui/widgets/menu.js";
 import "jquery-ui/ui/widgets/mouse.js";
 
+import "./abstract-select";
 import "./filter-box";
 import "./filtering-multiselect";
 import "./filtering-select";
@@ -26,5 +27,6 @@ import "./sidescroll";
 import "./ui";
 import "./widgets";
 
-Rails.start();
-window.$ = window.jQuery = jQuery;
+if (!window._rails_loaded) {
+  Rails.start();
+}

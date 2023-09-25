@@ -201,6 +201,8 @@ module RailsAdmin
           case @type
           when :boolean
             boolean_unary_operators
+          when :uuid
+            uuid_unary_operators
           when :integer, :decimal, :float
             numeric_unary_operators
           else
@@ -230,6 +232,7 @@ module RailsAdmin
           )
         end
         alias_method :numeric_unary_operators, :boolean_unary_operators
+        alias_method :uuid_unary_operators, :boolean_unary_operators
 
         def range_filter(min, max)
           if min && max && min == max
@@ -255,8 +258,12 @@ module RailsAdmin
         end
 
         def build_statement_for_boolean
-          return ["(#{@column} IS NULL OR #{@column} = ?)", false] if %w[false f 0].include?(@value)
-          return ["(#{@column} = ?)", true] if %w[true t 1].include?(@value)
+          case @value
+          when 'false', 'f', '0'
+            ["(#{@column} IS NULL OR #{@column} = ?)", false]
+          when 'true', 't', '1'
+            ["(#{@column} = ?)", true]
+          end
         end
 
         def column_for_value(value)

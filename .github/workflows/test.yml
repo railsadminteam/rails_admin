@@ -8,7 +8,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["3.0", 3.1]
+        ruby:
+          - "3.0"
+          - "3.1"
+          - "3.2"
         gemfile: [gemfiles/rails_7.0.gemfile]
         orm: [active_record]
         adapter: [sqlite3]
@@ -40,6 +43,11 @@ jobs:
             adapter: postgresql
             asset: sprockets
           - ruby: "3.0"
+            gemfile: gemfiles/rails_7.0.gemfile
+            orm: active_record
+            adapter: sqlite3
+            asset: vite
+          - ruby: "3.0"
             gemfile: gemfiles/composite_primary_keys.gemfile
             orm: active_record
             adapter: sqlite3
@@ -54,12 +62,12 @@ jobs:
             orm: mongoid
             adapter: sqlite3
             asset: sprockets
-          - ruby: jruby
+          - ruby: jruby-9.3
             gemfile: gemfiles/rails_6.1.gemfile
             orm: active_record
             adapter: mysql2
             asset: sprockets
-          - ruby: jruby
+          - ruby: jruby-9.3
             gemfile: gemfiles/rails_6.1.gemfile
             orm: mongoid
             adapter: sqlite3

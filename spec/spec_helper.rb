@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Configure Rails Envinronment
+# Configure Rails Environment
 ENV['RAILS_ENV'] = 'test'
 CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym
 CI_TARGET_ORMS = %i[active_record mongoid].freeze
@@ -79,7 +79,12 @@ RSpec.configure do |config|
   end
 
   config.before(:all) do
-    Webpacker.instance.compiler.compile if CI_ASSET == :webpacker
+    case CI_ASSET
+    when :webpacker
+      Webpacker.instance.compiler.compile
+    when :vite
+      ViteRuby.instance.commands.build
+    end
   end
 
   config.before do |example|

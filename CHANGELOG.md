@@ -2,7 +2,47 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.0.rc2...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.2...HEAD)
+
+## [3.1.2](https://github.com/railsadminteam/rails_admin/tree/v3.1.2) - 2023-03-23
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.1...v3.1.2)
+
+### Fixed
+
+- Fix install failing with importmap setup ([aca22b6](https://github.com/railsadminteam/rails_admin/commit/aca22b6ba1eca1ac618525334cf14fc946e1c99e), [#3609](https://github.com/railsadminteam/rails_admin/issues/3609))
+- Fix to show non-eager-loaded models which are explicitly configured ([87c9d5b](https://github.com/railsadminteam/rails_admin/commit/87c9d5bc5b6ffb423e72054b3cfe8f949c12c178), [#3604](https://github.com/railsadminteam/rails_admin/issues/3604))
+- Fix `rails_admin.dom_ready` event not triggered with jQuery `on` ([2ee43de](https://github.com/railsadminteam/rails_admin/commit/2ee43deb1fa8d3a9e3ea0e589c1687d684e19ad6), [33773d7](https://github.com/railsadminteam/rails_admin/commit/33773d7f8dd43eeb0f6a7c125c4bee170132e5d2), [#3600](https://github.com/railsadminteam/rails_admin/discussions/3600))
+- Restore caching in RailsAdmin::Config::Model#excluded? ([#3587](https://github.com/railsadminteam/rails_admin/pull/3587))
+- Optimize/simplify viable_models file path to class name logic ([#3589](https://github.com/railsadminteam/rails_admin/pull/3589))
+
+## [3.1.1](https://github.com/railsadminteam/rails_admin/tree/v3.1.1) - 2022-12-18
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.0...v3.1.1)
+
+### Changed
+
+- Relax Font-Awesome dependency to allow Webpacker users to stay on 5.x ([3a7f348](https://github.com/railsadminteam/rails_admin/commit/3a7f34875248e446b48fd76870f0c337fee6dcf9), [#3565](https://github.com/railsadminteam/rails_admin/issues/3565))
+
+### Removed
+
+- Remove unused glphyicon assets ([#3578](https://github.com/railsadminteam/rails_admin/pull/3578))
+
+### Fixed
+
+- Simplify uses of defined? ([#3561](https://github.com/railsadminteam/rails_admin/pull/3561))
+- Define jQuery object in separate file to support esbuild ([#3571](https://github.com/railsadminteam/rails_admin/pull/3571))
+- Fix filter box being duplicated on browser back ([c6b1893](https://github.com/railsadminteam/rails_admin/commit/c6b18934cff3db0768836d799ee1bea54045709c), [#3570](https://github.com/railsadminteam/rails_admin/issues/3570))
+- Fix sidebar menu expanding horizontally, preventing vertical scroll ([9997c10](https://github.com/railsadminteam/rails_admin/commit/9997c1095066aaac39afb27bf8de705cf6ccb1ef), [#3564](https://github.com/railsadminteam/rails_admin/issues/3564))
+
+## [3.1.0](https://github.com/railsadminteam/rails_admin/tree/v3.1.0) - 2022-11-06
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.0.rc2...v3.1.0)
+
+### Fixed
+
+- Fix to use defer instead of async to ensure script loading order ([2a40976](https://github.com/railsadminteam/rails_admin/commit/2a409764b13a4e23fc848725c604d318e3375484), [#3513](https://github.com/railsadminteam/rails_admin/issues/3513))
+- Improve filter method select box appearance ([#3559](https://github.com/railsadminteam/rails_admin/pull/3559))
 
 ## [3.1.0.rc2](https://github.com/railsadminteam/rails_admin/tree/v3.1.0.rc2) - 2022-10-02
 
@@ -133,7 +173,7 @@
 ### Added
 
 - Support Mongoid's Storage Field Names ([cefa23c](https://github.com/railsadminteam/rails_admin/commit/cefa23c9d23d06dc1134228e142e6f0aa4655c54), [#1745](https://github.com/railsadminteam/rails_admin/issues/1745))
-- Allow save/delete oprations to be disabled based on an object's `#read_only?` status ([9cd7541](https://github.com/railsadminteam/rails_admin/commit/9cd7541a2e6af4ae4941b200840a1474baeb2f06), [#1684](https://github.com/railsadminteam/rails_admin/issues/1684))
+- Allow save/delete operations to be disabled based on an object's `#read_only?` status ([9cd7541](https://github.com/railsadminteam/rails_admin/commit/9cd7541a2e6af4ae4941b200840a1474baeb2f06), [#1684](https://github.com/railsadminteam/rails_admin/issues/1684))
 - Allow customizing model's last created time ([d6d380a](https://github.com/railsadminteam/rails_admin/commit/d6d380a02e955c3b14ff7dc30f1809a2a6cd0f47), [#3010](https://github.com/railsadminteam/rails_admin/issues/3010))
 - Add ability to hide the dashboard history section ([#3189](https://github.com/railsadminteam/rails_admin/pull/3189))
 - Add model scope configuration option, which enables 'unscoped' mode ([8d905f9](https://github.com/railsadminteam/rails_admin/commit/8d905f9e2f1102e8addf324b496720e3fd47bf1d), [#1348](https://github.com/railsadminteam/rails_admin/issues/1348))

@@ -11,7 +11,7 @@ module RailsAdmin
     end
 
     def format
-      imports = packager.import("rails_admin@#{RailsAdmin::Version.js}")
+      imports = packager.import("rails_admin@#{RailsAdmin::Version.js}", from: 'jspm.io')
 
       # Use ESM compatible version to work around https://github.com/cljsjs/packages/issues/1579
       imports['@popperjs/core'].gsub!('lib/index.js', 'dist/esm/popper.js')

@@ -6,8 +6,9 @@ gem 'appraisal', '>= 2.0'
 gem 'devise'
 gem 'net-smtp', require: false
 gem 'rails'
+gem 'vite_rails', require: false
 gem 'webpacker', require: false
-gem 'webrick', '~> 1.7'
+gem 'webrick'
 
 group :active_record do
   gem 'paper_trail'

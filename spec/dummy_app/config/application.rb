@@ -23,6 +23,8 @@ when :sprockets, :webpack
 when :importmap
   require 'sprockets/railtie'
   require 'importmap-rails'
+when :vite
+  require 'vite_rails'
 end
 
 # Require the gems listed in Gemfile, including any gems

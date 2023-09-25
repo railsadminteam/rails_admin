@@ -87,6 +87,18 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
             contains 'webpack --config webpack.config.js'
             contains 'sass ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css'
           end
+        when :vite
+          file 'app/frontend/entrypoints/rails_admin.js' do
+            contains 'import "~/stylesheets/rails_admin.scss"'
+            contains 'import "rails_admin/src/rails_admin/base"'
+          end
+          file 'app/frontend/stylesheets/rails_admin.scss' do
+            contains '$fa-font-path: "@fortawesome/fontawesome-free/webfonts";'
+            contains '@import "rails_admin/src/rails_admin/styles/base"'
+          end
+          file 'package.json' do
+            contains 'sass'
+          end
         end
       end,
     )

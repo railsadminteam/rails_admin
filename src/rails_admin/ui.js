@@ -88,7 +88,7 @@ import I18n from "./i18n";
   $(document).ready(triggerDomReady);
   document.addEventListener("turbo:render", triggerDomReady);
 
-  document.addEventListener("rails_admin.dom_ready", function () {
+  document.addEventListener("rails_admin.dom_ready", function (event) {
     $(".nav.nav-pills li.active").removeClass("active");
     $(
       '.nav.nav-pills li[data-model="' + $(".page-header").data("model") + '"]'
@@ -129,6 +129,12 @@ import I18n from "./i18n";
     $("a[data-method]").on("click", function (event) {
       window.Turbo.session.drive = false;
     });
+
+    // Trigger via jQuery for compatibility with existing user codes
+    $(document).trigger(
+      "rails_admin.dom_ready",
+      event.detail ? [event.detail] : null
+    );
   });
 
   $(document).on("click", ".bulk-link", function (event) {
