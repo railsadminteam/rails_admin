@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe 'Boolean field', type: :request do
+RSpec.describe 'Boolean field', type: :request, js: true do
   subject { page }
   let(:field_test) { FactoryBot.create :field_test }
 
@@ -41,6 +41,25 @@ RSpec.describe 'Boolean field', type: :request do
       click_button 'Save and edit'
       expect(page).to have_selector('.boolean_type input[value=""][checked]')
       expect(field_test.reload.boolean_field).to be nil
+    end
+  end
+
+  context 'when the boolean is in an embedded document' do
+    before do
+      RailsAdmin.config FieldTest do
+        field :comment
+      end
+    end
+
+    it 'can be updated' do
+      visit edit_path(model_name: 'field_test', id: field_test.id)
+
+      # toggle open the embedded document section
+      find('#field_test_comment_attributes_field .add_nested_fields').click
+      # set the value to false and assert the values
+      find('.boolean_type label.danger').click
+      click_button 'Save and edit'
+      expect(field_test.reload.comment.boolean_field).to be false
     end
   end
 

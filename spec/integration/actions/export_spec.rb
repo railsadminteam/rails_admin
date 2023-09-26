@@ -83,7 +83,7 @@ RSpec.describe 'Export action', type: :request do
                                      'Revenue [Team]', 'Color [Team]', 'Custom field [Team]', 'Main Sponsor [Team]', 'Id [Draft]', 'Created at [Draft]',
                                      'Updated at [Draft]', 'Date [Draft]', 'Round [Draft]', 'Pick [Draft]', 'Overall [Draft]',
                                      'College [Draft]', 'Notes [Draft]', 'Id [Comments]', 'Content [Comments]', 'Created at [Comments]',
-                                     'Updated at [Comments]']
+                                     'Updated at [Comments]', 'Boolean field [Comments]']
       expect(csv.flatten).to include("#{player.name} exported")
       expect(csv.flatten).to include(player.team.name)
       expect(csv.flatten).to include(player.draft.college)
@@ -115,7 +115,7 @@ RSpec.describe 'Export action', type: :request do
       select "<comma> ','", from: 'csv_options_generator_col_sep'
       click_button 'Export to csv'
       csv = CSV.parse page.driver.response.body
-      expect(csv[0]).to match_array ['Id', 'Commentable', 'Commentable type', 'Content', 'Created at', 'Updated at']
+      expect(csv[0]).to match_array ['Id', 'Commentable', 'Commentable type', 'Content', 'Created at', 'Updated at', 'Boolean field']
       csv[1..].each do |line|
         expect(line[csv[0].index('Commentable')]).to eq(player.id.to_s)
         expect(line[csv[0].index('Commentable type')]).to eq(player.class.to_s)
