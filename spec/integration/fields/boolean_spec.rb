@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe 'Boolean field', type: :request, js: true do
+RSpec.describe 'Boolean field', type: :request do
   subject { page }
   let(:field_test) { FactoryBot.create :field_test }
 
@@ -51,7 +51,7 @@ RSpec.describe 'Boolean field', type: :request, js: true do
       end
     end
 
-    it 'can be updated' do
+    it 'can be updated', js: true do
       visit edit_path(model_name: 'field_test', id: field_test.id)
 
       # toggle open the embedded document section
