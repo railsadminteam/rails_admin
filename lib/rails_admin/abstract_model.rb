@@ -60,6 +60,14 @@ module RailsAdmin
       @model_name.constantize
     end
 
+    def quoted_table_name
+      model.quoted_table_name
+    end
+
+    def quote_column_name(name)
+      model.connection.quote_column_name(name)
+    end
+
     def to_s
       model.to_s
     end

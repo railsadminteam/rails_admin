@@ -67,7 +67,7 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
 
     it 'works with belongs_to associations with label method virtual' do
       controller.params = {sort: 'parent_category', model_name: 'categories'}
-      expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq(sort: '"categories"."parent_category_id"', sort_reverse: true)
+      expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq(sort: 'categories.parent_category_id', sort_reverse: true)
     end
 
     context 'using mongoid, not supporting joins', mongoid: true do
