@@ -67,20 +67,20 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
 
     it 'works with belongs_to associations with label method virtual' do
       controller.params = {sort: 'parent_category', model_name: 'categories'}
-      expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq(sort: 'categories.parent_category_id', sort_reverse: true)
+      expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq(sort: '"categories"."parent_category_id"', sort_reverse: true)
     end
 
     context 'using mongoid, not supporting joins', mongoid: true do
       it 'gives back the remote table with label name' do
         controller.params = {sort: 'team', model_name: 'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: 'players.team_id', sort_reverse: true)
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: '"players"."team_id"', sort_reverse: true)
       end
     end
 
     context 'using active_record, supporting joins', active_record: true do
       it 'gives back the local column' do
         controller.params = {sort: 'team', model_name: 'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: 'teams.name', sort_reverse: true)
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: '"teams"."name"', sort_reverse: true)
       end
     end
   end
