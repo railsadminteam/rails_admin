@@ -61,11 +61,19 @@ module RailsAdmin
     end
 
     def quoted_table_name
-      model.quoted_table_name
+      if adapter == :active_record
+        model.quoted_table_name
+      else
+        table_name
+      end
     end
 
     def quote_column_name(name)
-      model.connection.quote_column_name(name)
+      if adapter == :active_record
+        model.connection.quote_column_name(name)
+      else
+        name
+      end
     end
 
     def to_s
