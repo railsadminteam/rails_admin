@@ -72,6 +72,14 @@ module RailsAdmin
 
       delegate :primary_key, :table_name, to: :model, prefix: false
 
+      def quoted_table_name
+        model.quoted_table_name
+      end
+
+      def quote_column_name(name)
+        model.connection.quote_column_name(name)
+      end
+
       def encoding
         adapter =
           if ::ActiveRecord::Base.respond_to?(:connection_db_config)
