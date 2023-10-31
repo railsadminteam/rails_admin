@@ -873,7 +873,7 @@ RSpec.describe 'Edit action', type: :request do
       record = FieldTest.create
       visit edit_path(model_name: 'field_test', id: record.id)
       expect do
-        check 'field_test[open]'
+        find('label[for=field_test_open_1]').click
         click_button 'Save'
       end.to change { record.reload.open }.from(nil).to(true)
     end
