@@ -153,6 +153,7 @@
 * [RailsAdminCountries](https://github.com/xronos-i-am/rails_admin_countries): Add [countries](https://github.com/hexorx/countries) gem support
 * [RailsAdminDropzone](https://github.com/luizpicolo/rails_admin_dropzone): Easy to use integration of drag and drop files upload via [dropzone.js](http://www.dropzonejs.com) for rails_admin
 * [RailsAdminContentBuilder](https://github.com/luizpicolo/rails_admin_content_builder):  Easy way for create contents using rails_admin
+* [RailsAdminTinyMCE](https://github.com/wvengen/rails_admin_tinymce): TinyMCE rich text editor
 
 #### Custom action
 * [RailsAdminClone](https://github.com/dalpo/rails_admin_clone): Clone records
