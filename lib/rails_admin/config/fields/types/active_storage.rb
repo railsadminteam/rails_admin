@@ -18,9 +18,7 @@ module RailsAdmin
           end
 
           register_instance_option :image? do
-            if value
-              value.representable? || mime_type(value.filename).to_s.match?(/^image/)
-            end
+            value && (value.representable? || mime_type(value.filename).to_s.match?(/^image/))
           end
 
           register_instance_option :eager_load do
