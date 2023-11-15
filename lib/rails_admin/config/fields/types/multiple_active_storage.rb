@@ -23,19 +23,16 @@ module RailsAdmin
             end
 
             register_instance_option :image? do
-              if value
-                mime_type = Mime::Type.lookup_by_extension(value.filename.extension_without_delimiter)
-                mime_type.to_s.match?(/^image/)
-              end
+              value.representable? if value
             end
 
             def resource_url(thumb = false)
               return nil unless value
 
-              if thumb && value.variable?
-                variant = value.variant(thumb_method)
+              if thumb && value.representable?
+                repr = value.representation(thumb_method)
                 Rails.application.routes.url_helpers.rails_blob_representation_path(
-                  variant.blob.signed_id, variant.variation.key, variant.blob.filename, only_path: true
+                  repr.blob.signed_id, repr.variation.key, repr.blob.filename, only_path: true
                 )
               else
                 Rails.application.routes.url_helpers.rails_blob_path(value, only_path: true)
