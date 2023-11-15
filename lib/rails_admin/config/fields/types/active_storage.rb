@@ -18,7 +18,7 @@ module RailsAdmin
           end
 
           register_instance_option :image? do
-            value.representable? if value
+            value&.representable?
           end
 
           register_instance_option :eager_load do

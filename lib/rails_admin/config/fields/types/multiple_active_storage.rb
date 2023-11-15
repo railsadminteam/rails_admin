@@ -23,7 +23,7 @@ module RailsAdmin
             end
 
             register_instance_option :image? do
-              value.representable? if value
+              value&.representable?
             end
 
             def resource_url(thumb = false)
