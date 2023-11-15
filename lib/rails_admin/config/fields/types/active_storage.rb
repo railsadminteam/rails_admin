@@ -18,7 +18,9 @@ module RailsAdmin
           end
 
           register_instance_option :image? do
-            value&.representable?
+            if value
+              value.representable? || mime_type(value.filename).to_s.match?(/^image/)
+            end
           end
 
           register_instance_option :eager_load do
@@ -54,6 +56,10 @@ module RailsAdmin
           def value
             attachment = super
             attachment if attachment&.attached?
+          end
+
+          def mime_type(filename_obj)
+            Mime::Type.lookup_by_extension(filename_obj.extension_without_delimiter)
           end
         end
       end

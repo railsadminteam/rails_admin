@@ -23,7 +23,9 @@ module RailsAdmin
             end
 
             register_instance_option :image? do
-              value&.representable?
+              if value
+                value.representable? || mime_type(value.filename).to_s.match?(/^image/)
+              end
             end
 
             def resource_url(thumb = false)
@@ -37,6 +39,10 @@ module RailsAdmin
               else
                 Rails.application.routes.url_helpers.rails_blob_path(value, only_path: true)
               end
+            end
+
+            def mime_type(filename_obj)
+              Mime::Type.lookup_by_extension(filename_obj.extension_without_delimiter)
             end
           end
 
