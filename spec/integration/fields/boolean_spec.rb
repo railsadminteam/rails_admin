@@ -44,6 +44,25 @@ RSpec.describe 'Boolean field', type: :request do
     end
   end
 
+  context 'when the boolean is in an embedded document' do
+    before do
+      RailsAdmin.config FieldTest do
+        field :comment
+      end
+    end
+
+    it 'can be updated', js: true do
+      visit edit_path(model_name: 'field_test', id: field_test.id)
+
+      # toggle open the embedded document section
+      find('#field_test_comment_attributes_field .add_nested_fields').click
+      # set the value to false and assert the values
+      find('.boolean_type label.danger').click
+      click_button 'Save and edit'
+      expect(field_test.reload.comment.boolean_field).to be false
+    end
+  end
+
   context 'if not nullable' do
     before do
       RailsAdmin.config FieldTest do
