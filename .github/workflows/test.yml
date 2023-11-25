@@ -111,13 +111,14 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3
         with:
-          node-version: "14"
+          node-version: "18"
       - name: Setup application
         env:
           BUNDLE_GEMFILE: ../../${{ matrix.gemfile }}
           CI_ASSET: ${{ matrix.asset }}
           CI_DB_ADAPTER: ${{ matrix.adapter }}
           RAILS_ENV: test
+          NODE_OPTIONS: --openssl-legacy-provider
         run: |
           yarn install
           cd spec/dummy_app
