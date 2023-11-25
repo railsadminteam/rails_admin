@@ -6,7 +6,6 @@ class CreateComments < ActiveRecord::Migration[5.0]
       t.integer :commentable_id
       t.string :commentable_type
       t.text :content
-      t.boolean :boolean_field
 
       t.timestamps null: false
     end

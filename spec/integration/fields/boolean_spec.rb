@@ -49,6 +49,10 @@ RSpec.describe 'Boolean field', type: :request do
       RailsAdmin.config FieldTest do
         field :comment
       end
+
+      RailsAdmin.config Comment do
+        field :content, :boolean
+      end
     end
 
     it 'can be updated', js: true do
@@ -59,7 +63,7 @@ RSpec.describe 'Boolean field', type: :request do
       # set the value to false and assert the values
       find('.boolean_type label.danger').click
       click_button 'Save and edit'
-      expect(field_test.reload.comment.boolean_field).to be false
+      expect(field_test.reload.comment.content).to eq '0'
     end
   end
 
