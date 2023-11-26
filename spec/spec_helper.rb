@@ -75,7 +75,18 @@ RSpec.configure do |config|
     example.run_with_retry retry: (ENV['CI'] && RUBY_ENGINE == 'jruby' ? 3 : 2)
   end
   config.retry_callback = proc do |example|
-    Capybara.reset! if example.metadata[:js]
+    example.metadata[:retry] = 6 if [Ferrum::DeadBrowserError, Ferrum::NoExecutionContextError, Ferrum::TimeoutError].include?(example.exception.class)
+    if example.metadata[:js]
+      attempt = 0
+      begin
+        Capybara.reset!
+      rescue Ferrum::TimeoutError, Ferrum::NoExecutionContextError
+        attempt += 1
+        raise if attempt >= 5
+
+        retry
+      end
+    end
   end
 
   config.before(:all) do
