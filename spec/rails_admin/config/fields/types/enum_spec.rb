@@ -126,7 +126,11 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
     before do
       class TeamWithSerializedEnum < Team
         self.table_name = 'teams'
-        serialize :color
+        if ActiveRecord.gem_version < Gem::Version.new('7.1')
+          serialize :color
+        else
+          serialize :color, coder: JSON
+        end
         def color_enum
           %w[blue green red]
         end

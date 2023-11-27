@@ -5,7 +5,11 @@ class User < ActiveRecord::Base
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
 
-  serialize :roles, Array
+  if ActiveRecord.gem_version < Gem::Version.new('7.1')
+    serialize :roles, Array
+  else
+    serialize :roles, coder: YAML, type: Array
+  end
 
   # Add Paperclip support for avatars
   has_attached_file :avatar, styles: {medium: '300x300>', thumb: '100x100>'}

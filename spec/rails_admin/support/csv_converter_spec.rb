@@ -68,7 +68,7 @@ RSpec.describe RailsAdmin::CSVConverter do
       before do
         case connection_config[:adapter]
         when 'postgresql'
-          @connection = ActiveRecord::Base.connection.instance_variable_get(:@connection)
+          @connection = ActiveRecord::Base.connection.raw_connection
           @connection.set_client_encoding('latin1')
         when 'mysql2'
           ActiveRecord::Base.connection.execute('SET NAMES latin1;')

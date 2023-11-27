@@ -12,7 +12,7 @@ jobs:
           - "3.0"
           - "3.1"
           - "3.2"
-        gemfile: [gemfiles/rails_7.0.gemfile]
+        gemfile: [gemfiles/rails_7.1.gemfile]
         orm: [active_record]
         adapter: [sqlite3]
         asset: [webpack]
@@ -32,22 +32,27 @@ jobs:
             orm: active_record
             adapter: sqlite3
             asset: webpacker
-          - ruby: "3.0"
-            gemfile: gemfiles/rails_7.0.gemfile
-            orm: active_record
-            adapter: mysql2
-            asset: importmap
-          - ruby: "3.0"
-            gemfile: gemfiles/rails_7.0.gemfile
-            orm: active_record
-            adapter: postgresql
-            asset: sprockets
-          - ruby: "3.0"
+          - ruby: "3.2"
             gemfile: gemfiles/rails_7.0.gemfile
             orm: active_record
             adapter: sqlite3
+            asset: sprockets
+          - ruby: "3.2"
+            gemfile: gemfiles/rails_7.1.gemfile
+            orm: active_record
+            adapter: mysql2
+            asset: importmap
+          - ruby: "3.2"
+            gemfile: gemfiles/rails_7.1.gemfile
+            orm: active_record
+            adapter: postgresql
+            asset: sprockets
+          - ruby: "3.2"
+            gemfile: gemfiles/rails_7.1.gemfile
+            orm: active_record
+            adapter: sqlite3
             asset: vite
-          - ruby: "3.0"
+          - ruby: "3.2"
             gemfile: gemfiles/composite_primary_keys.gemfile
             orm: active_record
             adapter: sqlite3
@@ -172,7 +177,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.0"
+          ruby-version: "3.2"
       - name: Cache gems
         uses: actions/cache@v3
         with:

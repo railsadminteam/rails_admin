@@ -18,7 +18,11 @@ class FieldTest < ActiveRecord::Base
 
   mount_uploader :carrierwave_asset, CarrierwaveUploader
   mount_uploaders :carrierwave_assets, CarrierwaveUploader
-  serialize :carrierwave_assets, JSON
+  if ActiveRecord.gem_version < Gem::Version.new('7.1')
+    serialize :carrierwave_assets, JSON
+  else
+    serialize :carrierwave_assets, coder: JSON
+  end
 
   if defined?(ActiveStorage)
     has_one_attached :active_storage_asset

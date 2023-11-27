@@ -48,7 +48,7 @@ module RailsAdmin
           end
 
           register_instance_option :keep_method do
-            method_name if ::ActiveStorage.replace_on_assign_to_many
+            method_name if ::ActiveStorage.gem_version >= Gem::Version.new('7.1') || ::ActiveStorage.replace_on_assign_to_many
           end
 
           register_instance_option :delete_method do
