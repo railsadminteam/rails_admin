@@ -84,6 +84,15 @@ appraise 'rails-7.0' do
     gem 'pg', '>= 1.0.0', platforms: :ruby
     gem 'paper_trail', '>= 12.0'
   end
+
+  group :mongoid do
+    gem 'mongoid', '~> 8.0'
+    gem 'kaminari-mongoid'
+    gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
+    gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
+    gem 'cancancan-mongoid'
+    gem 'shrine-mongoid', '~> 1.0'
+  end
 end
 
 appraise 'rails-7.1' do
@@ -102,6 +111,15 @@ appraise 'rails-7.1' do
   group :active_record do
     gem 'pg', '>= 1.0.0', platforms: :ruby
     gem 'paper_trail', '>= 12.0'
+  end
+
+  group :mongoid do
+    gem 'mongoid', '~> 8.0'
+    gem 'kaminari-mongoid'
+    gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
+    gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
+    gem 'cancancan-mongoid'
+    gem 'shrine-mongoid', '~> 1.0'
   end
 end
 

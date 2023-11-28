@@ -67,6 +67,16 @@ jobs:
             orm: mongoid
             adapter: sqlite3
             asset: sprockets
+          - ruby: "3.1"
+            gemfile: gemfiles/rails_7.0.gemfile
+            orm: mongoid
+            adapter: sqlite3
+            asset: sprockets
+          - ruby: "3.2"
+            gemfile: gemfiles/rails_7.1.gemfile
+            orm: mongoid
+            adapter: sqlite3
+            asset: sprockets
           - ruby: jruby-9.3
             gemfile: gemfiles/rails_6.1.gemfile
             orm: active_record
