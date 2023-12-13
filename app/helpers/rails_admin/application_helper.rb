@@ -114,8 +114,8 @@ module RailsAdmin
 
       content_tag(:ol, class: 'breadcrumb') do
         parent_actions.collect do |a|
-          am = a.send(:eval, 'bindings[:abstract_model]')
-          o = a.send(:eval, 'bindings[:object]')
+          am = a.send(:bindings)[:abstract_model]
+          o = a.send(:bindings)[:object]
           content_tag(:li, class: current_action?(a, am, o) && 'active') do
             crumb = begin
               if !current_action?(a, am, o)
