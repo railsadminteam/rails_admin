@@ -80,6 +80,9 @@ class Article < ActiveRecord::Base
 end
 ```
 
+> In the latest version, you no longer need to define this `delete_#{name}` attribute to get files to be deleted. It will send identifiers of remaing files to the `#{name}`.
+[[More here|https://github.com/railsadminteam/rails_admin/blob/master/app/views/rails_admin/main/_form_multiple_file_upload.html.erb]]
+
 ### Want to preserve existing attachments when uploading more
 
 By default, CarrierWave's multiple upload feature discards existing ones when new files are uploaded. Here's a workaround: 
