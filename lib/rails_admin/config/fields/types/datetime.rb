@@ -11,7 +11,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           def parse_value(value)
-            ::Time.zone.parse(value)
+            ActiveSupport::TimeZone.new('EST').parse(value)
           end
 
           def parse_input(params)
@@ -39,7 +39,7 @@ module RailsAdmin
           register_instance_option :strftime_format do
             ::I18n.t(date_format, scope: i18n_scope, raise: true)
           rescue ::I18n::ArgumentError
-            '%B %d, %Y %H:%M'
+            '%B %d, %Y %H:%M %Z'
           end
 
           register_instance_option :flatpickr_format do
@@ -72,7 +72,7 @@ module RailsAdmin
           register_instance_option :formatted_value do
             time = (value || default_value)
             if time
-              ::I18n.l(time, format: strftime_format)
+              ::I18n.l(time.in_time_zone('EST'), format: strftime_format)
             else
               ''.html_safe
             end
