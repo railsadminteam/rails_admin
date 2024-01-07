@@ -118,7 +118,7 @@ RSpec.configure do |config|
 
   CI_TARGET_ORMS.each do |orm|
     if orm == CI_ORM
-      config.filter_run_excluding "skip_#{orm}".to_sym => true
+      config.filter_run_excluding "skip_#{orm}": true
     else
       config.filter_run_excluding orm => true
     end

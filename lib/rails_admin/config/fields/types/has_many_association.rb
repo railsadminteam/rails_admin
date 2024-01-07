@@ -20,7 +20,7 @@ module RailsAdmin
           end
 
           def method_name
-            nested_form ? "#{name}_attributes".to_sym : super
+            nested_form ? :"#{name}_attributes" : super
           end
 
           # Reader for validation errors of the bound object
