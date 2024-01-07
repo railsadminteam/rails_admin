@@ -71,9 +71,9 @@ module RailsAdmin
         def key_accessor
           case type
           when :has_many, :has_and_belongs_to_many
-            "#{name.to_s.singularize}_ids".to_sym
+            :"#{name.to_s.singularize}_ids"
           when :has_one
-            "#{name}_id".to_sym
+            :"#{name}_id"
           else
             foreign_key
           end

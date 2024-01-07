@@ -16,7 +16,7 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
   field = RailsAdmin::Config::Fields::Types.load(:shrine).new(parent, attachment_name, properties)
   fields << field
 
-  data_field_name = "#{attachment_name}_data".to_sym
+  data_field_name = :"#{attachment_name}_data"
   child_properties = parent.abstract_model.properties.detect { |p| p.name == data_field_name }
   next true unless child_properties
 

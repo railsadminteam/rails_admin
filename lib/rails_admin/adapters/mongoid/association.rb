@@ -92,9 +92,9 @@ module RailsAdmin
         def key_accessor
           case macro.to_sym
           when :has_many
-            "#{name.to_s.singularize}_ids".to_sym
+            :"#{name.to_s.singularize}_ids"
           when :has_one
-            "#{name}_id".to_sym
+            :"#{name}_id"
           when :embedded_in, :embeds_one, :embeds_many
             nil
           else

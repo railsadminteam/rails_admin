@@ -172,7 +172,7 @@ module RailsAdmin
       # "0055" is the filter index, no use here. o is the operator, v the value
       def filter_scope(scope, filters, fields = config.list.fields.select(&:filterable?))
         filters.each_pair do |field_name, filters_dump|
-          filters_dump.each do |_, filter_dump|
+          filters_dump.each_value do |filter_dump|
             wb = WhereBuilder.new(scope)
             field = fields.detect { |f| f.name.to_s == field_name }
             value = parse_field_value(field, filter_dump[:v])
@@ -256,7 +256,8 @@ module RailsAdmin
 
         def build_statement_for_boolean
           return ["(#{@column} IS NULL OR #{@column} = ?)", false] if %w[false f 0].include?(@value)
-          return ["(#{@column} = ?)", true] if %w[true t 1].include?(@value)
+
+          ["(#{@column} = ?)", true] if %w[true t 1].include?(@value)
         end
 
         def column_for_value(value)

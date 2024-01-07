@@ -152,7 +152,7 @@ module RailsAdmin
         statements = []
 
         filters.each_pair do |field_name, filters_dump|
-          filters_dump.each do |_, filter_dump|
+          filters_dump.each_value do |filter_dump|
             field = fields.detect { |f| f.name.to_s == field_name }
             next unless field
 
@@ -251,7 +251,8 @@ module RailsAdmin
 
         def build_statement_for_boolean
           return {@column => false} if %w[false f 0].include?(@value)
-          return {@column => true} if %w[true t 1].include?(@value)
+
+          {@column => true} if %w[true t 1].include?(@value)
         end
 
         def column_for_value(value)

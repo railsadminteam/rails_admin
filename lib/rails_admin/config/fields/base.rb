@@ -357,7 +357,7 @@ module RailsAdmin
 
         def generic_field_help
           model = abstract_model.model_name.underscore
-          model_lookup = "admin.help.#{model}.#{name}".to_sym
+          model_lookup = :"admin.help.#{model}.#{name}"
           translated = I18n.translate(model_lookup, help: generic_help, default: [generic_help])
           (translated.is_a?(Hash) ? translated.to_a.first[1] : translated).html_safe
         end
