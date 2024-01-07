@@ -23,7 +23,7 @@ group :test do
   gem "database_cleaner-active_record", ">= 2.0", require: false
   gem "database_cleaner-mongoid", ">= 2.0", require: false
   gem "dragonfly", "~> 1.0"
-  gem "factory_bot", ">= 4.2"
+  gem "factory_bot", ">= 4.2", "!= 6.4.5"
   gem "generator_spec", ">= 0.8"
   gem "kt-paperclip"
   gem "launchy", ">= 2.2"
