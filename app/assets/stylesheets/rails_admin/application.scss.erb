@@ -30,6 +30,6 @@
 @import "rails_admin/styles/base/theming";
 @import "rails_admin/custom/theming";
 
-<% if defined?(ActionText) && Rails.gem_version >= Gem::Version.new('7.0') %>
+<% if defined?(ActionText::Engine) && Rails.gem_version >= Gem::Version.new('7.0') %>
 @import "trix";
 <% end %>
