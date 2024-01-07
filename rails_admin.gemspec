@@ -7,6 +7,7 @@ require 'rails_admin/version'
 Gem::Specification.new do |spec|
   # If you add a dependency, please maintain alphabetical order
   spec.add_dependency 'activemodel-serializers-xml', '>= 1.0'
+  spec.add_dependency 'csv'
   spec.add_dependency 'kaminari', '>= 0.14', '< 2.0'
   spec.add_dependency 'nested_form', '~> 0.3'
   spec.add_dependency 'rails', ['>= 6.0', '< 8']

@@ -26,7 +26,7 @@ RSpec.describe RailsAdmin::Config::HasFields do
       end
     end
     expect { RailsAdmin.config(Team).fields.detect { |f| f.name == :division } }.not_to raise_error
-    expect { RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.visible? }.to raise_error("undefined method `[]' for nil:NilClass")
+    expect { RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.visible? }.to raise_error(/undefined method `\[\]' for nil/)
   end
 
   it 'assigns properties to new one on overriding existing field' do
