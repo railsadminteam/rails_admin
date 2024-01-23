@@ -63,3 +63,18 @@ $(document).on('rails_admin.dom_ready', function() {
   /* your js code here */
 });
 ``` 
+When using Rails Admin 3.1.2+ and Rails 7.x+, you can simply omit JQuery and listen to document directly.
+
+```javascript
+// Events are emitted the following way by rails_admin
+new CustomEvent("rails_admin.dom_ready", { detail: form });
+
+// When trying to catch and read these events you can simply listen for it via the document.'
+
+document.addEventListener('rails_admin.dom_ready', (e) => {
+  console.log(e)
+  // This returns the target form in this example
+   /* your js code here */
+})
+
+```
