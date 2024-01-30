@@ -25,4 +25,8 @@ class Player < ActiveRecord::Base
   def draft_id=(id)
     self.draft = Draft.find_by_id(id)
   end
+
+  def number_name
+    "#{number} #{name}"
+  end
 end
