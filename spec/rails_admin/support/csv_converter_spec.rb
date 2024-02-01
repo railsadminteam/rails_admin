@@ -17,6 +17,25 @@ RSpec.describe RailsAdmin::CSVConverter do
     expect(RailsAdmin::CSVConverter.new(objects, schema).to_csv({})[2]).to match(/Number,Name/)
   end
 
+  it 'keeps headers ordering with custom method' do
+    RailsAdmin.config(Player) do
+      export do
+        field :number
+        field :number_name do
+          formatted_value do
+            bindings[:object].number_name
+          end
+        end
+        field :name
+      end
+    end
+
+    FactoryBot.create :player
+    objects = Player.all
+    schema = { only: [:number, :name], methods: [:number_name] }
+    expect(RailsAdmin::CSVConverter.new(objects, schema).to_csv({})[2]).to match(/Number,Number name,Name/)
+  end
+
   describe '#to_csv' do
     before do
       RailsAdmin.config(Player) do
