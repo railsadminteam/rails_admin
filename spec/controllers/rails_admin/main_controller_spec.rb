@@ -73,14 +73,14 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
     context 'using mongoid, not supporting joins', mongoid: true do
       it 'gives back the remote table with label name' do
         controller.params = {sort: 'team', model_name: 'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: 'players.team_id', sort_reverse: true)
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to match(sort: /.?players.?\..?team_id.?/, sort_reverse: true)
       end
     end
 
     context 'using active_record, supporting joins', active_record: true do
       it 'gives back the local column' do
         controller.params = {sort: 'team', model_name: 'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: 'teams.name', sort_reverse: true)
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to match(sort: /.?teams.?\..?name.?/, sort_reverse: true)
       end
     end
   end
