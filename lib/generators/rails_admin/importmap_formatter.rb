@@ -6,7 +6,7 @@ module RailsAdmin
   class ImportmapFormatter
     attr_reader :packager
 
-    def initialize(path = 'confing/importmap.rails_admin.rb')
+    def initialize(path = 'config/importmap.rails_admin.rb')
       @packager = Importmap::Packager.new(path)
     end
 
