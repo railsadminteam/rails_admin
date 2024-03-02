@@ -70,17 +70,35 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
       expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq(sort: 'categories.parent_category_id', sort_reverse: true)
     end
 
-    context 'using mongoid, not supporting joins', mongoid: true do
-      it 'gives back the remote table with label name' do
+    context 'using mongoid', mongoid: true do
+      it 'gives back the remote table with label name, as it does not support joins' do
         controller.params = {sort: 'team', model_name: 'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to match(sort: /.?players.?\..?team_id.?/, sort_reverse: true)
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to match(sort: 'players.team_id', sort_reverse: true)
       end
     end
 
-    context 'using active_record, supporting joins', active_record: true do
+    context 'using active_record', active_record: true do
+      let(:connection_config) do
+        if ActiveRecord::Base.respond_to?(:connection_db_config)
+          ActiveRecord::Base.connection_db_config.configuration_hash
+        else
+          ActiveRecord::Base.connection_config
+        end
+      end
+
       it 'gives back the local column' do
         controller.params = {sort: 'team', model_name: 'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to match(sort: /.?teams.?\..?name.?/, sort_reverse: true)
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to match(sort: /^["`]teams["`]\.["`]name["`]$/, sort_reverse: true)
+      end
+
+      it 'quotes the table and column names it returns as :sort' do
+        controller.params = {sort: 'team', model_name: 'players'}
+        case connection_config[:adapter]
+        when 'mysql2'
+          expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))[:sort]).to eq '`teams`.`name`'
+        else
+          expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))[:sort]).to eq '"teams"."name"'
+        end
       end
     end
   end
