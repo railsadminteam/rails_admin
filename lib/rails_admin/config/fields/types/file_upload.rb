@@ -52,7 +52,7 @@ module RailsAdmin
           end
 
           register_instance_option :image? do
-            mime_type = Mime::Type.lookup_by_extension(resource_url.to_s.split('.').last)
+            mime_type = Mime::Type.lookup_by_extension(resource_url.to_s.split('.').last&.split('?')&.first)
             mime_type.to_s.match?(/^image/)
           end
 
