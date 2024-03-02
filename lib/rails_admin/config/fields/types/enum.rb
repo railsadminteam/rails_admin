@@ -28,7 +28,7 @@ module RailsAdmin
             if abstract_model.model.respond_to?(enum_method)
               abstract_model.model.send(enum_method)
             else
-              (bindings[:object] || abstract_model.model.new).send(enum_method)
+              (bindings&.[](:object) || abstract_model.model.new).send(enum_method)
             end
           end
 
