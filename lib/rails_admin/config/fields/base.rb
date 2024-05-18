@@ -67,7 +67,7 @@ module RailsAdmin
             sortable
           elsif sortable.is_a?(Hash) # just join sortable hash, don't do anything smart
             "#{sortable.keys.first}.#{sortable.values.first}"
-          elsif association # use column on target table
+          elsif association? # use column on target table
             "#{associated_model_config.abstract_model.quoted_table_name}.#{abstract_model.quote_column_name(sortable)}"
           else # use described column in the field conf.
             "#{abstract_model.quoted_table_name}.#{abstract_model.quote_column_name(sortable)}"

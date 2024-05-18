@@ -40,6 +40,14 @@ module RailsAdmin
             )
           end
 
+          register_instance_option :searchable do
+            false
+          end
+
+          register_instance_option :sortable do
+            false
+          end
+
           def resource_url(thumb = false)
             return nil unless value
 

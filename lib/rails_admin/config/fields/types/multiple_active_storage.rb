@@ -70,6 +70,14 @@ module RailsAdmin
               direct? && {data: {direct_upload_url: bindings[:view].main_app.rails_direct_uploads_url}} || {},
             )
           end
+
+          register_instance_option :searchable do
+            false
+          end
+
+          register_instance_option :sortable do
+            false
+          end
         end
       end
     end

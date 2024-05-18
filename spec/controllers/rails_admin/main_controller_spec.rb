@@ -65,6 +65,26 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
       end
     end
 
+    context 'with a virtual field' do
+      before do
+        RailsAdmin.config('Player') do
+          base do
+            field :virtual do
+              sortable :name
+            end
+          end
+
+          list do
+            sort_by :virtual
+          end
+        end
+      end
+
+      it 'returns the query referenced in the sortable' do
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to match(sort: /["`]?players["`]?\.["`]?name["`]?/, sort_reverse: true)
+      end
+    end
+
     it 'works with belongs_to associations with label method virtual' do
       controller.params = {sort: 'parent_category', model_name: 'categories'}
       expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq(sort: 'categories.parent_category_id', sort_reverse: true)

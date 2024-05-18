@@ -123,5 +123,17 @@ if defined?(ActiveStorage)
         end
       end
     end
+
+    describe '#searchable' do
+      it 'is false' do
+        expect(field.searchable).to be false
+      end
+    end
+
+    describe '#sortable' do
+      it 'is false' do
+        expect(field.sortable).to be false
+      end
+    end
   end
 end
