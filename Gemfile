@@ -50,7 +50,7 @@ group :active_record do
   platforms :ruby, :mswin, :mingw, :x64_mingw do
     gem 'mysql2', '>= 0.3.14'
     gem 'pg', '>= 1.0.0'
-    gem 'sqlite3', '>= 1.3'
+    gem 'sqlite3', '~> 1.3'
   end
 end
 
