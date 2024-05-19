@@ -31,6 +31,7 @@ module RailsAdmin
           Mongoid::Errors::InvalidFind
           Moped::Errors::InvalidObjectId
           BSON::InvalidObjectId
+          BSON::Error::InvalidObjectId
         ].exclude?(e.class.to_s)
       end
 
