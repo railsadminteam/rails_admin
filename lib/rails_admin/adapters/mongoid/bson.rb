@@ -21,6 +21,7 @@ module RailsAdmin
               Moped::Errors::InvalidObjectId
               BSON::ObjectId::Invalid
               BSON::InvalidObjectId
+              BSON::Error::InvalidObjectId
             ].exclude?(e.class.to_s)
           end
         end
