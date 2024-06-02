@@ -14,15 +14,19 @@ RSpec.describe 'HasOneAssociation field', type: :request do
   context 'on create' do
     before do
       @draft = FactoryBot.create :draft
+      visit new_path(model_name: 'player')
     end
 
     it 'shows selects' do
-      visit new_path(model_name: 'player')
       is_expected.to have_selector('select#player_draft_id')
     end
 
     it 'creates an object with correct associations' do
-      post new_path(model_name: 'player', player: FactoryBot.attributes_for(:player).merge(name: 'Jackie Robinson', draft_id: @draft.id))
+      fill_in 'Name', with: 'Jackie Robinson'
+      fill_in 'Number', with: @draft.player.number + 1
+      select("Draft ##{@draft.id}", from: 'Draft')
+      click_button 'Save'
+      is_expected.to have_content 'Player successfully created'
       @player = Player.where(name: 'Jackie Robinson').first
       @draft.reload
       expect(@player.draft).to eq(@draft)
@@ -31,22 +35,23 @@ RSpec.describe 'HasOneAssociation field', type: :request do
 
   context 'on update' do
     before do
-      @player = FactoryBot.create :player
-      @draft = FactoryBot.create :draft
-      @number = @draft.player.number + 1 # to avoid collision
-      put edit_path(model_name: 'player', id: @player.id, player: {name: 'Jackie Robinson', draft_id: @draft.id, number: @number, position: 'Second baseman'})
-      @player.reload
-    end
-
-    it 'updates an object with correct attributes' do
-      expect(@player.name).to eq('Jackie Robinson')
-      expect(@player.number).to eq(@number)
-      expect(@player.position).to eq('Second baseman')
+      @drafts = FactoryBot.create_list :draft, 2
+      @player = FactoryBot.create :player, draft: @drafts[0]
+      visit edit_path(model_name: 'player', id: @player.id)
     end
 
     it 'updates an object with correct associations' do
-      @draft.reload
-      expect(@player.draft).to eq(@draft)
+      select("Draft ##{@drafts[1].id}", from: 'Draft')
+      click_button 'Save'
+      @player.reload
+      expect(@player.draft).to eq(@drafts[1])
+    end
+
+    it 'clears the current selection' do
+      select('', from: 'Draft')
+      click_button 'Save'
+      @player.reload
+      expect(@player.draft).to be nil
     end
   end
 

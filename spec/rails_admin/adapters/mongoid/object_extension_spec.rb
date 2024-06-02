@@ -69,7 +69,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::ObjectExtension', mongoid: true d
 
     context 'on create' do
       before do
-        player.draft_id = draft.id
+        player.draft = draft
         expect(player.draft._target).to receive(:save).once.and_call_original
         player.save
       end
@@ -93,7 +93,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::ObjectExtension', mongoid: true d
 
     context 'on update' do
       before do
-        player.draft_id = draft.id
+        player.draft = draft
       end
 
       context 'with autosave: false' do
@@ -110,16 +110,6 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::ObjectExtension', mongoid: true d
         it 'persists associated documents changes on assignment' do
           expect(player.reload.draft).to eq draft
         end
-      end
-    end
-
-    context 'with explicit id setter' do
-      let(:user) { ManagingUser.create(FactoryBot.attributes_for(:user)) }
-      let(:team) { ManagedTeam.create(FactoryBot.attributes_for(:team)) }
-
-      it 'works without issues' do
-        user.team_id = team.id
-        expect(user.reload.team).to eq team
       end
     end
   end

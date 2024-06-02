@@ -23,6 +23,10 @@ module RailsAdmin
             (o = value) && o.send(associated_model_config.object_label_method)
           end
 
+          register_instance_option :allowed_methods do
+            nested_form ? [method_name] : [name]
+          end
+
           def selected_id
             value.try(:id).try(:to_s)
           end
@@ -37,6 +41,13 @@ module RailsAdmin
 
           def associated_prepopulate_params
             {associated_model_config.abstract_model.param_key => {association.foreign_key => bindings[:object].try(:id)}}
+          end
+
+          def parse_input(params)
+            return if nested_form
+
+            id = params.delete(method_name)
+            params[name] = associated_model_config.abstract_model.get(id) if id
           end
         end
       end
