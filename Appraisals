@@ -6,7 +6,7 @@ appraise 'rails-6.0' do
   gem 'devise', '~> 4.7'
 
   group :test do
-    gem 'cancancan', '~> 3.0'
+    gem 'cancancan', ['~> 3.0', '< 3.6']
     gem 'kt-paperclip'
     gem 'pundit', '~> 2.1.0'
     gem 'rspec-rails', '>= 4.0.0.beta2'
@@ -40,7 +40,7 @@ appraise 'rails-6.1' do
   gem 'devise', '~> 4.7'
 
   group :test do
-    gem 'cancancan', '~> 3.2'
+    gem 'cancancan', ['~> 3.2', '< 3.6']
     gem 'kt-paperclip'
     gem 'rspec-rails', '>= 4.0.0.beta2'
     gem 'shrine', '~> 3.0'

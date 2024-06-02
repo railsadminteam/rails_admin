@@ -31,7 +31,7 @@ group :development, :test do
 end
 
 group :test do
-  gem "cancancan", "~> 3.2"
+  gem "cancancan", ["~> 3.2", "< 3.6"]
   gem "carrierwave", [">= 2.0.0.rc", "< 3"]
   gem "cuprite"
   gem "database_cleaner-active_record", ">= 2.0", require: false
