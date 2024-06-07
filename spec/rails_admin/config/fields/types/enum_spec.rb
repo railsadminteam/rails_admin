@@ -63,9 +63,14 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
       Team.send(:remove_method, :color_list)
     end
 
-    it 'allows configuration' do
+    it 'allows configuration by enum_method when bindings provide object' do
       is_expected.to be_a(RailsAdmin::Config::Fields::Types::Enum)
       expect(subject.with(object: Team.new).enum).to eq %w[blue green red]
+    end
+
+    it 'allows configuration by enum_method when no bindings provided' do
+      is_expected.to be_a(RailsAdmin::Config::Fields::Types::Enum)
+      expect(subject.enum).to eq %w[blue green red]
     end
   end
 
@@ -87,9 +92,14 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
       Team.instance_eval { undef :color_list }
     end
 
-    it 'allows configuration' do
+    it 'allows configuration by enum_method when bindings provide object' do
       is_expected.to be_a(RailsAdmin::Config::Fields::Types::Enum)
       expect(subject.with(object: Team.new).enum).to eq %w[blue green red]
+    end
+
+    it 'allows configuration by enum_method when no bindings provided' do
+      is_expected.to be_a(RailsAdmin::Config::Fields::Types::Enum)
+      expect(subject.enum).to eq %w[blue green red]
     end
   end
 
