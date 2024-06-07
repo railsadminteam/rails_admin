@@ -17,10 +17,16 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
       end
     end
 
-    it 'auto-detects enumeration' do
+    it 'auto-detects enumeration when bindings provide object' do
       is_expected.to be_a(RailsAdmin::Config::Fields::Types::Enum)
       is_expected.not_to be_multiple
       expect(subject.with(object: Team.new).enum).to eq %w[blue green red]
+    end
+
+    it 'auto-detects enumeration when no bindings provided' do
+      is_expected.to be_a(RailsAdmin::Config::Fields::Types::Enum)
+      is_expected.not_to be_multiple
+      expect(subject.enum).to eq %w[blue green red]
     end
   end
 
@@ -39,9 +45,14 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
       end
     end
 
-    it 'auto-detects enumeration' do
+    it 'auto-detects enumeration when bindings provide object' do
       is_expected.to be_a(RailsAdmin::Config::Fields::Types::Enum)
       expect(subject.with(object: Team.new).enum).to eq %w[blue green red]
+    end
+
+    it 'auto-detects enumeration when no bindings provided' do
+      is_expected.to be_a(RailsAdmin::Config::Fields::Types::Enum)
+      expect(subject.enum).to eq %w[blue green red]
     end
   end
 
