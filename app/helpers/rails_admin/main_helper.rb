@@ -45,7 +45,7 @@ module RailsAdmin
           filter_for_field = duplet[1]
           filter_name = filter_for_field.keys.first
           filter_hash = filter_for_field.values.first
-          unless (field = filterable_fields.find { |f| f.name == filter_name.to_sym })
+          unless (field = filterable_fields.find { |f| f.name == filter_name.to_sym }&.with({view: self}))
             raise "#{filter_name} is not currently filterable; filterable fields are #{filterable_fields.map(&:name).join(', ')}"
           end
 
