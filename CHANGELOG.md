@@ -637,7 +637,7 @@
 - Fix Syntax Error in removal of new nested entity([#2539](https://github.com/railsadminteam/rails_admin/pull/2539))
 - Fix momentjs translations for '%-d' format day of the month([#2540](https://github.com/railsadminteam/rails_admin/pull/2540))
 - Fix Mongoid BSON object field ([#2495](https://github.com/railsadminteam/rails_admin/issues/2495))
-- Make browser ignore validaitons of removed nested child models([#2443](https://github.com/railsadminteam/rails_admin/issues/2443), [#2490](https://github.com/railsadminteam/rails_admin/pull/2490))
+- Make browser ignore validations of removed nested child models([#2443](https://github.com/railsadminteam/rails_admin/issues/2443), [#2490](https://github.com/railsadminteam/rails_admin/pull/2490))
 
 ## [0.8.1](https://github.com/railsadminteam/rails_admin/tree/v0.8.1) - 2015-11-24
 
