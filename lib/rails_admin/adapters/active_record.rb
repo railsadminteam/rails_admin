@@ -15,7 +15,7 @@ module RailsAdmin
       end
 
       def get(id, scope = scoped)
-        object = scope.where(primary_key => id).first
+        object = primary_key_scope(scope, id).first
         return unless object
 
         object.extend(ObjectExtension)
@@ -115,10 +115,42 @@ module RailsAdmin
         true
       end
 
+      def format_id(id)
+        if primary_key.is_a? Array
+          RailsAdmin.config.composite_keys_serializer.serialize(id)
+        else
+          id
+        end
+      end
+
+      def parse_id(id)
+        if primary_key.is_a?(Array)
+          ids = RailsAdmin.config.composite_keys_serializer.deserialize(id)
+          primary_key.each_with_index do |key, i|
+            ids[i] = model.type_for_attribute(key).cast(ids[i])
+          end
+          ids
+        else
+          id
+        end
+      end
+
     private
 
+      def primary_key_scope(scope, id)
+        if primary_key.is_a? Array
+          scope.where(primary_key.zip(parse_id(id)).to_h)
+        else
+          scope.where(primary_key => id)
+        end
+      end
+
       def bulk_scope(scope, options)
-        scope.where(primary_key => options[:bulk_ids])
+        if primary_key.is_a? Array
+          options[:bulk_ids].map { |id| primary_key_scope(scope, id) }.reduce(&:or)
+        else
+          scope.where(primary_key => options[:bulk_ids])
+        end
       end
 
       def sort_scope(scope, options)

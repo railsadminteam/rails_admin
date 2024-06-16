@@ -19,14 +19,14 @@ module RailsAdmin
           end
 
           def parse_input(params)
-            return if nested_form
+            return super if nested_form
 
             id = params.delete(method_name)
             params[name] = associated_model_config.abstract_model.get(id) if id
           end
 
           def selected_id
-            value.try(:id).try(:to_s)
+            format_key(value.try(:id)).try(:to_s)
           end
         end
       end

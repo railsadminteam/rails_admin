@@ -42,16 +42,29 @@ module RailsAdmin
         def primary_key
           return nil if polymorphic?
 
-          case type
-          when :has_one
-            association.klass.primary_key
+          value =
+            case type
+            when :has_one
+              association.klass.primary_key
+            else
+              association.association_primary_key
+            end
+
+          if value.is_a? Array
+            :id
           else
-            association.association_primary_key
-          end.try(:to_sym)
+            value.to_sym
+          end
         end
 
         def foreign_key
-          association.foreign_key.to_sym
+          if association.options[:query_constraints].present?
+            association.options[:query_constraints].map(&:to_sym)
+          elsif association.foreign_key.is_a?(Array)
+            association.foreign_key.map(&:to_sym)
+          else
+            association.foreign_key.to_sym
+          end
         end
 
         def foreign_key_nullable?
@@ -75,7 +88,11 @@ module RailsAdmin
           when :has_one
             :"#{name}_id"
           else
-            foreign_key
+            if foreign_key.is_a?(Array)
+              :"#{name}_id"
+            else
+              foreign_key
+            end
           end
         end
 

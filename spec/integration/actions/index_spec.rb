@@ -350,7 +350,7 @@ RSpec.describe 'Index action', type: :request do
 
   describe 'fields' do
     before do
-      if defined?(CompositePrimaryKeys)
+      if defined?(ActiveRecord) && ActiveRecord.gem_version >= Gem::Version.new('7.1') || defined?(CompositePrimaryKeys)
         RailsAdmin.config Fan do
           configure(:fanships) { hide }
           configure(:fanship) { hide }
@@ -1245,7 +1245,7 @@ RSpec.describe 'Index action', type: :request do
     end
   end
 
-  context 'with composite_primary_keys', composite_primary_keys: true do
+  context 'with composite primary keys', composite_primary_keys: true do
     let!(:fanships) { FactoryBot.create_list(:fanship, 3) }
 
     it 'shows the list' do
@@ -1256,6 +1256,25 @@ RSpec.describe 'Index action', type: :request do
         is_expected.to have_content fanship.team.name
       end
       is_expected.to have_content '3 fanships'
+    end
+
+    context 'using custom serializer' do
+      before do
+        RailsAdmin.config.composite_keys_serializer = Class.new do
+          def self.serialize(keys)
+            keys.join(',')
+          end
+
+          def self.deserialize(string)
+            string.split(',')
+          end
+        end
+      end
+
+      it 'shows the member action links accordingly' do
+        visit index_path(model_name: 'fanship')
+        is_expected.to have_css(%(a[href$="/admin/fanship/#{fanships[0].fan_id},#{fanships[0].team_id}/edit"]))
+      end
     end
   end
 end

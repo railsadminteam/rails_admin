@@ -125,5 +125,5 @@ RSpec.configure do |config|
     end
   end
 
-  config.filter_run_excluding composite_primary_keys: true unless defined?(CompositePrimaryKeys)
+  config.filter_run_excluding composite_primary_keys: true unless defined?(ActiveRecord) && ActiveRecord.gem_version >= Gem::Version.new('7.1') || defined?(CompositePrimaryKeys)
 end

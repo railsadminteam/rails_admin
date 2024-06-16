@@ -101,6 +101,20 @@ RSpec.describe 'BelongsToAssociation field', type: :request do
         is_expected.to have_content 'Favorite player successfully updated'
         expect(FavoritePlayer.all.map(&:fanship)).to eq [fanship]
       end
+
+      context 'with invalid key' do
+        before do
+          allow_any_instance_of(RailsAdmin::Config::Fields::Types::BelongsToAssociation).
+            to receive(:collection).and_return([["Fanship ##{fanship.id}", 'invalid']])
+        end
+
+        it 'fails to update' do
+          visit edit_path(model_name: 'favorite_player', id: favorite_player.id)
+          select("Fanship ##{fanship.id}", from: 'Fanship')
+          click_button 'Save'
+          is_expected.to have_content 'Fanship must exist'
+        end
+      end
     end
 
     describe 'via remote-sourced field' do

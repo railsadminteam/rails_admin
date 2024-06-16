@@ -87,7 +87,7 @@ RSpec.describe 'BulkDelete action', type: :request do
     end
   end
 
-  context 'with composite_primary_keys', composite_primary_keys: true do
+  context 'with composite primary keys', composite_primary_keys: true do
     let!(:fanships) { FactoryBot.create_list(:fanship, 3) }
 
     it 'provides check boxes for bulk operation' do
@@ -96,7 +96,7 @@ RSpec.describe 'BulkDelete action', type: :request do
     end
 
     it 'deletes selected records' do
-      delete(bulk_delete_path(bulk_action: 'bulk_delete', model_name: 'fanship', bulk_ids: fanships[0..1].map { |fanship| fanship.id.to_s }))
+      delete(bulk_delete_path(bulk_action: 'bulk_delete', model_name: 'fanship', bulk_ids: fanships[0..1].map { |fanship| RailsAdmin::Support::CompositeKeysSerializer.serialize(fanship.id) }))
       expect(flash[:success]).to match(/2 Fanships successfully deleted/)
       expect(Fanship.all).to eq fanships[2..2]
     end

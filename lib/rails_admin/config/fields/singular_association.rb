@@ -34,6 +34,14 @@ module RailsAdmin
           raise NoMethodError # abstract
         end
 
+        def parse_input(params)
+          return unless nested_form && params[method_name].try(:[], :id).present?
+
+          ids = associated_model_config.abstract_model.parse_id(params[method_name][:id])
+          ids = ids.to_composite_keys.to_s if ids.respond_to?(:to_composite_keys)
+          params[method_name][:id] = ids
+        end
+
         def form_value
           form_default_value.nil? ? selected_id : form_default_value
         end
@@ -41,7 +49,7 @@ module RailsAdmin
         def widget_options
           {
             xhr: !associated_collection_cache_all,
-            remote_source: bindings[:view].index_path(associated_model_config.abstract_model, source_object_id: bindings[:object].id, source_abstract_model: abstract_model.to_param, associated_collection: name, current_action: bindings[:view].current_action, compact: true),
+            remote_source: bindings[:view].index_path(associated_model_config.abstract_model, source_object_id: abstract_model.format_id(bindings[:object].id), source_abstract_model: abstract_model.to_param, associated_collection: name, current_action: bindings[:view].current_action, compact: true),
             scopeBy: dynamic_scope_relationships,
           }
         end

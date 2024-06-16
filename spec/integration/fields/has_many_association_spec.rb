@@ -228,6 +228,19 @@ RSpec.describe 'HasManyAssociation field', type: :request do
         is_expected.to have_content 'Fan successfully updated'
         expect(fan.reload.fanships.map(&:team_id)).to match_array fanships.map(&:team_id)[0..1]
       end
+
+      context 'with invalid key' do
+        before do
+          allow_any_instance_of(RailsAdmin::Config::Fields::Types::HasManyAssociation).
+            to receive(:collection).and_return([["Fanship ##{fanships[0].id}", 'invalid']])
+        end
+
+        it 'fails to update' do
+          visit edit_path(model_name: 'fan', id: fan.id)
+          select("Fanship ##{fanships[0].id}", from: 'Fanships')
+          expect { click_button 'Save' }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
     end
 
     describe 'via remote-sourced field' do

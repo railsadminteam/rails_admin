@@ -21,8 +21,25 @@ module RailsAdmin
             true
           end
 
+          register_instance_option :allowed_methods do
+            nested_form ? [method_name] : Array(association.foreign_key)
+          end
+
           def selected_id
-            bindings[:object].safe_send(association.key_accessor)
+            if association.foreign_key.is_a?(Array)
+              format_key(association.foreign_key.map { |attribute| bindings[:object].safe_send(attribute) })
+            else
+              bindings[:object].safe_send(association.key_accessor)
+            end
+          end
+
+          def parse_input(params)
+            return super if nested_form
+            return unless params[method_name].present? && association.foreign_key.is_a?(Array)
+
+            association.foreign_key.zip(RailsAdmin.config.composite_keys_serializer.deserialize(params.delete(method_name))).each do |key, value|
+              params[key] = value
+            end
           end
         end
       end
