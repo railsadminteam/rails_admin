@@ -78,7 +78,7 @@ jobs:
             orm: mongoid
             adapter: sqlite3
             asset: sprockets
-          - ruby: jruby-9.4.5.0
+          - ruby: jruby-9.4
             gemfile: gemfiles/rails_7.0.gemfile
             orm: active_record
             adapter: mysql2
