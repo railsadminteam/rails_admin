@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-lib = File.expand_path('lib', __dir__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'rails_admin/version'
+require_relative 'lib/rails_admin/version'
 
 Gem::Specification.new do |spec|
   # If you add a dependency, please maintain alphabetical order
