@@ -12,13 +12,28 @@ RSpec.describe 'BelongsToAssociation field', type: :request do
   end
 
   describe 'on create' do
-    before do
-      FactoryBot.create :draft
-      visit new_path(model_name: 'player')
-    end
+    let!(:draft) { FactoryBot.create :draft }
+    let(:team) { FactoryBot.create :team }
 
     it 'shows selects' do
+      visit new_path(model_name: 'player')
       is_expected.to have_selector('select#player_team_id')
+    end
+
+    context 'with default_value' do
+      before do
+        id = team.id
+        RailsAdmin.config Player do
+          configure :team do
+            default_value id
+          end
+        end
+      end
+
+      it 'shows the value as selected' do
+        visit new_path(model_name: 'player')
+        expect(find('select#player_team_id').value).to eq team.id.to_s
+      end
     end
   end
 

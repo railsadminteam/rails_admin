@@ -14,14 +14,15 @@ RSpec.describe 'HasOneAssociation field', type: :request do
   context 'on create' do
     before do
       @draft = FactoryBot.create :draft
-      visit new_path(model_name: 'player')
     end
 
     it 'shows selects' do
+      visit new_path(model_name: 'player')
       is_expected.to have_selector('select#player_draft_id')
     end
 
     it 'creates an object with correct associations' do
+      visit new_path(model_name: 'player')
       fill_in 'Name', with: 'Jackie Robinson'
       fill_in 'Number', with: @draft.player.number + 1
       select("Draft ##{@draft.id}", from: 'Draft')
@@ -30,6 +31,22 @@ RSpec.describe 'HasOneAssociation field', type: :request do
       @player = Player.where(name: 'Jackie Robinson').first
       @draft.reload
       expect(@player.draft).to eq(@draft)
+    end
+
+    context 'with default_value' do
+      before do
+        id = @draft.id
+        RailsAdmin.config Player do
+          configure :draft do
+            default_value id
+          end
+        end
+      end
+
+      it 'shows the value as selected' do
+        visit new_path(model_name: 'player')
+        expect(find('select#player_draft_id').value).to eq @draft.id.to_s
+      end
     end
   end
 

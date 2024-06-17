@@ -13,7 +13,7 @@ module RailsAdmin
         end
 
         def method_name
-          association.key_accessor
+          nested_form ? :"#{name}_attributes" : association.key_accessor
         end
 
         register_instance_option :pretty_value do
@@ -132,6 +132,12 @@ module RailsAdmin
         # Reader for the association's value unformatted
         def value
           bindings[:object].send(association.name)
+        end
+
+        # Returns collection of all selectable records
+        def collection(scope = nil)
+          (scope || bindings[:controller].list_entries(associated_model_config, :index, associated_collection_scope, false)).
+            map { |o| [o.send(associated_object_label_method), o.send(associated_primary_key).to_s] }
         end
 
         # has many?

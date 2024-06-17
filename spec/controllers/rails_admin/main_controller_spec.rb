@@ -331,8 +331,8 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
     it "uses target model's primary key" do
       @user = FactoryBot.create :managing_user
       @team = FactoryBot.create :managed_team, user: @user
-      get :index, model_name: 'managing_user', source_object_id: @team.id, source_abstract_model: 'managing_user', associated_collection: 'teams', current_action: :create, compact: true, format: :json
-      expect(response.body).to match(/"id":"#{@user.id}"/)
+      get :index, model_name: 'managed_team', source_object_id: @user.id, source_abstract_model: 'managing_user', associated_collection: 'teams', current_action: :create, compact: true, format: :json
+      expect(response.body).to match(/"id":"#{@team.id}"/)
     end
 
     context 'as JSON' do

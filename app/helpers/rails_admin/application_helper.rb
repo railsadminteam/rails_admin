@@ -7,6 +7,10 @@ module RailsAdmin
       action(action_name, abstract_model, object).try(:authorized?)
     end
 
+    def current_action
+      params[:action].in?(%w[create new]) ? 'create' : 'update'
+    end
+
     def current_action?(action, abstract_model = @abstract_model, object = @object)
       @action.custom_key == action.custom_key &&
         abstract_model.try(:to_param) == @abstract_model.try(:to_param) &&

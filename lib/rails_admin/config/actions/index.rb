@@ -50,9 +50,11 @@ module RailsAdmin
               format.json do
                 output =
                   if params[:compact]
-                    primary_key_method = @association ? @association.associated_primary_key : @model_config.abstract_model.primary_key
-                    label_method = @model_config.object_label_method
-                    @objects.collect { |o| {id: o.send(primary_key_method).to_s, label: o.send(label_method).to_s} }
+                    if @association
+                      @association.collection(@objects).collect { |(label, id)| {id: id, label: label} }
+                    else
+                      @objects.collect { |object| {id: object.id.to_s, label: object.send(@model_config.object_label_method).to_s} }
+                    end
                   else
                     @objects.to_json(@schema)
                   end

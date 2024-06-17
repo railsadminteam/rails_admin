@@ -520,12 +520,6 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
     end
   end
 
-  describe '#associated_collection' do
-    it 'returns [] when type is blank?' do
-      expect(RailsAdmin.config(Comment).fields.detect { |f| f.name == :commentable }.associated_collection('')).to be_empty
-    end
-  end
-
   describe '#visible?' do
     it 'is false when fields have specific name ' do
       class FieldVisibilityTest < Tableless
