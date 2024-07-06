@@ -674,6 +674,18 @@ RSpec.describe 'Index action', type: :request do
       visit index_path(model_name: 'team')
       expect(find('tbody tr:nth-child(1) td:nth-child(4)')).to have_content(@players.sort_by(&:id).collect(&:name).join(', '))
     end
+
+    it 'does not allow XSS for title attribute' do
+      RailsAdmin.config Team do
+        list do
+          field :name
+        end
+      end
+      @team = FactoryBot.create :team, name: '" onclick="alert()" "'
+      visit index_path(model_name: 'team')
+      expect(find('tbody tr:nth-child(1) td:nth-child(2)')['onclick']).to be_nil
+      expect(find('tbody tr:nth-child(1) td:nth-child(2)')['title']).to eq '" onclick="alert()" "'
+    end
   end
 
   context 'when no record exists' do

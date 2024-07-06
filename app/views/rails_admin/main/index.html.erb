@@ -133,7 +133,7 @@
               <% end %>
               <% properties.map{ |property| property.bind(:object, object) }.each do |property| %>
                 <% value = property.pretty_value %>
-                <td class="<%= [property.sticky? && 'sticky', property.css_class, property.type_css_class].select(&:present?).join(' ') %>" title="<%= strip_tags(value.to_s) %>">
+                <td class="<%= [property.sticky? && 'sticky', property.css_class, property.type_css_class].select(&:present?).join(' ') %>" title="<%= value %>">
                   <%= value %>
                 </td>
               <% end %>
