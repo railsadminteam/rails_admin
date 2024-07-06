@@ -26,7 +26,7 @@
   * [[Dashboard|Dashboard Action]]
 * Collection actions
   * [[Index|Index Action]]
-  * [[Create|New Action]]
+  * [[New|Create Action]]
   * [[Export|Export Action]]
   * [[HistoryIndex|History Index Action]]
   * [[BulkDelete|Bulk Delete Action]]
