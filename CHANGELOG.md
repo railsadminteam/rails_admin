@@ -2,7 +2,20 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.2...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.3...HEAD)
+
+## [3.1.3](https://github.com/railsadminteam/rails_admin/tree/v3.1.3) - 2024-07-06
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.2...v3.1.3)
+
+### Fixed
+
+- Fix bson 5.0 compatibility ([13da4f0](https://github.com/railsadminteam/rails_admin/commit/13da4f0191f5185dadecdfe9e6fc9ca808f7f73d))
+- Fix Importmap 2.0 compatibility ([bd0cf97](https://github.com/railsadminteam/rails_admin/commit/bd0cf97530d93dc66577e5d1ea0da2ebf3b57737))
+
+### Security
+
+- Fix XSS vulnerability in the list view ([b5a287d](https://github.com/railsadminteam/rails_admin/commit/b5a287d82e2cbd1737a1a01e11ede2911cce7fef), [GHSA-8qgm-g2vv-vwvc](https://github.com/railsadminteam/rails_admin/security/advisories/GHSA-8qgm-g2vv-vwvc))
 
 ## [3.1.2](https://github.com/railsadminteam/rails_admin/tree/v3.1.2) - 2023-03-23
 
