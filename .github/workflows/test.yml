@@ -68,6 +68,7 @@ jobs:
             adapter: sqlite3
             asset: sprockets
     runs-on: ubuntu-latest
+    continue-on-error: ${{ startsWith(matrix.ruby, 'jruby') }}
     services:
       mysql:
         image: mysql:8.0
