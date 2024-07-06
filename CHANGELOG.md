@@ -2,10 +2,20 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.2.1...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.3.0...HEAD)
+
+## [2.3.0](https://github.com/sferik/rails_admin/tree/v2.3.0) - 2024-07-06
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.2.1...v2.3.0)
+
+### Added
+- Add not like (=does not contain) operator ([#3421](https://github.com/railsadminteam/rails_admin/pull/3421))
+
+### Security
+- Fix XSS vulnerability in the list view ([d84b398](https://github.com/railsadminteam/rails_admin/commit/d84b39884059c4ed50197cec8522cca029a17673), [GHSA-8qgm-g2vv-vwvc](https://github.com/railsadminteam/rails_admin/security/advisories/GHSA-8qgm-g2vv-vwvc))
 
 
-## [2.2.1](https://github.com/sferik/rails_admin/tree/v2.2.0) - 2021-08-08
+## [2.2.1](https://github.com/sferik/rails_admin/tree/v2.2.1) - 2021-08-08
 
 [Full Changelog](https://github.com/sferik/rails_admin/compare/v2.2.0...v2.2.1)
 
