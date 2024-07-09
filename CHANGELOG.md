@@ -2,7 +2,15 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.3...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.4...HEAD)
+
+## [3.1.4](https://github.com/railsadminteam/rails_admin/tree/v3.1.4) - 2024-07-09
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.3...v3.1.4)
+
+### Fixed
+
+- Fix [32f91e4](https://github.com/railsadminteam/rails_admin/commit/32f91e4b49205e44d3931c2e36d9f7273384a250) broke fields with HTML tags ([758d249](https://github.com/railsadminteam/rails_admin/commit/758d249d950062be6840f9c96e2a286e02b92a1e), [#3686](https://github.com/railsadminteam/rails_admin/issues/3686#issuecomment-2215491140))
 
 ## [3.1.3](https://github.com/railsadminteam/rails_admin/tree/v3.1.3) - 2024-07-06
 
