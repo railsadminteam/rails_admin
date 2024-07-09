@@ -675,16 +675,29 @@ RSpec.describe 'Index action', type: :request do
       expect(find('tbody tr:nth-child(1) td:nth-child(4)')).to have_content(@players.sort_by(&:id).collect(&:name).join(', '))
     end
 
-    it 'does not allow XSS for title attribute' do
-      RailsAdmin.config Team do
-        list do
-          field :name
+    describe 'with title attribute' do
+      it 'does not allow XSS' do
+        RailsAdmin.config Team do
+          list do
+            field :name
+          end
         end
+        @team = FactoryBot.create :team, name: '" onclick="alert()" "'
+        visit index_path(model_name: 'team')
+        expect(find('tbody tr:nth-child(1) td:nth-child(2)')['onclick']).to be_nil
+        expect(find('tbody tr:nth-child(1) td:nth-child(2)')['title']).to eq '" onclick="alert()" "'
       end
-      @team = FactoryBot.create :team, name: '" onclick="alert()" "'
-      visit index_path(model_name: 'team')
-      expect(find('tbody tr:nth-child(1) td:nth-child(2)')['onclick']).to be_nil
-      expect(find('tbody tr:nth-child(1) td:nth-child(2)')['title']).to eq '" onclick="alert()" "'
+
+      it 'does not break values with HTML tags' do
+        RailsAdmin.config Player do
+          list do
+            field :team
+          end
+        end
+        @player = FactoryBot.create :player, team: FactoryBot.create(:team)
+        visit index_path(model_name: 'player')
+        expect(find('tbody tr:nth-child(1) td:nth-child(2)')['title']).to eq @player.team.name
+      end
     end
   end
 

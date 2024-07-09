@@ -133,9 +133,9 @@
               <% end %>
               <% properties.map{ |property| property.bind(:object, object) }.each do |property| %>
                 <% value = property.pretty_value %>
-                <td class="<%= [property.sticky? && 'sticky', property.css_class, property.type_css_class].select(&:present?).join(' ') %>" title="<%= value %>">
+                <%= content_tag(:td, class: [property.sticky? && 'sticky', property.css_class, property.type_css_class].select(&:present?), title: strip_tags(value.to_s)) do %>
                   <%= value %>
-                </td>
+                <% end %>
               <% end %>
               <td class="last links ra-sidescroll-frozen">
                 <ul class="nav d-inline list-inline">
