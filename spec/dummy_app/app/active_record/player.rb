@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 class Player < ActiveRecord::Base
   belongs_to :team, optional: true, inverse_of: :players

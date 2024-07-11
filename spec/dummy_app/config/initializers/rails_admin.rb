@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 RailsAdmin.config do |c|
   c.asset_source = CI_ASSET

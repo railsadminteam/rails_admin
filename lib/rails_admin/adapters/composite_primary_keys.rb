@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 require 'rails_admin/adapters/active_record'
 require 'rails_admin/adapters/composite_primary_keys/association'

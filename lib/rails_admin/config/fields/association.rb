@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 require 'rails_admin/config'
 require 'rails_admin/config/fields/base'

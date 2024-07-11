@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 class CreateDivisionsMigration < ActiveRecord::Migration[5.0]
   def self.up

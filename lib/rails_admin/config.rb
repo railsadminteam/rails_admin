@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 require 'rails_admin/config/lazy_model'
 require 'rails_admin/config/sections/list'

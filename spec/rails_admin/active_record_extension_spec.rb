@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 require 'spec_helper'
 require File.expand_path('../../config/initializers/active_record_extensions', __dir__)

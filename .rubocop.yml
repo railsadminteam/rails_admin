@@ -169,6 +169,9 @@ Style/EndlessMethod:
 Style/HashConversion:
   Enabled: true
 
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
 Style/HashExcept:
   Enabled: true
 

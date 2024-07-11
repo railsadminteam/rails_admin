@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 class AddCarrierwaveAssetsToFieldTests < ActiveRecord::Migration[5.0]
   def change

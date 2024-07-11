@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 class Division < ActiveRecord::Base
   self.primary_key = :custom_id

@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 class Draft < ActiveRecord::Base
   belongs_to :team

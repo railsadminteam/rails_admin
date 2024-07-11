@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 class NestedFieldTest < ActiveRecord::Base
   belongs_to :field_test, optional: true, inverse_of: :nested_field_tests

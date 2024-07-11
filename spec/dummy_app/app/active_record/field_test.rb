@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+
 
 class FieldTest < ActiveRecord::Base
   has_many :nested_field_tests, dependent: :destroy, inverse_of: :field_test
