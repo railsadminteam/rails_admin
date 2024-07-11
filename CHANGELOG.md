@@ -2,7 +2,14 @@
 
 ## [Unreleased](https://github.com/sferik/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.3.0...HEAD)
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.3.1...HEAD)
+
+## [2.3.1](https://github.com/sferik/rails_admin/tree/v2.3.1) - 2024-07-11
+
+[Full Changelog](https://github.com/sferik/rails_admin/compare/v2.3.0...v2.3.1)
+
+### Fixed
+- Revert [d84b398](https://github.com/railsadminteam/rails_admin/commit/d84b39884059c4ed50197cec8522cca029a17673), as 2.x wasn't affected by the vulnerability ([34d8431](https://github.com/railsadminteam/rails_admin/commit/34d8431efbe45943d1a413eb80f725ad9ec6971f), [#3686](https://github.com/railsadminteam/rails_admin/issues/3686#issuecomment-2215491140))
 
 ## [2.3.0](https://github.com/sferik/rails_admin/tree/v2.3.0) - 2024-07-06
 
