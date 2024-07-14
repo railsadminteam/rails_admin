@@ -12,7 +12,6 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :image? do
-            false unless value
             if abstract_model.model.new.respond_to?("#{name}_name")
               mime_type = Mime::Type.lookup_by_extension(bindings[:object].send("#{name}_name").to_s.split('.').last)
               mime_type.to_s.match?(/^image/)
