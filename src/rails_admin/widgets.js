@@ -258,6 +258,7 @@ import I18n from "./i18n";
             "options"
           );
           object_select.data("options", selected_data);
+          object_select.val('');
           object_select.filteringSelect("destroy");
           object_select.filteringSelect(selected_data);
         });
