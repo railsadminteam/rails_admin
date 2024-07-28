@@ -2,6 +2,7 @@
 
 appraise 'rails-6.0' do
   gem 'rails', '~> 6.0.0'
+  gem 'psych', '~> 3.3'
 
   group :test do
     gem 'cancancan', ['~> 3.0', '< 3.6']

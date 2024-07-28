@@ -68,6 +68,7 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers
 
   config.include Capybara::DSL, type: :request
+  config.include Capybara::RSpecMatchers, type: :request
 
   config.verbose_retry = true
   config.display_try_failure_messages = true

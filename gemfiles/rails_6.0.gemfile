@@ -11,6 +11,7 @@ gem "turbo-rails"
 gem "vite_rails", require: false
 gem "webpacker", require: false
 gem "webrick"
+gem "psych", "~> 3.3"
 
 group :development, :test do
   gem "pry", ">= 0.9"
