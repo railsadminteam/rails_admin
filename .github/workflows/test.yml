@@ -149,7 +149,7 @@ jobs:
         run: bundle exec rspec
       - name: Coveralls Parallel
         if: ${{ github.repository_owner == 'railsadminteam' }}
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v2
         continue-on-error: true
         with:
           github-token: ${{ secrets.github_token }}
@@ -163,7 +163,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.github_token }}
           parallel-finished: true
