@@ -22,7 +22,7 @@
     "bootstrap": "^5.1.3",
     "flatpickr": "^4.6.9",
     "jquery": "^3.6.0",
-    "jquery-ui": "^1.12.1"
+    "jquery-ui": "^1.12.1 <1.14.0"
   },
   "devDependencies": {
     "prettier": "^2.4.1"
