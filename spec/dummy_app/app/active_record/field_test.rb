@@ -43,8 +43,13 @@ class FieldTest < ActiveRecord::Base
 
   has_rich_text :action_text_field if defined?(ActionText)
 
-  enum string_enum_field: {S: 's', M: 'm', L: 'l'}
-  enum integer_enum_field: %i[small medium large]
+  if ActiveRecord.gem_version >= Gem::Version.new('7.0')
+    enum :string_enum_field, {S: 's', M: 'm', L: 'l'}
+    enum :integer_enum_field, %i[small medium large]
+  else
+    enum string_enum_field: {S: 's', M: 'm', L: 'l'}
+    enum integer_enum_field: %i[small medium large]
+  end
 
   validates :string_field, exclusion: {in: ['Invalid']} # to test file upload caching
 end

@@ -12,7 +12,11 @@ class Player < ActiveRecord::Base
     record.errors.add(:base, 'Player is cheating') if /on steroids/.match?(value.to_s)
   end
 
-  enum formation: {start: 'start', substitute: 'substitute'}
+  if ActiveRecord.gem_version >= Gem::Version.new('7.0')
+    enum :formation, {start: 'start', substitute: 'substitute'}
+  else
+    enum formation: {start: 'start', substitute: 'substitute'}
+  end
 
   before_destroy :destroy_hook
 

@@ -9,7 +9,11 @@ RSpec.describe RailsAdmin::Config::Fields::Types::ActiveRecordEnum, active_recor
     context 'when column name is format' do
       before do
         class FormatAsEnum < FieldTest
-          enum format: {Text: 'txt', Markdown: 'md'}
+          if ActiveRecord.gem_version >= Gem::Version.new('7.0')
+            enum :format, {Text: 'txt', Markdown: 'md'}
+          else
+            enum format: {Text: 'txt', Markdown: 'md'}
+          end
         end
       end
       let(:field) do

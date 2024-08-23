@@ -21,7 +21,6 @@ group :test do
   gem 'carrierwave', ['>= 2.0.0.rc', '< 3']
   gem 'cuprite', '!= 0.15.1'
   gem 'database_cleaner-active_record', '>= 2.0', require: false
-  gem 'database_cleaner-mongoid', '>= 2.0', require: false
   gem 'dragonfly', '~> 1.0'
   gem 'factory_bot', '>= 4.2', '!= 6.4.5'
   gem 'generator_spec', '>= 0.8'
@@ -52,14 +51,6 @@ group :active_record do
     gem 'pg', '>= 1.0.0'
     gem 'sqlite3', '~> 1.3'
   end
-end
-
-group :mongoid do
-  gem 'cancancan-mongoid'
-  gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
-  gem 'kaminari-mongoid'
-  gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
-  gem 'shrine-mongoid', '~> 1.0'
 end
 
 gemspec
