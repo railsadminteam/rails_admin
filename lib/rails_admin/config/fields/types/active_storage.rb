@@ -18,7 +18,7 @@ module RailsAdmin
           end
 
           register_instance_option :image? do
-            value && (value.representable? || mime_type(value.filename).to_s.match?(/^image/))
+            value && (value.representable? || value.content_type.match?(/^image/))
           end
 
           register_instance_option :eager_load do
@@ -50,9 +50,9 @@ module RailsAdmin
 
             if thumb && value.representable?
               thumb = thumb_method if thumb == true
-              repr = value.representation(thumb)
+              representation = value.representation(thumb)
               Rails.application.routes.url_helpers.rails_blob_representation_path(
-                repr.blob.signed_id, repr.variation.key, repr.blob.filename, only_path: true
+                representation.blob.signed_id, representation.variation.key, representation.blob.filename, only_path: true
               )
             else
               Rails.application.routes.url_helpers.rails_blob_path(value, only_path: true)
@@ -62,10 +62,6 @@ module RailsAdmin
           def value
             attachment = super
             attachment if attachment&.attached?
-          end
-
-          def mime_type(filename_obj)
-            Mime::Type.lookup_by_extension(filename_obj.extension_without_delimiter)
           end
         end
       end
