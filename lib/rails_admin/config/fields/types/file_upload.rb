@@ -52,7 +52,7 @@ module RailsAdmin
           end
 
           register_instance_option :image? do
-            mime_type = Mime::Type.lookup_by_extension(resource_url.to_s.split('.').last)
+            mime_type = Mime::Type.lookup_by_extension(extension)
             mime_type.to_s.match?(/^image/)
           end
 
@@ -64,6 +64,12 @@ module RailsAdmin
             {
               required: required? && !value.present?,
             }
+          end
+
+          def extension
+            URI.parse(resource_url).path.split('.').last
+          rescue URI::InvalidURIError
+            nil
           end
 
           # virtual class

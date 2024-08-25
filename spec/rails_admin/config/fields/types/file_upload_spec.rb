@@ -83,4 +83,57 @@ RSpec.describe RailsAdmin::Config::Fields::Types::FileUpload do
       end
     end
   end
+
+  describe '#image?' do
+    let(:filename) { 'dummy.txt' }
+    let :rails_admin_field do
+      RailsAdmin.config('FieldTest').fields.detect do |f|
+        f.name == :string_field
+      end.with(
+        object: FieldTest.new(string_field: filename),
+        view: ApplicationController.new.view_context,
+      )
+    end
+    before do
+      RailsAdmin.config FieldTest do
+        field :string_field, :file_upload do
+          def resource_url
+            "http://example.com/#{value}"
+          end
+        end
+      end
+    end
+
+    context 'when the file is not an image' do
+      let(:filename) { 'dummy.txt' }
+
+      it 'returns false' do
+        expect(rails_admin_field.image?).to be false
+      end
+    end
+
+    context 'when the file is an image' do
+      let(:filename) { 'dummy.jpg' }
+
+      it 'returns true' do
+        expect(rails_admin_field.image?).to be true
+      end
+    end
+
+    context 'when the file is an image but suffixed with a query string' do
+      let(:filename) { 'dummy.jpg?foo=bar' }
+
+      it 'returns true' do
+        expect(rails_admin_field.image?).to be true
+      end
+    end
+
+    context "when the filename can't be represented as a valid URI" do
+      let(:filename) { 'du mmy.jpg' }
+
+      it 'returns false' do
+        expect(rails_admin_field.image?).to be false
+      end
+    end
+  end
 end
