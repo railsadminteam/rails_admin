@@ -2,7 +2,26 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.2.0.beta...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.2.0.rc...HEAD)
+
+## [3.2.0.rc](https://github.com/railsadminteam/rails_admin/tree/v3.2.0.rc) - 2024-08-25
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.2.0.beta...v3.2.0.rc)
+
+### Added
+
+- ActiveRecord 7.1 composite primary keys support ([53b89c9](https://github.com/railsadminteam/rails_admin/commit/53b89c9161e48c0f9b4ecd5f544398c9360ea50f))
+
+### Changed
+
+- Introduce SingularAssociation and CollectionAssociation to tidy up the view files ([876be11](https://github.com/railsadminteam/rails_admin/commit/876be11ec01237596b2f27e15239e86418ce7610))
+
+### Fixed
+
+- Fix to show a thumbnail of all representable ActiveStorage attachments ([#3656](https://github.com/railsadminteam/rails_admin/pull/3656), [7754ac3](https://github.com/railsadminteam/rails_admin/commit/7754ac34eb8e0af7605b2e52ae0646b17e9bb0c6))
+- Fix to detect images properly in FileUpload and MultipleFileUpload field ([35c8702](https://github.com/railsadminteam/rails_admin/commit/35c8702351aa300bddcc950d36d68b80742f5011), [#3633](https://github.com/railsadminteam/rails_admin/pull/3633))
+- Fix to reset polymorphic id selection upon type change ([#3630](https://github.com/railsadminteam/rails_admin/pull/3630), [13114e5](https://github.com/railsadminteam/rails_admin/commit/13114e5629d49eab14d58df1319eb068dacedba7))
+- Lock jQuery UI version due to incompatibility with 1.14 ([5245d5b](https://github.com/railsadminteam/rails_admin/commit/5245d5bb91691d646219b5243f3f881a0144a3fd), [#3692](https://github.com/railsadminteam/rails_admin/issues/3692))
 
 ## [3.2.0.beta](https://github.com/railsadminteam/rails_admin/tree/v3.2.0.beta) - 2024-07-13
 
