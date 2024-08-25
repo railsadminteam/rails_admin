@@ -27,6 +27,18 @@ RSpec.describe 'PolymorphicAssociation field', type: :request do
       expect(@comment.commentable).to eq @hardball
     end
 
+    it 'clears the selected id on type change', js: true do
+      @players = ['Jackie Robinson', 'Rob Wooten'].map { |name| FactoryBot.create :player, name: name }
+      visit new_path(model_name: 'comment')
+      select 'Player', from: 'comment[commentable_type]'
+      find('input.ra-filtering-select-input').set('Rob')
+      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
+      expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+      page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Jackie Robinson")).click()}
+      select 'Team', from: 'comment[commentable_type]'
+      expect(find('#comment_commentable_id', visible: false).value).to eq ''
+    end
+
     context 'when the associated model is declared in a two-level namespace' do
       it 'successfully saves the record', js: true do
         polymorphic_association_tests = ['Jackie Robinson', 'Rob Wooten'].map do |name|
