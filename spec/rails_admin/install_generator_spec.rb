@@ -8,7 +8,6 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
   arguments ['admin', "--asset=#{CI_ASSET}", '--force']
 
   before do
-    pending 'Until next version of npm package is released' if CI_ASSET == :importmap
     prepare_destination
     File.write(File.join(destination_root, 'package.json'), '{"license": "MIT"}')
     FileUtils.touch File.join(destination_root, 'Gemfile')
