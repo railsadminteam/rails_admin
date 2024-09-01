@@ -297,6 +297,7 @@ import I18n from "./i18n";
     destroy: function () {
       this.input.remove();
       this.button.remove();
+      this.element.html($('<option value="" selected="selected"></option>'));
       this.element.show();
       this.filtering_select.remove();
       $.Widget.prototype.destroy.call(this);

@@ -90,6 +90,30 @@ RSpec.describe 'PolymorphicAssociation field', type: :request do
 
       is_expected.to have_selector('select#team_comment_ids')
     end
+
+    context 'with records in different models share the same id', js: true do
+      let!(:players) { [FactoryBot.create(:player, id: team.id, name: 'Jackie Robinson')] }
+
+      it 'clears the selected id on type change', js: true do
+        visit edit_path(model_name: 'comment', id: comment.id)
+        select 'Player', from: 'comment[commentable_type]'
+        click_button 'Save'
+        is_expected.to have_content 'Comment successfully updated'
+        expect(comment.reload.commentable).to eq nil
+      end
+
+      it 'updates correctly', js: true do
+        visit edit_path(model_name: 'comment', id: comment.id)
+        select 'Player', from: 'comment[commentable_type]'
+        find('input.ra-filtering-select-input').set('Rob')
+        page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
+        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+        page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Jackie Robinson")).click()}
+        click_button 'Save'
+        is_expected.to have_content 'Comment successfully updated'
+        expect(comment.reload.commentable).to eq players[0]
+      end
+    end
   end
 
   context 'on show' do
