@@ -5,7 +5,7 @@ module RailsAdmin
     MAJOR = 3
     MINOR = 2
     PATCH = 0
-    PRE = 'rc'
+    PRE = nil
 
     class << self
       # @return [String]

@@ -2,7 +2,15 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.2.0.rc...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.2.0...HEAD)
+
+## [3.2.0](https://github.com/railsadminteam/rails_admin/tree/v3.2.0) - 2024-09-08
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.2.0.rc...v3.2.0)
+
+### Fixed
+
+- Fix polymorphic id doesn't reset properly in an edge case ([7b2ffb1](https://github.com/railsadminteam/rails_admin/commit/7b2ffb12386e06a0e6e0bace6d331fc5af989e38), [#3630](https://github.com/railsadminteam/rails_admin/pull/3630))
 
 ## [3.2.0.rc](https://github.com/railsadminteam/rails_admin/tree/v3.2.0.rc) - 2024-08-25
 
