@@ -92,4 +92,28 @@ RSpec.describe 'Boolean field', type: :request do
       expect(field_test.reload.boolean_field).to be false
     end
   end
+
+  context 'if the database column is not nullable', active_record: true do
+    before do
+      RailsAdmin.config FieldTest do
+        field :non_nullable_boolean_field
+      end
+    end
+
+    it 'shows a checkbox' do
+      visit new_path(model_name: 'field_test')
+      is_expected.to have_content 'New Field test'
+      is_expected.to have_css '[type="checkbox"][name="field_test[non_nullable_boolean_field]"]'
+    end
+
+    it 'can be updated' do
+      visit edit_path(model_name: 'field_test', id: field_test.id)
+      find('.boolean_type input').check
+      click_button 'Save and edit'
+      expect(field_test.reload.non_nullable_boolean_field).to be true
+      find('.boolean_type input').uncheck
+      click_button 'Save and edit'
+      expect(field_test.reload.non_nullable_boolean_field).to be false
+    end
+  end
 end
