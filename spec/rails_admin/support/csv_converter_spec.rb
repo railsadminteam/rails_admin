@@ -150,5 +150,34 @@ RSpec.describe RailsAdmin::CSVConverter do
         expect(subject[2]).to eq("\n")
       end
     end
+
+    context 'when more than one page of objects' do
+      before do
+        FactoryBot.create_list :player, 100
+      end
+
+      let(:objects) { Player.all }
+      let(:options) { {} }
+
+      it 'generates a csv with all objects' do
+        expect(subject[2].split("\n").count).to be 101
+      end
+    end
+
+    context 'when objects are ordered' do
+      before do
+        FactoryBot.create_list :player, 2 do |player, index|
+          player.name = "Player #{index}"
+        end
+        FactoryBot.create :player, name: 'Player zzz'
+      end
+
+      let(:objects) { Player.all.order(name: :desc) }
+      let(:options) { {} }
+
+      it 'preserves the ordering' do
+        expect(subject[2].split("\n")[1]).to include('Player zzz')
+      end
+    end
   end
 end
