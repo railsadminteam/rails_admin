@@ -6,7 +6,7 @@ module RailsAdmin
     include RailsAdmin::MainHelper
     include RailsAdmin::ApplicationHelper
 
-    layout: 'rails_admin/application'
+    layout 'rails_admin/application'
 
     before_action :check_for_cancel
 
