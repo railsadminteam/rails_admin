@@ -49,7 +49,14 @@ module RailsAdmin
   rescue LoadError
     if YAML.respond_to?(:safe_load)
       def self.yaml_load(yaml)
-        YAML.safe_load(yaml)
+        # https://github.com/rails/rails/blob/v6.1.7.6/activerecord/lib/active_record/coders/yaml_column.rb#L50-L56
+        if ActiveRecord::Base.use_yaml_unsafe_load
+          YAML.unsafe_load(yaml)
+        elsif YAML.method(:safe_load).parameters.include?([:key, :permitted_classes])
+          YAML.safe_load(yaml, permitted_classes: ActiveRecord::Base.yaml_column_permitted_classes, aliases: true)
+        else
+          YAML.safe_load(yaml, ActiveRecord::Base.yaml_column_permitted_classes, [], true)
+        end
       end
     else
       raise LoadError.new "Safe-loading of YAML is not available. Please install 'safe_yaml' or install Psych 2.0+"
