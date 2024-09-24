@@ -16,7 +16,7 @@ module RailsAdmin
       @model_config = @abstract_model.config
       @methods = [(schema[:only] || []) + (schema[:methods] || [])].flatten.compact
       @ordered_methods = @model_config.export.fields.filter { |field| @methods.include?(field.name) }.sort_by(&:order).map(&:name)
-      @fields = @ordered_methods.collect { |m| export_fields_for(m).first }
+      @fields = @ordered_methods.collect { |m| export_field_for(m).first }
       @empty = ::I18n.t('admin.export.empty_value_for_associated_objects')
       schema_include = schema.delete(:include) || {}
 
