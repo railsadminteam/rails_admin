@@ -204,6 +204,13 @@ RSpec.describe RailsAdmin, type: :request do
       is_expected.to have_content 'Player failed to be updated'
       is_expected.to have_css '.filtering-select[data-input-for="player_team_id"]'
     end
+
+    it 'does not prefetch pages' do
+      allow_any_instance_of(RailsAdmin::Config::Actions::Index).to receive(:controller).and_raise('index prefetched')
+      visit dashboard_path
+      find('.sidebar a.nav-link[href$="/player"]').hover
+      sleep 0.3 # Turbo waits 100ms before prefetch
+    end
   end
 
   describe 'dom_ready events', js: true do
