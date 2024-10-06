@@ -133,6 +133,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "18"
+      - name: Install ImageMagick
+        run: sudo apt-get install imagemagick
       - name: Setup application
         env:
           BUNDLE_GEMFILE: ../../${{ matrix.gemfile }}
