@@ -12,7 +12,7 @@
   font-style: normal;
   font-weight: 900;
   font-display: block;
-  src: asset-url("rails_admin/fa-solid-900.woff2") format("woff2"), asset-url("rails_admin/fa-solid-900.ttf") format("truetype"); }
+  src: url("rails_admin/fa-solid-900.woff2") format("woff2"), url("rails_admin/fa-solid-900.ttf") format("truetype"); }
 
 .fa,
 .fas,
