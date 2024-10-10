@@ -15,4 +15,4 @@ var I18n = {
   },
 };
 
-module.exports = I18n;
+export default I18n;
