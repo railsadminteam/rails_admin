@@ -294,10 +294,12 @@ import I18n from "./i18n";
       };
     },
 
-    destroy: function () {
+    destroy: function (isDefault = true) {
       this.input.remove();
       this.button.remove();
-      this.element.html($('<option value="" selected="selected"></option>'));
+      if (isDefault) {
+        this.element.html($('<option value="" selected="selected"></option>'));
+      }
       this.element.show();
       this.filtering_select.remove();
       $.Widget.prototype.destroy.call(this);
