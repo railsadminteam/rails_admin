@@ -11,7 +11,6 @@ gem "turbo-rails"
 gem "vite_rails", require: false
 gem "webpacker", require: false
 gem "webrick"
-gem "sqlite3", "~> 2.2"
 gem "importmap-rails", require: false
 
 group :development, :test do
