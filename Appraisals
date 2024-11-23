@@ -56,6 +56,10 @@ appraise 'rails-7.0' do
   gem 'importmap-rails', require: false
 
   group :active_record do
+    platforms :ruby, :mswin, :mingw, :x64_mingw do
+      gem 'sqlite3', '~> 1.3'
+    end
+
     platforms :jruby do
       gem 'activerecord-jdbcmysql-adapter', '~> 70.0'
       gem 'activerecord-jdbcpostgresql-adapter', '~> 70.0'
@@ -78,6 +82,12 @@ appraise 'rails-7.1' do
   gem 'rails', '~> 7.1.0'
   gem 'importmap-rails', require: false
 
+  group :active_record do
+    platforms :ruby, :mswin, :mingw, :x64_mingw do
+      gem 'sqlite3', '~> 1.3'
+    end
+  end
+
   group :mongoid do
     gem 'cancancan-mongoid'
     gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
@@ -94,10 +104,19 @@ appraise 'rails-7.2' do
   gem 'importmap-rails', require: false
 end
 
+appraise 'rails-8.0' do
+  gem 'rails', '~> 8.0.0'
+  gem 'importmap-rails', require: false
+end
+
 appraise 'composite_primary_keys' do
   gem 'rails', '~> 7.0.0'
 
   group :active_record do
     gem 'composite_primary_keys'
+
+    platforms :ruby, :mswin, :mingw, :x64_mingw do
+      gem 'sqlite3', '~> 1.3'
+    end
   end
 end

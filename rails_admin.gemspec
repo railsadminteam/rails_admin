@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'csv'
   spec.add_dependency 'kaminari', '>= 0.14', '< 2.0'
   spec.add_dependency 'nested_form', '~> 0.3'
-  spec.add_dependency 'rails', ['>= 6.0', '< 8']
+  spec.add_dependency 'rails', ['>= 6.0', '< 9']
   spec.add_dependency 'turbo-rails', ['>= 1.0', '< 3']
   spec.add_development_dependency 'bundler', '>= 1.0'
   spec.authors = ['Erik Michaels-Ober', 'Bogdan Gaza', 'Petteri Kaapa', 'Benoit Benezech', 'Mitsuhiro Shibuya']
