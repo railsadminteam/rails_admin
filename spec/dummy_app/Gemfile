@@ -26,7 +26,7 @@ gem 'devise', '>= 3.2'
 gem 'dragonfly', '~> 1.0'
 gem 'importmap-rails', require: false
 gem 'mini_magick', '>= 3.4'
-gem 'mlb', '>= 0.7', github: 'mshibuya/mlb', branch: 'ruby-3'
+gem 'mlb', '>= 0.7'
 gem 'paperclip', '>= 3.4'
 gem 'rails_admin', path: '../../'
 gem 'shrine', '~> 3.0'
