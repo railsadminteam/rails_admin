@@ -58,6 +58,11 @@ jobs:
             orm: active_record
             adapter: sqlite3
             asset: sprockets
+          - ruby: "3.3"
+            gemfile: gemfiles/rails_8.0.gemfile
+            orm: active_record
+            adapter: sqlite3
+            asset: sprockets
           - ruby: "3.2"
             gemfile: gemfiles/composite_primary_keys.gemfile
             orm: active_record

@@ -94,6 +94,17 @@ appraise 'rails-7.2' do
   gem 'importmap-rails', require: false
 end
 
+appraise 'rails-8.0' do
+  gem 'rails', '~> 8.0.0'
+  gem 'importmap-rails', require: false
+
+  group :active_record do
+    platforms :ruby, :mswin, :mingw, :x64_mingw do
+      gem 'sqlite3', '~> 2.2'
+    end
+  end
+end
+
 appraise 'composite_primary_keys' do
   gem 'rails', '~> 7.0.0'
 
