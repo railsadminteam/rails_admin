@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe RailsAdmin::Config do
@@ -16,10 +18,6 @@ RSpec.describe RailsAdmin::Config do
       RailsAdmin.config.excluded_models = [Team]
       RailsAdmin.config.included_models = [Team, League]
       expect(RailsAdmin::AbstractModel.all.collect(&:model)).to eq([League])
-    end
-
-    it 'always excludes history', active_record: true do
-      expect(RailsAdmin::AbstractModel.all.collect(&:model)).not_to include(RailsAdmin::History)
     end
 
     it 'excluded? returns true for any model not on the list' do
@@ -74,9 +72,9 @@ RSpec.describe RailsAdmin::Config do
 
     it 'can be configured' do
       RailsAdmin.config do |config|
-        config.main_app_name = %w(stati c value)
+        config.main_app_name = %w[static value]
       end
-      expect(RailsAdmin.config.main_app_name).to eq(%w(stati c value))
+      expect(RailsAdmin.config.main_app_name).to eq(%w[static value])
     end
   end
 
@@ -134,7 +132,9 @@ RSpec.describe RailsAdmin::Config do
         class ControllerMock
           def set_paper_trail_whodunnit; end
         end
+
         module PaperTrail; end
+
         class Version; end
         RailsAdmin.add_extension(:example, RailsAdmin::Extensions::PaperTrail, auditing: true)
       end
@@ -244,6 +244,7 @@ RSpec.describe RailsAdmin::Config do
         include Mongoid::Document
         recursively_embeds_one
       end
+
       class RecursivelyEmbedsMany
         include Mongoid::Document
         recursively_embeds_many
@@ -259,9 +260,25 @@ RSpec.describe RailsAdmin::Config do
     it 'should not include classnames start with Concerns::' do
       expect(RailsAdmin::Config.models_pool.select { |m| m.match(/^Concerns::/) }).to be_empty
     end
+
+    it 'includes models in the directory added by config.eager_load_paths' do
+      expect(RailsAdmin::Config.models_pool).to include('Basketball')
+    end
+
+    it 'should include a model which was configured explicitly' do
+      RailsAdmin::Config.model 'PaperTrail::Version' do
+        visible false
+      end
+
+      expect(RailsAdmin::Config.models_pool).to include('PaperTrail::Version')
+    end
   end
 
   describe '.parent_controller' do
+    before do
+      class TestController < ActionController::Base; end
+    end
+
     it 'uses default class' do
       expect(RailsAdmin.config.parent_controller).to eq '::ActionController::Base'
     end
@@ -271,6 +288,27 @@ RSpec.describe RailsAdmin::Config do
         config.parent_controller = 'TestController'
       end
       expect(RailsAdmin.config.parent_controller).to eq 'TestController'
+    end
+  end
+
+  describe '.parent_controller=' do
+    context 'if RailsAdmin::ApplicationController is already loaded' do
+      before do
+        # preload controllers (e.g. when config.eager_load = true)
+        RailsAdmin::MainController
+      end
+
+      after do
+        RailsAdmin::Config.reset
+        RailsAdmin.send(:remove_const, :ApplicationController)
+        load RailsAdmin::Engine.root.join('app/controllers/rails_admin/application_controller.rb')
+      end
+
+      it 'can be changed' do
+        RailsAdmin.config.parent_controller = 'ApplicationController'
+        expect(RailsAdmin::ApplicationController.superclass).to eq ApplicationController
+        expect(RailsAdmin::MainController.superclass.superclass).to eq ApplicationController
+      end
     end
   end
 
@@ -296,6 +334,7 @@ RSpec.describe RailsAdmin::Config do
         end
       end
     end
+
     context 'when model expanded' do
       before do
         described_class.model(Team) do
@@ -303,9 +342,10 @@ RSpec.describe RailsAdmin::Config do
         end
       end
       it 'execute all passed blocks' do
-        expect(fields.map(&:name)).to match_array %i(players fans)
+        expect(fields.map(&:name)).to match_array %i[players fans]
       end
     end
+
     context 'when expand redefine behavior' do
       before do
         described_class.model Team do
@@ -316,84 +356,61 @@ RSpec.describe RailsAdmin::Config do
         expect(fields.find { |f| f.name == :players }.visible).to be true
       end
     end
-    context 'when model expanded in config' do
-      let(:block) { proc { field :players } }
-      before do
-        allow(block).to receive(:source_location).and_return(['config/initializers/rails_admin.rb'])
-        described_class.model(Team, &block)
-      end
-      it 'executes first' do
-        expect(fields.find { |f| f.name == :players }.visible).to be false
+
+    context 'when model has no table yet', active_record: true do
+      it 'does not try to apply the configuration block' do
+        described_class.model(WithoutTable) do
+          include_all_fields
+        end
       end
     end
   end
 
-  describe "field types code reloading" do
-    before { Rails.application.config.cache_classes = false }
-    after { Rails.application.config.cache_classes = true }
+  describe '.reset' do
+    before do
+      RailsAdmin.config do |config|
+        config.included_models = %w[Player Team]
+      end
+      RailsAdmin::AbstractModel.all
+      RailsAdmin::Config.reset
+      RailsAdmin.config do |config|
+        config.excluded_models = ['Player']
+      end
+    end
+    subject { RailsAdmin::AbstractModel.all.map { |am| am.model.name } }
 
-    let(:config) { described_class.model(Team) }
-    let(:fields) { described_class.model(Team).edit.fields }
+    it 'refreshes the result of RailsAdmin::AbstractModel.all' do
+      expect(subject).not_to include 'Player'
+      expect(subject).to include 'Team'
+    end
+  end
 
-    let(:team_config) do
-      proc do
-        field :id
-        field :wins, :boolean
+  describe '.reload!' do
+    before do
+      RailsAdmin.config Player do
+        field :name
+      end
+      RailsAdmin.config Team do
+        field :color, :integer
       end
     end
 
-    let(:team_config2) do
-      proc do
-        field :wins, :toggle
-      end
+    it 'clears current configuration' do
+      RailsAdmin::Config.reload!
+      expect(RailsAdmin::Config.model(Player).fields.map(&:name)).to include :number
     end
 
-    let(:team_config3) do
-      proc do
-        field :wins
-      end
+    it 'reloads the configuration from the initializer' do
+      RailsAdmin::Config.reload!
+      expect(RailsAdmin::Config.model(Team).fields.find { |f| f.name == :color }.type).to eq :hidden
     end
-
-    it "allows code reloading" do
-      Team.send(:rails_admin, &team_config)
-
-      # This simulates the way RailsAdmin really does it
-      config.edit.send(:_fields, true)
-
-      module RailsAdmin
-        module Config
-          module Fields
-            module Types
-              class Toggle < RailsAdmin::Config::Fields::Base
-                RailsAdmin::Config::Fields::Types.register(self)
-              end
-            end
-          end
-        end
-      end
-      Team.send(:rails_admin, &team_config2)
-      expect(fields.map(&:name)).to match_array %i(id wins)
-    end
-
-    it "updates model config when reloading code for rails 5" do
-      Team.send(:rails_admin, &team_config)
-
-      # this simulates rails code reloading
-      RailsAdmin::Engine.initializers.select do |i|
-        i.name == "RailsAdmin reload config in development"
-      end.first.block.call
-      Rails.application.executor.wrap do
-        ActiveSupport::Reloader.new.tap(&:class_unload!).complete!
-      end
-
-      Team.send(:rails_admin, &team_config3)
-      expect(fields.map(&:name)).to match_array %i(wins)
-    end if defined?(ActiveSupport::Reloader)
   end
 end
 
 module ExampleModule
   class AuthorizationAdapter; end
+
   class ConfigurationAdapter; end
+
   class AuditingAdapter; end
 end

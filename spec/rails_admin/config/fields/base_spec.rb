@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe RailsAdmin::Config::Fields::Base do
@@ -61,8 +63,8 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
         class ConditionalValidationTest < Tableless
           column :foo, :varchar
           column :bar, :varchar
-          validates :foo, presence: true, if: :presisted?
-          validates :bar, presence: true, unless: :presisted?
+          validates :foo, presence: true, if: :persisted?
+          validates :bar, presence: true, unless: :persisted?
         end
       end
 
@@ -122,7 +124,7 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
   end
 
   describe '#children_fields' do
-    POLYMORPHIC_CHILDREN = [:commentable_id, :commentable_type].freeze
+    POLYMORPHIC_CHILDREN = %i[commentable_id commentable_type].freeze
 
     it 'is empty by default' do
       expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :name }.children_fields).to eq([])
@@ -159,7 +161,7 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
 
     context 'of a Dragonfly installation' do
       it 'is a _name field and _uid field' do
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :dragonfly_asset }.children_fields).to eq([:dragonfly_asset_name, :dragonfly_asset_uid])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :dragonfly_asset }.children_fields).to eq(%i[dragonfly_asset_name dragonfly_asset_uid])
       end
     end
 
@@ -180,11 +182,11 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
     if defined?(ActiveStorage)
       context 'of a ActiveStorage installation' do
         it 'is _attachment and _blob fields' do
-          expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :active_storage_asset }.children_fields).to match_array [:active_storage_asset_attachment, :active_storage_asset_blob]
+          expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :active_storage_asset }.children_fields).to match_array %i[active_storage_asset_attachment active_storage_asset_blob]
         end
 
         it 'is hidden, not filterable' do
-          fields = RailsAdmin.config(FieldTest).fields.select { |f| [:active_storage_asset_attachment, :active_storage_asset_blob].include?(f.name) }
+          fields = RailsAdmin.config(FieldTest).fields.select { |f| %i[active_storage_asset_attachment active_storage_asset_blob].include?(f.name) }
           expect(fields).to all(be_hidden)
           expect(fields).not_to include(be_filterable)
         end
@@ -192,11 +194,11 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
 
       context 'of a ActiveStorage installation with multiple file support' do
         it 'is _attachment and _blob fields' do
-          expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :active_storage_assets }.children_fields).to match_array [:active_storage_assets_attachments, :active_storage_assets_blobs]
+          expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :active_storage_assets }.children_fields).to match_array %i[active_storage_assets_attachments active_storage_assets_blobs]
         end
 
         it 'is hidden, not filterable' do
-          fields = RailsAdmin.config(FieldTest).fields.select { |f| [:active_storage_assets_attachments, :active_storage_assets_blobs].include?(f.name) }
+          fields = RailsAdmin.config(FieldTest).fields.select { |f| %i[active_storage_assets_attachments active_storage_assets_blobs].include?(f.name) }
           expect(fields).to all(be_hidden)
           expect(fields).not_to include(be_filterable)
         end
@@ -518,12 +520,6 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
     end
   end
 
-  describe '#associated_collection' do
-    it 'returns [] when type is blank?' do
-      expect(RailsAdmin.config(Comment).fields.detect { |f| f.name == :commentable }.associated_collection('')).to be_empty
-    end
-  end
-
   describe '#visible?' do
     it 'is false when fields have specific name ' do
       class FieldVisibilityTest < Tableless
@@ -538,8 +534,8 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
         column :updated_on, :timestamp
         column :deleted_on, :timestamp
       end
-      expect(RailsAdmin.config(FieldVisibilityTest).base.fields.select(&:visible?).collect(&:name)).to match_array [:_id, :created_at, :created_on, :deleted_at, :deleted_on, :id, :name, :updated_at, :updated_on]
-      expect(RailsAdmin.config(FieldVisibilityTest).list.fields.select(&:visible?).collect(&:name)).to match_array [:_id, :created_at, :created_on, :deleted_at, :deleted_on, :id, :name, :updated_at, :updated_on]
+      expect(RailsAdmin.config(FieldVisibilityTest).base.fields.select(&:visible?).collect(&:name)).to match_array %i[_id created_at created_on deleted_at deleted_on id name updated_at updated_on]
+      expect(RailsAdmin.config(FieldVisibilityTest).list.fields.select(&:visible?).collect(&:name)).to match_array %i[_id created_at created_on deleted_at deleted_on id name updated_at updated_on]
       expect(RailsAdmin.config(FieldVisibilityTest).edit.fields.select(&:visible?).collect(&:name)).to match_array [:name]
       expect(RailsAdmin.config(FieldVisibilityTest).show.fields.select(&:visible?).collect(&:name)).to match_array [:name]
     end
@@ -571,6 +567,37 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
       expect(name_field.default_filter_operator).to eq('is') # custom via user specification
       division_field = RailsAdmin.config('Team').list.fields.detect { |f| f.name == :division }
       expect(division_field.default_filter_operator).to be nil # rails_admin generic fallback
+    end
+  end
+
+  describe '#eager_load' do
+    let(:field) { RailsAdmin.config('Team').fields.detect { |f| f.name == :players } }
+
+    it 'can be set to true' do
+      RailsAdmin.config Team do
+        field :players do
+          eager_load true
+        end
+      end
+      expect(field.eager_load_values).to eq [:players]
+    end
+
+    it 'can be set to false' do
+      RailsAdmin.config Team do
+        field :players do
+          eager_load false
+        end
+      end
+      expect(field.eager_load_values).to eq []
+    end
+
+    it 'can be set to a custom value' do
+      RailsAdmin.config Team do
+        field :players do
+          eager_load [{players: :draft}, :fans]
+        end
+      end
+      expect(field.eager_load_values).to eq [{players: :draft}, :fans]
     end
   end
 end

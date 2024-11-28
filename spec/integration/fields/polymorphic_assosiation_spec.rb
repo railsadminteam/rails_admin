@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'PolymorphicAssociation field', type: :request do
@@ -9,11 +11,11 @@ RSpec.describe 'PolymorphicAssociation field', type: :request do
       visit new_path(model_name: 'comment')
       select 'Player', from: 'comment[commentable_type]'
       find('input.ra-filtering-select-input').set('Rob')
-      page.execute_script("$('input.ra-filtering-select-input').trigger('focus')")
-      page.execute_script("$('input.ra-filtering-select-input').trigger('keydown')")
+      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
       expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
-      page.execute_script %{$('ul.ui-autocomplete li.ui-menu-item a:contains("Jackie Robinson")').trigger('mouseenter').click()}
+      page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Jackie Robinson")).click()}
       click_button 'Save'
+      is_expected.to have_content 'Comment successfully created'
       expect(Comment.first.commentable).to eq @players[0]
     end
 
@@ -24,25 +26,93 @@ RSpec.describe 'PolymorphicAssociation field', type: :request do
       expect(@comment.commentable_type).to eq 'Ball'
       expect(@comment.commentable).to eq @hardball
     end
+
+    it 'clears the selected id on type change', js: true do
+      @players = ['Jackie Robinson', 'Rob Wooten'].map { |name| FactoryBot.create :player, name: name }
+      visit new_path(model_name: 'comment')
+      select 'Player', from: 'comment[commentable_type]'
+      find('input.ra-filtering-select-input').set('Rob')
+      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
+      expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+      page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Jackie Robinson")).click()}
+      select 'Team', from: 'comment[commentable_type]'
+      expect(find('#comment_commentable_id', visible: false).value).to eq ''
+    end
+
+    context 'when the associated model is declared in a two-level namespace' do
+      it 'successfully saves the record', js: true do
+        polymorphic_association_tests = ['Jackie Robinson', 'Rob Wooten'].map do |name|
+          FactoryBot.create(:two_level_namespaced_polymorphic_association_test, name: name)
+        end
+
+        visit new_path(model_name: 'comment')
+
+        select 'Polymorphic association test', from: 'comment[commentable_type]'
+        find('input.ra-filtering-select-input').set('Rob')
+
+        page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
+        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+
+        page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Jackie Robinson")).click()}
+        click_button 'Save'
+        is_expected.to have_content 'Comment successfully created'
+        expect(Comment.first.commentable).to eq polymorphic_association_tests.first
+      end
+    end
   end
 
   context 'on update' do
-    before :each do
-      @team = FactoryBot.create :team
-      @comment = FactoryBot.create :comment, commentable: @team
-    end
+    let(:team) { FactoryBot.create :team, name: 'Los Angeles Dodgers' }
+    let(:comment) { FactoryBot.create :comment, commentable: team }
+    let!(:players) { ['Jackie Robinson', 'Rob Wooten', 'Scott Hairston'].map { |name| FactoryBot.create :player, name: name } }
 
-    it 'is editable' do
-      visit edit_path(model_name: 'comment', id: @comment.id)
-
-      is_expected.to have_selector('select#comment_commentable_type')
-      is_expected.to have_selector('select#comment_commentable_id')
+    it 'is editable', js: true do
+      visit edit_path(model_name: 'comment', id: comment.id)
+      expect(find('select#comment_commentable_type').value).to eq 'Team'
+      expect(find('select#comment_commentable_id', visible: false).value).to eq team.id.to_s
+      find('input.ra-filtering-select-input').set('Los')
+      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
+      expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+      expect(all('ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to eq ['Los Angeles Dodgers']
+      select 'Player', from: 'comment[commentable_type]'
+      find('input.ra-filtering-select-input').set('Rob')
+      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
+      expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+      expect(all('ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to eq ['Rob Wooten', 'Jackie Robinson']
+      page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Jackie Robinson")).click()}
+      click_button 'Save'
+      is_expected.to have_content 'Comment successfully updated'
+      expect(comment.reload.commentable).to eq players[0]
     end
 
     it 'is visible in the owning end' do
-      visit edit_path(model_name: 'team', id: @team.id)
+      visit edit_path(model_name: 'team', id: team.id)
 
       is_expected.to have_selector('select#team_comment_ids')
+    end
+
+    context 'with records in different models share the same id', js: true do
+      let!(:players) { [FactoryBot.create(:player, id: team.id, name: 'Jackie Robinson')] }
+
+      it 'clears the selected id on type change', js: true do
+        visit edit_path(model_name: 'comment', id: comment.id)
+        select 'Player', from: 'comment[commentable_type]'
+        click_button 'Save'
+        is_expected.to have_content 'Comment successfully updated'
+        expect(comment.reload.commentable).to eq nil
+      end
+
+      it 'updates correctly', js: true do
+        visit edit_path(model_name: 'comment', id: comment.id)
+        select 'Player', from: 'comment[commentable_type]'
+        find('input.ra-filtering-select-input').set('Rob')
+        page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
+        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+        page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Jackie Robinson")).click()}
+        click_button 'Save'
+        is_expected.to have_content 'Comment successfully updated'
+        expect(comment.reload.commentable).to eq players[0]
+      end
     end
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePlayersMigration < ActiveRecord::Migration[5.0]
   def self.up
     create_table :players do |t|

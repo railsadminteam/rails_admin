@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateFansTeamsMigration < ActiveRecord::Migration[5.0]
   def self.up
     create_table :fans_teams, id: false do |t|

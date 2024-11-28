@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 DummyApp::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -20,7 +22,7 @@ DummyApp::Application.configure do
   config.static_cache_control = 'public, max-age=31536000'
 
   # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :uglifier
+  # config.assets.js_compressor = :uglifier
   # config.assets.css_compressor = :sass
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.

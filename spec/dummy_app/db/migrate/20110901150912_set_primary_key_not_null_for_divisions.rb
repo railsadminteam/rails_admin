@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SetPrimaryKeyNotNullForDivisions < ActiveRecord::Migration[5.0]
   def up
     drop_table :divisions

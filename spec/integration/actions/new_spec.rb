@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'New action', type: :request do
@@ -8,22 +10,22 @@ RSpec.describe 'New action', type: :request do
       visit new_path(model_name: 'player')
     end
 
-    it "shows \"New Model\"" do
+    it 'shows "New Model"' do
       is_expected.to have_content('New Player')
     end
 
-    it "shows required fields as \"Required\"" do
+    it 'shows required fields as "Required"' do
       is_expected.to have_selector('div', text: /Name\s*Required/)
       is_expected.to have_selector('div', text: /Number\s*Required/)
     end
 
-    it "shows non-required fields as \"Optional\"" do
-      is_expected.to have_selector('#player_position_field .help-block', text: 'Optional')
-      is_expected.to have_selector('#player_born_on_field .help-block', text: 'Optional')
-      is_expected.to have_selector('#player_notes_field .help-block', text: 'Optional')
+    it 'shows non-required fields as "Optional"' do
+      is_expected.to have_selector('#player_position_field .form-text', text: 'Optional')
+      is_expected.to have_selector('#player_born_on_field .form-text', text: 'Optional')
+      is_expected.to have_selector('#player_notes_field .form-text', text: 'Optional')
     end
 
-    # https://github.com/sferik/rails_admin/issues/362
+    # https://github.com/railsadminteam/rails_admin/issues/362
     # test that no link uses the "wildcard route" with the main
     # controller and new method
     it "does not use the 'wildcard route'" do
@@ -44,15 +46,16 @@ RSpec.describe 'New action', type: :request do
       expect(page).to have_css('input[value=Sam]')
     end
 
-    it 'prepropulates belongs to relationships' do
-      @team = FactoryBot.create :team, name: 'belongs_to association prepopulated'
-      visit new_path(model_name: 'player', associations: {team: @team.id})
-      expect(page).to have_css("select#player_team_id option[selected='selected'][value='#{@team.id}']")
+    it 'prepropulates has_one relationships' do
+      @draft = FactoryBot.create :draft
+      @player = FactoryBot.create :player, name: 'has_one association prepopulated'
+      visit new_path(model_name: 'player', player: {draft_id: @draft.id})
+      expect(page).to have_css("select#player_draft_id option[selected='selected'][value='#{@draft.id}']")
     end
 
     it 'prepropulates has_many relationships' do
       @player = FactoryBot.create :player, name: 'has_many association prepopulated'
-      visit new_path(model_name: 'team', associations: {players: @player.id})
+      visit new_path(model_name: 'team', team: {player_ids: [@player.id]})
       expect(page).to have_css("select#team_player_ids option[selected='selected'][value='#{@player.id}']")
     end
   end
@@ -120,19 +123,21 @@ RSpec.describe 'New action', type: :request do
     end
   end
 
-  context 'on create and add another' do
+  context 'on create and add another', js: true do
     before do
       visit new_path(model_name: 'player')
 
       fill_in 'player[name]', with: 'Jackie Robinson'
       fill_in 'player[number]', with: '42'
       fill_in 'player[position]', with: 'Second baseman'
-      click_button 'Save and add another'
-
-      @player = RailsAdmin::AbstractModel.new('Player').first
+      find_button('Save and add another').trigger('click')
     end
 
     it 'creates an object with correct attributes' do
+      is_expected.to have_text 'Player successfully created'
+      expect(page.current_path).to eq('/admin/player/new')
+
+      @player = RailsAdmin::AbstractModel.new('Player').first
       expect(@player.name).to eq('Jackie Robinson')
       expect(@player.number).to eq(42)
       expect(@player.position).to eq('Second baseman')
@@ -172,6 +177,34 @@ RSpec.describe 'New action', type: :request do
     it 'shows error base error message in flash' do
       is_expected.to have_content('Player failed to be created')
       is_expected.to have_content('Player is cheating')
+    end
+  end
+
+  context 'with a readonly object' do
+    it 'shows non-editable form' do
+      RailsAdmin.config do |config|
+        config.model ReadOnlyComment do
+          edit do
+            field :content
+          end
+        end
+      end
+      visit new_path(model_name: 'read_only_comment')
+      is_expected.not_to have_css('textarea[name="read_only_comment[content]"]')
+      is_expected.to have_css('button[name="_save"]:disabled')
+    end
+  end
+
+  context 'with composite primary keys', composite_primary_keys: true do
+    let!(:fan) { FactoryBot.create(:fan) }
+    let!(:team) { FactoryBot.create(:team) }
+
+    it 'creates an object' do
+      visit new_path(model_name: 'fanship')
+      select(fan.name, from: 'Fan')
+      select(team.name, from: 'Team')
+      expect { click_button 'Save' }.to change { Fanship.count }.by(1)
+      expect(Fanship.first.attributes.fetch_values('fan_id', 'team_id')).to eq [fan.id, team.id]
     end
   end
 end

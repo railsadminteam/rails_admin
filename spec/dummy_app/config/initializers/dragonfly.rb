@@ -1,4 +1,9 @@
+# frozen_string_literal: true
+
 require 'dragonfly'
+
+# Logger
+Dragonfly.logger = Rails.logger
 
 # Configure
 Dragonfly.app.configure do
@@ -13,9 +18,6 @@ Dragonfly.app.configure do
             root_path: Rails.root.join('public/system/dragonfly', Rails.env),
             server_root: Rails.root.join('public'))
 end
-
-# Logger
-Dragonfly.logger = Rails.logger
 
 # Mount as middleware
 Rails.application.middleware.use Dragonfly::Middleware

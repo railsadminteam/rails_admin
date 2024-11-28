@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RailsAdmin
   module Config
     # Provides accessors and autoregistering of model's fields.
@@ -8,9 +10,7 @@ module RailsAdmin
 
         # some fields are hidden by default (belongs_to keys, has_many associations in list views.)
         # unhide them if config specifically defines them
-        if field
-          field.show unless field.instance_variable_get("@#{field.name}_registered").is_a?(Proc)
-        end
+        field.show if field && !field.instance_variable_get("@#{field.name}_registered").is_a?(Proc)
         # Specify field as virtual if type is not specifically set and field was not
         # found in default stack
         if field.nil? && type.nil?
@@ -39,17 +39,18 @@ module RailsAdmin
         field
       end
 
-      # configure a field without adding it.
+      # configure field(s) from the default group in a section without changing the original order.
       def configure(name, type = nil, &block)
-        field(name, type, false, &block)
+        [*name].each { |field_name| field(field_name, type, false, &block) }
       end
 
-      # include fields by name and apply an optionnal block to each (through a call to fields),
+      # include fields by name and apply an optional block to each (through a call to fields),
       # or include fields by conditions if no field names
       def include_fields(*field_names, &block)
         if field_names.empty?
           _fields.select { |f| f.instance_eval(&block) }.each do |f|
             next if f.defined
+
             f.defined = true
             f.order = _fields.count(&:defined)
           end
@@ -117,6 +118,10 @@ module RailsAdmin
         all_fields.collect { |f| f.with(bindings) }.select(&:visible?).sort_by { |f| [f.order, i += 1] } # stable sort, damn
       end
 
+      def possible_fields
+        _fields(true)
+      end
+
     protected
 
       # Raw fields.
@@ -126,7 +131,7 @@ module RailsAdmin
         return @_fields if @_fields
         return @_ro_fields if readonly && @_ro_fields
 
-        if self.class == RailsAdmin::Config::Sections::Base
+        if instance_of?(RailsAdmin::Config::Sections::Base)
           @_ro_fields = @_fields = RailsAdmin::Config::Fields.factory(self)
         else
           # parent is RailsAdmin::Config::Model, recursion is on Section's classes

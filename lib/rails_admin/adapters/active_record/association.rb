@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RailsAdmin
   module Adapters
     module ActiveRecord
@@ -21,24 +23,53 @@ module RailsAdmin
           association.macro
         end
 
+        def field_type
+          if polymorphic?
+            :polymorphic_association
+          else
+            :"#{association.macro}_association"
+          end
+        end
+
         def klass
           if options[:polymorphic]
-            polymorphic_parents(:active_record, model.name.to_s, name) || []
+            polymorphic_parents(:active_record, association.active_record.name.to_s, name) || []
           else
             association.klass
           end
         end
 
         def primary_key
-          (options[:primary_key] || association.klass.primary_key).try(:to_sym) unless polymorphic?
+          return nil if polymorphic?
+
+          value =
+            case type
+            when :has_one
+              association.klass.primary_key
+            else
+              association.association_primary_key
+            end
+
+          if value.is_a? Array
+            :id
+          else
+            value.to_sym
+          end
         end
 
         def foreign_key
-          association.foreign_key.to_sym
+          if association.options[:query_constraints].present?
+            association.options[:query_constraints].map(&:to_sym)
+          elsif association.foreign_key.is_a?(Array)
+            association.foreign_key.map(&:to_sym)
+          else
+            association.foreign_key.to_sym
+          end
         end
 
         def foreign_key_nullable?
           return true if foreign_key.nil? || type != :has_many
+
           (column = klass.columns_hash[foreign_key.to_s]).nil? || column.null
         end
 
@@ -48,6 +79,21 @@ module RailsAdmin
 
         def foreign_inverse_of
           nil
+        end
+
+        def key_accessor
+          case type
+          when :has_many, :has_and_belongs_to_many
+            :"#{name.to_s.singularize}_ids"
+          when :has_one
+            :"#{name}_id"
+          else
+            if foreign_key.is_a?(Array)
+              :"#{name}_id"
+            else
+              foreign_key
+            end
+          end
         end
 
         def as
@@ -63,7 +109,7 @@ module RailsAdmin
         end
 
         def read_only?
-          (klass.all.instance_eval(&scope).readonly_value if scope.is_a? Proc) ||
+          (klass.all.instance_exec(&scope).readonly_value if scope.is_a?(Proc) && scope.arity == 0) ||
             association.nested? ||
             false
         end

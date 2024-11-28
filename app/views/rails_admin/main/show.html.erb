@@ -1,0 +1,30 @@
+<% @model_config.show.with(object: @object, view: self, controller: self.controller).visible_groups.each do |fieldset| %>
+  <% unless (fields = fieldset.with(object: @object, view: self, controller: self.controller).visible_fields).empty? %>
+    <% unless (fields = fields.reject{ |f| RailsAdmin::config.compact_show_view && (f.formatted_value.nil? || f.formatted_value == '') }).empty? %>
+      <div class="fieldset">
+        <h4>
+          <%= fieldset.label %>
+        </h4>
+        <% if fieldset.help %>
+          <p>
+            <%= fieldset.help %>
+          </p>
+        <% end %>
+        <div class="list-group">
+          <% fields.each_with_index do |field, index| %>
+            <div class="list-group-item border-0 <%= field.type_css_class %> <%= field.css_class %>">
+              <div class="card">
+                <h5 class="card-header bg-light">
+                  <%= field.label %>
+                </h5>
+                <div class="card-body">
+                  <%= field.pretty_value %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </dl>
+      </div>
+    <% end %>
+  <% end %>
+<% end %>

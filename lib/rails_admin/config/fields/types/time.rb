@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/config/fields/types/datetime'
 
 module RailsAdmin
@@ -8,10 +10,20 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           def parse_value(value)
-            parent_value = super(value)
-            return unless parent_value
-            value_with_tz = parent_value.in_time_zone
-            ::DateTime.parse(value_with_tz.strftime('%Y-%m-%d %H:%M:%S'))
+            abstract_model.model.type_for_attribute(name.to_s).serialize(super)&.change(year: 2000, month: 1, day: 1)
+          end
+
+          register_instance_option :filter_operators do
+            %w[default between] + (required? ? [] : %w[_separator _not_null _null])
+          end
+
+          register_instance_option :datepicker_options do
+            {
+              allowInput: true,
+              altFormat: flatpickr_format,
+              enableTime: true,
+              noCalendar: true,
+            }
           end
 
           register_instance_option :strftime_format do

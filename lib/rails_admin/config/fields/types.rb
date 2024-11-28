@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'active_support/core_ext/string/inflections'
 require 'rails_admin/config/fields'
 require 'rails_admin/config/fields/association'
@@ -9,7 +11,7 @@ module RailsAdmin
         @@registry = {}
 
         def self.load(type)
-          @@registry[type.to_sym] || raise("Unsupported field datatype: #{type}")
+          @@registry.fetch(type.to_sym) { raise "Unsupported field datatype: #{type}" }
         end
 
         def self.register(type, klass = nil)

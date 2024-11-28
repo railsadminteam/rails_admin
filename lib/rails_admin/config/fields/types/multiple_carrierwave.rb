@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/config/fields/types/multiple_file_upload'
 
 module RailsAdmin
@@ -22,6 +24,7 @@ module RailsAdmin
 
             def resource_url(thumb = false)
               return nil unless value
+
               thumb.present? ? value.send(thumb).url : value.url
             end
           end

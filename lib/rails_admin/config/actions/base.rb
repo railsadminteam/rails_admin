@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/config/proxyable'
 require 'rails_admin/config/configurable'
 require 'rails_admin/config/hideable'
@@ -36,7 +38,7 @@ module RailsAdmin
 
         # http://getbootstrap.com/2.3.2/base-css.html#icons
         register_instance_option :link_icon do
-          'icon-question-sign'
+          'fas fa-question'
         end
 
         # Should the action be visible
@@ -49,7 +51,7 @@ module RailsAdmin
             (only.nil? || [only].flatten.collect(&:to_s).include?(bindings[:abstract_model].to_s)) &&
             ![except].flatten.collect(&:to_s).include?(bindings[:abstract_model].to_s) &&
             !bindings[:abstract_model].config.excluded?
-          )
+          ) && (!respond_to?(:writable?) || writable?)
         end
 
         register_instance_option :authorized? do
@@ -73,8 +75,13 @@ module RailsAdmin
           false
         end
 
-        # Render via pjax?
-        register_instance_option :pjax? do
+        # Target window [_self, _blank]
+        register_instance_option :link_target do
+          nil
+        end
+
+        # Determines whether to navigate via Turbo Drive or not
+        register_instance_option :turbo? do
           true
         end
 

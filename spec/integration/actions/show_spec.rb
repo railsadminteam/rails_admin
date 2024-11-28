@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'Show action', type: :request do
@@ -110,7 +112,7 @@ RSpec.describe 'Show action', type: :request do
 
       visit show_path(model_name: 'team', id: team.id)
 
-      is_expected.to have_selector('dt .name_field.string_type')
+      is_expected.to have_selector('div .name_field.string_type')
     end
   end
 
@@ -118,7 +120,7 @@ RSpec.describe 'Show action', type: :request do
     it 'is present' do
       visit show_path(model_name: 'team', id: team.id)
 
-      is_expected.to have_selector('dt .name_field.string_type')
+      is_expected.to have_selector('div .name_field.string_type')
     end
   end
 
@@ -142,11 +144,11 @@ RSpec.describe 'Show action', type: :request do
 
       is_expected.not_to have_selector('h4', text: 'Basic info')
 
-      %w(
+      %w[
         division name logo_url manager
         ballpark mascot founded wins
         losses win_percentage revenue
-      ).each do |field|
+      ].each do |field|
         is_expected.not_to have_selector(".#{field}_field")
       end
     end
@@ -223,15 +225,15 @@ RSpec.describe 'Show action', type: :request do
 
       visit show_path(model_name: 'team', id: team.id)
 
-      is_expected.to have_selector('.label', text: 'Name')
-      is_expected.to have_selector('.label', text: 'Logo url')
-      is_expected.to have_selector('.label', text: 'Division')
-      is_expected.to have_selector('.label', text: 'Manager (STRING)')
-      is_expected.to have_selector('.label', text: 'Ballpark (STRING)')
+      is_expected.to have_selector('.card-header', text: 'Name')
+      is_expected.to have_selector('.card-header', text: 'Logo url')
+      is_expected.to have_selector('.card-header', text: 'Division')
+      is_expected.to have_selector('.card-header', text: 'Manager (STRING)')
+      is_expected.to have_selector('.card-header', text: 'Ballpark (STRING)')
     end
   end
 
-  describe "fields" do
+  describe 'fields' do
     before do
       RailsAdmin.config do |c|
         c.compact_show_view = false
@@ -241,11 +243,11 @@ RSpec.describe 'Show action', type: :request do
     it 'shows all by default' do
       visit show_path(model_name: 'team', id: team.id)
 
-      %w(
+      %w[
         division name logo_url manager
         ballpark mascot founded wins
         losses win_percentage revenue players fans
-      ).each do |field|
+      ].each do |field|
         is_expected.to have_selector(".#{field}_field")
       end
     end
@@ -276,8 +278,8 @@ RSpec.describe 'Show action', type: :request do
 
       visit show_path(model_name: 'team', id: team.id)
 
-      is_expected.to have_selector('.label', text: 'Team Manager')
-      is_expected.to have_selector('.label', text: 'Some Fans')
+      is_expected.to have_selector('.card-header', text: 'Team Manager')
+      is_expected.to have_selector('.card-header', text: 'Some Fans')
     end
 
     it 'is renameable' do
@@ -293,9 +295,9 @@ RSpec.describe 'Show action', type: :request do
 
       visit show_path(model_name: 'team', id: team.id)
 
-      is_expected.to have_selector('.label', text: 'Renamed field')
-      is_expected.to have_selector('.label', text: 'Division')
-      is_expected.to have_selector('.label', text: 'Name')
+      is_expected.to have_selector('.card-header', text: 'Renamed field')
+      is_expected.to have_selector('.card-header', text: 'Division')
+      is_expected.to have_selector('.card-header', text: 'Name')
     end
 
     it 'is renameable by type' do
@@ -314,7 +316,7 @@ RSpec.describe 'Show action', type: :request do
         'Ballpark (STRING)', 'Mascot (STRING)', 'Founded', 'Wins', 'Losses',
         'Win percentage', 'Revenue', 'Players', 'Fans'
       ].each do |text|
-        is_expected.to have_selector('.label', text: text)
+        is_expected.to have_selector('.card-header', text: text)
       end
     end
 
@@ -334,7 +336,7 @@ RSpec.describe 'Show action', type: :request do
         'Ballpark (STRING)', 'Mascot (STRING)', 'Founded', 'Wins', 'Losses',
         'Win percentage', 'Revenue', 'Players', 'Fans'
       ].each do |text|
-        is_expected.to have_selector('.label', text: text)
+        is_expected.to have_selector('.card-header', text: text)
       end
     end
 
@@ -366,12 +368,12 @@ RSpec.describe 'Show action', type: :request do
 
       visit show_path(model_name: 'team', id: team.id)
 
-      %w(Name Logo\ url Manager Ballpark Mascot).each do |text|
-        is_expected.not_to have_selector('.label', text: text)
+      ['Name', 'Logo url', 'Manager', 'Ballpark', 'Mascot'].each do |text|
+        is_expected.not_to have_selector('.card-header', text: text)
       end
 
-      %w(Division Founded Wins Losses Win\ percentage Revenue Players Fans).each do |text|
-        is_expected.to have_selector('.label', text: text)
+      ['Division', 'Founded', 'Wins', 'Losses', 'Win percentage', 'Revenue', 'Players', 'Fans'].each do |text|
+        is_expected.to have_selector('.card-header', text: text)
       end
     end
 
@@ -386,12 +388,12 @@ RSpec.describe 'Show action', type: :request do
 
       visit show_path(model_name: 'team', id: team.id)
 
-      %w(Name Logo\ url Manager Ballpark Mascot).each do |text|
-        is_expected.not_to have_selector('.label', text: text)
+      ['Name', 'Logo url', 'Manager', 'Ballpark', 'Mascot'].each do |text|
+        is_expected.not_to have_selector('.card-header', text: text)
       end
 
-      %w(Division Founded Wins Losses Win\ percentage Revenue Players Fans).each do |text|
-        is_expected.to have_selector('.label', text: text)
+      ['Division', 'Founded', 'Wins', 'Losses', 'Win percentage', 'Revenue', 'Players', 'Fans'].each do |text|
+        is_expected.to have_selector('.card-header', text: text)
       end
     end
   end
@@ -415,7 +417,7 @@ RSpec.describe 'Show action', type: :request do
         visit show_path(model_name: 'team', id: team.id)
 
         is_expected.to have_selector('.truncated_name_field')
-        is_expected.to have_selector('dd', text: 'fo...')
+        is_expected.to have_selector('.card', text: 'fo...')
       end
     end
 
@@ -435,6 +437,34 @@ RSpec.describe 'Show action', type: :request do
       it 'raises error along with suggestion' do
         expect { visit show_path(model_name: 'team', id: team.id) }.to raise_error(/you should declare 'formatted_value'/)
       end
+    end
+  end
+
+  describe 'with model scope' do
+    let!(:comments) { %w[something anything].map { |content| FactoryBot.create :comment_confirmed, content: content } }
+    before do
+      RailsAdmin.config do |config|
+        config.model Comment::Confirmed do
+          scope { Comment::Confirmed.unscoped }
+        end
+      end
+    end
+
+    it 'overrides default_scope' do
+      visit show_path(model_name: 'comment~confirmed', id: comments[0].id)
+      is_expected.to have_selector('.card-body', text: 'something')
+      visit show_path(model_name: 'comment~confirmed', id: comments[1].id)
+      is_expected.to have_selector('.card-body', text: 'anything')
+    end
+  end
+
+  context 'with composite primary keys', composite_primary_keys: true do
+    let(:fanship) { FactoryBot.create(:fanship) }
+
+    it 'shows the object' do
+      visit show_path(model_name: 'fanship', id: fanship.id)
+      is_expected.to have_link(fanship.fan.name)
+      is_expected.to have_link(fanship.team.name)
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/config/fields/types/belongs_to_association'
 
 module RailsAdmin
@@ -45,29 +47,33 @@ module RailsAdmin
             [children_fields]
           end
 
-          register_instance_option :eager_load? do
+          register_instance_option :eager_load do
             false
           end
 
-          def associated_collection(type)
-            return [] if type.blank?
-            config = RailsAdmin.config(type)
-            config.abstract_model.all.collect do |object|
-              [object.send(config.object_label_method), object.id]
+          def associated_model_config
+            @associated_model_config ||= association.klass.collect { |type| RailsAdmin.config(type) }.reject(&:excluded?)
+          end
+
+          def collection(_scope = nil)
+            if value
+              [[formatted_value, selected_id]]
+            else
+              [[]]
             end
           end
 
-          def associated_model_config
-            @associated_model_config ||= association.klass.collect { |type| RailsAdmin.config(type) }.select { |config| !config.excluded? }
+          def type_column
+            association.foreign_type.to_s
           end
 
-          def polymorphic_type_collection
+          def type_collection
             associated_model_config.collect do |config|
               [config.label, config.abstract_model.model.name]
             end
           end
 
-          def polymorphic_type_urls
+          def type_urls
             types = associated_model_config.collect do |config|
               [config.abstract_model.model.name, config.abstract_model.to_param]
             end
@@ -77,6 +83,26 @@ module RailsAdmin
           # Reader for field's value
           def value
             bindings[:object].send(association.name)
+          end
+
+          def widget_options_for_types
+            type_collection.inject({}) do |options, model|
+              options.merge(
+                model.second.downcase.gsub('::', '-') => {
+                  xhr: true,
+                  remote_source: bindings[:view].index_path(model.second.underscore, source_object_id: bindings[:object].id, source_abstract_model: abstract_model.to_param, current_action: bindings[:view].current_action, compact: true),
+                  float_left: false,
+                },
+              )
+            end
+          end
+
+          def widget_options
+            widget_options_for_types[selected_type.try(:downcase)] || {float_left: false}
+          end
+
+          def selected_type
+            bindings[:object].send(type_column)
           end
 
           def parse_input(params)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'HasAndBelongsToManyAssociation field', type: :request do
@@ -50,6 +52,29 @@ RSpec.describe 'HasAndBelongsToManyAssociation field', type: :request do
       is_expected.to have_css("a[href='/admin/comment/#{@comment1.id}']")
       is_expected.to have_css("a[href='/admin/comment/#{@comment2.id}']")
       is_expected.not_to have_css("a[href='/admin/comment/#{@comment3.id}']")
+    end
+  end
+
+  context "with Mongoid's custom primary_key option", mongoid: true do
+    let(:user) { FactoryBot.create :managing_user, players: [players[0]], balls: [balls[0]] }
+    let!(:players) { FactoryBot.create_list(:player, 2) }
+    let!(:balls) { %w[red blue].map { |color| FactoryBot.create(:ball, color: color) } }
+    before do
+      RailsAdmin.config ManagingUser do
+        field :players
+        field :balls
+      end
+    end
+
+    it 'allows update' do
+      visit edit_path(model_name: 'managing_user', id: user.id)
+      expect(find("select#managing_user_player_names option[value=\"#{players[0].name}\"]")).to be_selected
+      expect(find("select#managing_user_ball_ids option[value=\"#{balls[0].color}\"]")).to be_selected
+      select(players[1].name, from: 'Players')
+      select(balls[1].rails_admin_default_object_label_method, from: 'Balls')
+      click_button 'Save'
+      expect(ManagingUser.first.players).to match_array players
+      expect(ManagingUser.first.balls).to match_array balls
     end
   end
 end

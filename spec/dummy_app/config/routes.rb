@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 DummyApp::Application.routes.draw do
   # Needed for :show_in_app tests
   resources :players, only: [:show]

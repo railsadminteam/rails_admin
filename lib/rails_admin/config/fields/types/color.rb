@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/config/fields/types/string_like'
 
 module RailsAdmin
@@ -15,10 +17,14 @@ module RailsAdmin
             :form_colorpicker
           end
 
+          register_instance_option :view_helper do
+            :color_field
+          end
+
           register_instance_option :color do
             if value.present?
-              if value =~ /^[0-9a-fA-F]{3,6}$/
-                '#' + value
+              if /^[0-9a-fA-F]{3,6}$/.match?(value)
+                "##{value}"
               else
                 value
               end

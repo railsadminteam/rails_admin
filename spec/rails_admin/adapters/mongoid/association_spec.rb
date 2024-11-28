@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
@@ -71,11 +73,11 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
   end
 
   it 'lists associations' do
-    expect(@post.associations.collect { |a| a.name.to_sym }).to match_array [:mongo_blog, :mongo_categories, :mongo_comments, :mongo_note]
+    expect(@post.associations.collect { |a| a.name.to_sym }).to match_array %i[mongo_blog mongo_categories mongo_comments mongo_note]
   end
 
   it 'reads correct and know types in [:belongs_to, :has_and_belongs_to_many, :has_many, :has_one]' do
-    expect((@post.associations + @blog.associations + @user.associations).collect { |a| a.type.to_s }.uniq).to match_array %w(belongs_to has_and_belongs_to_many has_many has_one)
+    expect((@post.associations + @blog.associations + @user.associations).collect { |a| a.type.to_s }.uniq).to match_array %w[belongs_to has_and_belongs_to_many has_many has_one]
   end
 
   describe 'belongs_to association' do
@@ -90,6 +92,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_key_nullable?).to be_truthy
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
+      expect(subject.key_accessor).to eq :mongo_blog_id
       expect(subject.as).to be_nil
       expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
@@ -115,6 +118,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_key_nullable?).to be_truthy
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
+      expect(subject.key_accessor).to eq :mongo_post_ids
       expect(subject.as).to be_nil
       expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
@@ -135,6 +139,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_key_nullable?).to be_truthy
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
+      expect(subject.key_accessor).to eq :mongo_category_ids
       expect(subject.as).to be_nil
       expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
@@ -144,7 +149,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
   end
 
   describe 'polymorphic belongs_to association' do
-    before { allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w(MongoBlog MongoPost MongoCategory MongoUser MongoProfile MongoComment)) }
+    before { allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w[MongoBlog MongoPost MongoCategory MongoUser MongoProfile MongoComment]) }
     subject { @comment.associations.detect { |a| a.name == :commentable } }
 
     it 'returns correct values' do
@@ -156,16 +161,29 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_key_nullable?).to be_truthy
       expect(subject.foreign_type).to eq :commentable_type
       expect(subject.foreign_inverse_of).to be_nil
+      expect(subject.key_accessor).to eq :commentable_id
       expect(subject.as).to be_nil
       expect(subject.polymorphic?).to be_truthy
       expect(subject.inverse_of).to be_nil
       expect(subject.read_only?).to be_falsey
       expect(subject.nested_options).to be_nil
     end
+
+    describe 'on a subclass' do
+      before do
+        class MongoReview < MongoComment; end
+        allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w[MongoBlog MongoPost MongoCategory MongoUser MongoProfile MongoComment MongoReview])
+      end
+      subject { RailsAdmin::AbstractModel.new(MongoReview).associations.detect { |a| a.name == :commentable } }
+
+      it 'returns correct target klasses' do
+        expect(subject.klass).to eq [MongoBlog, MongoPost]
+      end
+    end
   end
 
   describe 'polymorphic inverse has_many association' do
-    before { allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w(MongoBlog MongoPost MongoCategory MongoUser MongoProfile MongoComment)) }
+    before { allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w[MongoBlog MongoPost MongoCategory MongoUser MongoProfile MongoComment]) }
     subject { @blog.associations.detect { |a| a.name == :mongo_comments } }
 
     it 'returns correct values' do
@@ -177,6 +195,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_key_nullable?).to be_truthy
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
+      expect(subject.key_accessor).to eq :mongo_comment_ids
       expect(subject.as).to eq :commentable
       expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
@@ -202,6 +221,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_key_nullable?).to be_falsey
       expect(subject.foreign_type).to be_nil
       expect(subject.foreign_inverse_of).to be_nil
+      expect(subject.key_accessor).to be_nil
       expect(subject.as).to be_nil
       expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
@@ -221,6 +241,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.foreign_key).to be_nil
       expect(subject.foreign_key_nullable?).to be_falsey
       expect(subject.foreign_type).to be_nil
+      expect(subject.key_accessor).to be_nil
       expect(subject.as).to be_nil
       expect(subject.polymorphic?).to be_falsey
       expect(subject.inverse_of).to be_nil
@@ -255,8 +276,8 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
         recursively_embeds_many
       end
 
-      expect { RailsAdmin::AbstractModel.new(MongoEmbedsOne).associations.first.nested_options }.to raise_error(RuntimeError, "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embedded' line to `MongoEmbedsOne' model.\n")
-      expect { RailsAdmin::AbstractModel.new(MongoEmbedsMany).associations.first.nested_options }.to raise_error(RuntimeError, "Embbeded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embeddeds' line to `MongoEmbedsMany' model.\n")
+      expect { RailsAdmin::AbstractModel.new(MongoEmbedsOne).associations.first.nested_options }.to raise_error(RuntimeError, "Embedded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embedded' line to `MongoEmbedsOne' model.\n")
+      expect { RailsAdmin::AbstractModel.new(MongoEmbedsMany).associations.first.nested_options }.to raise_error(RuntimeError, "Embedded association without accepts_nested_attributes_for can't be handled by RailsAdmin,\nbecause embedded model doesn't have top-level access.\nPlease add `accepts_nested_attributes_for :mongo_embeddeds' line to `MongoEmbedsMany' model.\n")
       expect { RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsOne).associations.first.nested_options }.not_to raise_error
       expect { RailsAdmin::AbstractModel.new(MongoRecursivelyEmbedsMany).associations.first.nested_options }.not_to raise_error
     end

@@ -1,7 +1,6 @@
-require 'rails_admin/extensions/history/history'
-require 'rails_admin/adapters/active_record'
+# frozen_string_literal: true
 
-DatabaseCleaner.strategy = :transaction
+require 'rails_admin/adapters/active_record'
 
 ActiveRecord::Base.connection.data_sources.each do |table|
   ActiveRecord::Base.connection.drop_table(table)
@@ -9,7 +8,7 @@ end
 
 def silence_stream(stream)
   old_stream = stream.dup
-  stream.reopen(RbConfig::CONFIG['host_os'] =~ /mswin|mingw/ ? 'NUL:' : '/dev/null')
+  stream.reopen(/mswin|mingw/.match?(RbConfig::CONFIG['host_os']) ? 'NUL:' : '/dev/null')
   stream.sync = true
   yield
 ensure
@@ -17,19 +16,19 @@ ensure
   old_stream.close
 end
 
-silence_stream(STDOUT) do
+silence_stream($stdout) do
   if ActiveRecord::Migrator.respond_to? :migrate
-    ActiveRecord::Migrator.migrate File.expand_path('../../dummy_app/db/migrate/', __FILE__)
+    ActiveRecord::Migrator.migrate File.expand_path('../dummy_app/db/migrate', __dir__)
   else
     ActiveRecord::MigrationContext.new(
-      *([File.expand_path('../../dummy_app/db/migrate/', __FILE__)] +
+      *([File.expand_path('../dummy_app/db/migrate', __dir__)] +
           (ActiveRecord::MigrationContext.instance_method(:initialize).arity == 2 ? [ActiveRecord::SchemaMigration] : [])),
     ).migrate
   end
 end
 
 class Tableless < ActiveRecord::Base
-  class <<self
+  class << self
     def load_schema
       # do nothing
     end
@@ -57,7 +56,7 @@ class Tableless < ActiveRecord::Base
     end
 
     def columns_hash
-      @columns_hash ||= Hash[columns.collect { |column| [column.name, column] }]
+      @columns_hash ||= columns.collect { |column| [column.name, column] }.to_h
     end
 
     def column_names
@@ -73,7 +72,7 @@ class Tableless < ActiveRecord::Base
 
     def attribute_types
       @attribute_types ||=
-        Hash[columns.collect { |column| [column.name, lookup_attribute_type(column.type)] }]
+        columns.collect { |column| [column.name, lookup_attribute_type(column.type)] }.to_h
     end
 
     def table_exists?
@@ -81,7 +80,7 @@ class Tableless < ActiveRecord::Base
     end
 
     def primary_key
-      "id"
+      'id'
     end
 
   private

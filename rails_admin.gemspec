@@ -1,32 +1,34 @@
-# coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'rails_admin/version'
+# frozen_string_literal: true
+
+require_relative 'lib/rails_admin/version'
 
 Gem::Specification.new do |spec|
   # If you add a dependency, please maintain alphabetical order
-  spec.add_dependency 'builder', '~> 3.1'
-  spec.add_dependency 'haml', '>= 4.0', '< 6'
-  spec.add_dependency 'jquery-rails', ['>= 3.0', '< 5']
-  spec.add_dependency 'jquery-ui-rails', ['>= 5.0', '< 7']
+  spec.add_dependency 'activemodel-serializers-xml', '>= 1.0'
+  spec.add_dependency 'csv'
   spec.add_dependency 'kaminari', '>= 0.14', '< 2.0'
   spec.add_dependency 'nested_form', '~> 0.3'
-  spec.add_dependency 'rack-pjax', '>= 0.7'
-  spec.add_dependency 'rails', ['>= 5.0', '< 7']
-  spec.add_dependency 'remotipart', '~> 1.3'
-  spec.add_dependency 'sassc-rails', ['>= 1.3', '< 3']
-  spec.add_dependency 'activemodel-serializers-xml', '>= 1.0'
+  spec.add_dependency 'rails', ['>= 6.0', '< 8']
+  spec.add_dependency 'turbo-rails', ['>= 1.0', '< 3']
   spec.add_development_dependency 'bundler', '>= 1.0'
   spec.authors = ['Erik Michaels-Ober', 'Bogdan Gaza', 'Petteri Kaapa', 'Benoit Benezech', 'Mitsuhiro Shibuya']
   spec.description = 'RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data.'
   spec.email = ['sferik@gmail.com', 'bogdan@cadmio.org', 'petteri.kaapa@gmail.com']
-  spec.files = Dir['Gemfile', 'LICENSE.md', 'README.md', 'Rakefile', 'app/**/*', 'config/**/*', 'lib/**/*', 'public/**/*', 'vendor/**/*']
-  spec.licenses = %w(MIT)
-  spec.homepage = 'https://github.com/sferik/rails_admin'
+  spec.files = Dir['Gemfile', 'LICENSE.md', 'README.md', 'Rakefile', 'package.json', 'app/**/*', 'config/**/*', 'lib/**/*', 'public/**/*', 'src/**/*', 'vendor/**/*']
+  spec.licenses = %w[MIT]
+  spec.homepage = 'https://github.com/railsadminteam/rails_admin'
   spec.name = 'rails_admin'
-  spec.require_paths = %w(lib)
-  spec.required_ruby_version     = '>= 2.2.2'
+  spec.require_paths = %w[lib]
+  spec.required_ruby_version     = '>= 2.6.0'
   spec.required_rubygems_version = '>= 1.8.11'
   spec.summary = 'Admin for Rails'
   spec.version = RailsAdmin::Version
+  spec.post_install_message = <<~MSG
+    ### Upgrading RailsAdmin from 2.x.x to 3.x.x ###
+
+    Due to introduction of Webpack/Webpacker support, some additional dependencies and configuration will be needed.
+    Running `bin/rails g rails_admin:install` will suggest required changes, based on the current setup of your app.
+
+    For a complete list of changes, see https://github.com/railsadminteam/rails_admin/blob/master/CHANGELOG.md
+  MSG
 end

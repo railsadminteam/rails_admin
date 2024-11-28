@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/support/datetime'
 
 module RailsAdmin
@@ -19,7 +21,7 @@ module RailsAdmin
       def new(m)
         m = m.constantize unless m.is_a?(Class)
         (am = old_new(m)).model && am.adapter ? am : nil
-      rescue LoadError, NameError
+      rescue *([LoadError, NameError] + (defined?(ActiveRecord) ? ['ActiveRecord::NoDatabaseError'.constantize, 'ActiveRecord::ConnectionNotEstablished'.constantize] : []))
         puts "[RailsAdmin] Could not load model #{m}, assuming model is non existing. (#{$ERROR_INFO})" unless Rails.env.test?
         nil
       end
@@ -58,6 +60,14 @@ module RailsAdmin
       @model_name.constantize
     end
 
+    def quoted_table_name
+      table_name
+    end
+
+    def quote_column_name(name)
+      name
+    end
+
     def to_s
       model.to_s
     end
@@ -86,14 +96,21 @@ module RailsAdmin
       associations.each do |association|
         case association.type
         when :has_one
-          if child = object.send(association.name)
-            yield(association, [child])
-          end
+          child = object.send(association.name)
+          yield(association, [child]) if child
         when :has_many
           children = object.send(association.name)
           yield(association, Array.new(children))
         end
       end
+    end
+
+    def format_id(id)
+      id
+    end
+
+    def parse_id(id)
+      id
     end
 
   private
@@ -124,6 +141,7 @@ module RailsAdmin
 
       def to_statement
         return if [@operator, @value].any? { |v| v == '_discard' }
+
         unary_operators[@operator] || unary_operators[@value] ||
           build_statement_for_type_generic
       end
@@ -139,21 +157,22 @@ module RailsAdmin
           case @type
           when :date
             build_statement_for_date
-          when :datetime, :timestamp
+          when :datetime, :timestamp, :time
             build_statement_for_datetime_or_timestamp
           end
         end
       end
 
       def build_statement_for_type
-        raise('You must override build_statement_for_type in your StatementBuilder')
+        raise 'You must override build_statement_for_type in your StatementBuilder'
       end
 
       def build_statement_for_integer_decimal_or_float
         case @value
-        when Array then
+        when Array
           val, range_begin, range_end = *@value.collect do |v|
             next unless v.to_i.to_s == v || v.to_f.to_s == v
+
             @type == :integer ? v.to_i : v.to_f
           end
           case @operator
@@ -171,24 +190,36 @@ module RailsAdmin
 
       def build_statement_for_date
         start_date, end_date = get_filtering_duration
-        start_date = (start_date.to_date rescue nil) if start_date
-        end_date = (end_date.to_date rescue nil) if end_date
+        if start_date
+          start_date = begin
+            start_date.to_date
+          rescue StandardError
+            nil
+          end
+        end
+        if end_date
+          end_date = begin
+            end_date.to_date
+          rescue StandardError
+            nil
+          end
+        end
         range_filter(start_date, end_date)
       end
 
       def build_statement_for_datetime_or_timestamp
         start_date, end_date = get_filtering_duration
-        start_date = start_date.try(:beginning_of_day) if start_date
-        end_date = end_date.try(:end_of_day) if end_date
+        start_date = start_date.beginning_of_day if start_date.is_a?(Date)
+        end_date = end_date.end_of_day if end_date.is_a?(Date)
         range_filter(start_date, end_date)
       end
 
       def unary_operators
-        raise('You must override unary_operators in your StatementBuilder')
+        raise 'You must override unary_operators in your StatementBuilder'
       end
 
       def range_filter(_min, _max)
-        raise('You must override range_filter in your StatementBuilder')
+        raise 'You must override range_filter in your StatementBuilder'
       end
 
       class FilteringDuration

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
@@ -70,10 +72,10 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
       it 'returns actions by type' do
         abstract_model = RailsAdmin::AbstractModel.new(Player)
         object = FactoryBot.create :player
-        expect(helper.actions(:all, abstract_model, object).collect(&:custom_key)).to eq([:dashboard, :index, :show, :new, :edit, :export, :delete, :bulk_delete, :history_show, :history_index, :show_in_app])
+        expect(helper.actions(:all, abstract_model, object).collect(&:custom_key)).to eq(%i[dashboard index show new edit export delete bulk_delete history_show history_index show_in_app])
         expect(helper.actions(:root, abstract_model, object).collect(&:custom_key)).to eq([:dashboard])
-        expect(helper.actions(:collection, abstract_model, object).collect(&:custom_key)).to eq([:index, :new, :export, :bulk_delete, :history_index])
-        expect(helper.actions(:member, abstract_model, object).collect(&:custom_key)).to eq([:show, :edit, :delete, :history_show, :show_in_app])
+        expect(helper.actions(:collection, abstract_model, object).collect(&:custom_key)).to eq(%i[index new export bulk_delete history_index])
+        expect(helper.actions(:member, abstract_model, object).collect(&:custom_key)).to eq(%i[show edit delete history_show show_in_app])
       end
 
       it 'only returns visible actions, passing bindings correctly' do
@@ -105,7 +107,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
       it 'uses first sign out method from Devise when it is defined' do
         allow(Object).to receive(:defined?).with(Devise).and_return(true)
 
-        expect(Devise).to receive(:sign_out_via).and_return([:whatever_defined_on_devise, :something_ignored])
+        expect(Devise).to receive(:sign_out_via).and_return(%i[whatever_defined_on_devise something_ignored])
         expect(helper.logout_method).to eq(:whatever_defined_on_devise)
       end
     end
@@ -148,7 +150,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
         bc = helper.breadcrumb
         expect(bc).to match(/Dashboard/) # dashboard
         expect(bc).to match(/Teams/) # list
-        expect(bc).to match(/The avengers/) # show
+        expect(bc).to match(/the avengers/) # show
         expect(bc).to match(/Edit/) # current (edit)
       end
     end
@@ -165,11 +167,11 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
             end
             show do
               visible do
-                bindings[:object].class == Team
+                bindings[:object].instance_of?(Team)
               end
             end
             delete do
-              http_methods [:post, :put, :delete]
+              http_methods %i[post put delete]
             end
           end
         end
@@ -192,7 +194,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
         RailsAdmin.config do |config|
           config.actions do
             dashboard do
-              http_methods [:post, :put, :delete]
+              http_methods %i[post put delete]
             end
           end
         end
@@ -223,6 +225,24 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
         expect(helper.menu_for(:root)).not_to match(/Dashboard/)
         expect(helper.menu_for(:root)).to match(/Look this/)
       end
+
+      it 'should render allow an action to have link_target as config' do
+        RailsAdmin.config do |config|
+          config.actions do
+            dashboard
+            index
+            show do
+              link_target :_blank
+            end
+          end
+        end
+
+        @action = RailsAdmin::Config::Actions.find :show
+        @abstract_model = RailsAdmin::AbstractModel.new(Team)
+        @object = FactoryBot.create(:team, name: 'the avengers')
+
+        expect(helper.menu_for(:member, @abstract_model, @object)).to match(/_blank/)
+      end
     end
 
     describe '#main_navigation' do
@@ -230,7 +250,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
         RailsAdmin.config do |config|
           config.included_models = [Ball, Comment]
         end
-        expect(helper.main_navigation).to match(/(dropdown-header).*(Navigation).*(Balls).*(Comments)/m)
+        expect(helper.main_navigation).to match(/(btn-toggle).*(Navigation).*(Balls).*(Comments)/m)
       end
 
       it 'does not draw empty navigation labels' do
@@ -243,8 +263,8 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
             label_plural 'Confirmed'
           end
         end
-        expect(helper.main_navigation).to match(/(dropdown-header).*(Navigation).*(Balls).*(Commentz).*(Confirmed)/m)
-        expect(helper.main_navigation).not_to match(/(dropdown-header).*(Navigation).*(Balls).*(Commentz).*(Confirmed).*(Comment)/m)
+        expect(helper.main_navigation).to match(/(btn-toggle).*(Navigation).*(Balls).*(Commentz).*(Confirmed)/m)
+        expect(helper.main_navigation).not_to match(/(btn-toggle).*(Navigation).*(Balls).*(Commentz).*(Confirmed).*(Comment)/m)
       end
 
       it 'does not show unvisible models' do
@@ -255,25 +275,25 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
           end
         end
         result = helper.main_navigation
-        expect(result).to match(/(dropdown-header).*(Navigation).*(Balls)/m)
+        expect(result).to match(/(btn-toggle).*(Navigation).*(Balls)/m)
         expect(result).not_to match('Comments')
       end
 
-      it 'shows children of hidden models' do # https://github.com/sferik/rails_admin/issues/978
+      it 'shows children of hidden models' do # https://github.com/railsadminteam/rails_admin/issues/978
         RailsAdmin.config do |config|
           config.included_models = [Ball, Hardball]
           config.model Ball do
             hide
           end
         end
-        expect(helper.main_navigation).to match(/(dropdown\-header).*(Navigation).*(Hardballs)/m)
+        expect(helper.main_navigation).to match(/(btn-toggle).*(Navigation).*(Hardballs)/m)
       end
 
       it 'shows children of excluded models' do
         RailsAdmin.config do |config|
           config.included_models = [Hardball]
         end
-        expect(helper.main_navigation).to match(/(dropdown-header).*(Navigation).*(Hardballs)/m)
+        expect(helper.main_navigation).to match(/(btn-toggle).*(Navigation).*(Hardballs)/m)
       end
 
       it 'nests in navigation label' do
@@ -283,7 +303,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
             navigation_label 'commentable'
           end
         end
-        expect(helper.main_navigation).to match(/(dropdown\-header).*(Commentable).*(Comments)/m)
+        expect(helper.main_navigation).to match(/(btn-toggle).*(commentable).*(Comments)/m)
       end
 
       it 'nests in parent model' do
@@ -293,7 +313,7 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
             parent Player
           end
         end
-        expect(helper.main_navigation).to match(/(Players).* (nav\-level\-1).*(Comments)/m)
+        expect(helper.main_navigation).to match(/(Players).* (nav-level-1).*(Comments)/m)
       end
 
       it 'orders' do
@@ -443,32 +463,55 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
     end
 
     describe '#edit_user_link' do
-      it "don't include email column" do
-        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:player))
-        result = helper.edit_user_link
-        expect(result).to eq nil
+      subject { helper.edit_user_link }
+      let(:user) { FactoryBot.create(:user) }
+      before { allow(helper).to receive(:_current_user).and_return(user) }
+
+      it 'shows the edit action link of the user' do
+        is_expected.to match(%r{href="[^"]+/admin/user/#{user.id}/edit"})
       end
 
-      it 'include email column' do
-        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:user))
-        result = helper.edit_user_link
-        expect(result).to match('href')
+      it 'shows the gravatar icon' do
+        is_expected.to include('gravatar')
       end
 
-      it 'show gravatar' do
-        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:user))
-        result = helper.edit_user_link
-        expect(result).to include('gravatar')
+      context "when the user doesn't have the email column" do
+        let(:user) { FactoryBot.create(:player) }
+
+        it 'shows nothing' do
+          is_expected.to be nil
+        end
       end
 
-      it "don't show gravatar" do
-        RailsAdmin.config do |config|
-          config.show_gravatar = false
+      context 'when gravatar is disabled' do
+        before { RailsAdmin.config.show_gravatar = false }
+
+        it "doesn't show the gravatar icon" do
+          is_expected.not_to include('gravatar')
+        end
+      end
+
+      context 'when the user is not authorized to perform edit' do
+        before do
+          allow_any_instance_of(RailsAdmin::Config::Actions::Edit).to receive(:authorized?).and_return(false)
         end
 
-        allow(helper).to receive(:_current_user).and_return(FactoryBot.create(:user))
-        result = helper.edit_user_link
-        expect(result).not_to include('gravatar')
+        it 'shows gravatar and email without a link' do
+          is_expected.to include('gravatar')
+          is_expected.to include(user.email)
+          is_expected.not_to match('href')
+        end
+
+        it 'shows only email without a link when gravatar is disabled' do
+          RailsAdmin.config do |config|
+            config.show_gravatar = false
+          end
+
+          is_expected.not_to include('gravatar')
+          is_expected.not_to match('href')
+          is_expected.to include(user.email)
+          is_expected.to match("<span class=\"nav-link\"><span>#{user.email}</span></span>")
+        end
       end
     end
   end

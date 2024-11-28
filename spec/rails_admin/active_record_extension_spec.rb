@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
-require File.expand_path('../../../config/initializers/active_record_extensions', __FILE__)
+require File.expand_path('../../config/initializers/active_record_extensions', __dir__)
 
 RSpec.describe 'ActiveRecord::Base', active_record: true do
   describe '#safe_send' do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateHistoriesTable < ActiveRecord::Migration[5.0]
   def self.up
     create_table :histories do |t|
@@ -7,7 +9,7 @@ class CreateHistoriesTable < ActiveRecord::Migration[5.0]
       t.string :table
       t.timestamps null: false
     end
-    add_index(:histories, [:item, :table])
+    add_index(:histories, %i[item table])
   end
 
   def self.down

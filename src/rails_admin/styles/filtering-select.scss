@@ -1,0 +1,70 @@
+.ui-widget {
+  font-family: Arial, sans-serif;
+  font-size: 1.1em;
+}
+.ui-widget .ui-widget {
+  font-size: 1em;
+}
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+  font-family: Arial, sans-serif;
+  font-size: 1em;
+}
+.ui-widget-content {
+  border: 1px solid #b6b6b6;
+  background: #ffffff;
+  color: #4f4f4f;
+}
+.ui-widget-content a {
+  color: #4f4f4f;
+}
+
+.ui-menu {
+  list-style: none;
+  padding: 2px;
+  margin: 0;
+  display: block;
+  float: left;
+}
+.ui-menu .ui-menu {
+  margin-top: -3px;
+}
+.ui-menu .ui-menu-item {
+  margin: 0;
+  padding: 0;
+  zoom: 1;
+  float: left;
+  clear: left;
+  width: 100%;
+}
+.ui-menu .ui-menu-item a {
+  text-decoration: none;
+  display: block;
+  padding: 0.2em 0.4em;
+  line-height: 1.5;
+  zoom: 1;
+}
+.ui-menu .ui-menu-item a.ui-state-hover,
+.ui-menu .ui-menu-item a.ui-state-active {
+  font-weight: normal;
+  margin: -1px;
+  background: #5f83b9;
+  color: #ffffff;
+  text-shadow: 0px 1px 1px #234386;
+  border-color: #466086;
+  border-radius: 0;
+}
+
+.ui-autocomplete {
+  position: absolute;
+  cursor: default;
+  z-index: 1056 !important;
+  border-radius: 0;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+}
+
+.ui-helper-hidden-accessible {
+  display: none;
+}

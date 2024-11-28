@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe RailsAdmin, type: :request do
@@ -28,18 +30,73 @@ RSpec.describe RailsAdmin, type: :request do
   describe 'html head' do
     before { visit dashboard_path }
 
-    # Note: the [href^="/asset... syntax matches the start of a value. The reason
+    # NOTE: the [href^="/asset... syntax matches the start of a value. The reason
     # we just do that is to avoid being confused by rails' asset_ids.
     it 'loads stylesheets in header' do
-      is_expected.to have_selector('head link[href^="/assets/rails_admin/rails_admin"][href$=".css"]', visible: false)
+      case RailsAdmin.config.asset_source
+      when :sprockets
+        is_expected.to have_selector('head link[href^="/assets/rails_admin"][href$=".css"]', visible: false)
+      when :webpacker
+        is_expected.to have_no_selector('head link[href~="rails_admin"][href$=".css"]', visible: false)
+      end
     end
 
     it 'loads javascript files in body' do
-      is_expected.to have_selector('head script[src^="/assets/rails_admin/rails_admin"][src$=".js"]', visible: false)
+      case RailsAdmin.config.asset_source
+      when :sprockets
+        is_expected.to have_selector('head script[src^="/assets/rails_admin"][src$=".js"]', visible: false)
+      when :webpacker
+        is_expected.to have_selector('head script[src^="/packs-test/js/rails_admin"][src$=".js"]', visible: false)
+      end
     end
   end
 
-  describe '_current_user' do # https://github.com/sferik/rails_admin/issues/549
+  describe 'custom theming' do
+    before { visit dashboard_path }
+
+    if CI_ASSET == :sprockets
+      it 'applies the style overridden by assets in the application', js: true do
+        expect(find('.navbar-brand small').style('opacity')).to eq({'opacity' => '0.99'})
+      end
+    end
+  end
+
+  describe 'navbar css class' do
+    it 'is set by default' do
+      expect(RailsAdmin.config.navbar_css_classes).to eq(%w[navbar-dark bg-primary border-bottom])
+    end
+
+    it 'can be configured' do
+      RailsAdmin.config do |config|
+        config.navbar_css_classes = %w[navbar-light border-bottom]
+      end
+      visit dashboard_path
+      is_expected.to have_css('nav.navbar.navbar-light.border-bottom')
+    end
+  end
+
+  describe 'sidebar navigation', js: true do
+    it 'is collapsible' do
+      visit dashboard_path
+      is_expected.to have_css('.sidebar .nav-link', text: 'Players')
+      click_button 'Navigation'
+      is_expected.to have_css('.sidebar .btn-toggle.collapsed')
+      is_expected.not_to have_css('.sidebar #navigation.show')
+      is_expected.not_to have_css('.sidebar .nav-link', text: 'Players')
+    end
+
+    it 'persists over a page transition' do
+      visit dashboard_path
+      click_button 'Navigation'
+      is_expected.to have_css('.sidebar .btn-toggle.collapsed')
+      is_expected.not_to have_css('.sidebar #navigation.show')
+      find('.player_links .show a').trigger('click')
+      is_expected.to have_content 'List of Players'
+      is_expected.not_to have_css('.sidebar .nav-link', text: 'Players')
+    end
+  end
+
+  describe '_current_user' do # https://github.com/railsadminteam/rails_admin/issues/549
     it 'is accessible from the list view' do
       RailsAdmin.config Player do
         list do
@@ -66,7 +123,7 @@ RSpec.describe RailsAdmin, type: :request do
   describe 'secondary navigation' do
     it 'has Gravatar image' do
       visit dashboard_path
-      is_expected.to have_selector('ul.navbar-right img[src*="gravatar.com"]')
+      is_expected.to have_selector('ul.navbar-nav img[src*="gravatar.com"]')
     end
 
     it "does not show Gravatar when user doesn't have email method" do
@@ -88,9 +145,9 @@ RSpec.describe RailsAdmin, type: :request do
       is_expected.to have_content 'Log out'
     end
 
-    it 'has label-danger class on log out link' do
+    it 'has bg-danger class on log out link' do
       visit dashboard_path
-      is_expected.to have_selector('.label-danger')
+      is_expected.to have_selector('.bg-danger')
     end
 
     it 'has links for actions which are marked as show_in_navigation' do
@@ -125,8 +182,34 @@ RSpec.describe RailsAdmin, type: :request do
     it 'is enforced' do
       visit new_path(model_name: 'league')
       fill_in 'league[name]', with: 'National league'
-      find('input[name="authenticity_token"]', visible: false).set("invalid token")
+      find('input[name="authenticity_token"]', visible: false).set('invalid token')
       expect { click_button 'Save' }.to raise_error ActionController::InvalidAuthenticityToken
+    end
+  end
+
+  describe 'Turbo Drive', js: true do
+    let(:player) { FactoryBot.create :player }
+
+    it 'does not trigger JS errors by going away from and back to RailsAdmin' do
+      visit show_path(model_name: 'player', id: player.id)
+      click_link 'Show in app'
+      click_link 'Back to admin'
+      is_expected.to have_content 'Details for Player'
+    end
+
+    it 'triggers rails_admin.dom_ready right after a validation error' do
+      visit edit_path(model_name: 'player', id: player.id)
+      fill_in 'player[name]', with: 'on steroids'
+      find_button('Save').trigger 'click'
+      is_expected.to have_content 'Player failed to be updated'
+      is_expected.to have_css '.filtering-select[data-input-for="player_team_id"]'
+    end
+  end
+
+  describe 'dom_ready events', js: true do
+    it 'trigger properly' do
+      visit dashboard_path
+      expect(evaluate_script('domReadyTriggered')).to match_array %w[plainjs/dot jquery/dot]
     end
   end
 

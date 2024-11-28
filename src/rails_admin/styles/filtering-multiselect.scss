@@ -1,0 +1,53 @@
+.ra-multiselect {
+  .ra-multiselect-header {
+    margin-bottom: 5px;
+    clear: right;
+    .help {
+      float: left;
+      font-size: 10px;
+    }
+    .ui-icon {
+      position: relative;
+      top: 10px;
+      left: 3px;
+    }
+  }
+
+  .ra-multiselect-search {
+    width: 180px;
+  }
+
+  .ra-multiselect-column {
+    float: left;
+    .wrapper {
+      overflow-x: auto;
+      select {
+        height: auto;
+        min-height: 120px;
+        margin-bottom: 5px;
+        min-width: 200px;
+      }
+    }
+  }
+
+  .ra-multiselect-center {
+    width: 30px;
+    padding-top: 15px;
+    text-align: center;
+    .fas {
+      margin: 5px auto;
+    }
+  }
+
+  span.fas,
+  a.fas {
+    color: $gray-400;
+    font-size: 16px;
+    margin-right: 4px;
+    text-decoration: none;
+
+    &:hover {
+      color: $gray-700;
+    }
+  }
+}

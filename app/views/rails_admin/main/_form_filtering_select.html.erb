@@ -1,0 +1,21 @@
+<%
+  config = field.associated_model_config
+%>
+
+<div class="row">
+  <div class="col-sm-4">
+    <%=
+      form.select field.method_name, field.collection, { selected: field.form_value, include_blank: true },
+                  field.html_attributes.reverse_merge({ data: { filteringselect: true, options: field.widget_options.to_json }, placeholder: t('admin.misc.search') })
+    %>
+  </div>
+  <div class="col-sm-8 mt-2 mt-md-0 modal-actions">
+    <% if authorized?(:new, config.abstract_model) && field.inline_add %>
+      <% path_hash = { model_name: config.abstract_model.to_param, modal: true }.merge!(field.associated_prepopulate_params) %>
+      <%= link_to "<i class=\"fas fa-plus\"></i> ".html_safe + wording_for(:link, :new, config.abstract_model), '#', data: { link: new_path(path_hash) }, class: "btn btn-info create" %>
+    <% end %>
+    <% if authorized?(:edit, config.abstract_model) && field.inline_edit %>
+      <%= link_to "<i class=\"fas fa-pencil-alt\"></i> ".html_safe + wording_for(:link, :edit, config.abstract_model), '#', data: { link: edit_path(model_name: config.abstract_model.to_param, modal: true, id: '__ID__') }, class: "btn btn-info update ms-2#{' disabled' if field.value.nil?}" %>
+    <% end %>
+  </div>
+</div>

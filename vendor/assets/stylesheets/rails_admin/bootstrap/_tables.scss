@@ -1,233 +1,155 @@
 //
-// Tables
-// --------------------------------------------------
-
-
-table {
-  background-color: $table-bg;
-}
-th {
-  text-align: left;
-}
-
-
-// Baseline styles
+// Basic Bootstrap table
+//
 
 .table {
+  --#{$variable-prefix}table-bg: #{$table-bg};
+  --#{$variable-prefix}table-accent-bg: #{$table-accent-bg};
+  --#{$variable-prefix}table-striped-color: #{$table-striped-color};
+  --#{$variable-prefix}table-striped-bg: #{$table-striped-bg};
+  --#{$variable-prefix}table-active-color: #{$table-active-color};
+  --#{$variable-prefix}table-active-bg: #{$table-active-bg};
+  --#{$variable-prefix}table-hover-color: #{$table-hover-color};
+  --#{$variable-prefix}table-hover-bg: #{$table-hover-bg};
+
   width: 100%;
-  max-width: 100%;
-  margin-bottom: $line-height-computed;
-  // Cells
-  > thead,
-  > tbody,
-  > tfoot {
-    > tr {
-      > th,
-      > td {
-        padding: $table-cell-padding;
-        line-height: $line-height-base;
-        vertical-align: top;
-        border-top: 1px solid $table-border-color;
-      }
-    }
+  margin-bottom: $spacer;
+  color: $table-color;
+  vertical-align: $table-cell-vertical-align;
+  border-color: $table-border-color;
+
+  // Target th & td
+  // We need the child combinator to prevent styles leaking to nested tables which doesn't have a `.table` class.
+  // We use the universal selectors here to simplify the selector (else we would need 6 different selectors).
+  // Another advantage is that this generates less code and makes the selector less specific making it easier to override.
+  // stylelint-disable-next-line selector-max-universal
+  > :not(caption) > * > * {
+    padding: $table-cell-padding-y $table-cell-padding-x;
+    background-color: var(--#{$variable-prefix}table-bg);
+    border-bottom-width: $table-border-width;
+    box-shadow: inset 0 0 0 9999px var(--#{$variable-prefix}table-accent-bg);
   }
-  // Bottom align for column headings
-  > thead > tr > th {
+
+  > tbody {
+    vertical-align: inherit;
+  }
+
+  > thead {
     vertical-align: bottom;
-    border-bottom: 2px solid $table-border-color;
-  }
-  // Remove top border from thead by default
-  > caption + thead,
-  > colgroup + thead,
-  > thead:first-child {
-    > tr:first-child {
-      > th,
-      > td {
-        border-top: 0;
-      }
-    }
-  }
-  // Account for multiple tbody instances
-  > tbody + tbody {
-    border-top: 2px solid $table-border-color;
   }
 
-  // Nesting
-  .table {
-    background-color: $body-bg;
+  // Highlight border color between thead, tbody and tfoot.
+  > :not(:first-child) {
+    border-top: (2 * $table-border-width) solid $table-group-separator-color;
   }
 }
 
 
-// Condensed table w/ half padding
-
-.table-condensed {
-  > thead,
-  > tbody,
-  > tfoot {
-    > tr {
-      > th,
-      > td {
-        padding: $table-condensed-cell-padding;
-      }
-    }
-  }
-}
-
-
-// Bordered version
 //
-// Add borders all around the table and between all the columns.
+// Change placement of captions with a class
+//
+
+.caption-top {
+  caption-side: top;
+}
+
+
+//
+// Condensed table w/ half padding
+//
+
+.table-sm {
+  // stylelint-disable-next-line selector-max-universal
+  > :not(caption) > * > * {
+    padding: $table-cell-padding-y-sm $table-cell-padding-x-sm;
+  }
+}
+
+
+// Border versions
+//
+// Add or remove borders all around the table and between all the columns.
+//
+// When borders are added on all sides of the cells, the corners can render odd when
+// these borders do not have the same color or if they are semi-transparent.
+// Therefor we add top and border bottoms to the `tr`s and left and right borders
+// to the `td`s or `th`s
 
 .table-bordered {
-  border: 1px solid $table-border-color;
-  > thead,
-  > tbody,
-  > tfoot {
-    > tr {
-      > th,
-      > td {
-        border: 1px solid $table-border-color;
-      }
-    }
-  }
-  > thead > tr {
-    > th,
-    > td {
-      border-bottom-width: 2px;
+  > :not(caption) > * {
+    border-width: $table-border-width 0;
+
+    // stylelint-disable-next-line selector-max-universal
+    > * {
+      border-width: 0 $table-border-width;
     }
   }
 }
 
+.table-borderless {
+  // stylelint-disable-next-line selector-max-universal
+  > :not(caption) > * > * {
+    border-bottom-width: 0;
+  }
+
+  > :not(:first-child) {
+    border-top-width: 0;
+  }
+}
 
 // Zebra-striping
 //
 // Default zebra-stripe styles (alternating gray and transparent backgrounds)
 
 .table-striped {
-  > tbody > tr:nth-child(odd) {
-    > td,
-    > th {
-      background-color: $table-bg-accent;
-    }
+  > tbody > tr:nth-of-type(#{$table-striped-order}) > * {
+    --#{$variable-prefix}table-accent-bg: var(--#{$variable-prefix}table-striped-bg);
+    color: var(--#{$variable-prefix}table-striped-color);
   }
 }
 
+// Active table
+//
+// The `.table-active` class can be added to highlight rows or cells
+
+.table-active {
+  --#{$variable-prefix}table-accent-bg: var(--#{$variable-prefix}table-active-bg);
+  color: var(--#{$variable-prefix}table-active-color);
+}
 
 // Hover effect
 //
 // Placed here since it has to come after the potential zebra striping
 
 .table-hover {
-  > tbody > tr:hover {
-    > td,
-    > th {
-      background-color: $table-bg-hover;
-    }
+  > tbody > tr:hover > * {
+    --#{$variable-prefix}table-accent-bg: var(--#{$variable-prefix}table-hover-bg);
+    color: var(--#{$variable-prefix}table-hover-color);
   }
 }
 
 
-// Table cell sizing
+// Table variants
 //
-// Reset default table behavior
+// Table variants set the table cell backgrounds, border colors
+// and the colors of the striped, hovered & active tables
 
-table col[class*="col-"] {
-  position: static; // Prevent border hiding in Firefox and IE9/10 (see https://github.com/twbs/bootstrap/issues/11623)
-  float: none;
-  display: table-column;
+@each $color, $value in $table-variants {
+  @include table-variant($color, $value);
 }
-table {
-  td,
-  th {
-    &[class*="col-"] {
-      position: static; // Prevent border hiding in Firefox and IE9/10 (see https://github.com/twbs/bootstrap/issues/11623)
-      float: none;
-      display: table-cell;
-    }
-  }
-}
-
-
-// Table backgrounds
-//
-// Exact selectors below required to override `.table-striped` and prevent
-// inheritance to nested tables.
-
-// Generate the contextual variants
-@include table-row-variant('active', $table-bg-active);
-@include table-row-variant('success', $state-success-bg);
-@include table-row-variant('info', $state-info-bg);
-@include table-row-variant('warning', $state-warning-bg);
-@include table-row-variant('danger', $state-danger-bg);
-
 
 // Responsive tables
 //
-// Wrap your tables in `.table-responsive` and we'll make them mobile friendly
-// by enabling horizontal scrolling. Only applies <768px. Everything above that
-// will display normally.
+// Generate series of `.table-responsive-*` classes for configuring the screen
+// size of where your table will overflow.
 
-.table-responsive {
-  @media screen and (max-width: $screen-xs-max) {
-    width: 100%;
-    margin-bottom: ($line-height-computed * 0.75);
-    overflow-y: hidden;
-    overflow-x: auto;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
-    border: 1px solid $table-border-color;
-    -webkit-overflow-scrolling: touch;
+@each $breakpoint in map-keys($grid-breakpoints) {
+  $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
 
-    // Tighten up spacing
-    > .table {
-      margin-bottom: 0;
-
-      // Ensure the content doesn't wrap
-      > thead,
-      > tbody,
-      > tfoot {
-        > tr {
-          > th,
-          > td {
-            white-space: nowrap;
-          }
-        }
-      }
-    }
-
-    // Special overrides for the bordered tables
-    > .table-bordered {
-      border: 0;
-
-      // Nuke the appropriate borders so that the parent can handle them
-      > thead,
-      > tbody,
-      > tfoot {
-        > tr {
-          > th:first-child,
-          > td:first-child {
-            border-left: 0;
-          }
-          > th:last-child,
-          > td:last-child {
-            border-right: 0;
-          }
-        }
-      }
-
-      // Only nuke the last row's bottom-border in `tbody` and `tfoot` since
-      // chances are there will be only one `tr` in a `thead` and that would
-      // remove the border altogether.
-      > tbody,
-      > tfoot {
-        > tr:last-child {
-          > th,
-          > td {
-            border-bottom: 0;
-          }
-        }
-      }
-
+  @include media-breakpoint-down($breakpoint) {
+    .table-responsive#{$infix} {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
   }
 }

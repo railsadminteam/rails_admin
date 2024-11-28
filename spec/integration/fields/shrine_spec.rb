@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'Shrine field', type: :request, active_record: true do
@@ -13,7 +15,7 @@ RSpec.describe 'Shrine field', type: :request, active_record: true do
 
   it 'supports caching an uploaded file', js: true do
     visit new_path(model_name: 'field_test')
-    attach_file "Shrine asset", file_path('test.jpg')
+    attach_file 'Shrine asset', file_path('test.jpg')
     fill_in 'field_test[string_field]', with: 'Invalid'
     click_button 'Save'
     expect(page).to have_content 'Field test failed to be created'

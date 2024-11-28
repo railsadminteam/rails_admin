@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/config/fields'
 require 'rails_admin/config/fields/types'
 require 'rails_admin/config/fields/types/file_upload'
@@ -11,12 +13,14 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
     fields << field
     associations =
       if properties.type == :has_many
-        ["#{name}_attachments".to_sym, "#{name}_blobs".to_sym]
+        [:"#{name}_attachments", :"#{name}_blobs"]
       else
-        ["#{name}_attachment".to_sym, "#{name}_blob".to_sym]
+        [:"#{name}_attachment", :"#{name}_blob"]
       end
     children_fields = associations.map do |child_name|
-      next unless child_association = parent.abstract_model.associations.detect { |p| p.name.to_sym == child_name }
+      child_association = parent.abstract_model.associations.detect { |p| p.name.to_sym == child_name }
+      next unless child_association
+
       child_field = fields.detect { |f| f.name == child_name } || RailsAdmin::Config::Fields.default_factory.call(parent, child_association, fields)
       child_field.hide unless field == child_field
       child_field.filterable(false) unless field == child_field

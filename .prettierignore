@@ -1,0 +1,7 @@
+coverage
+lib/generators/rails_admin/templates
+spec/dummy_app/app/assets/builds
+spec/dummy_app/public
+spec/dummy_app/tmp
+spec/support/jquery.simulate.drag-sortable.js
+vendor

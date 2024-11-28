@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # This migration comes from active_storage (originally 20170806125915)
 class CreateActiveStorageTables < ActiveRecord::Migration[5.0]
   def change
@@ -24,7 +26,7 @@ class CreateActiveStorageTables < ActiveRecord::Migration[5.0]
 
       t.datetime :created_at, null: false
 
-      t.index [:record_type, :record_id, :name, :blob_id], name: "index_active_storage_attachments_uniqueness", unique: true
+      t.index %i[record_type record_id name blob_id], name: 'index_active_storage_attachments_uniqueness', unique: true
     end
   end
 end

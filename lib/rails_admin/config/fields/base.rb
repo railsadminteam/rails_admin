@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/config/proxyable'
 require 'rails_admin/config/configurable'
 require 'rails_admin/config/hideable'
@@ -14,13 +16,12 @@ module RailsAdmin
         include RailsAdmin::Config::Groupable
         include RailsAdmin::Config::Inspectable
 
-        attr_reader :name, :properties, :abstract_model
+        attr_reader :name, :properties, :abstract_model, :parent, :root
         attr_accessor :defined, :order, :section
-        attr_reader :parent, :root
 
-        NAMED_INSTANCE_VARIABLES = [
-          :@parent, :@root, :@section, :@children_fields_registered,
-          :@associated_model_config, :@group
+        NAMED_INSTANCE_VARIABLES = %i[
+          @parent @root @section @children_fields_registered
+          @associated_model_config @group
         ].freeze
 
         def initialize(parent, name, properties)
@@ -36,7 +37,7 @@ module RailsAdmin
         end
 
         register_instance_option :css_class do
-          "#{self.name}_field"
+          "#{name}_field"
         end
 
         def type_css_class
@@ -51,12 +52,34 @@ module RailsAdmin
           nil
         end
 
+        register_instance_option :sticky? do
+          false
+        end
+
         register_instance_option :sortable do
           !virtual? || children_fields.first || false
         end
 
+        def sort_column
+          if sortable == true
+            "#{abstract_model.quoted_table_name}.#{abstract_model.quote_column_name(name)}"
+          elsif (sortable.is_a?(String) || sortable.is_a?(Symbol)) && sortable.to_s.include?('.') # just provide sortable, don't do anything smart
+            sortable
+          elsif sortable.is_a?(Hash) # just join sortable hash, don't do anything smart
+            "#{sortable.keys.first}.#{sortable.values.first}"
+          elsif association? # use column on target table
+            "#{associated_model_config.abstract_model.quoted_table_name}.#{abstract_model.quote_column_name(sortable)}"
+          else # use described column in the field conf.
+            "#{abstract_model.quoted_table_name}.#{abstract_model.quote_column_name(sortable)}"
+          end
+        end
+
         register_instance_option :searchable do
           !virtual? || children_fields.first || false
+        end
+
+        register_instance_option :search_operator do
+          RailsAdmin::Config.default_search_operator
         end
 
         register_instance_option :queryable? do
@@ -67,8 +90,22 @@ module RailsAdmin
           !!searchable
         end
 
-        register_instance_option :search_operator do
-          @search_operator ||= RailsAdmin::Config.default_search_operator
+        register_instance_option :filter_operators do
+          []
+        end
+
+        register_instance_option :default_filter_operator do
+          nil
+        end
+
+        def filter_options
+          {
+            label: label,
+            name: name,
+            operator: default_filter_operator,
+            operators: filter_operators,
+            type: type,
+          }
         end
 
         # serials and dates are reversed in list, which is more natural (last modified items first).
@@ -78,7 +115,7 @@ module RailsAdmin
 
         # list of columns I should search for that field [{ column: 'table_name.column', type: field.type }, {..}]
         register_instance_option :searchable_columns do
-          @searchable_columns ||= begin
+          @searchable_columns ||=
             case searchable
             when true
               [{column: "#{abstract_model.table_name}.#{name}", type: type}]
@@ -93,22 +130,21 @@ module RailsAdmin
                   table_name, column = f.split '.'
                   type = nil
                 elsif f.is_a?(Hash)                                              #  <Model|table_name> => <attribute|column>
-                  am = f.keys.first.is_a?(Class) && AbstractModel.new(f.keys.first)
-                  table_name = am && am.table_name || f.keys.first
+                  am = AbstractModel.new(f.keys.first) if f.keys.first.is_a?(Class)
+                  table_name = am&.table_name || f.keys.first
                   column = f.values.first
-                  property = am && am.properties.detect { |p| p.name == f.values.first.to_sym }
-                  type = property && property.type
+                  property = am&.properties&.detect { |p| p.name == f.values.first.to_sym }
+                  type = property&.type
                 else                                                             #  <attribute|column>
                   am = (association? ? associated_model_config.abstract_model : abstract_model)
                   table_name = am.table_name
                   column = f
                   property = am.properties.detect { |p| p.name == f.to_sym }
-                  type = property && property.type
+                  type = property&.type
                 end
                 {column: "#{table_name}.#{column}", type: (type || :string)}
               end
             end
-          end
         end
 
         register_instance_option :formatted_value do
@@ -155,7 +191,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :length do
-          @length ||= properties && properties.length
+          @length ||= properties&.length
         end
 
         # Accessor for field's length restrictions per validations
@@ -172,17 +208,17 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :required? do
-          context = begin
+          context =
             if bindings && bindings[:object]
               bindings[:object].persisted? ? :update : :create
             else
               :nil
             end
-          end
+
           (@required ||= {})[context] ||= !!([name] + children_fields).uniq.detect do |column_name|
             abstract_model.model.validators_on(column_name).detect do |v|
               !(v.options[:allow_nil] || v.options[:allow_blank]) &&
-                [:presence, :numericality, :attachment_presence].include?(v.kind) &&
+                %i[presence numericality attachment_presence].include?(v.kind) &&
                 (v.options[:on] == context || v.options[:on].blank?) &&
                 (v.options[:if].blank? && v.options[:unless].blank?)
             end
@@ -193,7 +229,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :serial? do
-          properties && properties.serial?
+          properties&.serial?
         end
 
         register_instance_option :view_helper do
@@ -213,6 +249,7 @@ module RailsAdmin
           returned = true
           (RailsAdmin.config.default_hidden_fields || {}).each do |section, fields|
             next unless self.section.is_a?("RailsAdmin::Config::Sections::#{section.to_s.camelize}".constantize)
+
             returned = false if fields.include?(name)
           end
           returned
@@ -223,16 +260,29 @@ module RailsAdmin
           []
         end
 
+        register_instance_option :eager_load do
+          false
+        end
+
+        register_deprecated_instance_option :eager_load?, :eager_load
+
+        def eager_load_values
+          case eager_load
+          when true
+            [name]
+          when false, nil
+            []
+          else
+            Array.wrap(eager_load)
+          end
+        end
+
         register_instance_option :render do
           bindings[:view].render partial: "rails_admin/main/#{partial}", locals: {field: self, form: bindings[:form]}
         end
 
-        register_instance_option :default_filter_operator do
-          nil
-        end
-
         def editable?
-          !(@properties && @properties.read_only?)
+          !((@properties && @properties.read_only?) || (bindings[:object] && bindings[:object].readonly?))
         end
 
         # Is this an association
@@ -259,7 +309,7 @@ module RailsAdmin
         # @see RailsAdmin::Config::Fields::Base.register_instance_option :required?
         def optional(state = nil, &block)
           if !state.nil? || block
-            required state.nil? ? proc { false == instance_eval(&block) } : false == state
+            required state.nil? ? proc { instance_eval(&block) == false } : state == false
           else
             optional?
           end
@@ -281,14 +331,14 @@ module RailsAdmin
         def value
           bindings[:object].safe_send(name)
         rescue NoMethodError => e
-          raise e.exception <<-EOM.gsub(/^\s{10}/, '')
-          #{e.message}
-          If you want to use a RailsAdmin virtual field(= a field without corresponding instance method),
-          you should declare 'formatted_value' in the field definition.
-            field :#{name} do
-              formatted_value{ bindings[:object].call_some_method }
-            end
-          EOM
+          raise e.exception <<~ERROR
+            #{e.message}
+            If you want to use a RailsAdmin virtual field(= a field without corresponding instance method),
+            you should declare 'formatted_value' in the field definition.
+              field :#{name} do
+                formatted_value{ bindings[:object].call_some_method }
+              end
+          ERROR
         end
 
         # Reader for nested attributes
@@ -302,12 +352,12 @@ module RailsAdmin
         end
 
         def generic_help
-          (required? ? I18n.translate('admin.form.required') : I18n.translate('admin.form.optional')) + '. '
+          "#{required? ? I18n.translate('admin.form.required') : I18n.translate('admin.form.optional')}. "
         end
 
         def generic_field_help
           model = abstract_model.model_name.underscore
-          model_lookup = "admin.help.#{model}.#{name}".to_sym
+          model_lookup = :"admin.help.#{model}.#{name}"
           translated = I18n.translate(model_lookup, help: generic_help, default: [generic_help])
           (translated.is_a?(Hash) ? translated.to_a.first[1] : translated).html_safe
         end
@@ -317,7 +367,7 @@ module RailsAdmin
         end
 
         def parse_input(_params)
-          # overriden
+          # overridden
         end
 
         def inverse_of

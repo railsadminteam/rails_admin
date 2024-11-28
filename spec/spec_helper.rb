@@ -1,7 +1,9 @@
-# Configure Rails Envinronment
+# frozen_string_literal: true
+
+# Configure Rails Environment
 ENV['RAILS_ENV'] = 'test'
 CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym
-CI_TARGET_ORMS = [:active_record, :mongoid].freeze
+CI_TARGET_ORMS = %i[active_record mongoid].freeze
 PK_COLUMN = {active_record: :id, mongoid: :_id}[CI_ORM]
 
 if RUBY_ENGINE == 'jruby'
@@ -18,7 +20,6 @@ SimpleCov.formatters = [SimpleCov::Formatter::HTMLFormatter, SimpleCov::Formatte
 SimpleCov.start do
   add_filter '/spec/'
   add_filter '/vendor/bundle/'
-  minimum_coverage(CI_ORM == :mongoid ? 90.05 : 91.21)
 end
 
 SimpleCov::Formatter::LcovFormatter.config do |c|
@@ -26,17 +27,18 @@ SimpleCov::Formatter::LcovFormatter.config do |c|
   c.single_report_path = 'coverage/lcov.info'
 end
 
-require File.expand_path('../dummy_app/config/environment', __FILE__)
+require File.expand_path('dummy_app/config/environment', __dir__)
 
 require 'rspec/rails'
 require 'factory_bot'
 require 'factories'
 require 'policies'
-require 'database_cleaner'
+require "database_cleaner/#{CI_ORM}"
 require "orm/#{CI_ORM}"
+require 'paper_trail/frameworks/rspec' if defined?(PaperTrail)
 
-Dir[File.expand_path('../support/**/*.rb', __FILE__),
-    File.expand_path('../shared_examples/**/*.rb', __FILE__)].each { |f| require f }
+Dir[File.expand_path('support/**/*.rb', __dir__),
+    File.expand_path('shared_examples/**/*.rb', __dir__)].sort.each { |f| require f }
 
 ActionMailer::Base.delivery_method = :test
 ActionMailer::Base.perform_deliveries = true
@@ -44,27 +46,11 @@ ActionMailer::Base.default_url_options[:host] = 'example.com'
 
 Rails.backtrace_cleaner.remove_silencers!
 
-# Don't need passwords in test DB to be secure, but we would like 'em to be
-# fast -- and the stretches mechanism is intended to make passwords
-# computationally expensive.
-module Devise
-  module Models
-    module DatabaseAuthenticatable
-    protected
-
-      def password_digest(password)
-        password
-      end
-    end
-  end
+require 'capybara/cuprite'
+Capybara.javascript_driver = :cuprite
+Capybara.register_driver(:cuprite) do |app|
+  Capybara::Cuprite::Driver.new(app, js_errors: true, logger: ConsoleLogger)
 end
-
-Devise.setup do |config|
-  config.stretches = 0
-end
-
-require 'capybara/poltergeist'
-Capybara.javascript_driver = :poltergeist
 Capybara.server = :webrick
 
 RailsAdmin.setup_all_extensions
@@ -82,23 +68,48 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers
 
   config.include Capybara::DSL, type: :request
+  config.include Capybara::RSpecMatchers, type: :request
 
   config.verbose_retry = true
   config.display_try_failure_messages = true
   config.around :each, :js do |example|
-    example.run_with_retry retry: 2
+    example.run_with_retry retry: (ENV['CI'] && RUBY_ENGINE == 'jruby' ? 3 : 2)
   end
   config.retry_callback = proc do |example|
-    Capybara.reset! if example.metadata[:js]
+    example.metadata[:retry] = 6 if [Ferrum::DeadBrowserError, Ferrum::NoExecutionContextError, Ferrum::TimeoutError].include?(example.exception.class)
+    if example.metadata[:js]
+      attempt = 0
+      begin
+        Capybara.reset!
+      rescue Ferrum::TimeoutError, Ferrum::NoExecutionContextError
+        attempt += 1
+        raise if attempt >= 5
+
+        retry
+      end
+    end
+  end
+
+  config.before(:all) do
+    case CI_ASSET
+    when :webpacker
+      Webpacker.instance.compiler.compile
+    when :vite
+      ViteRuby.instance.commands.build
+    end
   end
 
   config.before do |example|
-    DatabaseCleaner.strategy = (CI_ORM == :mongoid || example.metadata[:js]) ? :truncation : :transaction
+    DatabaseCleaner.strategy =
+      if CI_ORM == :mongoid || example.metadata[:js]
+        :deletion
+      else
+        :transaction
+      end
 
     DatabaseCleaner.start
     RailsAdmin::Config.reset
-    RailsAdmin::AbstractModel.reset
-    RailsAdmin::Config.audit_with(:history) if CI_ORM == :active_record
+    RailsAdmin::Config.asset_source = CI_ASSET
   end
 
   config.after(:each) do
@@ -108,9 +119,11 @@ RSpec.configure do |config|
 
   CI_TARGET_ORMS.each do |orm|
     if orm == CI_ORM
-      config.filter_run_excluding "skip_#{orm}".to_sym => true
+      config.filter_run_excluding "skip_#{orm}": true
     else
       config.filter_run_excluding orm => true
     end
   end
+
+  config.filter_run_excluding composite_primary_keys: true unless defined?(ActiveRecord) && ActiveRecord.gem_version >= Gem::Version.new('7.1') || defined?(CompositePrimaryKeys)
 end

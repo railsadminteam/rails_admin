@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe RailsAdmin::MainHelper, type: :helper do
@@ -36,11 +38,11 @@ RSpec.describe RailsAdmin::MainHelper, type: :helper do
       end
 
       it 'should add novalidate attribute to the html form tag' do
-        expect(html_form).to include "novalidate=\"novalidate\""
+        expect(html_form).to include 'novalidate="novalidate"'
       end
 
       it 'should add novalidate attribute to the html form tag with html attributes' do
-        expect(html_form_with_attrs).to include "novalidate=\"novalidate\""
+        expect(html_form_with_attrs).to include 'novalidate="novalidate"'
       end
     end
   end

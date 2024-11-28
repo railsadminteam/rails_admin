@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+require 'nested_form/builder_mixin'
+
 module RailsAdmin
   class FormBuilder < ::ActionView::Helpers::FormBuilder
     include ::NestedForm::BuilderMixin
@@ -30,7 +34,7 @@ module RailsAdmin
 
       @template.content_tag :fieldset do
         contents = []
-        contents << @template.content_tag(:legend, %(<i class="icon-chevron-#{(fieldset.active? ? 'down' : 'right')}"></i> #{fieldset.label}).html_safe, style: fieldset.name == :default ? 'display:none' : '')
+        contents << @template.content_tag(:legend, %(<i class="fas fa-chevron-#{fieldset.active? ? 'down' : 'right'}"></i> #{fieldset.label}).html_safe, style: fieldset.name == :default ? 'display:none' : '')
         contents << @template.content_tag(:p, fieldset.help) if fieldset.help.present?
         contents << fields.collect { |field| field_wrapper_for(field, nested_in) }.join
         contents.join.html_safe
@@ -40,9 +44,10 @@ module RailsAdmin
     def field_wrapper_for(field, nested_in)
       # do not show nested field if the target is the origin
       return if nested_field_association?(field, nested_in)
-      @template.content_tag(:div, class: "form-group control-group #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", id: "#{dom_id(field)}_field") do
+
+      @template.content_tag(:div, class: "control-group row mb-3 #{field.type_css_class} #{field.css_class} #{'error' if field.errors.present?}", id: "#{dom_id(field)}_field") do
         if field.label
-          label(field.method_name, capitalize_first_letter(field.label), class: 'col-sm-2 control-label') +
+          label(field.method_name, field.label, class: 'col-sm-2 col-form-label text-md-end') +
             (field.nested_form ? field_for(field) : input_for(field))
         else
           field.nested_form ? field_for(field) : input_for(field)
@@ -65,7 +70,7 @@ module RailsAdmin
     end
 
     def help_for(field)
-      field.help.present? ? @template.content_tag(:span, field.help, class: 'help-block') : ''.html_safe
+      field.help.present? ? @template.content_tag(:div, field.help, class: 'form-text') : ''.html_safe
     end
 
     def field_for(field)
@@ -75,13 +80,13 @@ module RailsAdmin
     def object_infos
       model_config = RailsAdmin.config(object)
       model_label = model_config.label
-      object_label = begin
+      object_label =
         if object.new_record?
           I18n.t('admin.form.new_model', name: model_label)
         else
           object.send(model_config.object_label_method).presence || "#{model_config.label} ##{object.id}"
         end
-      end
+
       %(<span style="display:none" class="object-infos" data-model-label="#{model_label}" data-object-label="#{CGI.escapeHTML(object_label.to_s)}"></span>).html_safe
     end
 
@@ -100,6 +105,14 @@ module RailsAdmin
 
     def dom_name(field)
       (@dom_name ||= {})[field.name] ||= %(#{@object_name}#{options[:index] && "[#{options[:index]}]"}[#{field.method_name}]#{field.is_a?(Config::Fields::Association) && field.multiple? ? '[]' : ''})
+    end
+
+    def hidden_field(method, options = {})
+      if method == :id && object.id.is_a?(Array)
+        super method, {value: RailsAdmin.config.composite_keys_serializer.serialize(object.id)}
+      else
+        super
+      end
     end
 
   protected

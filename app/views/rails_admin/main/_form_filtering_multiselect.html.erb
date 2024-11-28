@@ -1,0 +1,19 @@
+<%
+  config = field.associated_model_config
+%>
+
+<div class="row">
+  <div class="col-auto">
+    <input name="<%= form.dom_name(field) %>" type="hidden" />
+    <%=
+      form.select field.method_name, field.collection, { selected: field.form_value, object: form.object },
+                  field.html_attributes.reverse_merge({data: { filteringmultiselect: true, options: field.widget_options.to_json }, multiple: true})
+    %>
+  </div>
+  <% if authorized?(:new, config.abstract_model) && field.inline_add %>
+    <div class="col-sm-4 modal-actions">
+      <% path_hash = { model_name: config.abstract_model.to_param, modal: true }.merge!(field.associated_prepopulate_params) %>
+      <%= link_to "<i class=\"fas fa-plus\"></i> ".html_safe + wording_for(:link, :new, config.abstract_model), '#', data: { link: new_path(path_hash) }, class: "create btn btn-info", style: 'margin-left:10px' %>
+    </div>
+  <% end %>
+</div>

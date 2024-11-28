@@ -1,0 +1,30 @@
+//=  require 'rails-ujs'
+//=  require 'turbo'
+//=  require 'rails_admin/jquery3'
+//=  require 'jquery_nested_form'
+//=  require 'rails_admin/jquery-ui/effect'
+//=  require 'rails_admin/jquery-ui/widgets/sortable'
+//=  require 'rails_admin/jquery-ui/widgets/autocomplete'
+//=  require 'rails_admin/flatpickr-with-locales'
+//=  require 'rails_admin/popper'
+//=  require 'rails_admin/bootstrap'
+
+//=  require 'rails_admin/abstract-select'
+//=  require 'rails_admin/filter-box'
+//=  require 'rails_admin/filtering-multiselect'
+//=  require 'rails_admin/filtering-select'
+//=  require 'rails_admin/remote-form'
+//=  require 'rails_admin/nested-form-hooks'
+//=  require 'rails_admin/i18n'
+//=  require 'rails_admin/widgets'
+//=  require 'rails_admin/sidescroll'
+//=  require 'rails_admin/ui'
+//=  require 'rails_admin/custom/ui'
+
+<% if defined?(ActiveStorage::Engine) %>
+//= require activestorage
+<% end %>
+<% if defined?(ActionText::Engine) && Rails.gem_version >= Gem::Version.new('7.0') %>
+//= require trix
+//= require actiontext
+<% end %>

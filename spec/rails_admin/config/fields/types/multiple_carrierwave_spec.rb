@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'base64'
 
@@ -6,7 +8,6 @@ RSpec.describe RailsAdmin::Config::Fields::Types::MultipleCarrierwave do
 
   describe '#thumb_method' do
     before do
-      allow_any_instance_of(CarrierwaveUploader).to receive(:cache!)
       RailsAdmin.config FieldTest do
         field :carrierwave_assets, :multiple_carrierwave
       end

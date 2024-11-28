@@ -1,0 +1,27 @@
+@charset "UTF-8";
+
+/***  Variables & mixins ***/
+
+@import "base/variables";
+@import "base/mixins";
+
+/***  Libraries  ***/
+
+@import "flatpickr/dist/flatpickr";
+
+/*** Font-awesome ***/
+
+$fa-font-path: "~@fortawesome/fontawesome-free/webfonts" !default;
+@import "@fortawesome/fontawesome-free/scss/solid";
+@import "@fortawesome/fontawesome-free/scss/fontawesome";
+
+/***  Bootstrap  ***/
+
+@import "bootstrap/scss/bootstrap";
+
+/***  RailsAdmin  ***/
+
+@import "base/theming";
+@import "filtering-select";
+@import "filtering-multiselect";
+@import "widgets";

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/config/fields/types/text'
 
 module RailsAdmin
@@ -9,7 +11,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :version do
-            '1.1.1'
+            '1.3.1'
           end
 
           register_instance_option :css_location do
@@ -18,6 +20,10 @@ module RailsAdmin
 
           register_instance_option :js_location do
             "https://cdnjs.cloudflare.com/ajax/libs/trix/#{version}/trix.js"
+          end
+
+          register_instance_option :warn_dynamic_load do
+            true
           end
 
           register_instance_option :partial do

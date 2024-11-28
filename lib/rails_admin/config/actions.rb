@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RailsAdmin
   module Config
     module Actions
@@ -9,7 +11,7 @@ module RailsAdmin
           end
           scope ||= :all
           init_actions!
-          actions = begin
+          actions =
             case scope
             when :all
               @@actions
@@ -22,7 +24,7 @@ module RailsAdmin
             when :member
               @@actions.select(&:member?)
             end
-          end
+
           actions = actions.collect { |action| action.with(bindings) }
           bindings[:controller] ? actions.select(&:visible?) : actions
         end
@@ -52,7 +54,7 @@ module RailsAdmin
             def key
               :#{key}
             end
-          ))
+          ), __FILE__, __LINE__ - 5)
           add_action_custom_key(a, &block)
         end
 
@@ -71,7 +73,7 @@ module RailsAdmin
               action = #{klass}.new
               add_action_custom_key(action, &block)
             end
-          }
+          }, __FILE__, __LINE__ - 5
         end
 
       private

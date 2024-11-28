@@ -1,15 +1,15 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'Color field', type: :request do
   subject { page }
 
-  it 'shows input with class color' do
+  it 'uses HTML5 color picker' do
     RailsAdmin.config Team do
-      edit do
-        field :color, :color
-      end
+      field :color, :color
     end
     visit new_path(model_name: 'team')
-    is_expected.to have_selector('.color_type input')
+    is_expected.to have_selector('#team_color[type="color"]')
   end
 end

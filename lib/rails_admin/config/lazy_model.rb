@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/config/model'
 
 module RailsAdmin
@@ -6,11 +8,15 @@ module RailsAdmin
       def initialize(entity, &block)
         @entity = entity
         @deferred_blocks = [*block]
-        @existing_blocks = []
+        @initialized = false
       end
 
       def add_deferred_block(&block)
-        @deferred_blocks << block
+        if @initialized
+          @model.instance_eval(&block)
+        else
+          @deferred_blocks << block
+        end
       end
 
       def target
@@ -42,17 +48,17 @@ module RailsAdmin
         #       :
         #     end
         #
-        # Thus, sort all blocks to excute for a resource by Proc.source_path,
+        # Thus, sort all blocks to execute for a resource by Proc.source_path,
         # to guarantee that blocks from 'config/initializers' evaluate before
         # blocks defined within a model class.
         unless @deferred_blocks.empty?
-          @existing_blocks += @deferred_blocks
-          @existing_blocks.
-            partition { |block| block.source_location.first =~ %r{config\/initializers} }.
+          @deferred_blocks.
+            partition { |block| block.source_location.first =~ %r{config/initializers} }.
             flatten.
             each { |block| @model.instance_eval(&block) }
           @deferred_blocks = []
         end
+        @initialized = true
         @model
       end
 
@@ -60,7 +66,7 @@ module RailsAdmin
         target.send(method_name, *args, &block)
       end
 
-      def respond_to?(method_name, include_private = false)
+      def respond_to_missing?(method_name, include_private = false)
         super || target.respond_to?(method_name, include_private)
       end
     end

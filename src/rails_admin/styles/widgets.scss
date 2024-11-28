@@ -1,0 +1,26 @@
+iframe.wysihtml5-sandbox {
+  height: 250px !important;
+  width: 99.7% !important;
+}
+
+iframe.wysihtml5-sandbox,
+.wysihtml5-editor {
+  border: 1px solid #ccc !important;
+}
+
+.controls img.preview {
+  max-height: 200px;
+  max-width: 300px;
+}
+
+.controls.ui-sortable .sortables {
+  cursor: move;
+}
+
+.form-group.hidden_type {
+  display: none;
+}
+
+.links .list-inline .disabled span {
+  color: $gray-600;
+}

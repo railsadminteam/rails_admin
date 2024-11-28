@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'Serialized field', type: :request do
@@ -22,7 +24,7 @@ RSpec.describe 'Serialized field', type: :request do
     end
 
     it 'saves the serialized data' do
-      expect(@user.roles).to eq(%w(admin user))
+      expect(@user.roles).to eq(%w[admin user])
     end
   end
 

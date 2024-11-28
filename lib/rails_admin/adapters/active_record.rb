@@ -1,20 +1,24 @@
+# frozen_string_literal: true
+
 require 'active_record'
-require 'rails_admin/adapters/active_record/abstract_object'
 require 'rails_admin/adapters/active_record/association'
+require 'rails_admin/adapters/active_record/object_extension'
 require 'rails_admin/adapters/active_record/property'
 
 module RailsAdmin
   module Adapters
     module ActiveRecord
-      DISABLED_COLUMN_TYPES = [:tsvector, :blob, :binary, :spatial, :hstore, :geometry].freeze
+      DISABLED_COLUMN_TYPES = %i[tsvector blob binary spatial hstore geometry].freeze
 
       def new(params = {})
-        AbstractObject.new(model.new(params))
+        model.new(params).extend(ObjectExtension)
       end
 
-      def get(id)
-        return unless object = model.where(primary_key => id).first
-        AbstractObject.new object
+      def get(id, scope = scoped)
+        object = primary_key_scope(scope, id).first
+        return unless object
+
+        object.extend(ObjectExtension)
       end
 
       def scoped
@@ -29,13 +33,11 @@ module RailsAdmin
         scope ||= scoped
         scope = scope.includes(options[:include]) if options[:include]
         scope = scope.limit(options[:limit]) if options[:limit]
-        scope = scope.where(primary_key => options[:bulk_ids]) if options[:bulk_ids]
+        scope = bulk_scope(scope, options) if options[:bulk_ids]
         scope = query_scope(scope, options[:query]) if options[:query]
         scope = filter_scope(scope, options[:filters]) if options[:filters]
-        if options[:page] && options[:per]
-          scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per])
-        end
-        scope = scope.reorder("#{options[:sort]} #{options[:sort_reverse] ? 'asc' : 'desc'}") if options[:sort]
+        scope = scope.send(Kaminari.config.page_method_name, options[:page]).per(options[:per]) if options[:page] && options[:per]
+        scope = sort_scope(scope, options) if options[:sort]
         scope
       end
 
@@ -70,6 +72,14 @@ module RailsAdmin
 
       delegate :primary_key, :table_name, to: :model, prefix: false
 
+      def quoted_table_name
+        model.quoted_table_name
+      end
+
+      def quote_column_name(name)
+        model.connection.quote_column_name(name)
+      end
+
       def encoding
         adapter =
           if ::ActiveRecord::Base.respond_to?(:connection_db_config)
@@ -81,9 +91,13 @@ module RailsAdmin
         when 'postgresql'
           ::ActiveRecord::Base.connection.select_one("SELECT ''::text AS str;").values.first.encoding
         when 'mysql2'
-          ::ActiveRecord::Base.connection.raw_connection.encoding
+          if RUBY_ENGINE == 'jruby'
+            ::ActiveRecord::Base.connection.select_one("SELECT '' AS str;").values.first.encoding
+          else
+            ::ActiveRecord::Base.connection.raw_connection.encoding
+          end
         when 'oracle_enhanced'
-          ::ActiveRecord::Base.connection.select_one("SELECT dummy FROM DUAL").values.first.encoding
+          ::ActiveRecord::Base.connection.select_one('SELECT dummy FROM DUAL').values.first.encoding
         else
           ::ActiveRecord::Base.connection.select_one("SELECT '' AS str;").values.first.encoding
         end
@@ -99,6 +113,59 @@ module RailsAdmin
 
       def adapter_supports_joins?
         true
+      end
+
+      def format_id(id)
+        if primary_key.is_a? Array
+          RailsAdmin.config.composite_keys_serializer.serialize(id)
+        else
+          id
+        end
+      end
+
+      def parse_id(id)
+        if primary_key.is_a?(Array)
+          ids = RailsAdmin.config.composite_keys_serializer.deserialize(id)
+          primary_key.each_with_index do |key, i|
+            ids[i] = model.type_for_attribute(key).cast(ids[i])
+          end
+          ids
+        else
+          id
+        end
+      end
+
+    private
+
+      def primary_key_scope(scope, id)
+        if primary_key.is_a? Array
+          scope.where(primary_key.zip(parse_id(id)).to_h)
+        else
+          scope.where(primary_key => id)
+        end
+      end
+
+      def bulk_scope(scope, options)
+        if primary_key.is_a? Array
+          options[:bulk_ids].map { |id| primary_key_scope(scope, id) }.reduce(&:or)
+        else
+          scope.where(primary_key => options[:bulk_ids])
+        end
+      end
+
+      def sort_scope(scope, options)
+        direction = options[:sort_reverse] ? :asc : :desc
+        case options[:sort]
+        when String, Symbol
+          scope.reorder("#{options[:sort]} #{direction}")
+        when Array
+          scope.reorder(options[:sort].zip(Array.new(options[:sort].size) { direction }).to_h)
+        when Hash
+          scope.reorder(options[:sort].map { |table_name, column| "#{table_name}.#{column}" }.
+            zip(Array.new(options[:sort].size) { direction }).to_h)
+        else
+          raise ArgumentError.new("Unsupported sort value: #{options[:sort]}")
+        end
       end
 
       class WhereBuilder
@@ -145,7 +212,7 @@ module RailsAdmin
       # "0055" is the filter index, no use here. o is the operator, v the value
       def filter_scope(scope, filters, fields = config.list.fields.select(&:filterable?))
         filters.each_pair do |field_name, filters_dump|
-          filters_dump.each do |_, filter_dump|
+          filters_dump.each_value do |filter_dump|
             wb = WhereBuilder.new(scope)
             field = fields.detect { |f| f.name.to_s == field_name }
             value = parse_field_value(field, filter_dump[:v])
@@ -174,6 +241,8 @@ module RailsAdmin
           case @type
           when :boolean
             boolean_unary_operators
+          when :uuid
+            uuid_unary_operators
           when :integer, :decimal, :float
             numeric_unary_operators
           else
@@ -203,9 +272,12 @@ module RailsAdmin
           )
         end
         alias_method :numeric_unary_operators, :boolean_unary_operators
+        alias_method :uuid_unary_operators, :boolean_unary_operators
 
         def range_filter(min, max)
-          if min && max
+          if min && max && min == max
+            ["(#{@column} = ?)", min]
+          elsif min && max
             ["(#{@column} BETWEEN ? AND ?)", min, max]
           elsif min
             ["(#{@column} >= ?)", min]
@@ -218,7 +290,7 @@ module RailsAdmin
           case @type
           when :boolean                   then build_statement_for_boolean
           when :integer, :decimal, :float then build_statement_for_integer_decimal_or_float
-          when :string, :text             then build_statement_for_string_or_text
+          when :string, :text, :citext    then build_statement_for_string_or_text
           when :enum                      then build_statement_for_enum
           when :belongs_to_association    then build_statement_for_belongs_to_association
           when :uuid                      then build_statement_for_uuid
@@ -226,8 +298,12 @@ module RailsAdmin
         end
 
         def build_statement_for_boolean
-          return ["(#{@column} IS NULL OR #{@column} = ?)", false] if %w(false f 0).include?(@value)
-          return ["(#{@column} = ?)", true] if %w(true t 1).include?(@value)
+          case @value
+          when 'false', 'f', '0'
+            ["(#{@column} IS NULL OR #{@column} = ?)", false]
+          when 'true', 't', '1'
+            ["(#{@column} = ?)", true]
+          end
         end
 
         def column_for_value(value)
@@ -236,6 +312,7 @@ module RailsAdmin
 
         def build_statement_for_belongs_to_association
           return if @value.blank?
+
           ["(#{@column} = ?)", @value.to_i] if @value.to_i.to_s == @value
         end
 
@@ -244,13 +321,11 @@ module RailsAdmin
 
           return ["(#{@column} = ?)", @value] if ['is', '='].include?(@operator)
 
-          unless ['postgresql', 'postgis'].include? ar_adapter
-            @value = @value.mb_chars.downcase
-          end
+          @value = @value.mb_chars.downcase unless %w[postgresql postgis].include? ar_adapter
 
-          @value = begin
+          @value =
             case @operator
-            when 'default', 'like'
+            when 'default', 'like', 'not_like'
               "%#{@value}%"
             when 'starts_with'
               "#{@value}%"
@@ -259,10 +334,15 @@ module RailsAdmin
             else
               return
             end
-          end
 
-          if ['postgresql', 'postgis'].include? ar_adapter
-            ["(#{@column} ILIKE ?)", @value]
+          if %w[postgresql postgis].include? ar_adapter
+            if @operator == 'not_like'
+              ["(#{@column} NOT ILIKE ?)", @value]
+            else
+              ["(#{@column} ILIKE ?)", @value]
+            end
+          elsif @operator == 'not_like'
+            ["(LOWER(#{@column}) NOT LIKE ?)", @value]
           else
             ["(LOWER(#{@column}) LIKE ?)", @value]
           end
@@ -270,13 +350,12 @@ module RailsAdmin
 
         def build_statement_for_enum
           return if @value.blank?
+
           ["(#{@column} IN (?))", Array.wrap(@value)]
         end
 
         def build_statement_for_uuid
-          if @value.to_s =~ /\A[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}\z/
-            column_for_value(@value)
-          end
+          column_for_value(@value) if /\A[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}\z/.match?(@value.to_s)
         end
 
         def ar_adapter

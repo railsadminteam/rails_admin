@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'Delete action', type: :request do
   subject { page }
 
-  it "shows \"Delete model\"" do
+  it 'shows "Delete model"' do
     @draft = FactoryBot.create :draft
     @player = @draft.player
     @comment = @player.comments.create
@@ -37,7 +39,7 @@ RSpec.describe 'Delete action', type: :request do
       visit delete_path(model_name: 'player', id: @player.id)
     end
 
-    it "shows \"Delete model\"" do
+    it 'shows "Delete model"' do
       is_expected.to have_content('delete this player')
       is_expected.not_to have_selector("a[href=\"/admin/player/#{@player.id}\"]")
       is_expected.not_to have_selector("a[href=\"/admin/draft/#{@draft.id}\"]")
@@ -52,7 +54,7 @@ RSpec.describe 'Delete action', type: :request do
       visit delete_path(model_name: 'player', id: @player.id)
     end
 
-    it "shows \"Delete model\"" do
+    it 'shows "Delete model"' do
       is_expected.not_to have_content('Routing Error')
       is_expected.to have_content('delete this player')
       is_expected.to have_link(@player.name, href: "/admin/player/#{@player.id}")
@@ -105,8 +107,25 @@ RSpec.describe 'Delete action', type: :request do
       is_expected.to have_content('Player failed to be deleted')
     end
 
-    it 'returns status code 200' do
-      expect(page.status_code).to eq(200)
+    it 'returns status code 406' do
+      expect(page.status_code).to eq(406)
+    end
+  end
+
+  context 'on destroy error by dependent: :restrict_with_error' do
+    let!(:player) { FactoryBot.create :player, team: FactoryBot.create(:restricted_team) }
+    before do
+      visit delete_path(model_name: 'restricted_team', id: player.team.id)
+      click_button "Yes, I'm sure"
+      is_expected.to have_content('Restricted team failed to be deleted')
+    end
+
+    it 'shows error message', active_record: true do
+      is_expected.to have_content('Cannot delete record because dependent players exist')
+    end
+
+    it 'shows error message', mongoid: true do
+      is_expected.to have_content('Players is not empty and prevents the document from being destroyed')
     end
   end
 
@@ -114,12 +133,12 @@ RSpec.describe 'Delete action', type: :request do
     before do
       @player = FactoryBot.create :player
       visit delete_path(model_name: 'player', id: @player.id)
-      click_button 'Cancel'
-      @player = RailsAdmin::AbstractModel.new('Player').first
     end
 
-    it 'does not destroy an object' do
-      expect(@player).to be
+    it 'does not destroy an object', js: true do
+      find_button('Cancel').trigger('click')
+      is_expected.to have_text 'No actions were taken'
+      expect(RailsAdmin::AbstractModel.new('Player').first).to be
     end
   end
 
@@ -143,26 +162,25 @@ RSpec.describe 'Delete action', type: :request do
       expect(URI.parse(page.current_url).path).to eq(index_path(model_name: 'player'))
     end
 
-    it 'redirects back to the object on error' do
+    it 'stays on the delete page' do
       allow_any_instance_of(Player).to receive(:destroy_hook) { throw :abort }
       @player = FactoryBot.create :player
       visit show_path(model_name: 'player', id: @player.id)
       click_link 'Delete'
       click_button "Yes, I'm sure"
 
-      expect(URI.parse(page.current_url).path).to eq(show_path(model_name: 'player', id: @player.id))
+      expect(URI.parse(page.current_url).path).to eq(delete_path(model_name: 'player', id: @player.id))
     end
   end
 
-  context 'when navigated to delete from index page' do
-    it 'returns status code 200' do
-      allow_any_instance_of(Player).to receive(:destroy_hook) { throw :abort }
-      @player = FactoryBot.create :player
-      visit index_path(model_name: 'player')
-      click_link 'Delete'
-      click_button "Yes, I'm sure"
+  context 'with composite primary keys', composite_primary_keys: true do
+    let(:fanship) { FactoryBot.create(:fanship) }
 
-      expect(page.status_code).to eq(200)
+    it 'deletes the object' do
+      visit delete_path(model_name: 'fanship', id: fanship.id)
+      click_button "Yes, I'm sure"
+      is_expected.to have_content('Fanship successfully deleted')
+      expect(Fanship.all).to be_empty
     end
   end
 end

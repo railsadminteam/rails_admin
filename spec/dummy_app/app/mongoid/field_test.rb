@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/adapters/mongoid'
 
 class FieldTest
@@ -31,8 +33,10 @@ class FieldTest
   field :time_field, type: Time
 
   field :format, type: String
+  field :open, type: Boolean
   field :restricted_field, type: String
   field :protected_field, type: String
+  field :al, as: :aliased_field, type: String
   has_mongoid_attached_file :paperclip_asset, styles: {thumb: '100x100>'}
 
   field :shrine_asset_data, type: String
@@ -51,6 +55,7 @@ class FieldTest
   accepts_nested_attributes_for :embeds, allow_destroy: true
 
   attr_accessor :delete_paperclip_asset
+
   before_validation { self.paperclip_asset = nil if delete_paperclip_asset == '1' }
 
   field :dragonfly_asset_name
@@ -60,7 +65,7 @@ class FieldTest
   mount_uploader :carrierwave_asset, CarrierwaveUploader
   # carrierwave-mongoid does not support mount_uploaders yet:
   #   https://github.com/carrierwaveuploader/carrierwave-mongoid/issues/138
-  mount_uploader :carrierwave_assets, CarrierwaveUploader
+  mount_uploaders :carrierwave_assets, CarrierwaveUploader
 
   validates :short_text, length: {maximum: 255}
 end

@@ -1,7 +1,15 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'HasManyAssociation field', type: :request do
   subject { page }
+
+  it 'adds a related id to the has_many create team link' do
+    @team = FactoryBot.create :team
+    visit edit_path(model_name: 'team', id: @team.id)
+    is_expected.to have_selector("a[data-link='/admin/player/new?modal=true&player%5Bteam_id%5D=#{@team.id}']")
+  end
 
   context 'when an association is readonly' do
     it 'is not editable' do
@@ -39,28 +47,37 @@ RSpec.describe 'HasManyAssociation field', type: :request do
       expect(@league.divisions).not_to include(@divisions[1])
       expect(@league.divisions).not_to include(@divisions[2])
     end
+
+    context 'with default_value' do
+      before do
+        ids = [@divisions[2].id]
+        RailsAdmin.config League do
+          configure :divisions do
+            default_value ids
+          end
+        end
+      end
+
+      it 'shows the value as selected' do
+        visit new_path(model_name: 'league')
+        expect(find('select#league_division_ids').value).to eq [@divisions[2].id.to_s]
+      end
+    end
   end
 
   context 'on update' do
     it 'is fillable and emptyable', active_record: true do
-      RailsAdmin.config do |c|
-        c.audit_with :history
-      end
-
       @league = FactoryBot.create :league
       @divisions = Array.new(3) { Division.create!(name: "div #{Time.now.to_f}", league: League.create!(name: "league #{Time.now.to_f}")) }
 
       put edit_path(model_name: 'league', id: @league.id, league: {name: 'National League', division_ids: [@divisions[0].id]})
 
-      old_name = @league.name
       @league.reload
       expect(@league.name).to eq('National League')
       @divisions[0].reload
       expect(@league.divisions).to include(@divisions[0])
       expect(@league.divisions).not_to include(@divisions[1])
       expect(@league.divisions).not_to include(@divisions[2])
-
-      expect(RailsAdmin::History.where(item: @league.id).collect(&:message)).to include("name: \"#{old_name}\" -> \"National League\"")
 
       put edit_path(model_name: 'league', id: @league.id, league: {division_ids: ['']})
 
@@ -112,123 +129,6 @@ RSpec.describe 'HasManyAssociation field', type: :request do
     end
   end
 
-  describe 'nested form' do
-    it 'works', js: true do
-      @record = FactoryBot.create :field_test
-      NestedFieldTest.create! title: 'title 1', field_test: @record
-      NestedFieldTest.create! title: 'title 2', field_test: @record
-      visit edit_path(model_name: 'field_test', id: @record.id)
-
-      fill_in 'field_test_nested_field_tests_attributes_0_title', with: 'nested field test title 1 edited', visible: false
-      find('#field_test_nested_field_tests_attributes_1__destroy', visible: false).set('true')
-
-      # trigger click via JS, workaround for instability in CI
-      execute_script %($('button[name="_save"]').trigger('click');)
-      is_expected.to have_content('Field test successfully updated')
-
-      @record.reload
-      expect(@record.nested_field_tests.length).to eq(1)
-      expect(@record.nested_field_tests[0].title).to eq('nested field test title 1 edited')
-    end
-
-    it 'supports adding new nested item', js: true do
-      @record = FactoryBot.create :field_test
-      visit edit_path(model_name: 'field_test', id: @record.id)
-
-      find('#field_test_nested_field_tests_attributes_field .add_nested_fields').click
-
-      expect(page).to have_selector('.fields.tab-pane.active', visible: true)
-    end
-
-    it 'sets bindings[:object] to nested object' do
-      RailsAdmin.config(NestedFieldTest) do
-        nested do
-          field :title do
-            label do
-              bindings[:object].class.name
-            end
-          end
-        end
-      end
-      @record = FieldTest.create
-      NestedFieldTest.create! title: 'title 1', field_test: @record
-      visit edit_path(model_name: 'field_test', id: @record.id)
-      expect(find('#field_test_nested_field_tests_attributes_0_title_field')).to have_content('NestedFieldTest')
-    end
-
-    it 'is deactivatable' do
-      visit new_path(model_name: 'field_test')
-      is_expected.to have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
-      RailsAdmin.config(FieldTest) do
-        configure :nested_field_tests do
-          nested_form false
-        end
-      end
-      visit new_path(model_name: 'field_test')
-      is_expected.to have_no_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
-    end
-
-    context 'with nested_attributes_options given' do
-      before do
-        allow(FieldTest.nested_attributes_options).to receive(:[]).with(any_args).
-          and_return(allow_destroy: true, update_only: false)
-      end
-
-      it 'does not show add button when :update_only is true' do
-        allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
-          and_return(allow_destroy: true, update_only: true)
-        visit new_path(model_name: 'field_test')
-        is_expected.to have_selector('.toggler')
-        is_expected.not_to have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
-      end
-
-      it 'does not show destroy button except for newly created when :allow_destroy is false' do
-        @record = FieldTest.create
-        NestedFieldTest.create! title: 'nested title 1', field_test: @record
-        allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
-          and_return(allow_destroy: false, update_only: false)
-        visit edit_path(model_name: 'field_test', id: @record.id)
-        expect(find('#field_test_nested_field_tests_attributes_0_title').value).to eq('nested title 1')
-        is_expected.not_to have_selector('form .remove_nested_fields')
-        expect(find('div#nested_field_tests_fields_blueprint', visible: false)[:'data-blueprint']).to match(
-          /<a[^>]* class="remove_nested_fields"[^>]*>/,
-        )
-      end
-    end
-
-    context "when a field which have the same name of nested_in field's" do
-      it "does not hide fields which are not associated with nesting parent field's model" do
-        visit new_path(model_name: 'field_test')
-        is_expected.not_to have_selector('select#field_test_nested_field_tests_attributes_new_nested_field_tests_field_test_id')
-        expect(find('div#nested_field_tests_fields_blueprint', visible: false)[:'data-blueprint']).to match(
-          /<select[^>]* id="field_test_nested_field_tests_attributes_new_nested_field_tests_another_field_test_id"[^>]*>/,
-        )
-      end
-
-      it 'hides fields that are deeply nested with inverse_of' do
-        visit new_path(model_name: 'field_test')
-        expect(page.body).to_not include('field_test_nested_field_tests_attributes_new_nested_field_tests_deeply_nested_field_tests_attributes_new_deeply_nested_field_tests_nested_field_test_id_field')
-        expect(page.body).to include('field_test_nested_field_tests_attributes_new_nested_field_tests_deeply_nested_field_tests_attributes_new_deeply_nested_field_tests_title')
-      end
-    end
-
-    context 'when XSS attack is attempted', js: true do
-      it 'does not break on adding a new item' do
-        allow(I18n).to receive(:t).and_call_original
-        expect(I18n).to receive(:t).with('admin.form.new_model', name: 'Nested field test').and_return('<script>throw "XSS";</script>')
-        @record = FactoryBot.create :field_test
-        visit edit_path(model_name: 'field_test', id: @record.id)
-        find('#field_test_nested_field_tests_attributes_field .add_nested_fields').click
-      end
-
-      it 'does not break on editing an existing item' do
-        @record = FactoryBot.create :field_test
-        NestedFieldTest.create! title: '<script>throw "XSS";</script>', field_test: @record
-        visit edit_path(model_name: 'field_test', id: @record.id)
-      end
-    end
-  end
-
   context 'with not nullable foreign key', active_record: true do
     before do
       RailsAdmin.config FieldTest do
@@ -275,11 +175,12 @@ RSpec.describe 'HasManyAssociation field', type: :request do
       end
     end
 
-    it "allows update" do
+    it 'allows update' do
       visit edit_path(model_name: 'managing_user', id: user.id)
       expect(find("select#managing_user_team_ids option[value=\"#{teams[0].id}\"]")).to have_content teams[0].name
       select(teams[1].name, from: 'Teams')
       click_button 'Save'
+      is_expected.to have_content 'Managing user successfully updated'
       expect(ManagingUser.first.teams).to match_array teams
     end
 
@@ -290,15 +191,98 @@ RSpec.describe 'HasManyAssociation field', type: :request do
         end
       end
 
-      it "allows update", js: true do
+      it 'allows update', js: true do
         visit edit_path(model_name: 'managing_user', id: user.id)
         find('input.ra-multiselect-search').set('T')
-        page.execute_script("$('input.ra-multiselect-search').trigger('focus')")
-        page.execute_script("$('input.ra-multiselect-search').trigger('keydown')")
         find('.ra-multiselect-collection option', text: teams[1].name).select_option
         find('.ra-multiselect-item-add').click
         click_button 'Save'
+        is_expected.to have_content 'Managing user successfully updated'
         expect(ManagingUser.first.teams).to match_array teams
+      end
+    end
+  end
+
+  context 'with composite foreign keys', composite_primary_keys: true do
+    let(:fan) { FactoryBot.create(:fan) }
+    let!(:fanships) { FactoryBot.create_list(:fanship, 3) }
+
+    describe 'via default field' do
+      before do
+        RailsAdmin.config Fan do
+          field :name
+          field :fanships
+        end
+      end
+
+      it 'shows the current selection' do
+        visit edit_path(model_name: 'fan', id: fanships[0].fan.id)
+        is_expected.to have_select('Fanships', selected: "Fanship ##{fanships[0].id}")
+      end
+
+      it 'allows update' do
+        visit edit_path(model_name: 'fan', id: fan.id)
+        select("Fanship ##{fanships[0].id}", from: 'Fanships')
+        select("Fanship ##{fanships[1].id}", from: 'Fanships')
+        click_button 'Save'
+        is_expected.to have_content 'Fan successfully updated'
+        expect(fan.reload.fanships.map(&:team_id)).to match_array fanships.map(&:team_id)[0..1]
+      end
+
+      context 'with invalid key' do
+        before do
+          allow_any_instance_of(RailsAdmin::Config::Fields::Types::HasManyAssociation).
+            to receive(:collection).and_return([["Fanship ##{fanships[0].id}", 'invalid']])
+        end
+
+        it 'fails to update' do
+          visit edit_path(model_name: 'fan', id: fan.id)
+          select("Fanship ##{fanships[0].id}", from: 'Fanships')
+          expect { click_button 'Save' }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+    end
+
+    describe 'via remote-sourced field' do
+      before do
+        RailsAdmin.config Fan do
+          field :name
+          field :fanships do
+            associated_collection_cache_all false
+          end
+        end
+      end
+
+      it 'allows update', js: true do
+        visit edit_path(model_name: 'fan', id: fan.id)
+        find('input.ra-multiselect-search').set('F')
+        find('.ra-multiselect-collection option', text: "Fanship ##{fanships[0].id}").select_option
+        find('.ra-multiselect-collection option', text: "Fanship ##{fanships[1].id}").select_option
+        find('.ra-multiselect-item-add').click
+        click_button 'Save'
+        is_expected.to have_content 'Fan successfully updated'
+        expect(fan.reload.fanships.map(&:team_id)).to match_array fanships.map(&:team_id)[0..1]
+      end
+    end
+
+    describe 'via nested field' do
+      let!(:team) { FactoryBot.create :team }
+      let!(:fanships) { FactoryBot.create_list(:fanship, 2, fan: fan) }
+      before do
+        RailsAdmin.config NestedFan do
+          field :name
+          field :fanships
+        end
+      end
+
+      it 'allows update' do
+        visit edit_path(model_name: 'nested_fan', id: fan.id)
+        select(team.name, from: 'nested_fan_fanships_attributes_0_team_id')
+        fill_in 'nested_fan_fanships_attributes_1_since', with: '2020-01-23'
+        click_button 'Save'
+        is_expected.to have_content 'Nested fan successfully updated'
+        expect(fan.fanships[0].team).to eq team
+        expect(fan.fanships[1].since).to eq Date.new(2020, 1, 23)
       end
     end
   end

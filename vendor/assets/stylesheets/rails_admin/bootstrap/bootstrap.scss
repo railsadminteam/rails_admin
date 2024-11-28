@@ -1,50 +1,53 @@
-// Core variables and mixins
+/*!
+ * Bootstrap v5.1.3 (https://getbootstrap.com/)
+ * Copyright 2011-2021 The Bootstrap Authors
+ * Copyright 2011-2021 Twitter, Inc.
+ * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
+ */
+
+// scss-docs-start import-stack
+// Configuration
+@import "functions";
 @import "variables";
 @import "mixins";
+@import "utilities";
 
-// Reset and dependencies
-@import "normalize";
-@import "print";
-@import "glyphicons";
-
-// Core CSS
-@import "scaffolding";
+// Layout & components
+@import "root";
+@import "reboot";
 @import "type";
-@import "code";
+@import "images";
+@import "containers";
 @import "grid";
 @import "tables";
 @import "forms";
 @import "buttons";
-
-// Components
-@import "component-animations";
-@import "dropdowns";
-@import "button-groups";
-@import "input-groups";
-@import "navs";
+@import "transitions";
+@import "dropdown";
+@import "button-group";
+@import "nav";
 @import "navbar";
-@import "breadcrumbs";
+@import "card";
+@import "accordion";
+@import "breadcrumb";
 @import "pagination";
-@import "pager";
-@import "labels";
-@import "badges";
-@import "jumbotron";
-@import "thumbnails";
-@import "alerts";
-@import "progress-bars";
-@import "media";
+@import "badge";
+@import "alert";
+@import "progress";
 @import "list-group";
-@import "panels";
-@import "responsive-embed";
-@import "wells";
 @import "close";
-
-// Components w/ JavaScript
-@import "modals";
+@import "toasts";
+@import "modal";
 @import "tooltip";
-@import "popovers";
+@import "popover";
 @import "carousel";
+@import "spinners";
+@import "offcanvas";
+@import "placeholders";
 
-// Utility classes
-@import "utilities";
-@import "responsive-utilities";
+// Helpers
+@import "helpers";
+
+// Utilities
+@import "utilities/api";
+// scss-docs-end import-stack

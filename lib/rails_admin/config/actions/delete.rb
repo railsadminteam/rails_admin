@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RailsAdmin
   module Config
     module Actions
@@ -13,7 +15,7 @@ module RailsAdmin
         end
 
         register_instance_option :http_methods do
-          [:get, :delete]
+          %i[get delete]
         end
 
         register_instance_option :authorization_key do
@@ -31,24 +33,24 @@ module RailsAdmin
 
             elsif request.delete? # DESTROY
 
-              redirect_path = nil
-              @auditing_adapter && @auditing_adapter.delete_object(@object, @abstract_model, _current_user)
+              @auditing_adapter&.delete_object(@object, @abstract_model, _current_user)
               if @object.destroy
                 flash[:success] = t('admin.flash.successful', name: @model_config.label, action: t('admin.actions.delete.done'))
-                redirect_path = index_path
+                redirect_to index_path
               else
-                flash[:error] = t('admin.flash.error', name: @model_config.label, action: t('admin.actions.delete.done'))
-                redirect_path = back_or_index
+                handle_save_error :delete
               end
-
-              redirect_to redirect_path
 
             end
           end
         end
 
         register_instance_option :link_icon do
-          'icon-remove'
+          'fas fa-times'
+        end
+
+        register_instance_option :writable? do
+          !(bindings[:object] && bindings[:object].readonly?)
         end
       end
     end

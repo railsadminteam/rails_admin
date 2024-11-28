@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/config/fields/types/file_upload'
 
 module RailsAdmin
@@ -8,11 +10,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :thumb_method do
-            if ::ActiveStorage::VERSION::MAJOR >= 6
-              {resize_to_limit: [100, 100]}
-            else
-              {resize: '100x100>'}
-            end
+            {resize_to_limit: [100, 100]}
           end
 
           register_instance_option :delete_method do
@@ -20,18 +18,41 @@ module RailsAdmin
           end
 
           register_instance_option :image? do
-            if value
-              value.filename.to_s.split('.').last =~ /jpg|jpeg|png|gif|svg/i
-            end
+            value && (value.representable? || value.content_type.match?(/^image/))
+          end
+
+          register_instance_option :eager_load do
+            {"#{name}_attachment": :blob}
+          end
+
+          register_instance_option :direct? do
+            false
+          end
+
+          register_instance_option :html_attributes do
+            {
+              required: required? && !value.present?,
+            }.merge(
+              direct? && {data: {direct_upload_url: bindings[:view].main_app.rails_direct_uploads_url}} || {},
+            )
+          end
+
+          register_instance_option :searchable do
+            false
+          end
+
+          register_instance_option :sortable do
+            false
           end
 
           def resource_url(thumb = false)
             return nil unless value
-            if thumb && value.variable?
+
+            if thumb && value.representable?
               thumb = thumb_method if thumb == true
-              variant = value.variant(thumb)
+              representation = value.representation(thumb)
               Rails.application.routes.url_helpers.rails_blob_representation_path(
-                variant.blob.signed_id, variant.variation.key, variant.blob.filename, only_path: true
+                representation.blob.signed_id, representation.variation.key, representation.blob.filename, only_path: true
               )
             else
               Rails.application.routes.url_helpers.rails_blob_path(value, only_path: true)
@@ -40,7 +61,7 @@ module RailsAdmin
 
           def value
             attachment = super
-            attachment if attachment && attachment.attached?
+            attachment if attachment&.attached?
           end
         end
       end

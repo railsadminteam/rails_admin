@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RailsAdmin::Engine.routes.draw do
   controller 'main' do
     RailsAdmin::Config::Actions.all(:root).each { |action| match "/#{action.route_fragment}", action: action.action_name, as: action.action_name, via: action.http_methods }

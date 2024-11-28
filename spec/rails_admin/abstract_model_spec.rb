@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe RailsAdmin::AbstractModel do
@@ -8,6 +10,28 @@ RSpec.describe RailsAdmin::AbstractModel do
 
     it 'does not pick up a model without table', active_record: true do
       expect(RailsAdmin::AbstractModel.all.map(&:model)).not_to include WithoutTable
+    end
+  end
+
+  describe '.new' do
+    context 'on ActiveRecord::NoDatabaseError', active_record: true do
+      before do
+        expect(WithoutTable).to receive(:table_exists?).and_raise(ActiveRecord::NoDatabaseError)
+      end
+
+      it 'does not raise error and returns nil' do
+        expect(RailsAdmin::AbstractModel.new('WithoutTable')).to eq nil
+      end
+    end
+
+    context 'on ActiveRecord::ConnectionNotEstablished', active_record: true do
+      before do
+        expect(WithoutTable).to receive(:table_exists?).and_raise(ActiveRecord::ConnectionNotEstablished)
+      end
+
+      it 'does not raise error and returns nil' do
+        expect(RailsAdmin::AbstractModel.new('WithoutTable')).to eq nil
+      end
     end
   end
 
@@ -35,13 +59,13 @@ RSpec.describe RailsAdmin::AbstractModel do
     end
 
     context 'on ActiveRecord native enum', active_record: true do
-      shared_examples "filter on enum" do
+      shared_examples 'filter on enum' do
         before do
-          ["S", "M", "L"].each do |size|
+          %w[S M L].each do |size|
             FactoryBot.create(:field_test, string_enum_field: size)
           end
 
-          ["small", "medium", "large"].each do |size|
+          %w[small medium large].each do |size|
             FactoryBot.create(:field_test, integer_enum_field: size)
           end
         end
@@ -55,26 +79,26 @@ RSpec.describe RailsAdmin::AbstractModel do
         end
       end
 
-      context "when enum is integer enum" do
-        it_behaves_like "filter on enum" do
+      context 'when enum is integer enum' do
+        it_behaves_like 'filter on enum' do
           let(:filter_value) { 0 }
-          let(:enum_field) { "integer_enum_field" }
+          let(:enum_field) { 'integer_enum_field' }
           let(:enum_label) { 'small' }
           let(:expected_elements_count) { 1 }
         end
       end
 
-      context "when enum is string enum where label <> value" do
-        it_behaves_like "filter on enum" do
+      context 'when enum is string enum where label <> value' do
+        it_behaves_like 'filter on enum' do
           let(:filter_value) { 's' }
-          let(:enum_field) { "string_enum_field" }
+          let(:enum_field) { 'string_enum_field' }
           let(:enum_label) { 'S' }
           let(:expected_elements_count) { 1 }
         end
       end
     end
 
-    context 'on dates with :en locale' do
+    context 'on dates' do
       before do
         [Date.new(2012, 1, 1), Date.new(2012, 1, 2), Date.new(2012, 1, 3), Date.new(2012, 1, 4)].each do |date|
           FactoryBot.create(:field_test, date_field: date)
@@ -82,35 +106,29 @@ RSpec.describe RailsAdmin::AbstractModel do
       end
 
       it 'lists elements within outbound limits' do
-        expect(@abstract_model.all(filters: {'date_field' => {'1' => {v: ['', 'January 02, 2012', 'January 03, 2012'], o: 'between'}}}).count).to eq(2)
-        expect(@abstract_model.all(filters: {'date_field' => {'1' => {v: ['', 'January 02, 2012', 'January 02, 2012'], o: 'between'}}}).count).to eq(1)
-        expect(@abstract_model.all(filters: {'date_field' => {'1' => {v: ['', 'January 03, 2012', ''], o: 'between'}}}).count).to eq(2)
-        expect(@abstract_model.all(filters: {'date_field' => {'1' => {v: ['', '', 'January 02, 2012'], o: 'between'}}}).count).to eq(2)
-        expect(@abstract_model.all(filters: {'date_field' => {'1' => {v: ['January 02, 2012'], o: 'default'}}}).count).to eq(1)
+        expect(@abstract_model.all(filters: {'date_field' => {'1' => {v: ['', '2012-01-02', '2012-01-03'], o: 'between'}}}).count).to eq(2)
+        expect(@abstract_model.all(filters: {'date_field' => {'1' => {v: ['', '2012-01-02', '2012-01-02'], o: 'between'}}}).count).to eq(1)
+        expect(@abstract_model.all(filters: {'date_field' => {'1' => {v: ['', '2012-01-03', ''], o: 'between'}}}).count).to eq(2)
+        expect(@abstract_model.all(filters: {'date_field' => {'1' => {v: ['', '', '2012-01-02'], o: 'between'}}}).count).to eq(2)
+        expect(@abstract_model.all(filters: {'date_field' => {'1' => {v: ['2012-01-02'], o: 'default'}}}).count).to eq(1)
       end
     end
 
-    context 'on datetimes with :en locale' do
+    context 'on datetimes' do
       before do
         I18n.locale = :en
         FactoryBot.create(:field_test, datetime_field: Time.zone.local(2012, 1, 1, 23, 59, 59))
         FactoryBot.create(:field_test, datetime_field: Time.zone.local(2012, 1, 2, 0, 0, 0))
         FactoryBot.create(:field_test, datetime_field: Time.zone.local(2012, 1, 3, 23, 59, 59))
-
-        # TODO: Mongoid 3.0.0 mysteriously expands the range of inclusion slightly...
-        if defined?(Mongoid) && Mongoid::VERSION >= '3.0.0'
-          FactoryBot.create(:field_test, datetime_field: Time.zone.local(2012, 1, 4, 0, 0, 1))
-        else
-          FactoryBot.create(:field_test, datetime_field: Time.zone.local(2012, 1, 4, 0, 0, 0))
-        end
+        FactoryBot.create(:field_test, datetime_field: Time.zone.local(2012, 1, 4, 0, 0, 0))
       end
 
       it 'lists elements within outbound limits' do
-        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', 'January 02, 2012 12:00', 'January 03, 2012 12:00'], o: 'between'}}}).count).to eq(2)
-        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', 'January 02, 2012 12:00', 'January 02, 2012 12:00'], o: 'between'}}}).count).to eq(1)
-        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', 'January 03, 2012 12:00', ''], o: 'between'}}}).count).to eq(2)
-        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', '', 'January 02, 2012 12:00'], o: 'between'}}}).count).to eq(2)
-        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['January 02, 2012 12:00'], o: 'default'}}}).count).to eq(1)
+        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', '2012-01-02T00:00:00', '2012-01-03T23:59:59'], o: 'between'}}}).count).to eq(2)
+        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', '2012-01-02T00:00:00', '2012-01-03T12:00:00'], o: 'between'}}}).count).to eq(1)
+        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', '2012-01-03T12:00:00', ''], o: 'between'}}}).count).to eq(2)
+        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['', '', '2012-01-02T12:00:00'], o: 'between'}}}).count).to eq(2)
+        expect(@abstract_model.all(filters: {'datetime_field' => {'1' => {v: ['2012-01-02T00:00:00'], o: 'default'}}}).count).to eq(1)
       end
     end
   end

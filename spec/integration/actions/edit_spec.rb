@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'Edit action', type: :request do
@@ -9,19 +11,19 @@ RSpec.describe 'Edit action', type: :request do
       visit edit_path(model_name: 'player', id: @player.id)
     end
 
-    it "shows \"Edit model\"" do
+    it 'shows "Edit model"' do
       is_expected.to have_content('Edit Player')
     end
 
-    it "shows required fields as \"Required\"" do
+    it 'shows required fields as "Required"' do
       is_expected.to have_selector('div', text: /Name\s*Required/)
       is_expected.to have_selector('div', text: /Number\s*Required/)
     end
 
-    it "shows non-required fields as \"Optional\"" do
-      expect(find('#player_position_field .help-block')).to have_content('Optional')
-      expect(find('#player_born_on_field .help-block')).to have_content('Optional')
-      expect(find('#player_notes_field .help-block')).to have_content('Optional')
+    it 'shows non-required fields as "Optional"' do
+      expect(find('#player_position_field .form-text')).to have_content('Optional')
+      expect(find('#player_born_on_field .form-text')).to have_content('Optional')
+      expect(find('#player_notes_field .form-text')).to have_content('Optional')
     end
 
     it 'checks required fields to have required attribute set' do
@@ -118,19 +120,19 @@ RSpec.describe 'Edit action', type: :request do
       context 'using mongoid', skip_active_record: true do
         it 'uses the db column size for the maximum length' do
           visit new_path(model_name: 'help_test')
-          expect(find('#help_test_name_field .help-block')).to have_content('Length up to 255.')
+          expect(find('#help_test_name_field .form-text')).to have_content('Length up to 255.')
         end
 
         it 'returns nil for the maximum length' do
           visit new_path(model_name: 'team')
-          expect(find('#team_custom_field_field .help-block')).not_to have_content('Length')
+          expect(find('#team_custom_field_field .form-text')).not_to have_content('Length')
         end
       end
 
       context 'using active_record', skip_mongoid: true do
         it 'uses the db column size for the maximum length' do
           visit new_path(model_name: 'help_test')
-          expect(find('#help_test_name_field .help-block')).to have_content('Length up to 50.')
+          expect(find('#help_test_name_field .form-text')).to have_content('Length up to 50.')
         end
 
         it 'uses the :minimum setting from the validation' do
@@ -138,7 +140,7 @@ RSpec.describe 'Edit action', type: :request do
             validates_length_of :name, minimum: 1
           end
           visit new_path(model_name: 'help_test')
-          expect(find('#help_test_name_field .help-block')).to have_content('Length of 1-50.')
+          expect(find('#help_test_name_field .form-text')).to have_content('Length of 1-50.')
         end
 
         it 'uses the minimum of db column size or :maximum setting from the validation' do
@@ -146,7 +148,7 @@ RSpec.describe 'Edit action', type: :request do
             validates_length_of :name, maximum: 51
           end
           visit new_path(model_name: 'help_test')
-          expect(find('#help_test_name_field .help-block')).to have_content('Length up to 50.')
+          expect(find('#help_test_name_field .form-text')).to have_content('Length up to 50.')
         end
       end
 
@@ -199,7 +201,7 @@ RSpec.describe 'Edit action', type: :request do
           validates_length_of :name, is: 3
         end
         visit new_path(model_name: 'help_test')
-        expect(find('#help_test_name_field .help-block')).to have_content('Length of 3.')
+        expect(find('#help_test_name_field .form-text')).to have_content('Length of 3.')
       end
 
       it 'uses the :maximum setting from the validation' do
@@ -207,7 +209,7 @@ RSpec.describe 'Edit action', type: :request do
           validates_length_of :name, maximum: 49
         end
         visit new_path(model_name: 'help_test')
-        expect(find('#help_test_name_field .help-block')).to have_content('Length up to 49.')
+        expect(find('#help_test_name_field .form-text')).to have_content('Length up to 49.')
       end
 
       it 'uses the :minimum and :maximum from the validation' do
@@ -215,7 +217,7 @@ RSpec.describe 'Edit action', type: :request do
           validates_length_of :name, minimum: 1, maximum: 49
         end
         visit new_path(model_name: 'help_test')
-        expect(find('#help_test_name_field .help-block')).to have_content('Length of 1-49.')
+        expect(find('#help_test_name_field .form-text')).to have_content('Length of 1-49.')
       end
 
       it 'uses the range from the validation' do
@@ -223,7 +225,7 @@ RSpec.describe 'Edit action', type: :request do
           validates_length_of :name, in: 1..49
         end
         visit new_path(model_name: 'help_test')
-        expect(find('#help_test_name_field .help-block')).to have_content('Length of 1-49.')
+        expect(find('#help_test_name_field .form-text')).to have_content('Length of 1-49.')
       end
 
       it 'does not show help for hidden fields' do
@@ -233,7 +235,7 @@ RSpec.describe 'Edit action', type: :request do
           end
         end
         visit new_path(model_name: 'help_test')
-        expect(page).not_to have_css('.help-block')
+        expect(page).not_to have_css('.form-text')
       end
     end
 
@@ -289,7 +291,7 @@ RSpec.describe 'Edit action', type: :request do
     end
   end
 
-  describe "fields" do
+  describe 'fields' do
     it 'shows all by default' do
       visit new_path(model_name: 'team')
       is_expected.to have_selector('select#team_division_id')
@@ -426,13 +428,13 @@ RSpec.describe 'Edit action', type: :request do
           field :name do
             read_only true
             formatted_value do
-              "I'm outputed in the form"
+              "I'm outputted in the form"
             end
           end
         end
       end
       visit new_path(model_name: 'team')
-      is_expected.to have_content("I'm outputed in the form")
+      is_expected.to have_content("I'm outputted in the form")
     end
 
     it 'is hideable' do
@@ -510,9 +512,9 @@ RSpec.describe 'Edit action', type: :request do
         end
       end
       visit new_path(model_name: 'team')
-      expect(find('#team_manager_field .help-block')).to have_content('Required. Length up to 100. Additional help text for manager field.')
-      expect(find('#team_division_id_field .help-block')).to have_content('Required')
-      expect(find('#team_name_field .help-block')).not_to have_content('Additional help text')
+      expect(find('#team_manager_field .form-text')).to have_content('Required. Length up to 100. Additional help text for manager field.')
+      expect(find('#team_division_id_field .form-text')).to have_content('Required')
+      expect(find('#team_name_field .form-text')).not_to have_content('Additional help text')
     end
 
     it 'has option to override required status' do
@@ -530,9 +532,9 @@ RSpec.describe 'Edit action', type: :request do
         end
       end
       visit new_path(model_name: 'team')
-      expect(find('#team_manager_field .help-block')).to have_content('Optional')
-      expect(find('#team_division_id_field .help-block')).to have_content('Optional')
-      expect(find('#team_name_field .help-block')).to have_content(I18n.translate('admin.help.team.name'))
+      expect(find('#team_manager_field .form-text')).to have_content('Optional')
+      expect(find('#team_division_id_field .form-text')).to have_content('Optional')
+      expect(find('#team_name_field .form-text')).to have_content(I18n.translate('admin.help.team.name'))
     end
 
     describe 'inline_add' do
@@ -659,6 +661,14 @@ RSpec.describe 'Edit action', type: :request do
     end
   end
 
+  context 'with a readonly object' do
+    let(:comment) { FactoryBot.create :comment, (CI_ORM == :mongoid ? {_type: 'ReadOnlyComment'} : {}) }
+
+    it 'raises ActionNotAllowed' do
+      expect { visit edit_path(model_name: 'read_only_comment', id: comment.id) }.to raise_error 'RailsAdmin::ActionNotAllowed'
+    end
+  end
+
   context 'with missing label', given: ['a player exists', 'three teams with no name exist'] do
     before do
       @player = FactoryBot.create :player
@@ -680,51 +690,21 @@ RSpec.describe 'Edit action', type: :request do
 
   context 'on cancel' do
     before do
-      @ball = FactoryBot.create :ball
-      visit '/admin/ball?sort=color'
+      @player = FactoryBot.create :player
+      visit '/admin/player'
       click_link 'Edit'
     end
 
-    it "shows cancel button with 'novalidate' attribute" do
-      expect(page).to have_css '[type="submit"][name="_continue"][formnovalidate]'
+    it 'sends back to previous URL', js: true do
+      find_button('Cancel').trigger('click')
+      is_expected.to have_text 'No actions were taken'
+      expect(page.current_path).to eq('/admin/player')
     end
 
-    it 'sends back to previous URL' do
-      click_button 'Cancel'
-      expect(page.current_url).to eq('http://www.example.com/admin/ball?sort=color')
-    end
-  end
-
-  context 'on clicking save without changing anything' do
-    before { @datetime = 'October 08, 2015 06:45' }
-    context 'when config.time_zone set' do
-      before do
-        RailsAdmin.config Player do
-          field :datetime_field
-        end
-        @old_timezone = Time.zone
-        Time.zone = ActiveSupport::TimeZone.new('Central Time (US & Canada)')
-      end
-
-      after do
-        Time.zone = @old_timezone
-      end
-
-      it 'does not alter datetime fields' do
-        visit new_path(model_name: 'field_test')
-        find('#field_test_datetime_field').set(@datetime)
-        click_button 'Save and edit'
-        expect(find('#field_test_datetime_field').value).to eq(@datetime)
-      end
-    end
-
-    context 'without config.time_zone set (default)' do
-      it 'does not alter datetime fields' do
-        visit new_path(model_name: 'field_test')
-        find('#field_test_datetime_field').set(@datetime)
-        click_button 'Save and edit'
-        expect(find('#field_test_datetime_field').value).to eq(@datetime)
-      end
+    it 'allows submit even if client-side validation is not satisfied', js: true do
+      fill_in 'player[name]', with: ''
+      find_button('Cancel').trigger('click')
+      is_expected.to have_text 'No actions were taken'
     end
   end
 
@@ -763,7 +743,7 @@ RSpec.describe 'Edit action', type: :request do
     end
   end
 
-  describe 'update and edit' do
+  describe 'update and edit', js: true do
     before do
       @player = FactoryBot.create :player
 
@@ -772,15 +752,34 @@ RSpec.describe 'Edit action', type: :request do
       fill_in 'player[name]', with: 'Jackie Robinson'
       fill_in 'player[number]', with: '42'
       fill_in 'player[position]', with: 'Second baseman'
-      click_button 'Save and edit'
-
-      @player.reload
+      find_button('Save and edit').trigger('click')
     end
 
     it 'updates an object with correct attributes' do
+      is_expected.to have_text 'Player successfully updated'
+      expect(page.current_path).to eq("/admin/player/#{@player.id}/edit")
+
+      @player.reload
       expect(@player.name).to eq('Jackie Robinson')
       expect(@player.number).to eq(42)
       expect(@player.position).to eq('Second baseman')
+    end
+  end
+
+  context 'with a submit button with custom value', js: true do
+    before do
+      @player = FactoryBot.create :player
+
+      visit edit_path(model_name: 'player', id: @player.id)
+
+      execute_script %{$('.form-actions [name="_save"]').attr('name', 'player[name]').attr('value', 'Jackie Robinson')}
+      find_button('Save').trigger('click')
+      is_expected.to have_text 'Player successfully updated'
+    end
+
+    it 'submits the value' do
+      @player.reload
+      expect(@player.name).to eq('Jackie Robinson')
     end
   end
 
@@ -859,6 +858,64 @@ RSpec.describe 'Edit action', type: :request do
       click_button 'Save' # first(:button, "Save").click
       @record = RailsAdmin::AbstractModel.new('FieldTest').first
       expect(@record.format).to eq('test for format')
+    end
+  end
+
+  context "with a field with 'open' as a name" do
+    it 'is updatable without any error' do
+      RailsAdmin.config FieldTest do
+        edit do
+          field :open do
+            nullable false
+          end
+        end
+      end
+      record = FieldTest.create
+      visit edit_path(model_name: 'field_test', id: record.id)
+      expect do
+        check 'field_test[open]'
+        click_button 'Save'
+      end.to change { record.reload.open }.from(nil).to(true)
+    end
+  end
+
+  context 'with composite primary keys', composite_primary_keys: true do
+    let(:fanship) { FactoryBot.create(:fanship) }
+
+    it 'edits the object' do
+      visit edit_path(model_name: 'fanship', id: fanship.id)
+      fill_in 'Since', with: '2000-01-23'
+      click_button 'Save'
+      expect { fanship.reload }.to change { fanship.since }.from(nil).to(Date.new(2000, 1, 23))
+    end
+
+    context 'using custom serializer' do
+      before do
+        RailsAdmin.config.composite_keys_serializer = Class.new do
+          def self.serialize(keys)
+            keys.join(',')
+          end
+
+          def self.deserialize(string)
+            string.split(',')
+          end
+        end
+      end
+
+      it 'edits the object' do
+        visit edit_path(model_name: 'fanship', id: "#{fanship.fan_id},#{fanship.team_id}")
+        fill_in 'Since', with: '2000-01-23'
+        click_button 'Save'
+        expect { fanship.reload }.to change { fanship.since }.from(nil).to(Date.new(2000, 1, 23))
+      end
+    end
+
+    context 'receiving invalid id' do
+      it 'returns 404' do
+        visit edit_path(model_name: 'fanship', id: '11')
+        expect(page.driver.status_code).to eq(404)
+        is_expected.to have_content("Fanship with id '11' could not be found")
+      end
     end
   end
 end

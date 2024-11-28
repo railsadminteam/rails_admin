@@ -30,3 +30,7 @@ development:
 test:
   <<: *sqlite
   database: db/test.sqlite3
+
+production:
+  <<: *sqlite
+  database: db/production.sqlite3

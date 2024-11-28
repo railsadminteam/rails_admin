@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'timecop'
 
@@ -22,6 +24,20 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord::Property', active_record: tr
       expect(subject.type).to eq :serialized
       expect(subject.nullable?).to be_truthy
       expect(subject.serial?).to be_falsey
+    end
+  end
+
+  describe '#read_only?' do
+    before do
+      class HasReadOnlyColumn < Tableless
+        column :name, :varchar
+        attr_readonly :name
+      end
+    end
+
+    it 'returns correct values' do
+      expect(RailsAdmin::AbstractModel.new('Player').properties.detect { |f| f.name == :name }).not_to be_read_only
+      expect(RailsAdmin::AbstractModel.new('HasReadOnlyColumn').properties.detect { |f| f.name == :name }).to be_read_only
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'BulkDelete action', type: :request do
@@ -49,8 +51,6 @@ RSpec.describe 'BulkDelete action', type: :request do
 
   context 'on destroy' do
     before do
-      RailsAdmin::History.destroy_all
-      RailsAdmin.config { |c| c.audit_with :history }
       @players = Array.new(3) { FactoryBot.create(:player) }
       @delete_ids = @players[0..1].collect(&:id)
 
@@ -63,15 +63,8 @@ RSpec.describe 'BulkDelete action', type: :request do
       click_button "Yes, I'm sure"
     end
 
-    it 'does not contain deleted records', active_record: true do
-      expect(RailsAdmin::AbstractModel.new('Player').count).to eq(1)
-      expect(RailsAdmin::History.count).to eq(@delete_ids.count)
-      RailsAdmin::History.all.each do |history|
-        expect(history.table).to eq('Player')
-      end
-      RailsAdmin::History.all.each do |history|
-        expect(@delete_ids).to include(history.item)
-      end
+    it 'does not contain deleted records' do
+      expect(RailsAdmin::AbstractModel.new('Player').all.pluck(:id)).to eq([@players[2].id])
       expect(page).to have_selector('.alert-success', text: '2 Players successfully deleted')
     end
   end
@@ -81,17 +74,31 @@ RSpec.describe 'BulkDelete action', type: :request do
       @players = Array.new(3) { FactoryBot.create(:player) }
       @delete_ids = @players[0..1].collect(&:id)
 
-      # NOTE: This uses an internal, unsupported capybara API which could break at any moment. We
-      # should refactor this test so that it either A) uses capybara's supported API (only GET
-      # requests via visit) or B) just uses Rack::Test (and doesn't use capybara for browser
-      # interaction like click_button).
-      page.driver.browser.reset_host!
-      page.driver.browser.process :post, bulk_action_path(bulk_action: 'bulk_delete', model_name: 'player', bulk_ids: @delete_ids, '_method' => 'post')
-      click_button 'Cancel'
+      visit index_path(model_name: 'player')
+      @delete_ids.each { |id| find(%(input[name="bulk_ids[]"][value="#{id}"])).click }
+      click_link 'Selected items'
+      click_link 'Delete selected Players'
     end
 
-    it 'does not delete records' do
+    it 'does not delete records', js: true do
+      find_button('Cancel').trigger('click')
+      is_expected.to have_text 'No actions were taken'
       expect(RailsAdmin::AbstractModel.new('Player').count).to eq(3)
+    end
+  end
+
+  context 'with composite primary keys', composite_primary_keys: true do
+    let!(:fanships) { FactoryBot.create_list(:fanship, 3) }
+
+    it 'provides check boxes for bulk operation' do
+      visit index_path(model_name: 'fanship')
+      fanships.each { |fanship| is_expected.to have_css(%(input[name="bulk_ids[]"][value="#{fanship.id}"])) }
+    end
+
+    it 'deletes selected records' do
+      delete(bulk_delete_path(bulk_action: 'bulk_delete', model_name: 'fanship', bulk_ids: fanships[0..1].map { |fanship| RailsAdmin::Support::CompositeKeysSerializer.serialize(fanship.id) }))
+      expect(flash[:success]).to match(/2 Fanships successfully deleted/)
+      expect(Fanship.all).to eq fanships[2..2]
     end
   end
 end

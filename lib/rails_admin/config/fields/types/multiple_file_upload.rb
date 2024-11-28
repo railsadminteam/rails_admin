@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RailsAdmin
   module Config
     module Fields
@@ -36,7 +38,7 @@ module RailsAdmin
                 if image
                   thumb_url = resource_url(thumb_method)
                   image_html = v.image_tag(thumb_url, class: 'img-thumbnail')
-                  url != thumb_url ? v.link_to(image_html, url, target: '_blank', rel: 'noopener noreferrer') : image_html
+                  url == thumb_url ? image_html : v.link_to(image_html, url, target: '_blank', rel: 'noopener noreferrer')
                 else
                   display_value = value.respond_to?(:filename) ? value.filename : value
                   v.link_to(display_value, url, target: '_blank', rel: 'noopener noreferrer')
@@ -45,11 +47,18 @@ module RailsAdmin
             end
 
             register_instance_option :image? do
-              (url = resource_url.to_s) && url.split('.').last =~ /jpg|jpeg|png|gif|svg/i
+              mime_type = Mime::Type.lookup_by_extension(extension)
+              mime_type.to_s.match?(/^image/)
             end
 
             def resource_url(_thumb = false)
-              raise('not implemented')
+              raise 'not implemented'
+            end
+
+            def extension
+              URI.parse(resource_url).path.split('.').last
+            rescue URI::InvalidURIError
+              nil
             end
           end
 

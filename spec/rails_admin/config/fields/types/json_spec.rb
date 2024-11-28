@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe RailsAdmin::Config::Fields::Types::Json do
@@ -26,12 +28,12 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Json do
     end
 
     it 'retuns correct value' do
-      allow(object).to receive(:json_field) { {sample_key: "sample_value"} }
+      allow(object).to receive(:json_field) { {sample_key: 'sample_value'} }
       actual = field.with(bindings).formatted_value
       expected = [
-        "{",
-        "  \"sample_key\": \"sample_value\"",
-        "}",
+        '{',
+        '  "sample_key": "sample_value"',
+        '}',
       ].join("\n")
       expect(actual).to eq(expected)
     end
@@ -47,12 +49,12 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Json do
     end
 
     it 'retuns correct value' do
-      allow(object).to receive(:json_field) { {sample_key: "sample_value"} }
+      allow(object).to receive(:json_field) { {sample_key: 'sample_value'} }
       actual = field.with(bindings).pretty_value
       expected = [
-        "<pre>{",
-        "  &quot;sample_key&quot;: &quot;sample_value&quot;",
-        "}</pre>",
+        '<pre>{',
+        '  &quot;sample_key&quot;: &quot;sample_value&quot;',
+        '}</pre>',
       ].join("\n")
       expect(actual).to eq(expected)
     end
@@ -74,12 +76,12 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Json do
     end
 
     it 'returns correct value' do
-      allow(object).to receive(:json_field) { {sample_key: "sample_value"} }
+      allow(object).to receive(:json_field) { {sample_key: 'sample_value'} }
       actual = field.with(bindings).export_value
       expected = [
-        "{",
-        "  \"sample_key\": \"sample_value\"",
-        "}",
+        '{',
+        '  "sample_key": "sample_value"',
+        '}',
       ].join("\n")
       expect(actual).to eq(expected)
     end

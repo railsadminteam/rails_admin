@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/config/fields/base'
 require 'rails_admin/support/datetime'
 
@@ -8,25 +10,22 @@ module RailsAdmin
         class Datetime < RailsAdmin::Config::Fields::Base
           RailsAdmin::Config::Fields::Types.register(self)
 
-          def parser
-            RailsAdmin::Support::Datetime.new(strftime_format)
-          end
-
           def parse_value(value)
-            parser.parse_string(value)
+            ::Time.zone.parse(value)
           end
 
           def parse_input(params)
             params[name] = parse_value(params[name]) if params[name]
           end
 
-          def value
-            parent_value = super
-            if %w(DateTime Date Time).include?(parent_value.class.name)
-              parent_value.in_time_zone
-            else
-              parent_value
-            end
+          register_instance_option :filter_operators do
+            %w[default between today yesterday this_week last_week] + (required? ? [] : %w[_separator _not_null _null])
+          end
+
+          def filter_options
+            super.merge(
+              datetimepicker_options: datepicker_options,
+            )
           end
 
           register_instance_option :date_format do
@@ -34,21 +33,24 @@ module RailsAdmin
           end
 
           register_instance_option :i18n_scope do
-            [:time, :formats]
+            %i[time formats]
           end
 
           register_instance_option :strftime_format do
-            begin
-              ::I18n.t(date_format, scope: i18n_scope, raise: true)
-            rescue ::I18n::ArgumentError
-              "%B %d, %Y %H:%M"
-            end
+            ::I18n.t(date_format, scope: i18n_scope, raise: true)
+          rescue ::I18n::ArgumentError
+            '%B %d, %Y %H:%M'
+          end
+
+          register_instance_option :flatpickr_format do
+            RailsAdmin::Support::Datetime.to_flatpickr_format(strftime_format)
           end
 
           register_instance_option :datepicker_options do
             {
-              showTodayButton: true,
-              format: parser.to_momentjs,
+              allowInput: true,
+              enableTime: true,
+              altFormat: flatpickr_format,
             }
           end
 
@@ -63,8 +65,13 @@ module RailsAdmin
             true
           end
 
+          register_instance_option :queryable? do
+            false
+          end
+
           register_instance_option :formatted_value do
-            if time = (value || default_value)
+            time = (value || default_value)
+            if time
               ::I18n.l(time, format: strftime_format)
             else
               ''.html_safe
@@ -73,6 +80,14 @@ module RailsAdmin
 
           register_instance_option :partial do
             :form_datetime
+          end
+
+          register_deprecated_instance_option :momentjs_format do
+            ActiveSupport::Deprecation.warn('The momentjs_format configuration option is deprecated, please use flatpickr_format with corresponding values here: https://flatpickr.js.org/formatting/')
+          end
+
+          def form_value
+            value&.in_time_zone&.strftime('%FT%T') || form_default_value
           end
         end
       end

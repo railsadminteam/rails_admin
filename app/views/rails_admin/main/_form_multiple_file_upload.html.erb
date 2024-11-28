@@ -1,0 +1,20 @@
+<% field.attachments.each_with_index do |attachment, i| %>
+  <div class="<%= field.reorderable? ? 'sortables' : '' %> toggle mb-2">
+    <%= attachment.pretty_value %>
+    <% if field.delete_method || field.keep_method %>
+      <a class="btn btn-info btn-remove-image" data-toggle="button" href="#" role="button">
+        <i class="fas fa-trash"></i>
+        <%= I18n.t('admin.form.delete_file', field_label: field.label, number: i + 1) %>
+      </a>
+      <% if field.keep_method %>
+        <%= form.check_box(field.keep_method, {multiple:true, checked: true, style: 'display:none;'}, attachment.keep_value, nil) %>
+      <% elsif field.delete_method %>
+        <%= form.check_box(field.delete_method, {multiple:true, style: 'display:none;'}, attachment.delete_value, nil) %>
+      <% end %>
+    <% end %>
+  </div>
+<% end %>
+<%= form.file_field(field.name, { data: { :"multiple-fileupload" => true }, multiple: true }.deep_merge(field.html_attributes)) %>
+<% if field.cache_method %>
+  <%= form.hidden_field(field.cache_method) %>
+<% end %>

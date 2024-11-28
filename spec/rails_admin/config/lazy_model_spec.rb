@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe RailsAdmin::Config::LazyModel do
   subject { RailsAdmin::Config::LazyModel.new(:Team, &block) }
   let(:block) { proc { register_instance_option('parameter') } } # an arbitrary instance method we can spy on
 
-  describe '#store' do
+  describe '#initialize' do
     it "doesn't evaluate the block immediately" do
       expect_any_instance_of(RailsAdmin::Config::Model).not_to receive(:register_instance_option)
       subject
@@ -20,6 +22,21 @@ RSpec.describe RailsAdmin::Config::LazyModel do
 
       subject.groups
       subject.groups
+    end
+  end
+
+  describe '#add_deferred_block' do
+    let(:another_block) { proc { register_instance_option('parameter2') } }
+
+    it "doesn't evaluate the block immediately" do
+      expect_any_instance_of(RailsAdmin::Config::Model).not_to receive(:register_instance_option).with('parameter2')
+      subject.add_deferred_block(&another_block)
+    end
+
+    it 'evaluates the block immediately after initialization' do
+      subject.target
+      expect_any_instance_of(RailsAdmin::Config::Model).to receive(:register_instance_option).with('parameter2')
+      subject.add_deferred_block(&another_block)
     end
   end
 

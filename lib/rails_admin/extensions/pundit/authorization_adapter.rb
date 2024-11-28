@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RailsAdmin
   module Extensions
     module Pundit
@@ -7,7 +9,7 @@ module RailsAdmin
       class AuthorizationAdapter
         # This method is called first time only and used for setup
         def self.setup
-          RailsAdmin::Extensions::ControllerExtension.send(:include, ::Pundit)
+          RailsAdmin::Extensions::ControllerExtension.include defined?(::Pundit::Authorization) ? ::Pundit::Authorization : ::Pundit
         end
 
         # See the +authorize_with+ config method for where the initialization happens.
@@ -21,10 +23,9 @@ module RailsAdmin
         # AbstractModel instance that applies. The third argument is the actual model
         # instance if it is available.
         def authorize(action, abstract_model = nil, model_object = nil)
-          record = model_object || abstract_model && abstract_model.model
-          if action && !policy(record).send(action_for_pundit(action))
-            raise ::Pundit::NotAuthorizedError.new("not allowed to #{action} this #{record}")
-          end
+          record = model_object || abstract_model&.model
+          raise ::Pundit::NotAuthorizedError.new("not allowed to #{action} this #{record}") if action && !policy(record).send(action_for_pundit(action))
+
           @controller.instance_variable_set(:@_pundit_policy_authorized, true)
         end
 
@@ -33,7 +34,7 @@ module RailsAdmin
         # This takes the same arguments as +authorize+. The difference is that this will
         # return a boolean whereas +authorize+ will raise an exception when not authorized.
         def authorized?(action, abstract_model = nil, model_object = nil)
-          record = model_object || abstract_model && abstract_model.model
+          record = model_object || abstract_model&.model
           policy(record).send(action_for_pundit(action)) if action
         end
 
@@ -50,7 +51,7 @@ module RailsAdmin
         # records. It should return a hash of attributes which match what the user
         # is authorized to create.
         def attributes_for(action, abstract_model)
-          record = abstract_model && abstract_model.model
+          record = abstract_model&.model
           policy(record).try(:attributes_for, action) || {}
         end
 

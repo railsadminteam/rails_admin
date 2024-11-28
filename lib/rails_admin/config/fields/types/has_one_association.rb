@@ -1,44 +1,32 @@
-require 'rails_admin/config/fields/association'
+# frozen_string_literal: true
+
+require 'rails_admin/config/fields/singular_association'
 
 module RailsAdmin
   module Config
     module Fields
       module Types
-        class HasOneAssociation < RailsAdmin::Config::Fields::Association
+        class HasOneAssociation < RailsAdmin::Config::Fields::SingularAssociation
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types.register(self)
 
-          register_instance_option :partial do
-            nested_form ? :form_nested_one : :form_filtering_select
+          register_instance_option :allowed_methods do
+            nested_form ? [method_name] : [name]
           end
 
-          # Accessor for field's formatted value
-          register_instance_option :formatted_value do
-            (o = value) && o.send(associated_model_config.object_label_method)
+          def associated_prepopulate_params
+            {associated_model_config.abstract_model.param_key => {association.foreign_key => bindings[:object].try(:id)}}
           end
 
-          register_instance_option :inline_add do
-            true
-          end
+          def parse_input(params)
+            return super if nested_form
 
-          register_instance_option :inline_edit do
-            true
-          end
-
-          def editable?
-            (nested_form || abstract_model.model.new.respond_to?("#{name}_id=")) && super
+            id = params.delete(method_name)
+            params[name] = associated_model_config.abstract_model.get(id) if id
           end
 
           def selected_id
-            value.try :id
-          end
-
-          def method_name
-            nested_form ? "#{name}_attributes".to_sym : "#{name}_id".to_sym
-          end
-
-          def multiple?
-            false
+            format_key(value.try(:id)).try(:to_s)
           end
         end
       end

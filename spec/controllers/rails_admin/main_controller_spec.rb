@@ -1,4 +1,5 @@
-# encoding: utf-8
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe RailsAdmin::MainController, type: :controller do
@@ -8,9 +9,13 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
     super action, params: params
   end
 
+  before do
+    controller.instance_variable_set :@action, RailsAdmin::Config::Actions.find(:index)
+  end
+
   describe '#check_for_cancel' do
     before do
-      allow(controller).to receive(:back_or_index) { raise(StandardError.new('redirected back')) }
+      allow(controller).to receive(:back_or_index) { raise StandardError.new('redirected back') }
     end
 
     it 'redirects to back if params[:bulk_ids] is nil when params[:bulk_action] is present' do
@@ -36,7 +41,47 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
 
       it 'returns the option with no changes' do
         controller.params = {sort: 'team', model_name: 'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: :"team.name", sort_reverse: true)
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: :'team.name', sort_reverse: true)
+      end
+    end
+
+    context 'when default sort_by points to a field with a table reference for sortable' do
+      before do
+        RailsAdmin.config('Player') do
+          base do
+            field :name do
+              sortable 'teams.name'
+            end
+          end
+
+          list do
+            sort_by :name
+          end
+        end
+      end
+
+      it 'returns the query referenced in the sortable' do
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: 'teams.name', sort_reverse: true)
+      end
+    end
+
+    context 'with a virtual field' do
+      before do
+        RailsAdmin.config('Player') do
+          base do
+            field :virtual do
+              sortable :name
+            end
+          end
+
+          list do
+            sort_by :virtual
+          end
+        end
+      end
+
+      it 'returns the query referenced in the sortable' do
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to match(sort: /["`]?players["`]?\.["`]?name["`]?/, sort_reverse: true)
       end
     end
 
@@ -45,18 +90,56 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
       expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq(sort: 'categories.parent_category_id', sort_reverse: true)
     end
 
-    context 'using mongoid, not supporting joins', mongoid: true do
-      it 'gives back the remote table with label name' do
+    context 'using mongoid', mongoid: true do
+      it 'gives back the remote table with label name, as it does not support joins' do
         controller.params = {sort: 'team', model_name: 'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: 'players.team_id', sort_reverse: true)
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to match(sort: 'players.team_id', sort_reverse: true)
       end
     end
 
-    context 'using active_record, supporting joins', active_record: true do
+    context 'using active_record', active_record: true do
+      let(:connection_config) do
+        if ActiveRecord::Base.respond_to?(:connection_db_config)
+          ActiveRecord::Base.connection_db_config.configuration_hash
+        else
+          ActiveRecord::Base.connection_config
+        end
+      end
+
       it 'gives back the local column' do
         controller.params = {sort: 'team', model_name: 'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: 'teams.name', sort_reverse: true)
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to match(sort: /^["`]teams["`]\.["`]name["`]$/, sort_reverse: true)
       end
+
+      it 'quotes the table and column names it returns as :sort' do
+        controller.params = {sort: 'team', model_name: 'players'}
+        case connection_config[:adapter]
+        when 'mysql2'
+          expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))[:sort]).to eq '`teams`.`name`'
+        else
+          expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))[:sort]).to eq '"teams"."name"'
+        end
+      end
+    end
+  end
+
+  describe '#bulk_action' do
+    before do
+      RailsAdmin.config do |config|
+        config.actions do
+          dashboard
+          index do
+            visible do
+              raise # This shouldn't be invoked
+            end
+          end
+          bulk_delete
+        end
+      end
+    end
+
+    it 'retrieves actions using :bulkable scope' do
+      expect { post :bulk_action, params: {model_name: 'player', bulk_action: 'bulk_delete', bulk_ids: [1]} }.not_to raise_error
     end
   end
 
@@ -182,24 +265,65 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
     end
   end
 
+  describe '#action_missing' do
+    it 'raises error when action is not found' do
+      expect(RailsAdmin::Config::Actions).to receive(:find).and_return(nil)
+      expect { get :index, model_name: 'player' }.to raise_error AbstractController::ActionNotFound
+    end
+  end
+
+  describe '#respond_to_missing?' do
+    it 'returns the result based on existence of action' do
+      expect(controller.send(:respond_to_missing?, :index, false)).to be true
+      expect(controller.send(:respond_to_missing?, :invalid_action, false)).to be false
+    end
+  end
+
   describe '#get_collection' do
+    let(:team) { FactoryBot.create :team }
+    let!(:player) { FactoryBot.create :player, team: team }
+    let(:model_config) { RailsAdmin.config(Team) }
+    let(:abstract_model) { model_config.abstract_model }
     before do
-      @team = FactoryBot.create(:team)
-      controller.params = {model_name: 'teams'}
+      controller.params = {model_name: 'team'}
+    end
+
+    it 'performs eager-loading with `eager_load true`' do
       RailsAdmin.config Team do
         field :players do
           eager_load true
         end
       end
-      @model_config = RailsAdmin.config(Team)
+      expect(abstract_model).to receive(:all).with(hash_including(include: [:players]), nil).once.and_call_original
+      controller.send(:get_collection, model_config, nil, false).to_a
     end
 
-    it 'performs eager-loading for an association field with `eagar_load true`' do
-      scope = double('scope')
-      abstract_model = @model_config.abstract_model
-      allow(@model_config).to receive(:abstract_model).and_return(abstract_model)
-      expect(abstract_model).to receive(:all).with(hash_including(include: [:players]), scope).once
-      controller.send(:get_collection, @model_config, scope, false)
+    it 'performs eager-loading with custom eager_load value' do
+      RailsAdmin.config Team do
+        field :players do
+          eager_load players: :draft
+        end
+      end
+      expect(abstract_model).to receive(:all).with(hash_including(include: [{players: :draft}]), nil).once.and_call_original
+      controller.send(:get_collection, model_config, nil, false).to_a
+    end
+
+    context 'on export' do
+      before do
+        controller.instance_variable_set :@action, RailsAdmin::Config::Actions.find(:export)
+      end
+
+      it 'uses the export section' do
+        RailsAdmin.config Team do
+          export do
+            field :players do
+              eager_load true
+            end
+          end
+        end
+        expect(abstract_model).to receive(:all).with(hash_including(include: [:players]), nil).once.and_call_original
+        controller.send(:get_collection, model_config, nil, false).to_a
+      end
     end
   end
 
@@ -207,8 +331,8 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
     it "uses target model's primary key" do
       @user = FactoryBot.create :managing_user
       @team = FactoryBot.create :managed_team, user: @user
-      get :index, model_name: 'managing_user', source_object_id: @team.id, source_abstract_model: 'managing_user', associated_collection: 'teams', current_action: :create, compact: true, format: :json
-      expect(response.body).to match(/\"id\":\"#{@user.id}\"/)
+      get :index, model_name: 'managed_team', source_object_id: @user.id, source_abstract_model: 'managing_user', associated_collection: 'teams', current_action: :create, compact: true, format: :json
+      expect(response.body).to match(/"id":"#{@team.id}"/)
     end
 
     context 'as JSON' do
@@ -227,7 +351,7 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
       end
 
       controller(RailsAdmin::MainController) do
-        include ::Pundit
+        include defined?(::Pundit::Authorization) ? ::Pundit::Authorization : ::Pundit
         after_action :verify_authorized
       end
 
@@ -245,27 +369,18 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
   end
 
   describe 'sanitize_params_for!' do
-    context 'in France' do
+    context 'with datetime' do
       before do
-        I18n.locale = :fr
         ActionController::Parameters.permit_all_parameters = false
-
-        RailsAdmin.config FieldTest do
-          configure :datetime_field do
-            date_format { :default }
-          end
-        end
 
         RailsAdmin.config Comment do
           configure :created_at do
-            date_format { :default }
             show
           end
         end
 
         RailsAdmin.config NestedFieldTest do
           configure :created_at do
-            date_format { :default }
             show
           end
         end
@@ -273,19 +388,19 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
         controller.params = ActionController::Parameters.new(
           'field_test' => {
             'unallowed_field' => "I shouldn't be here",
-            'datetime_field' => '1 août 2010 00:00:00',
+            'datetime_field' => '2010-08-01T00:00:00',
             'nested_field_tests_attributes' => {
               'new_1330520162002' => {
                 'comment_attributes' => {
                   'unallowed_field' => "I shouldn't be here",
-                  'created_at' => '2 août 2010 00:00:00',
+                  'created_at' => '2010-08-02T00:00:00',
                 },
-                'created_at' => '3 août 2010 00:00:00',
+                'created_at' => '2010-08-03T00:00:00',
               },
             },
             'comment_attributes' => {
               'unallowed_field' => "I shouldn't be here",
-              'created_at' => '4 août 2010 00:00:00',
+              'created_at' => '2010-08-04T00:00:00',
             },
           },
         )
@@ -294,7 +409,6 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
 
       after do
         ActionController::Parameters.permit_all_parameters = true
-        I18n.locale = :en
       end
 
       it 'sanitize params recursively in nested forms' do
@@ -329,15 +443,21 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
         field :paperclip_asset do
           delete_method :delete_paperclip_asset
         end
-        field :active_storage_asset do
-          delete_method :remove_active_storage_asset
-        end if defined?(ActiveStorage)
-        field :active_storage_assets do
-          delete_method :remove_active_storage_assets
-        end if defined?(ActiveStorage)
-        field :shrine_asset do
-          delete_method :remove_shrine_asset
-        end if defined?(Shrine)
+        if defined?(ActiveStorage)
+          field :active_storage_asset do
+            delete_method :remove_active_storage_asset
+          end
+        end
+        if defined?(ActiveStorage)
+          field :active_storage_assets do
+            delete_method :remove_active_storage_assets
+          end
+        end
+        if defined?(Shrine)
+          field :shrine_asset do
+            delete_method :remove_shrine_asset
+          end
+        end
       end
       controller.params = HashWithIndifferentAccess.new(
         'field_test' => {
@@ -386,6 +506,72 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
         'commentable_id' => 'test',
         'commentable_type' => 'test',
       )
+    end
+  end
+
+  describe 'back_or_index' do
+    before do
+      allow(controller).to receive(:index_path).and_return(index_path)
+    end
+
+    let(:index_path) { '/' }
+
+    it 'returns back to index when return_to is not defined' do
+      controller.params = {}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to return_to url when it starts with same protocol and host' do
+      return_to_url = "http://#{request.host}/teams"
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(return_to_url)
+    end
+
+    it 'returns back to return_to url when it contains a path' do
+      return_to_url = '/teams'
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(return_to_url)
+    end
+
+    it 'returns back to index path when return_to path does not start with slash' do
+      return_to_url = 'teams'
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to index path when return_to url does not start with full protocol' do
+      return_to_url = "#{request.host}/teams"
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to index path when return_to url starts with double slash' do
+      return_to_url = "//#{request.host}/teams"
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to index path when return_to url starts with triple slash' do
+      return_to_url = "///#{request.host}/teams"
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to index path when return_to url does not have host' do
+      return_to_url = 'http:///teams'
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to index path when return_to url starts with different protocol' do
+      return_to_url = "other://#{request.host}/teams"
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to index path when return_to does not start with the same protocol and host' do
+      controller.params = {return_to: "http://google.com?#{request.host}"}
+      expect(controller.send(:back_or_index)).to eq(index_path)
     end
   end
 end

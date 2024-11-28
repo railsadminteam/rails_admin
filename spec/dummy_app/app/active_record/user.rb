@@ -1,14 +1,21 @@
+# frozen_string_literal: true
+
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable, :lockable and :timeoutable
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :trackable, :validatable
 
-  serialize :roles, Array
+  if ActiveRecord.gem_version < Gem::Version.new('7.1')
+    serialize :roles, Array
+  else
+    serialize :roles, coder: YAML, type: Array
+  end
 
   # Add Paperclip support for avatars
   has_attached_file :avatar, styles: {medium: '300x300>', thumb: '100x100>'}
 
   attr_accessor :delete_avatar
+
   before_validation { self.avatar = nil if delete_avatar == '1' }
 
   def attr_accessible_role
@@ -16,6 +23,6 @@ class User < ActiveRecord::Base
   end
 
   def roles_enum
-    [:admin, :user]
+    %i[admin user]
   end
 end

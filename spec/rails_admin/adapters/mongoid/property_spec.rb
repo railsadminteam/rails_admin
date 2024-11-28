@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
@@ -195,6 +197,15 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
     end
   end
 
+  describe 'aliased field' do
+    let(:field) { :aliased_field }
+
+    it 'has correct values' do
+      expect(subject.name).to eq :aliased_field
+      expect(subject.pretty_name).to eq 'Aliased field'
+    end
+  end
+
   describe '#length_validation_lookup' do
     it 'detects validation length properly' do
       class LengthValiated
@@ -209,12 +220,28 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Property', mongoid: true do
       class MyCustomValidator < ActiveModel::Validator
         def validate(_r); end
       end
+
       class CustomValiated
         include Mongoid::Document
         field :text, type: String
         validates_with MyCustomValidator
       end
       expect { RailsAdmin::AbstractModel.new('CustomValiated').properties.last.send(:length_validation_lookup) }.not_to raise_error
+    end
+  end
+
+  describe '#read_only?' do
+    before do
+      class HasReadOnlyColumn
+        include Mongoid::Document
+        field :name, type: String
+        attr_readonly :name
+      end
+    end
+
+    it 'returns correct values' do
+      expect(RailsAdmin::AbstractModel.new('Player').properties.detect { |f| f.name == :name }).not_to be_read_only
+      expect(RailsAdmin::AbstractModel.new('HasReadOnlyColumn').properties.detect { |f| f.name == :name }).to be_read_only
     end
   end
 end

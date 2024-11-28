@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_admin/config/fields/types/action_text'
 require 'rails_admin/config/fields/types/active_record_enum'
 require 'rails_admin/config/fields/types/active_storage'
@@ -38,3 +40,4 @@ require 'rails_admin/config/fields/types/froala'
 require 'rails_admin/config/fields/types/json'
 require 'rails_admin/config/fields/types/inet'
 require 'rails_admin/config/fields/types/uuid'
+require 'rails_admin/config/fields/types/citext'
