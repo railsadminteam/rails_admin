@@ -2,7 +2,15 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.2.1...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.3.0...HEAD)
+
+## [3.3.0](https://github.com/railsadminteam/rails_admin/tree/v3.3.0) - 2024-12-08
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.2.1...v3.3.0)
+
+### Added
+
+- Rails 8.0 support ([#3702](https://github.com/railsadminteam/rails_admin/pull/3702))
 
 ## [3.2.1](https://github.com/railsadminteam/rails_admin/tree/v3.2.0) - 2024-10-10
 
