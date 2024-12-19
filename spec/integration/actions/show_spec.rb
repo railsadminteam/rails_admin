@@ -47,6 +47,16 @@ RSpec.describe 'Show action', type: :request do
     end
   end
 
+  context 'with default format' do
+    it 'responds with HTML' do
+      page.driver.options[:headers] = {'HTTP_ACCEPT' => '*/*'}
+      visit show_path(model_name: 'team', id: team.id)
+
+      response_type = Mime::Type.parse(response_headers['Content-Type']).first
+      expect(response_type).to be_html
+    end
+  end
+
   context 'when compact_show_view is enabled' do
     it 'hides nil fields in show view by default' do
       visit show_path(model_name: 'team', id: team.id)
