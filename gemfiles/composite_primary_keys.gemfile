@@ -5,7 +5,7 @@ source "https://rubygems.org"
 gem "appraisal", ">= 2.0"
 gem "devise", "~> 4.7"
 gem "net-smtp", require: false
-gem "rails", "~> 7.0.0"
+gem "rails", "~> 7.0.0", "7.0.8.6"
 gem "sassc-rails", "~> 2.1"
 gem "turbo-rails"
 gem "vite_rails", require: false
