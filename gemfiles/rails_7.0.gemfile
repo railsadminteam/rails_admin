@@ -12,6 +12,7 @@ gem "vite_rails", require: false
 gem "webpacker", require: false
 gem "webrick"
 gem "importmap-rails", require: false
+gem "nokogiri", "~> 1.16.0", platform: :jruby
 
 group :development, :test do
   gem "pry", ">= 0.9"

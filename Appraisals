@@ -54,6 +54,7 @@ end
 appraise 'rails-7.0' do
   gem 'rails', '~> 7.0.0', '7.0.8.6' # Pinning until the fix for https://github.com/basecamp/trix/issues/1209 become available in actiontext
   gem 'importmap-rails', require: false
+  gem 'nokogiri', '~> 1.16.0', platform: :jruby
 
   group :active_record do
     platforms :ruby, :mswin, :mingw, :x64_mingw do
