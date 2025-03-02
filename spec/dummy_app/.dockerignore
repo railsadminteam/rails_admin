@@ -3,8 +3,9 @@
 # Ignore git directory.
 /.git/
 
-# Ignore bundler config.
+# Ignore bundler config and Gemfile.lock.
 /.bundle
+/Gemfile.lock
 
 # Ignore all default key files.
 /config/master.key
@@ -26,6 +27,10 @@
 !/tmp/pids/.keep
 
 # Ignore storage (uploaded files in development and any SQLite databases).
+/db/*.sqlite3
+/public/system
+/public/uploads
+/public/vite
 /storage/*
 !/storage/.keep
 /tmp/storage/*
