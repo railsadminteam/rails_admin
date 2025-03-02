@@ -16,5 +16,10 @@ RailsAdmin.config do |c|
         visible false
       end
     end
+    c.model 'League' do
+      configure :players do
+        visible false
+      end
+    end
   end
 end

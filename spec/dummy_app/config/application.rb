@@ -37,6 +37,7 @@ module DummyApp
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     config.load_defaults Rails.version[0, 3]
+    (CI_TARGET_ORMS - [CI_ORM]).each { |orm| config.paths.add "app/#{orm}", eager_load: false }
     config.eager_load_paths = (config.try(:all_eager_load_paths) || config.eager_load_paths).reject { |p| p =~ %r{/app/([^/]+)} && !%W[controllers jobs locales mailers #{CI_ORM}].include?(Regexp.last_match[1]) }
     config.eager_load_paths += %W[#{config.root}/app/eager_loaded]
     config.autoload_paths += %W[#{config.root}/lib]
