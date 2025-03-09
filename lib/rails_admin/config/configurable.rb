@@ -52,7 +52,7 @@ module RailsAdmin
           options = scope.instance_variable_get('@config_options') ||
                     scope.instance_variable_set('@config_options', {})
 
-          option_name = option_name.to_s
+          option_name = option_name.to_s.dup
           options[option_name] = nil
 
           # If it's a boolean create an alias for it and remove question mark
