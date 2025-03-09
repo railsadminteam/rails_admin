@@ -360,7 +360,13 @@ module RailsAdmin
       def visible_models(bindings)
         visible_models_with_bindings(bindings).sort do |a, b|
           if (weight_order = a.weight <=> b.weight) == 0
-            a.label.casecmp(b.label)
+            result = a.label.casecmp(b.label)
+            if result.zero? && a.try(:model) && b.try(:model)
+              # If two models have the same label, fallback to the model name
+              # for a deterministic ordering.
+              result = a.model.name.casecmp(b.model.name)
+            end
+            result
           else
             weight_order
           end
