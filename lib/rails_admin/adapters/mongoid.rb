@@ -112,6 +112,10 @@ module RailsAdmin
         false
       end
 
+      def belongs_to_required_by_default
+        ::Mongoid.belongs_to_required_by_default
+      end
+
     private
 
       def build_statement(column, type, value, operator)
