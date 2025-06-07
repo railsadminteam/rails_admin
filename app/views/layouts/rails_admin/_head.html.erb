@@ -4,22 +4,23 @@
 <meta content="NONE,NOARCHIVE" name="robots">
 <meta content="false" name="turbo-prefetch">
 <%= csrf_meta_tag %>
+<%= csp_meta_tag %>
 <% case RailsAdmin::config.asset_source
    when :webpacker %>
-  <%= stylesheet_pack_tag "rails_admin", data: {'turbo-track': 'reload'} %>
-  <%= javascript_pack_tag "rails_admin", defer: true, data: {'turbo-track': 'reload'} %>
+  <%= stylesheet_pack_tag "rails_admin", data: {'turbo-track': 'reload'}, nonce: true %>
+  <%= javascript_pack_tag "rails_admin", defer: true, data: {'turbo-track': 'reload'}, nonce: true %>
 <% when :sprockets %>
   <% handle_asset_dependency_error do %>
-    <%= stylesheet_link_tag "rails_admin/application.css", media: :all, data: {'turbo-track': 'reload'} %>
-    <%= javascript_include_tag "rails_admin/application.js", defer: true, data: {'turbo-track': 'reload'} %>
+    <%= stylesheet_link_tag "rails_admin/application.css", media: :all, data: {'turbo-track': 'reload'}, nonce: true %>
+    <%= javascript_include_tag "rails_admin/application.js", defer: true, data: {'turbo-track': 'reload'}, nonce: true %>
   <% end %>
 <% when :vite %>
-  <%= vite_javascript_tag "rails_admin", defer: true, data: {'turbo-track': 'reload'} %>
+  <%= vite_javascript_tag "rails_admin", defer: true, data: {'turbo-track': 'reload'}, nonce: true %>
 <% when :webpack %>
-  <%= stylesheet_link_tag "rails_admin.css", media: :all, data: {'turbo-track': 'reload'} %>
-  <%= javascript_include_tag "rails_admin.js", defer: true, data: {'turbo-track': 'reload'} %>
+  <%= stylesheet_link_tag "rails_admin.css", media: :all, data: {'turbo-track': 'reload'}, nonce: true %>
+  <%= javascript_include_tag "rails_admin.js", defer: true, data: {'turbo-track': 'reload'}, nonce: true %>
 <% when :importmap %>
-  <%= stylesheet_link_tag "rails_admin.css", media: :all, data: {'turbo-track': 'reload'} %>
+  <%= stylesheet_link_tag "rails_admin.css", media: :all, data: {'turbo-track': 'reload'}, nonce: true %>
   <%= javascript_inline_importmap_tag(RailsAdmin::Engine.importmap.to_json(resolver: self)) %>
   <%= javascript_importmap_module_preload_tags(RailsAdmin::Engine.importmap) %>
   <%= javascript_importmap_shim_nonce_configuration_tag if respond_to? :javascript_importmap_shim_nonce_configuration_tag %>
