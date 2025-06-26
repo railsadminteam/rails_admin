@@ -50,7 +50,7 @@ module RailsAdmin
     if YAML.respond_to?(:safe_load)
       def self.yaml_load(yaml)
         # https://github.com/rails/rails/blob/v6.1.7.6/activerecord/lib/active_record/coders/yaml_column.rb#L50-L56
-        if ActiveRecord::Base.use_yaml_unsafe_load
+        if ActiveRecord::Base.respond_to?(:use_yaml_unsafe_load) && ActiveRecord::Base.use_yaml_unsafe_load
           YAML.unsafe_load(yaml)
         elsif YAML.method(:safe_load).parameters.include?([:key, :permitted_classes])
           YAML.safe_load(yaml, permitted_classes: ActiveRecord::Base.yaml_column_permitted_classes, aliases: true)
