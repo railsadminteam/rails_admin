@@ -1,5 +1,18 @@
 # RailsAdmin Changelog
 
+## [Unreleased](https://github.com/Kaligo/rails_admin/tree/HEAD)
+
+- Disabled pagination by default - this is to preserve performance for all repos using Rails Admin once installed
+  - To enable pagination, add the following to your models:
+
+```ruby
+config.model 'YourRailsModel' do
+  list do
+    limited_pagination false
+  end
+end
+```
+
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.2.0...HEAD)

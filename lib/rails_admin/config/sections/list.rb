@@ -23,7 +23,7 @@ module RailsAdmin
         # Positive value shows only prev, next links in pagination.
         # This is for avoiding count(*) query.
         register_instance_option :limited_pagination do
-          false
+          true
         end
 
         register_instance_option :search_by do

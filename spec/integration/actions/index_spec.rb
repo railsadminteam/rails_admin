@@ -732,7 +732,12 @@ RSpec.describe 'Index action', type: :request do
     end
 
     describe 'with limited_pagination=false' do
-      before { RailsAdmin.config.default_items_per_page = 1 }
+      before do
+        RailsAdmin.config.default_items_per_page = 1
+        allow(RailsAdmin::AbstractModel.new(Player).config.list).
+          to receive(:limited_pagination).
+          and_return(false)
+      end
 
       it 'page 1' do
         visit_page(1)
