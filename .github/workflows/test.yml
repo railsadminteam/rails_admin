@@ -137,7 +137,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"
       - name: Install ImageMagick
         run: sudo apt-get install imagemagick
       - name: Setup application
