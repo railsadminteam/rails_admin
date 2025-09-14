@@ -216,11 +216,18 @@ module RailsAdmin
             end
 
           (@required ||= {})[context] ||= !!([name] + children_fields).uniq.detect do |column_name|
-            abstract_model.model.validators_on(column_name).detect do |v|
+            model = abstract_model.model
+            model.validators_on(column_name).detect do |v|
               !(v.options[:allow_nil] || v.options[:allow_blank]) &&
                 %i[presence numericality attachment_presence].include?(v.kind) &&
                 (v.options[:on] == context || v.options[:on].blank?) &&
                 (v.options[:if].blank? && v.options[:unless].blank?)
+            end || model.reflect_on_all_associations(:belongs_to).detect do |a|
+              next unless a.name == column_name
+
+              required = a.options[:required] if a.options.key?(:required)
+              required = !a.options[:optional] if a.options.key?(:optional) && required.nil?
+              required.nil? ? abstract_model.belongs_to_required_by_default : required
             end
           end
         end
