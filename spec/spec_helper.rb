@@ -48,7 +48,8 @@ Rails.backtrace_cleaner.remove_silencers!
 require 'capybara/cuprite'
 Capybara.javascript_driver = :cuprite
 Capybara.register_driver(:cuprite) do |app|
-  Capybara::Cuprite::Driver.new(app, js_errors: true, logger: ConsoleLogger)
+  # Refs. https://github.com/rubycdp/ferrum/issues/470
+  Capybara::Cuprite::Driver.new(app, flatten: RUBY_ENGINE != 'jruby', js_errors: true, logger: ConsoleLogger)
 end
 Capybara.server = :webrick
 

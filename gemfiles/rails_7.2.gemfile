@@ -52,4 +52,14 @@ group :active_record do
   end
 end
 
+group :mongoid do
+  gem "cancancan-mongoid"
+  gem "carrierwave-mongoid", ">= 0.6.3", require: "carrierwave/mongoid"
+  gem "database_cleaner-mongoid", ">= 2.0", require: false
+  gem "kaminari-mongoid"
+  gem "mongoid", "~> 8.0"
+  gem "mongoid-paperclip", ">= 0.0.8", require: "mongoid_paperclip"
+  gem "shrine-mongoid", "~> 1.0"
+end
+
 gemspec path: "../"
