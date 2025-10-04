@@ -9,6 +9,7 @@
     "src"
   ],
   "main": "src/rails_admin/base.js",
+  "sass": "src/rails_admin/styles/base.scss",
   "scripts": {
     "link": "yarn link && cd spec/dummy_app && yarn link rails_admin",
     "format": "prettier -w ."
