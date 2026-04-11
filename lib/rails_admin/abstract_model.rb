@@ -140,6 +140,10 @@ module RailsAdmin
       end
 
       def to_statement
+        if @value.is_a?(Array) && @value.include?('_discard')
+          @value = @value.reject { |v| v == '_discard' }
+          return if @value.empty?
+        end
         return if [@operator, @value].any? { |v| v == '_discard' }
 
         unary_operators[@operator] || unary_operators[@value] ||
