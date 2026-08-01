@@ -65,9 +65,9 @@ RSpec.describe 'Datetimepicker widget', type: :request, js: true do
   context 'with locale set' do
     around(:each) do |example|
       original = I18n.default_locale
-      I18n.default_locale = :fr
+      I18n.locale = I18n.default_locale = :fr
       example.run
-      I18n.default_locale = original
+      I18n.locale = I18n.default_locale = original
     end
 
     it 'shows and accepts the value in the given locale' do
