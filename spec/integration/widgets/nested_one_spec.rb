@@ -6,6 +6,7 @@ RSpec.describe 'Nested one widget', type: :request, js: true do
   subject { page }
 
   let(:field_test) { FactoryBot.create :field_test }
+  let(:comment) { FactoryBot.create :comment, commentable: field_test }
   before do
     RailsAdmin.config(FieldTest) do
       field :comment
@@ -23,6 +24,21 @@ RSpec.describe 'Nested one widget', type: :request, js: true do
     is_expected.to have_content('Field test successfully updated')
 
     expect(field_test.reload.comment.content.strip).to eq('nested comment content')
+  end
+
+  it 'edits the nested item' do
+    comment
+    visit edit_path(model_name: 'field_test', id: field_test.id)
+
+    find('#field_test_comment_attributes_field .toggler').click
+    fill_in 'field_test_comment_attributes_content', with: 'nested comment content edited'
+
+    # trigger click via JS, workaround for instability in CI
+    execute_script %(document.querySelector('button[name="_save"]').click())
+    is_expected.to have_content('Field test successfully updated')
+
+    field_test.reload
+    expect(field_test.comment.content.strip).to eq('nested comment content edited')
   end
 
   it 'deletes the nested item' do
