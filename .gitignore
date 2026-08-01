@@ -24,7 +24,7 @@ log/*.log
 pkg/*
 spec/dummy_app/db/*.sqlite3
 spec/dummy_app/db/*.sqlite3-journal
-spec/dummy_app/log/*.log
+spec/dummy_app/log/
 spec/dummy_app/public/uploads
 spec/dummy_app/Gemfile*.lock
 tmp/**/*

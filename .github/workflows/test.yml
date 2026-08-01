@@ -12,7 +12,7 @@ jobs:
           - "3.2"
           - "3.3"
           - "3.4"
-        gemfile: [gemfiles/rails_8.0.gemfile]
+        gemfile: [gemfiles/rails_8.1.gemfile]
         orm: [active_record]
         adapter: [sqlite3]
         asset: [webpack]
@@ -47,23 +47,28 @@ jobs:
             orm: active_record
             adapter: sqlite3
             asset: sprockets
-          - ruby: "3.4"
+          - ruby: "3.3"
             gemfile: gemfiles/rails_8.0.gemfile
+            orm: active_record
+            adapter: sqlite3
+            asset: sprockets
+          - ruby: "3.4"
+            gemfile: gemfiles/rails_8.1.gemfile
             orm: active_record
             adapter: mysql2
             asset: importmap
           - ruby: "3.4"
-            gemfile: gemfiles/rails_8.0.gemfile
+            gemfile: gemfiles/rails_8.1.gemfile
             orm: active_record
             adapter: postgresql
             asset: sprockets
           - ruby: "3.4"
-            gemfile: gemfiles/rails_8.0.gemfile
+            gemfile: gemfiles/rails_8.1.gemfile
             orm: active_record
             adapter: sqlite3
             asset: vite
           - ruby: "3.4"
-            gemfile: gemfiles/rails_8.0.gemfile
+            gemfile: gemfiles/rails_8.1.gemfile
             orm: active_record
             adapter: sqlite3
             asset: sprockets
@@ -99,6 +104,11 @@ jobs:
             asset: sprockets
           - ruby: "3.4"
             gemfile: gemfiles/rails_8.0.gemfile
+            orm: mongoid
+            adapter: sqlite3
+            asset: sprockets
+          - ruby: "3.4"
+            gemfile: gemfiles/rails_8.1.gemfile
             orm: mongoid
             adapter: sqlite3
             asset: sprockets

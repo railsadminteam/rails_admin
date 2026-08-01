@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-gem "appraisal", ">= 2.0"
+gem "appraisal", ">= 2.0", require: false
 gem "devise", "~> 4.7"
 gem "net-smtp", require: false
 gem "rails", "~> 7.0.0", "7.0.8.6"
