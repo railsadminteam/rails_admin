@@ -61,6 +61,13 @@ RSpec.describe 'Nested one widget', type: :request, js: true do
     expect(field_test.reload.comment).to be_nil
   end
 
+  it 'hides the polymorphic association pointing back at the nesting parent' do
+    visit new_path(model_name: 'field_test')
+    expect(page.body).to include('field_test_comment_attributes_content')
+    expect(page.body).to_not include('field_test_comment_attributes_commentable_type')
+    expect(page.body).to_not include('field_test_comment_attributes_commentable_id')
+  end
+
   it 'is closable after adding a new item' do
     visit new_path(model_name: 'field_test')
     within('#field_test_comment_attributes_field') do

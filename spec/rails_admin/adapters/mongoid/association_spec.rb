@@ -198,7 +198,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::Association', mongoid: true do
       expect(subject.key_accessor).to eq :mongo_comment_ids
       expect(subject.as).to eq :commentable
       expect(subject.polymorphic?).to be_falsey
-      expect(subject.inverse_of).to be_nil
+      expect(subject.inverse_of).to eq :commentable
       expect(subject.read_only?).to be_falsey
       expect(subject.nested_options).to be_nil
     end
