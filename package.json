@@ -17,7 +17,7 @@
   "dependencies": {
     "@babel/runtime": "^7.16.7",
     "@fortawesome/fontawesome-free": ">=5.15.0 <7.0.0",
-    "@hotwired/turbo-rails": "^7.1.0",
+    "@hotwired/turbo-rails": "^8.0.21",
     "@popperjs/core": "^2.11.0",
     "@rails/ujs": "^7.1.3-4",
     "bootstrap": "^5.1.3",
