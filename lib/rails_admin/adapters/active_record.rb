@@ -135,6 +135,10 @@ module RailsAdmin
         end
       end
 
+      def belongs_to_required_by_default
+        model.belongs_to_required_by_default
+      end
+
     private
 
       def primary_key_scope(scope, id)
