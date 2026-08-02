@@ -468,7 +468,7 @@ import I18n from "./i18n";
         .not(".froala-wysiwyged");
       if (array.length) {
         options = $(array[0]).data("options");
-        if (!$.isFunction($.fn.editable)) {
+        if (typeof $.fn.editable !== "function") {
           $("head").append(
             '<link href="' +
               options["csspath"] +
