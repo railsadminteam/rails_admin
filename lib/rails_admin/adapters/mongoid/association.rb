@@ -111,7 +111,7 @@ module RailsAdmin
         end
 
         def inverse_of
-          association.inverse_of.try :to_sym
+          association.inverse_of.try(:to_sym) || as
         end
 
         def read_only?
