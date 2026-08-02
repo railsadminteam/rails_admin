@@ -395,7 +395,7 @@ import I18n from "./i18n";
       if (array.length) {
         this.array = array;
         options = $(array[0]).data("options");
-        config_options = $.parseJSON(options["config_options"]);
+        config_options = JSON.parse(options["config_options"]);
         if (!window.wysihtml5) {
           $("head").append(
             '<link href="' +
@@ -419,7 +419,7 @@ import I18n from "./i18n";
           return array.each(function () {
             var uploadEnabled;
             options = $(this).data("options");
-            config_options = $.parseJSON(options["config_options"]);
+            config_options = JSON.parse(options["config_options"]);
             if (config_options) {
               if (!config_options["inlineMode"]) {
                 config_options["inlineMode"] = false;
