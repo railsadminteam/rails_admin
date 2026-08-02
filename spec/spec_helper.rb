@@ -55,6 +55,18 @@ Capybara.server = :webrick
 
 RailsAdmin.setup_all_extensions
 
+# Rails 8 draws routes lazily in development and test (Rails::Engine::LazyRouteSet),
+# and the first access is what triggers the draw. That path is not thread-safe:
+# RoutesReloader#execute flips @loaded to true *before* reloading, and reloading
+# undefines every named route helper before redefining it. A second thread landing
+# in that window gets nil from #reload_routes_unless_loaded, so LazyRouteSet's
+# method_missing falls through to super and raises NoMethodError instead of waiting.
+#
+# js: true examples serve requests from WEBrick threads while the example itself
+# calls route helpers, so both sides race to trigger the very first draw. Warm the
+# routes up here, while still single-threaded, so nothing has to draw them later.
+Rails.application.reload_routes_unless_loaded if Rails.application.respond_to?(:reload_routes_unless_loaded)
+
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
