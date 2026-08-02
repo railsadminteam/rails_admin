@@ -15,7 +15,7 @@
   },
   "devDependencies": {
     "vite": "^5.0",
-    "vite-plugin-ruby": ">=5.0 <6",
+    "vite-plugin-ruby": ">=5.0 <5.2",
     "webpack-dev-server": "^3"
   },
   "scripts": {
