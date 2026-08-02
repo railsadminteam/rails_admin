@@ -106,7 +106,7 @@ import I18n from "./i18n";
       var self = this;
       var requestIndex = 0;
 
-      if ($.isArray(source)) {
+      if (Array.isArray(source)) {
         return function (request, response) {
           response(self._getResultSet(request, source, false));
         };
