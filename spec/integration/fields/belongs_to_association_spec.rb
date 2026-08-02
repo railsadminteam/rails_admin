@@ -79,7 +79,7 @@ RSpec.describe 'BelongsToAssociation field', type: :request do
         visit edit_path(model_name: 'managed_team', id: teams[0].id)
         find('input.ra-filtering-select-input').set('M')
         page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
-        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: "ManagingUser ##{users[1].id}")
         page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("ManagingUser ##{users[1].id}")).click()}
         click_button 'Save'
         teams[0].reload
@@ -130,7 +130,7 @@ RSpec.describe 'BelongsToAssociation field', type: :request do
         visit edit_path(model_name: 'favorite_player', id: favorite_player.id)
         find('.fanship_field input.ra-filtering-select-input').set(fanship.fan_id)
         page.execute_script("document.querySelector('.fanship_field input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
-        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: "Fanship ##{fanship.id}")
         page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Fanship ##{fanship.id}")).click()}
         click_button 'Save'
         is_expected.to have_content 'Favorite player successfully updated'

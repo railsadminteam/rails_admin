@@ -113,7 +113,7 @@ RSpec.describe 'HasOneAssociation field', type: :request do
         visit edit_path(model_name: 'managing_user', id: user.id)
         find('input.ra-filtering-select-input').set('T')
         page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
-        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: team.name)
         page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("#{team.name}")).click()}
         click_button 'Save'
         is_expected.to have_content 'Managing user successfully updated'
@@ -164,7 +164,7 @@ RSpec.describe 'HasOneAssociation field', type: :request do
         fill_in 'Name', with: 'someone'
         find('.fanship_field input.ra-filtering-select-input').set(fanship.fan_id)
         page.execute_script("document.querySelector('.fanship_field input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
-        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: "Fanship ##{fanship.id}")
         page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Fanship ##{fanship.id}")).click()}
         click_button 'Save'
         is_expected.to have_content 'Fan successfully created'
