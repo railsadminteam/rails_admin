@@ -194,7 +194,7 @@
       relatedTarget: undefined
     }, options || {});
 
-    if ($.isFunction(document.createEvent)) {
+    if (typeof document.createEvent === "function") {
       evt = document.createEvent("MouseEvents");
       evt.initMouseEvent(type, e.bubbles, e.cancelable, e.view, e.detail,
         e.screenX, e.screenY, e.clientX, e.clientY,
