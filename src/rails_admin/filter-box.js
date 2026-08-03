@@ -311,7 +311,7 @@ import flatpickr from "flatpickr";
     e.preventDefault();
     $.filters.append(
       $.extend(
-        { index: $.now().toString().slice(6, 11) },
+        { index: Date.now().toString().slice(6, 11) },
         $(this).data("options")
       )
     );

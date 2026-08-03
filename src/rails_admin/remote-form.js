@@ -107,7 +107,7 @@ import * as bootstrap from "bootstrap";
       form.bind("ajax:complete", function (event) {
         var data = event.detail[0];
         if (data.status == 200) {
-          var json = $.parseJSON(data.responseText);
+          var json = JSON.parse(data.responseText);
           var option =
             '<option value="' +
             json.id +
