@@ -35,19 +35,19 @@ module RailsAdmin
           bindings[:controller] ? (action.try(:visible?) && action || nil) : action
         end
 
-        def collection(key, parent_class = :base, &block)
-          add_action key, parent_class, :collection, &block
+        def collection(key, parent_class = :base, &)
+          add_action(key, parent_class, :collection, &)
         end
 
-        def member(key, parent_class = :base, &block)
-          add_action key, parent_class, :member, &block
+        def member(key, parent_class = :base, &)
+          add_action(key, parent_class, :member, &)
         end
 
-        def root(key, parent_class = :base, &block)
-          add_action key, parent_class, :root, &block
+        def root(key, parent_class = :base, &)
+          add_action(key, parent_class, :root, &)
         end
 
-        def add_action(key, parent_class, parent, &block)
+        def add_action(key, parent_class, parent, &)
           a = "RailsAdmin::Config::Actions::#{parent_class.to_s.camelize}".constantize.new
           a.instance_eval(%(
             #{parent} true
@@ -55,7 +55,7 @@ module RailsAdmin
               :#{key}
             end
           ), __FILE__, __LINE__ - 5)
-          add_action_custom_key(a, &block)
+          add_action_custom_key(a, &)
         end
 
         def reset

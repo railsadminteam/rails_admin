@@ -19,18 +19,18 @@ module RailsAdmin
           self
         end
 
-        def method_missing(method_name, *args, &block)
+        def method_missing(method_name, ...)
           if @object.respond_to?(method_name)
             reset = @object.bindings
             begin
               @object.bindings = @bindings
-              response = @object.__send__(method_name, *args, &block)
+              response = @object.__send__(method_name, ...)
             ensure
               @object.bindings = reset
             end
             response
           else
-            super(method_name, *args, &block)
+            super
           end
         end
       end

@@ -30,8 +30,8 @@ module RailsAdmin
         # and setting the field's group as self
         #
         # @see RailsAdmin::Config::Fields.field
-        def field(name, type = nil, &block)
-          field = section.field(name, type, &block)
+        def field(name, type = nil, &)
+          field = section.field(name, type, &)
           # Directly manipulate the variable instead of using the accessor
           # as group probably is not yet registered to the parent object.
           field.instance_variable_set('@group', self)

@@ -23,7 +23,7 @@ module RailsAdmin
 
   private
 
-    def action_missing(name, *_args)
+    def action_missing(name, ...)
       action = RailsAdmin::Config::Actions.find(name.to_sym)
       raise AbstractController::ActionNotFound.new("The action '#{name}' could not be found for #{self.class.name}") unless action
 
@@ -38,10 +38,10 @@ module RailsAdmin
       instance_eval(&@action.controller)
     end
 
-    def method_missing(name, *args, &block)
+    def method_missing(name, ...)
       action = RailsAdmin::Config::Actions.find(name.to_sym)
       if action
-        action_missing name, *args, &block
+        action_missing(name, ...)
       else
         super
       end

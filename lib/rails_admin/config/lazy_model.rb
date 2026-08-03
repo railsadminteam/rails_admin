@@ -62,8 +62,8 @@ module RailsAdmin
         @model
       end
 
-      def method_missing(method_name, *args, &block)
-        target.send(method_name, *args, &block)
+      def method_missing(method_name, ...)
+        target.send(method_name, ...)
       end
 
       def respond_to_missing?(method_name, include_private = false)

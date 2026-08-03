@@ -95,11 +95,8 @@ If you think you found a bug in RailsAdmin, you can [submit an issue](https://gi
 
 This library aims to support and is [tested against][ghactions] the following Ruby implementations:
 
-- Ruby 2.6
-- Ruby 2.7
-- Ruby 3.0
-- Ruby 3.1
-- Ruby 3.2
+- Ruby 3.3
+- Ruby 3.4
 - [JRuby][]
 
 [jruby]: http://jruby.org/

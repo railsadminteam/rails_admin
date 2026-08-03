@@ -9,7 +9,6 @@ jobs:
       fail-fast: false
       matrix:
         ruby:
-          - "3.2"
           - "3.3"
           - "3.4"
         gemfile: [gemfiles/rails_8.1.gemfile]
@@ -17,36 +16,6 @@ jobs:
         adapter: [sqlite3]
         asset: [webpack]
         include:
-          - ruby: 2.6
-            gemfile: gemfiles/rails_6.0.gemfile
-            orm: active_record
-            adapter: sqlite3
-            asset: sprockets
-          - ruby: 2.7
-            gemfile: gemfiles/rails_6.1.gemfile
-            orm: active_record
-            adapter: sqlite3
-            asset: sprockets
-          - ruby: 2.7
-            gemfile: gemfiles/rails_6.1.gemfile
-            orm: active_record
-            adapter: sqlite3
-            asset: webpacker
-          - ruby: "3.0"
-            gemfile: gemfiles/rails_7.0.gemfile
-            orm: active_record
-            adapter: sqlite3
-            asset: sprockets
-          - ruby: "3.1"
-            gemfile: gemfiles/rails_7.1.gemfile
-            orm: active_record
-            adapter: sqlite3
-            asset: sprockets
-          - ruby: "3.2"
-            gemfile: gemfiles/rails_7.2.gemfile
-            orm: active_record
-            adapter: sqlite3
-            asset: sprockets
           - ruby: "3.3"
             gemfile: gemfiles/rails_8.0.gemfile
             orm: active_record
@@ -72,31 +41,6 @@ jobs:
             orm: active_record
             adapter: sqlite3
             asset: sprockets
-          - ruby: "3.2"
-            gemfile: gemfiles/composite_primary_keys.gemfile
-            orm: active_record
-            adapter: sqlite3
-            asset: sprockets
-          - ruby: 2.7
-            gemfile: gemfiles/rails_6.0.gemfile
-            orm: mongoid
-            adapter: sqlite3
-            asset: sprockets
-          - ruby: "3.0"
-            gemfile: gemfiles/rails_6.1.gemfile
-            orm: mongoid
-            adapter: sqlite3
-            asset: sprockets
-          - ruby: "3.1"
-            gemfile: gemfiles/rails_7.0.gemfile
-            orm: mongoid
-            adapter: sqlite3
-            asset: sprockets
-          - ruby: "3.2"
-            gemfile: gemfiles/rails_7.1.gemfile
-            orm: mongoid
-            adapter: sqlite3
-            asset: sprockets
           - ruby: "3.3"
             gemfile: gemfiles/rails_7.2.gemfile
             orm: mongoid
@@ -112,12 +56,12 @@ jobs:
             orm: mongoid
             adapter: sqlite3
             asset: sprockets
-          - ruby: jruby-9.4
+          - ruby: jruby-10.0
             gemfile: gemfiles/rails_7.1.gemfile
             orm: active_record
             adapter: mysql2
             asset: sprockets
-          - ruby: jruby-9.4
+          - ruby: jruby-10.0
             gemfile: gemfiles/rails_7.1.gemfile
             orm: mongoid
             adapter: sqlite3
@@ -224,7 +168,7 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "3.2"
+          ruby-version: "3.3"
           bundler-cache: true
           cache-version: gems-${{ hashFiles('Gemfile') }}
       - name: Install dependencies
