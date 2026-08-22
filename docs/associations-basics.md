@@ -20,7 +20,7 @@ RailsAdmin.config do |config|
 end
 ```
 
-You'll need to handle ordering in your model with a position column for example. See [[here|Has-many-:through-association]] for a comprehensive ActiveRecord example with a `has_many :through` association.
+You'll need to handle ordering in your model with a position column for example. See [here](has-many-through-association.md) for a comprehensive ActiveRecord example with a `has_many :through` association.
 
 #### Important
 You must specify attr_accessible for the singular-form _ids setter method of your associated model, e.g.,  a `has_one` association. This setter method comes automatically with ActiveRecord when you create a `has_many` association, but not for a `has_one` association. 
@@ -29,7 +29,7 @@ For Rails 3, in the example above you would specify this at the top of your mode
 ```
 attr_accessible :fan_ids
 ```
-For Rails 4 and above you need to [define setters and getters](https://github.com/sferik/rails_admin/wiki/Has-one-association) for `has_one` associations.
+For Rails 4 and above you need to [define setters and getters](has-one-association.md) for `has_one` associations.
 
 If you fail to do this, the multiselect widget will simply not appear on your page. 
 
@@ -39,11 +39,11 @@ You can edit related objects by double-clicking on any visible item in the widge
 
 ### Querying and searching by association columns
 
-You can configure which columns from associated records show up as available filters or get searched in the general search box. See [[List#fields-searching]] for more details.
+You can configure which columns from associated records show up as available filters or get searched in the general search box. See [List#fields-searching](list.md#fields-searching) for more details.
 
 ### Limit/filter associated records
 
-See [[associations scoping]] for more informations on how to limit and filter proposed associated records.
+See [associations scoping](associations-scoping.md) for more informations on how to limit and filter proposed associated records.
 
 ### Inverse_of: Avoiding edit association spaghetti issues
 
@@ -78,7 +78,7 @@ config.model Team do
 end
 ```
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/association.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/association.rb)
 
 ### Disabling inline creation and edition
 

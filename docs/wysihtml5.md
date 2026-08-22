@@ -29,4 +29,4 @@ field :description, :wysihtml5 do
                  parserRules: { tags: { p:1 } } # support for <p> in html mode
 end   
 ```
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/wysihtml5.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/wysihtml5.rb)

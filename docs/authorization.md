@@ -29,7 +29,7 @@ end
 ```
 
 
-* [[CanCanCan (recommended)|CanCanCan]]
-* [[CanCan with relation to current Model|CanCan:-remove-associated-action-buttons-in-forms]]
-* [[Declarative Authorization (possible)|Declarative Authorization]]
-* [[Manually|Customized authorization]]
+* [CanCanCan (recommended)](cancancan.md)
+* [CanCan with relation to current Model](cancan-remove-associated-action-buttons-in-forms.md)
+* [Declarative Authorization (possible)](declarative-authorization.md)
+* [Manually](customized-authorization.md)

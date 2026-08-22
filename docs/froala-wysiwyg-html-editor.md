@@ -29,7 +29,7 @@ This assume you want to use the FREE version of Froala WYSIWYG HTML Editor (whic
   end
 ```
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/froala.rb]] and [[here|https://github.com/sferik/rails_admin/blob/master/app/assets/javascripts/rails_admin/ra.widgets.coffee]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/froala.rb) and [here](https://github.com/sferik/rails_admin/blob/master/app/assets/javascripts/rails_admin/ra.widgets.coffee)
 
 ### Using Plugins
 

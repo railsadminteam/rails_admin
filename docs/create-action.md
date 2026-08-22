@@ -15,4 +15,4 @@
   can :create, Model, { default_attributes }
 ```
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/new.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/new.rb)

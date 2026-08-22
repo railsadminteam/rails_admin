@@ -10,4 +10,4 @@
   can :show_in_app, Model, { conditions }
 ```
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/show_in_app.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/show_in_app.rb)

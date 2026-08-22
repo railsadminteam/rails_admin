@@ -28,4 +28,4 @@ end
 
 If you use a `attr_accessible` strategy, don't forget to add `delete_asset` to the whitelist.
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/paperclip.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/paperclip.rb)

@@ -1,8 +1,8 @@
 ### Optional external editors integration
 
-  * [[CKEditor]]
-  * [[CodeMirror]] (added [[recently|https://github.com/sferik/rails_admin/commit/61a7e0e7ec21e4183777aa8944cc4f6cc89b9bdc]])
-  * [[Wysihtml5]]
-  * [[Froala-WYSIWYG-HTML-Editor]]
+  * [CKEditor](ckeditor.md)
+  * [CodeMirror](codemirror.md) (added [recently](https://github.com/sferik/rails_admin/commit/61a7e0e7ec21e4183777aa8944cc4f6cc89b9bdc))
+  * [Wysihtml5](wysihtml5.md)
+  * [Froala-WYSIWYG-HTML-Editor](froala-wysiwyg-html-editor.md)
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/text.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/text.rb)

@@ -1,4 +1,4 @@
-File upload is a 'virtual' field type not meant to be used directly, but through vendor implementations ([[Paperclip]]/[[Dragonfly]]/[[Carrierwave]]/[[ActiveStorage]])
+File upload is a 'virtual' field type not meant to be used directly, but through vendor implementations ([Paperclip](paperclip.md)/[Dragonfly](dragonfly.md)/[Carrierwave](carrierwave.md)/[ActiveStorage](activestorage.md))
 
 Those implementation share common characteristics.
 
@@ -17,4 +17,4 @@ field :asset do
 end
 ```
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/file_upload.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/file_upload.rb)

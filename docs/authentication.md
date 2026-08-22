@@ -7,6 +7,6 @@ If your application responds to a route helper named `logout_path` then Rails Ad
 
 Popular authentication gems examples:
 
-* [[Devise]]
-* [[Sorcery]]
-* [[Manually]]
+* [Devise](devise.md)
+* [Sorcery](sorcery.md)
+* [Manually](manually.md)

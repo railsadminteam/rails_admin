@@ -34,4 +34,4 @@ class Draft < ActiveRecord::Base
 end
 ```
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/has_one_association.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/has_one_association.rb)

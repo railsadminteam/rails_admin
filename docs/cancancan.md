@@ -1,4 +1,4 @@
-Rails Admin is fully compatible with [[CanCanCan|https://github.com/CanCanCommunity/cancancan]].
+Rails Admin is fully compatible with [CanCanCan](https://github.com/CanCanCommunity/cancancan).
 
 ### Configuration
 
@@ -41,7 +41,7 @@ class Ability
 end
 ```
 
-How you define the user roles is completely up to you. See the [[CanCanCan Documentation|https://github.com/CanCanCommunity/cancancan/wiki]] for more information.
+How you define the user roles is completely up to you. See the [CanCanCan Documentation](https://github.com/CanCanCommunity/cancancan/wiki) for more information.
 
 ### Use different Ability classes for front-end and admin
 

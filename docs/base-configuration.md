@@ -113,11 +113,11 @@ end
 
 ## Authentication integration (Devise, Sorcery, Manual)
 
-[[Authentication]]
+[Authentication](authentication.md)
 
 ## Authorization (Cancancan, Pundit)
 
-[[Authorization]]
+[Authorization](authorization.md)
 
 ## Instance labels
 
@@ -134,4 +134,4 @@ config.browser_validations = false # Default is true
 
 **Next**
 
-Then you can start adding [[actions|Actions]], configuring [[models|Models]], [[sections|Base]] and [[fields|Fields]].
+Then you can start adding [actions](actions.md), configuring [models](models.md), [sections](base.md) and [fields](fields.md).

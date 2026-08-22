@@ -31,7 +31,7 @@ end
 
 `:enum` is the different thing(see the section below) and do not work with ActiveRecord Enum columns.
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/active_record_enum.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/active_record_enum.rb)
 
 ## RailsAdmin Enums(Legacy)
 
@@ -180,4 +180,4 @@ class User < ActiveRecord::Base
 end
 ```
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/enum.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/enum.rb)

@@ -4,4 +4,4 @@ It inherits its configuration from the `base` section.
 
 Its configuration can be overridden by `create`, `update` and `nested` section's configuration.
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/sections/edit.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/sections/edit.rb)

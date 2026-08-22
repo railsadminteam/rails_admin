@@ -38,4 +38,4 @@ Relevant only for model/instance actions, not base actions (like `dashboard`).
 
 
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/base.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/base.rb)

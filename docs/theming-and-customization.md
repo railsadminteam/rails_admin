@@ -1,9 +1,9 @@
 The content of this page applies to RailsAdmin 3.x.
-Pre-3.x users should refer to [[Theming and customization for RailsAdmin 2.x and earlier]].
+Pre-3.x users should refer to [Theming and customization for RailsAdmin 2.x and earlier](theming-and-customization-for-railsadmin-2-x-and-earlier.md).
 
 # Theming
 
-Since RailsAdmin is built on top of the Web frontend framework [[Bootstrap|https://getbootstrap.com/]], it can be integrated easily with Bootstrap themes out there. There's one limitation though, your application needs to use [an asset delivery method](https://github.com/railsadminteam/rails_admin/wiki/Base-configuration#asset-delivery) other than Sprockets since this setup relies on the NPM ecosystem.
+Since RailsAdmin is built on top of the Web frontend framework [Bootstrap](https://getbootstrap.com/), it can be integrated easily with Bootstrap themes out there. There's one limitation though, your application needs to use [an asset delivery method](base-configuration.md#asset-delivery) other than Sprockets since this setup relies on the NPM ecosystem.
 
 Let's take [Bootswatch](https://bootswatch.com/) as an example here. First you install the NPM package:
 
@@ -43,8 +43,8 @@ app/assets/javascripts/rails_admin/custom/ui.js
 
 SCSS files are meant to be used for following purposes:
 
-* modify all the mixins provided by rails_admin and bootstrap and add others for you to use in `mixins.scss`. (available mixins [[here|https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_mixins.scss]])
-* modify all the variables provided by rails_admin and bootstrap and add others for you to use in `variables.scss`. Note that the variables in `variables.scss` are imported before Bootstrap's variables which all have set the [[!default|http://sass-lang.com/documentation/file.SASS_REFERENCE.html#variable_defaults_]] flag. This effectively means that you can customize chained variables by just assigning a custom value to the first one instead of the need to  override each single one. E.g. you do not have to override `$btn-success-bg`, `$label-succes-bg` and `$progress-bar-success-bg` but only assign a custom value to `$brand-success`. (available variables [[here|https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss]])
+* modify all the mixins provided by rails_admin and bootstrap and add others for you to use in `mixins.scss`. (available mixins [here](https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_mixins.scss))
+* modify all the variables provided by rails_admin and bootstrap and add others for you to use in `variables.scss`. Note that the variables in `variables.scss` are imported before Bootstrap's variables which all have set the [!default](http://sass-lang.com/documentation/file.SASS_REFERENCE.html#variable_defaults_) flag. This effectively means that you can customize chained variables by just assigning a custom value to the first one instead of the need to  override each single one. E.g. you do not have to override `$btn-success-bg`, `$label-succes-bg` and `$progress-bar-success-bg` but only assign a custom value to `$brand-success`. (available variables [here](https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss))
 * In `theming.scss`, you can use all mixins and variables. (your owns, Bootstrap's and RailsAdmin's)
 
 Don't forget to re-compile your assets or simply delete the content of your `tmp/cache` folder. Some additional steps might be required, as others reported here: https://github.com/sferik/rails_admin/issues/738#issuecomment-26615578
@@ -52,7 +52,7 @@ Don't forget to re-compile your assets or simply delete the content of your `tmp
 
 ## Non-Sprockets setup
 
-Upon the RailsAdmin installation, the installer will generate files `rails_admin.js` and `rails_admin.scss` (location will vary depending on [the asset delivery method](https://github.com/railsadminteam/rails_admin/wiki/Base-configuration#asset-delivery)). You can freely add your custom code or import a new dependency there.
+Upon the RailsAdmin installation, the installer will generate files `rails_admin.js` and `rails_admin.scss` (location will vary depending on [the asset delivery method](base-configuration.md#asset-delivery)). You can freely add your custom code or import a new dependency there.
 
 ## Working with JavaScript code
 

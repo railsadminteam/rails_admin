@@ -1,4 +1,4 @@
-* First install [[PaperTrail|https://github.com/paper-trail-gem/paper_trail]] and [[PaperTrail-AssociationTracking|https://github.com/westonganger/paper_trail-association_tracking]]
+* First install [PaperTrail](https://github.com/paper-trail-gem/paper_trail) and [PaperTrail-AssociationTracking](https://github.com/westonganger/paper_trail-association_tracking)
 
 *Note: you should use the `--with-changes` option when creating the version table  
 to ensure that history messages are recorded in a `object_changes` column.*

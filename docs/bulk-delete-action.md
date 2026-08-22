@@ -15,4 +15,4 @@
   can :destroy, Model, { conditions }
 ```
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/bulk_delete.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/bulk_delete.rb)

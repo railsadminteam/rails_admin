@@ -50,4 +50,4 @@ Reminder: It's necessary to configure ckeditor in asset precompile:
 Rails.application.config.assets.precompile += ['ckeditor/*']
 ```
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/ck_editor.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/ck_editor.rb)

@@ -15,4 +15,4 @@
   can :update, Model, { conditions_and_default_attributes }
 ```
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/edit.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/edit.rb)

@@ -26,4 +26,4 @@ rails_admin do
 end
 ```
 
-Note: `orderable` enables UI controls to move items up and down but you still need to support it in your models, see [here](https://github.com/sferik/rails_admin/wiki/Has-many-%3Athrough-association) for an example using a similar widget.
+Note: `orderable` enables UI controls to move items up and down but you still need to support it in your models, see [here](has-many-through-association.md) for an example using a similar widget.

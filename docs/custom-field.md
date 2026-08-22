@@ -19,4 +19,4 @@ gem 'rails_admin_<field_name>', :path => '../rails_admin_<field_name>'
 
 See the Base class your `FieldName` will inherit from: 
 
-[[https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/base.rb]]
+[https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/base.rb](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/base.rb)

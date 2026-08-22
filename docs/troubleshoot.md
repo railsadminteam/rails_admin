@@ -1,7 +1,7 @@
 ## Known incompatibilities, from namespacing issues:
 
- * various [[Twitter Bootstrap|https://github.com/twitter/bootstrap]] Asset-Pipeline vendoring libraries (use RailsAdmin dependency [[bootstrap-sass|https://github.com/thomas-mcdonald/bootstrap-sass]])
- * [[devise_invitable|https://github.com/scambra/devise_invitable]] can result in an issue. See [[this|http://stackoverflow.com/questions/6012792/devise-invitable-rails-admin-conflict]] Stack Overflow question for more info.
+ * various [Twitter Bootstrap](https://github.com/twitter/bootstrap) Asset-Pipeline vendoring libraries (use RailsAdmin dependency [bootstrap-sass](https://github.com/thomas-mcdonald/bootstrap-sass))
+ * [devise_invitable](https://github.com/scambra/devise_invitable) can result in an issue. See [this](http://stackoverflow.com/questions/6012792/devise-invitable-rails-admin-conflict) Stack Overflow question for more info.
  * [~~will_paginate~~](https://github.com/mislav/will_paginate) (Now we have a way to avoid method name collision. See ['Conflict between will_paginate and kaminari'](#conflict-between-will_paginate-and-kaminari) section below)
 
 ## Known fix for twitter-bootstrap-rails:
@@ -80,7 +80,7 @@ Note that this is needed on **Heroku** if you set `compile = false` and don't ve
 More here: http://devcenter.heroku.com/articles/rails31_heroku_cedar
 
 Also, as of version 0.0.4, you have to add this to successfully precompile assets. This is also needed if you're deploying in **Heroku**.
-(See [[#1192|https://github.com/sferik/rails_admin/issues/1192]] for the issue report and [[#1046|https://github.com/sferik/rails_admin/issues/1046]] for the fix.)
+(See [#1192](https://github.com/sferik/rails_admin/issues/1192) for the issue report and [#1046](https://github.com/sferik/rails_admin/issues/1046) for the fix.)
 
 ```ruby
 config.assets.precompile += ['rails_admin/rails_admin.css', 'rails_admin/rails_admin.js']
@@ -108,7 +108,7 @@ You can use a different URL scope for `RailsAdmin` by changing `mount RailsAdmin
 
 ### Double insertion of NestedFields
 
-jquery_nested_form is evaluated twice. Check your assets. Don't commit your assets to public/assets. See [[#924|https://github.com/sferik/rails_admin/issues/924]]
+jquery_nested_form is evaluated twice. Check your assets. Don't commit your assets to public/assets. See [#924](https://github.com/sferik/rails_admin/issues/924)
 
 
 ***

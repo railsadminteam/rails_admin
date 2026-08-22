@@ -92,4 +92,4 @@ import "@rails/actiontext";
 @import "trix/dist/trix";
 ```
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/action_text.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/action_text.rb)

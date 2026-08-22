@@ -81,7 +81,7 @@ end
 ```
 
 > In the latest version, you no longer need to define this `delete_#{name}` attribute to get files to be deleted. It will send identifiers of remaing files to the `#{name}`.
-[[More here|https://github.com/railsadminteam/rails_admin/blob/master/app/views/rails_admin/main/_form_multiple_file_upload.html.erb]]
+[More here](https://github.com/railsadminteam/rails_admin/blob/master/app/views/rails_admin/main/_form_multiple_file_upload.html.erb)
 
 ### Want to preserve existing attachments when uploading more
 
@@ -101,4 +101,4 @@ class Article < ActiveRecord::Base
 end
 ```
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/carrierwave.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/carrierwave.rb)

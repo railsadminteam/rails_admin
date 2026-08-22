@@ -54,7 +54,7 @@ Please note that `dashboard` and `index` are mandatory for the moment, but this 
 
 First argument is the key of the action.
 It will be the `i18n_key`, the `route_fragment`, the `action_name`, the `authorization_key`, etc.
-You can override each of these individually. See the respective class and the [[Base Action class|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/base.rb]] to get the list of these options.
+You can override each of these individually. See the respective class and the [Base Action class](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/base.rb) to get the list of these options.
 
 Second (optional) argument is the key of the parent class. It can be any existing Action class. If none given, it will be `Base`.
 
@@ -110,7 +110,7 @@ config.actions do
 end
 ```
 
-If you want to share it as a gem, see [[custom action]]
+If you want to share it as a gem, see [custom action](custom-action.md)
 
 ## Action wording for title, menu, breadcrumb and links
 
@@ -138,7 +138,7 @@ xx:
         link: "..."
 ```
 
-See [[rails_admin.en.yml|https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml]] to get an idea.
+See [rails_admin.en.yml](https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml) to get an idea.
 
 Actions can provide specific option configuration, check their respective wiki page.
 
@@ -148,7 +148,7 @@ Actions can provide specific option configuration, check their respective wiki p
 ### Through authorization
 
 Authorization is done automatically before any link is displayed, any page accessed, etc.
-Check [[CanCanCan]] for the list of key used by RailsAdmin default actions.
+Check [CanCanCan](cancancan.md) for the list of key used by RailsAdmin default actions.
 
 You can change the authorization key with:
 
@@ -199,7 +199,7 @@ config.actions do
 end
 ```
 
-Have a look at [[Show in App implementation|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/show_in_app.rb]] for a better idea of how you can take advantage of this.
+Have a look at [Show in App implementation](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/show_in_app.rb) for a better idea of how you can take advantage of this.
 
 Important: at some point of the application lifecycle, bindings can be nil:
 

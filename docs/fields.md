@@ -508,7 +508,7 @@ examples if you want to use that mechanism.
 
 ## Making all fields readonly by default
 
-Borrowing from [[Models#configuring-models-all-at-once]], you can use the following to make fields read-only by default:
+Borrowing from [Models#configuring-models-all-at-once](models.md#configuring-models-all-at-once), you can use the following to make fields read-only by default:
 
 ```rb
 RailsAdmin.config do |config|

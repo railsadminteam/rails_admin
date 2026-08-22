@@ -4,7 +4,7 @@ Due to the 'fire and forget' nature of Dragonfly and the obfuscated uid, RailsAd
 
 It will try to read `asset_name` to see the extension for a smart guess. If absent, it will suppose it is an image.
 
-See the #image option in [[File Upload]] if you need to override this behavior.
+See the #image option in [File Upload](file-upload.md) if you need to override this behavior.
 
 ```ruby
 class Article < ActiveRecord::Base
@@ -14,4 +14,4 @@ class Article < ActiveRecord::Base
 end
 ```
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/dragonfly.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/dragonfly.rb)

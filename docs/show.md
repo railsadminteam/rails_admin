@@ -22,4 +22,4 @@ RailsAdmin.config do |config|
 end
 ```
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/sections/show.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/sections/show.rb)

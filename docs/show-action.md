@@ -12,4 +12,4 @@
   can :show, Model, { conditions }
 ```
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/show.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/show.rb)

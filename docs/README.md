@@ -1,128 +1,128 @@
-[[Troubleshoot? check me first|Troubleshoot]]
+[Troubleshoot? check me first](troubleshoot.md)
 
 ### Overview
 
-1. [[Introduction to RailsAdmin|http://www.slideshare.net/benoitbenezech/rails-admin-overbest-practices]]
+1. [Introduction to RailsAdmin](http://www.slideshare.net/benoitbenezech/rails-admin-overbest-practices)
 
 ### Configuration
 
-1. [[Base RailsAdmin configuration|Base configuration]]
-2. [[Actions]]
-3. [[Navigation]]
-4. [[Models]]
-5. [[Groups]]
-6. [[Fields]]
-7. [[Translations]]
+1. [Base RailsAdmin configuration](base-configuration.md)
+2. [Actions](actions.md)
+3. [Navigation](navigation.md)
+4. [Models](models.md)
+5. [Groups](groups.md)
+6. [Fields](fields.md)
+7. [Translations](translations.md)
 
 ### Integration Testing
 
-[[Rspec with Capybara examples]]
+[Rspec with Capybara examples](rspec-with-capybara-examples.md)
 
 ### Actions
 
-[[Base|Base Action]]
+[Base](base-action.md)
 
 * Root actions
-  * [[Dashboard|Dashboard Action]]
+  * [Dashboard](dashboard-action.md)
 * Collection actions
-  * [[Index|Index Action]]
-  * [[New|Create Action]]
-  * [[Export|Export Action]]
-  * [[HistoryIndex|History Index Action]]
-  * [[BulkDelete|Bulk Delete Action]]
+  * [Index](index-action.md)
+  * [New](create-action.md)
+  * [Export](export-action.md)
+  * [HistoryIndex](history-index-action.md)
+  * [BulkDelete](bulk-delete-action.md)
 * Member actions
-  * [[Show|Show Action]]
-  * [[Edit|Edit Action]]
-  * [[Delete|Delete Action]]
-  * [[HistoryShow|History Show Action]]
-  * [[ShowInApp|Show In App Action]]
+  * [Show](show-action.md)
+  * [Edit](edit-action.md)
+  * [Delete](delete-action.md)
+  * [HistoryShow](history-show-action.md)
+  * [ShowInApp](show-in-app-action.md)
 
 ### Field types
 
-[[Base|Base Field]]
+[Base](base-field.md)
 
-* [[FileUpload|File Upload]]
-  * [[ActiveStorage]]
-  * [[Carrierwave]]
-  * [[Dragonfly]]
-  * [[Paperclip]]
-* [[Enumeration]]
-* [[Boolean]]
-* [[Decimal]]
-* [[Integer]]
-* [[Float]]
-* [[Hidden]]
-* [[String]]
-  * [[Password]]
-* [[Text]]
-  * [[ActionText]]
-  * [[CKEditor]]
-  * [[CodeMirror]]
-  * [[Froala WYSIWYG HTML Editor]]
-  * [[Wysihtml5]]
-* [[Timestamp - Date  - Datetime - Time|Timestamp---Date---Datetime---Time]]
+* [FileUpload](file-upload.md)
+  * [ActiveStorage](activestorage.md)
+  * [Carrierwave](carrierwave.md)
+  * [Dragonfly](dragonfly.md)
+  * [Paperclip](paperclip.md)
+* [Enumeration](enumeration.md)
+* [Boolean](boolean.md)
+* [Decimal](decimal.md)
+* [Integer](integer.md)
+* [Float](float.md)
+* [Hidden](hidden.md)
+* [String](string.md)
+  * [Password](password.md)
+* [Text](text.md)
+  * [ActionText](actiontext.md)
+  * [CKEditor](ckeditor.md)
+  * [CodeMirror](codemirror.md)
+  * [Froala WYSIWYG HTML Editor](froala-wysiwyg-html-editor.md)
+  * [Wysihtml5](wysihtml5.md)
+* [Timestamp - Date  - Datetime - Time](timestamp-date-datetime-time.md)
 
 
 ### Associations
 
-* [[Associations basics]]
-* [[Associations scoping]]
-* [[Associations validation]]
+* [Associations basics](associations-basics.md)
+* [Associations scoping](associations-scoping.md)
+* [Associations validation](associations-validation.md)
 
 ### Associations types
 
-* [[belongs_to association|Belongs-to-association]]
-  * [[polymorphic belongs_to association|Polymorphic-belongs-to-association]]
-* [[has_one association|Has-one-association]]
-* [[has_many association|Has-many-association]]
-  * [[has_and_belongs_to_many association|Has-and-belongs-to-many-association]]
-  * [[has_many :through association|Has-many-:through-association]]
+* [belongs_to association](belongs-to-association.md)
+  * [polymorphic belongs_to association](polymorphic-belongs-to-association.md)
+* [has_one association](has-one-association.md)
+* [has_many association](has-many-association.md)
+  * [has_and_belongs_to_many association](has-and-belongs-to-many-association.md)
+  * [has_many :through association](has-many-through-association.md)
 
 
 ### Sections
 
-[[Base]]
+[Base](base.md)
 
-* [[List]]
-* [[Show]]
-* [[Export]]
-* [[Edit]]
-  * [[Create]]
-  * [[Update]]
-  * [[Nested]]
-  * [[Modal]]
+* [List](list.md)
+* [Show](show.md)
+* [Export](export.md)
+* [Edit](edit.md)
+  * [Create](create.md)
+  * [Update](update.md)
+  * [Nested](nested.md)
+  * [Modal](modal.md)
 
 
 ### User integration
 
-* [[Authentication]]
-* [[Authorization]]
-* [[Mass-assignments protection]]
-* [[Auditing changes|Auditing]]
+* [Authentication](authentication.md)
+* [Authorization](authorization.md)
+* [Mass-assignments protection](mass-assignments-protection.md)
+* [Auditing changes](auditing.md)
 
 ### Extend RailsAdmin (RailsAdmin API)
 
-* [[Theming and customization]]
-* [[Custom action]]
-* [[Custom field]]
+* [Theming and customization](theming-and-customization.md)
+* [Custom action](custom-action.md)
+* [Custom field](custom-field.md)
 
 ### Styling
 
-* [[List view table styling]]
-* [[Horizontally scrolling table with frozen columns in list view]]
+* [List view table styling](list-view-table-styling.md)
+* [Horizontally scrolling table with frozen columns in list view](horizontally-scrolling-table-with-frozen-columns-in-list-view.md)
 
 ### Routing
 
-* [[Routing Problems]]
-* [[Using RailsAdmin routes]]
+* [Routing Problems](routing-problems.md)
+* [Using RailsAdmin routes](using-railsadmin-routes.md)
 
 
 ### Recipes
 
-* [[How to set default values]]
-* [[Excluding RailsAdmin from NewRelic]] For when you don't want timing and performance information about RailsAdmin to show up in your NewRelic dashboards.
-* [[Performance]] - how to make Rails Admin snappier with large databases
-* [[Changing locale]]
+* [How to set default values](how-to-set-default-values.md)
+* [Excluding RailsAdmin from NewRelic](excluding-railsadmin-from-newrelic.md) For when you don't want timing and performance information about RailsAdmin to show up in your NewRelic dashboards.
+* [Performance](performance.md) - how to make Rails Admin snappier with large databases
+* [Changing locale](changing-locale.md)
 
 ### Plugins
 

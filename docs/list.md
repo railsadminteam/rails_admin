@@ -10,7 +10,7 @@ RailsAdmin.config do |config|
 end
 ```
 
-Also see how to [show all columns on one page in a horizontally-scrolling table](https://github.com/sferik/rails_admin/wiki/Horizontally-scrolling-table-with-frozen-columns-in-list-view).
+Also see how to [show all columns on one page in a horizontally-scrolling table](horizontally-scrolling-table-with-frozen-columns-in-list-view.md).
 
 ### Width of individual columns
 
@@ -268,6 +268,6 @@ end
 ![image](https://user-images.githubusercontent.com/486678/183049250-fd8ce8ff-6587-4b77-9656-17ce2a71191f.png)
 
 
-[[More here|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/sections/list.rb]]
+[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/sections/list.rb)
 
-xref https://github.com/sferik/rails_admin/wiki/List-view-table-styling
+xref [List view table styling](list-view-table-styling.md)

@@ -1,4 +1,4 @@
-[[Declarative Authorization|https://github.com/stffn/declarative_authorization]] is not fully integrated into Rails Admin, so it is only possible to add permissions to the controller actions. Currently if you want more integrated authorization, consider [[CanCan]].
+[Declarative Authorization](https://github.com/stffn/declarative_authorization) is not fully integrated into Rails Admin, so it is only possible to add permissions to the controller actions. Currently if you want more integrated authorization, consider [CanCan](cancan.md).
 
 You can hook declarative_authorization into Rails Admin using code like this in an initializer (e.g., config/initializers/rails_admin.rb):
 
@@ -30,4 +30,4 @@ other roles from doing anything.
 
 # Authorization Adapter
 
-If you would like better support for Declarative Authorization in Rails Admin, consider making an authorization adapter for it. See the [[CanCan Adapter|https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/extensions/cancan/authorization_adapter.rb]] for an example. Fork the project, add the adapter, and send a pull request.
+If you would like better support for Declarative Authorization in Rails Admin, consider making an authorization adapter for it. See the [CanCan Adapter](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/extensions/cancan/authorization_adapter.rb) for an example. Fork the project, add the adapter, and send a pull request.

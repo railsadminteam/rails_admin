@@ -1,1 +1,1 @@
-See [CanCanCan](https://github.com/sferik/rails_admin/wiki/CanCanCan).
+See [CanCanCan](cancancan.md).

@@ -1,5 +1,5 @@
 Unlike [Orderable Sortable Has Many without Through
-](https://github.com/sferik/rails_admin/wiki/Orderable---Sortable-Has-Many-without-Through) with [Has And Belongs To Many](http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_and_belongs_to_many) you don't care that you destroy/recreate the objects every time you want to change the order (as they only hold `record1_id` and `record2_id`) in a table row.
+](orderable-sortable-has-many-without-through.md) with [Has And Belongs To Many](http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#method-i-has_and_belongs_to_many) you don't care that you destroy/recreate the objects every time you want to change the order (as they only hold `record1_id` and `record2_id`) in a table row.
 
 The problem is that when you change order of records Rails don't see this as a change (as the ID's are the same) that's why you need to explicitly destroy and recreate them.
 

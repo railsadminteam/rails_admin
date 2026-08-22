@@ -49,4 +49,4 @@ end
 
 It will use field's name CSS class to set a width for header and data columns.
 
-Also see how to [show all fields on one page in a horizontally-scrolling table](https://github.com/sferik/rails_admin/wiki/Horizontally-scrolling-table-with-frozen-columns-in-list-view).
+Also see how to [show all fields on one page in a horizontally-scrolling table](horizontally-scrolling-table-with-frozen-columns-in-list-view.md).
