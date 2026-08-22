@@ -1,6 +1,6 @@
 ## Fields - Column CSS class
 
-By default each column has a CSS class set according to field's data type. 
+By default each column has a CSS class set according to field's data type.
 `<field_type>_field`
 
 In addition, each column has a CSS class based on its name

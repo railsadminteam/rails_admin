@@ -11,13 +11,13 @@ class Category < ApplicationRecord
   def project_ids=(ids)
     super([])
     super(ids)
-  end 
+  end
 
   rails_admin do
     configure :projects do
       orderable true
-    end 
-  end 
+    end
+  end
 end
 
 class Project < ApplicationRecord

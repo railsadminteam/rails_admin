@@ -24,6 +24,7 @@ bindings[:view].main_app.article_path(my_article)
 ```
 
 ### Link to RailsAdmin from RailsAdmin
+
 ```ruby
 # from a config block:
 bindings[:view].link_to('new record', bindings[:view].rails_admin.new_path('module~class_name'))

@@ -26,7 +26,7 @@ RailsAdmin will automatically load required assets. No setup is needed.
 
 ### Sprockets with Rails 6.x
 
-Since ActionText 6.x doesn't come with the Sprockets-based asset pipeline support, it'll be a bit tricky to set it up correctly. You can refer to [a StackOverflow answer](https://stackoverflow.com/a/72379459). 
+Since ActionText 6.x doesn't come with the Sprockets-based asset pipeline support, it'll be a bit tricky to set it up correctly. You can refer to [a StackOverflow answer](https://stackoverflow.com/a/72379459).
 
 Alternatively, if you don't need full features you can choose to suppress the warning by:
 
@@ -67,7 +67,6 @@ import "@rails/actiontext";
 ```css
 @import "trix/dist/trix";
 ```
-
 
 ### Webpacker or Webpack
 

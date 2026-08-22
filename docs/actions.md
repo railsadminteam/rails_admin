@@ -14,7 +14,7 @@ RailsAdmin.config do |config|
   config.actions do
     # root actions
     dashboard                     # mandatory
-    # collection actions 
+    # collection actions
     index                         # mandatory
     new
     export
@@ -48,9 +48,9 @@ Please note that `dashboard` and `index` are mandatory for the moment, but this 
 
 ## Define actions
 
-* `root` defines root level actions (Dashboard, etc.)
-* `collection` defines collection level actions (Index, New, etc.)
-* `member` defines member level actions (Show, Edit, etc.)
+- `root` defines root level actions (Dashboard, etc.)
+- `collection` defines collection level actions (Index, New, etc.)
+- `member` defines member level actions (Show, Edit, etc.)
 
 First argument is the key of the action.
 It will be the `i18n_key`, the `route_fragment`, the `action_name`, the `authorization_key`, etc.
@@ -62,10 +62,10 @@ Then you can pass the configuration block.
 
 Then add `app/views/rails_admin/main/my_action.html.<erb|haml>` in your application, where you will be able to access:
 
-* `@abstract_model`            (except for root actions, give the RailsAdmin representation of the model. Use .model to have your ActiveRecord original model)
-* `@model_config`              (except for root actions, give the RailsAdmin configuration of the model)
-* `@objects = list_entries`    (for collection actions, list the entries as specified in params, see the :index action and template)
-* `@object`                    (member actions only, ActiveRecord object)
+- `@abstract_model` (except for root actions, give the RailsAdmin representation of the model. Use .model to have your ActiveRecord original model)
+- `@model_config` (except for root actions, give the RailsAdmin configuration of the model)
+- `@objects = list_entries` (for collection actions, list the entries as specified in params, see the :index action and template)
+- `@object` (member actions only, ActiveRecord object)
 
 ```ruby
 config.actions do
@@ -116,7 +116,7 @@ If you want to share it as a gem, see [custom action](custom-action.md)
 
 Default I18n key is action name underscored. You can change it like so:
 
-```ruby 
+```ruby
 config.actions do
   dashboard do
     i18n_key :customized
@@ -131,7 +131,7 @@ Then head for your `config/locales/rails_admin.xx.yml` file:
 xx:
   admin:
     actions:
-      <customized>: 
+      <customized>:
         title: "..."
         menu: "..."
         breadcrumb: "..."
@@ -141,7 +141,6 @@ xx:
 See [rails_admin.en.yml](https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml) to get an idea.
 
 Actions can provide specific option configuration, check their respective wiki page.
-
 
 ## Controlling visibility
 
@@ -178,9 +177,9 @@ end
 
 You can use these 3 bindings to decide whereas the action should be visible or not:
 
-* `bindings[:controller]` is current controller instance
-* `bindings[:abstract_model]` is checked abstract model (except root actions)
-* `bindings[:object]` is checked instance object (member actions only)
+- `bindings[:controller]` is current controller instance
+- `bindings[:abstract_model]` is checked abstract model (except root actions)
+- `bindings[:object]` is checked instance object (member actions only)
 
 For instance, if you want to allow editing of games, but only if they haven't yet started:
 
@@ -203,7 +202,7 @@ Have a look at [Show in App implementation](https://github.com/sferik/rails_admi
 
 Important: at some point of the application lifecycle, bindings can be nil:
 
-* when RailsAdmin creates the route
-* when RailsAdmin defines the action in its controller
+- when RailsAdmin creates the route
+- when RailsAdmin defines the action in its controller
 
 These bindings are available in all options.

@@ -71,7 +71,6 @@ RailsAdmin.config do |config|
 end
 ```
 
-
 ### Filters
 
 Default visible filters. Must be a list of fields name.
@@ -93,16 +92,16 @@ RailsAdmin.config do |config|
 end
 ```
 
-
 ### Fields sorting
 
-* You can make a column non-sortable by setting the sortable option to false (1)
-* You can change the column that the field will actually sort on (2)
+- You can make a column non-sortable by setting the sortable option to false (1)
+- You can change the column that the field will actually sort on (2)
 
 `belongs_to` associations:
-* will be sorted on their label if label is not virtual (:name, :title, etc.)
-* otherwise on the foreign_key (:team_id)
-*  you can also specify a column on the targetted table (see example) (3)
+
+- will be sorted on their label if label is not virtual (:name, :title, etc.)
+- otherwise on the foreign_key (:team_id)
+- you can also specify a column on the targetted table (see example) (3)
 
 ```ruby
 RailsAdmin.config do |config|
@@ -155,19 +154,18 @@ RailsAdmin.config do |config|
 end
 ```
 
-
 ### Fields searching
 
-* You can make a column non-searchable by setting the searchable option to false (1)
-* You can change the column that the field will actually search on (2)
-* You can specify a list of column that will be searched over (3)
+- You can make a column non-searchable by setting the searchable option to false (1)
+- You can change the column that the field will actually search on (2)
+- You can specify a list of column that will be searched over (3)
 
 Belongs_to associations:
 
-* will be searched on their foreign_key (:team_id)
-* or on their label if label is not virtual (:name, :title, etc.)
-* you can also specify columns on the targeted table or the source table (see example) (4)
-* will not be searched unless `queryable` is set to `true`
+- will be searched on their foreign_key (:team_id)
+- or on their label if label is not virtual (:name, :title, etc.)
+- you can also specify columns on the targeted table or the source table (see example) (4)
+- will not be searched unless `queryable` is set to `true`
 
 ```ruby
 RailsAdmin.config do |config|
@@ -266,7 +264,6 @@ end
 ```
 
 ![image](https://user-images.githubusercontent.com/486678/183049250-fd8ce8ff-6587-4b77-9656-17ce2a71191f.png)
-
 
 [More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/sections/list.rb)
 

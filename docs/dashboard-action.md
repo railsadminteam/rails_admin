@@ -18,7 +18,7 @@ RailsAdmin.config do |c|
     dashboard do
       statistics false
     end
-    # collection actions 
+    # collection actions
     index                         # mandatory
     new
     export
@@ -33,6 +33,7 @@ RailsAdmin.config do |c|
   end
 end
 ```
+
 Note that disabling statistics removes the entire dashboard table, not just the colored graphs.
 
 [More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/actions/dashboard.rb)

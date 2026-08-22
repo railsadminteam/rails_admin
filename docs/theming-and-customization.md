@@ -13,7 +13,6 @@ $ yarn add bootswatch
 
 Then you add following content into your RailsAdmin stylesheet, located in either `app/javascript/stylesheets/rails_admin.scss` or `app/assets/stylesheets/rails_admin.scss`.
 
-
 ```diff
 + @import "bootswatch/dist/journal/variables";
   @import "rails_admin/src/rails_admin/styles/base.scss";
@@ -23,8 +22,6 @@ Then you add following content into your RailsAdmin stylesheet, located in eithe
 This way you'll get the [Bootswatch Journal](https://bootswatch.com/journal/)-themed RailsAdmin.
 
 <img src="https://user-images.githubusercontent.com/486678/148493782-4b730372-4dd8-4533-b120-b05669610820.png" width="50%" />
-
-
 
 # Customization
 
@@ -43,12 +40,11 @@ app/assets/javascripts/rails_admin/custom/ui.js
 
 SCSS files are meant to be used for following purposes:
 
-* modify all the mixins provided by rails_admin and bootstrap and add others for you to use in `mixins.scss`. (available mixins [here](https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_mixins.scss))
-* modify all the variables provided by rails_admin and bootstrap and add others for you to use in `variables.scss`. Note that the variables in `variables.scss` are imported before Bootstrap's variables which all have set the [!default](http://sass-lang.com/documentation/file.SASS_REFERENCE.html#variable_defaults_) flag. This effectively means that you can customize chained variables by just assigning a custom value to the first one instead of the need to  override each single one. E.g. you do not have to override `$btn-success-bg`, `$label-succes-bg` and `$progress-bar-success-bg` but only assign a custom value to `$brand-success`. (available variables [here](https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss))
-* In `theming.scss`, you can use all mixins and variables. (your owns, Bootstrap's and RailsAdmin's)
+- modify all the mixins provided by rails_admin and bootstrap and add others for you to use in `mixins.scss`. (available mixins [here](https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_mixins.scss))
+- modify all the variables provided by rails*admin and bootstrap and add others for you to use in `variables.scss`. Note that the variables in `variables.scss` are imported before Bootstrap's variables which all have set the [!default](http://sass-lang.com/documentation/file.SASS_REFERENCE.html#variable_defaults*) flag. This effectively means that you can customize chained variables by just assigning a custom value to the first one instead of the need to override each single one. E.g. you do not have to override `$btn-success-bg`, `$label-succes-bg` and `$progress-bar-success-bg` but only assign a custom value to `$brand-success`. (available variables [here](https://github.com/twbs/bootstrap-sass/blob/master/assets/stylesheets/bootstrap/_variables.scss))
+- In `theming.scss`, you can use all mixins and variables. (your owns, Bootstrap's and RailsAdmin's)
 
 Don't forget to re-compile your assets or simply delete the content of your `tmp/cache` folder. Some additional steps might be required, as others reported here: https://github.com/sferik/rails_admin/issues/738#issuecomment-26615578
-
 
 ## Non-Sprockets setup
 
@@ -59,10 +55,11 @@ Upon the RailsAdmin installation, the installer will generate files `rails_admin
 RailsAdmin 3.x uses Turbo Drive (https://turbo.hotwired.dev/) to load pages instead of normal HTTP requests. That means your HTML-interacting code can't simply use jQuery's `$(document).ready` or wait for `DOMContentLoaded`. Instead, you can hook to the custom JavaScript event which RailsAdmin triggers when the page content is ready.
 
 ```javascript
-$(document).on('rails_admin.dom_ready', function() { 
+$(document).on("rails_admin.dom_ready", function () {
   /* your js code here */
 });
-``` 
+```
+
 When using Rails Admin 3.1.2+ and Rails 7.x+, you can simply omit JQuery and listen to document directly.
 
 ```javascript
@@ -71,10 +68,9 @@ new CustomEvent("rails_admin.dom_ready", { detail: form });
 
 // When trying to catch and read these events you can simply listen for it via the document.'
 
-document.addEventListener('rails_admin.dom_ready', (e) => {
-  console.log(e)
+document.addEventListener("rails_admin.dom_ready", (e) => {
+  console.log(e);
   // This returns the target form in this example
-   /* your js code here */
-})
-
+  /* your js code here */
+});
 ```

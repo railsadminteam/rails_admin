@@ -2,31 +2,31 @@
 
 A model configuration can be done in any of the places below:
 
-* inside the RailsAdmin initializer:
+- inside the RailsAdmin initializer:
 
   ```ruby
   # config/initializers/rails_admin.rb
 
   RailsAdmin.config do |config|
-    config.model 'ModelName' do 
+    config.model 'ModelName' do
       # ...
     end
   end
   ```
 
-* in the model definition file:
+- in the model definition file:
 
   ```ruby
   # app/models/model_name.rb
 
   class ModelName < ActiveRecord::Base
-    rails_admin do 
+    rails_admin do
       # ...
     end
   end
   ```
 
-* in a separate concern file:
+- in a separate concern file:
 
   ```ruby
   module ModelNameAdmin
@@ -47,8 +47,9 @@ A model configuration can be done in any of the places below:
   ```
 
 This is your choice to make:
-* The initializer is loaded once at startup (modifications will show up when restarting the application) and may slow down your application startup, but all RailsAdmin configuration will stay in one place.
-* Models are reloaded at each request in development mode (when modified), which may smooth your RailsAdmin development workflow.
+
+- The initializer is loaded once at startup (modifications will show up when restarting the application) and may slow down your application startup, but all RailsAdmin configuration will stay in one place.
+- Models are reloaded at each request in development mode (when modified), which may smooth your RailsAdmin development workflow.
 
 ## The `object_label_method` method
 

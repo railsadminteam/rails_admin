@@ -1,6 +1,7 @@
 Synopsys:
 
 For a multiselect widget: (natural choice for n-n associations)
+
 ```ruby
 class Team < ActiveRecord::Base
   has_and_belongs_to_many :fans
@@ -8,7 +9,9 @@ class Team < ActiveRecord::Base
   attr_accessible :fan_ids
 end
 ```
-Or for a nested form: 
+
+Or for a nested form:
+
 ```ruby
 class Team < ActiveRecord::Base
   has_and_belongs_to_many :fans
@@ -24,13 +27,16 @@ class Team < ActiveRecord::Base
   end
 end
 ```
+
 The other side of the association is as usual:
+
 ```ruby
 # for info
 class Fan < ActiveRecord::Base
   has_and_belongs_to_many :teams
 end
 ```
+
 This will work for regular many-to-many relationships and self-referential many-to-manys.
 
 For Rails 4+ don't need to use `attr_accessible`

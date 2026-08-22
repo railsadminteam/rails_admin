@@ -1,15 +1,15 @@
-* First install [PaperTrail](https://github.com/paper-trail-gem/paper_trail) and [PaperTrail-AssociationTracking](https://github.com/westonganger/paper_trail-association_tracking)
+- First install [PaperTrail](https://github.com/paper-trail-gem/paper_trail) and [PaperTrail-AssociationTracking](https://github.com/westonganger/paper_trail-association_tracking)
 
-*Note: you should use the `--with-changes` option when creating the version table  
-to ensure that history messages are recorded in a `object_changes` column.*
+_Note: you should use the `--with-changes` option when creating the version table  
+to ensure that history messages are recorded in a `object_changes` column._
 
 ```bash
 $ bundle exec rails generate paper_trail:install --with-changes
 $ bundle exec rails generate paper_trail_association_tracking:install --with-associations
 ```
 
-* add the `has_paper_trail` statements to the tracked models
-* add this to your `rails_admin.rb` initializer:
+- add the `has_paper_trail` statements to the tracked models
+- add this to your `rails_admin.rb` initializer:
 
 ```ruby
 config.audit_with :paper_trail, 'User', 'PaperTrail::Version' # PaperTrail >= 3.0.0
@@ -19,6 +19,7 @@ config.audit_with :paper_trail, 'User', 'Version' # PaperTrail < 3.0.0
 User should be your 'whodunnit' model.
 
 To show the history:
+
 ```ruby
 PAPER_TRAIL_AUDIT_MODEL = ['Order', 'Payment']
 config.actions do

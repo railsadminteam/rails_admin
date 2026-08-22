@@ -3,6 +3,7 @@ Section used for the show view.
 It inherits its configuration from the `base` section.
 
 To configure which fields are shown in the "Show" view of a model, use the `show` method in the config block:
+
 ```ruby
 RailsAdmin.config do |config|
   config.model 'BlogPage' do
@@ -13,7 +14,9 @@ RailsAdmin.config do |config|
   end
 end
 ```
-# 
+
+#
+
 You can display empty fields in show view with:
 
 ```ruby

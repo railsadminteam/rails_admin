@@ -16,11 +16,11 @@ class Team < ActiveRecord::Base
 end
 ```
 
-The "after_initialize" hook (or callback) triggers after a model record is instantiated.  It will set the color value to 'red' for a new record and will leave it to its current value for an existing record (in the edit view).
+The "after_initialize" hook (or callback) triggers after a model record is instantiated. It will set the color value to 'red' for a new record and will leave it to its current value for an existing record (in the edit view).
 
 ## Url Params
 
-If you want to set a default value based on a URL param you can access the `bindings` object. The following example shows how to add a default message using the "message" URL param. 
+If you want to set a default value based on a URL param you can access the `bindings` object. The following example shows how to add a default message using the "message" URL param.
 
 ```ruby
 config.model Post do
@@ -36,42 +36,43 @@ end
 
 ## current_user
 
-Adding <code>current_user</code> as a default value adds an extra challenge.  The controller layer knows about <code>current_user</code>, this information is not typically available in the model layer for use by <code>after_initialize</code>.  And this is an intentional implication of the MVC architecture.
+Adding <code>current_user</code> as a default value adds an extra challenge. The controller layer knows about <code>current_user</code>, this information is not typically available in the model layer for use by <code>after_initialize</code>. And this is an intentional implication of the MVC architecture.
 
 In RailsAdmin, you can assign a default value of <code>current_user</code> like this:
 
 ```ruby
-config.model Post do 
-  edit do 
+config.model Post do
+  edit do
     field :user_id, :hidden do
       default_value do
         bindings[:view]._current_user.id
       end
     end
-  end 
+  end
 end
 ```
+
 This was taken from these discussion threads:
 
-* http://groups.google.com/group/rails_admin/msg/fe588202e4401dc4
-* http://groups.google.com/group/rails_admin/msg/5338518c540f9151
+- http://groups.google.com/group/rails_admin/msg/fe588202e4401dc4
+- http://groups.google.com/group/rails_admin/msg/5338518c540f9151
 
 One thing to be aware of, RailsAdmin hides :user_id when creating the :user belongs_to association. To get around this issue:
 
 ```ruby
-config.model Post do 
-  edit do 
+config.model Post do
+  edit do
     configure :user do
       visible false
     end
-  
+
     field :user_id, :hidden do
       visible true
       default_value do
         bindings[:view]._current_user.id
       end
     end
-  end 
+  end
 end
 ```
 

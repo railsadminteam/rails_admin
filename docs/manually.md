@@ -1,19 +1,20 @@
-# Using encrypted passwords 
+# Using encrypted passwords
 
 ### Add the bcrypt gem to Your Gemfile
+
 `gem 'bcrypt'`
 
-and run bundler 
+and run bundler
 
 `bundle install`
 
-### Create the User model 
+### Create the User model
 
 ```
 rails g model user name:string password_digest:string
 ```
 
-Add `has_secure_password` to the model 
+Add `has_secure_password` to the model
 
 ```
 class User < ApplicationRecord
@@ -23,7 +24,7 @@ end
 
 ### Edit config
 
-Edit the `config/initializers/rails_admin.rb` file and add the authentication. 
+Edit the `config/initializers/rails_admin.rb` file and add the authentication.
 
 ```
   config.authenticate_with do
@@ -61,5 +62,3 @@ In config/initializers/rails_admin.rb, you can add the following lines of code:
 
 This will call your User object from the database and check if it exists,
 If yes, it will login else it won't.
-
-

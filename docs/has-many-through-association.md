@@ -3,10 +3,10 @@ Synopsis:
 ```ruby
 
 class Grid < ActiveRecord::Base
-    
+
   has_many :block_grid_associations, :dependent => :delete_all, :autosave => true, :include => :block
   has_many :blocks, :through => :block_grid_associations
-  
+
   # for a multiselect widget: (natural choice for n-n associations)
 
     attr_accessible :block_ids
@@ -26,7 +26,7 @@ class Grid < ActiveRecord::Base
     end
 
   # for a nested form: (no reordering)
-   
+
     accepts_nested_attributes_for :blocks, :allow_destroy => true
     attr_accessible :blocks_attributes
 

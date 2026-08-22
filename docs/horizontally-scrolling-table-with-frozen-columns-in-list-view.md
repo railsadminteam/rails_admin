@@ -1,4 +1,5 @@
 Here's a technique that you can use to make the list view table show all of the columns on a single page, with horizontal scrolling and frozen header columns in the table. [PR #3017](https://github.com/sferik/rails_admin/pull/3017) adds this feature with the config setting `sidescroll`, which is used as follows:
+
 ```ruby
 RailsAdmin.config do |config|
   ...
@@ -54,6 +55,7 @@ Default - `config.sidescroll` unset:
 The following instructions allow you to add this feature to rails_admin before the PR is accepted/released.
 
 First, make all of your columns show up on a single page by editing `config/initializers/rails_admin.rb`:
+
 ```ruby
 RailsAdmin.config do |config|
   ...
@@ -63,74 +65,78 @@ end
 ```
 
 Next, add some custom javascript by creating `app/assets/javascripts/rails_admin/custom/ui.js`:
-```javascript
-(function(){
 
-  var horizontalScrollList = function(){
-    var $table = $('#bulk_form').find('table');
+```javascript
+(function () {
+  var horizontalScrollList = function () {
+    var $table = $("#bulk_form").find("table");
     var table = $table[0];
 
     // Abort if there's nothing to do. Don't repeat ourselves, either.
-    if (!table || $table.hasClass('js-horiz-scroll')) { return; }
+    if (!table || $table.hasClass("js-horiz-scroll")) {
+      return;
+    }
 
     // Add our indicator class. Also some enhancements.
-    $table.addClass('js-horiz-scroll table-hover');
+    $table.addClass("js-horiz-scroll table-hover");
 
     ////
     // Make the table horizontally scrollable.
     // Inspiration from bootstrap's table-responsive.
     ////
-    var tableWrapper = document.createElement('DIV');
-    tableWrapper.style.overflowX = 'auto';
-    tableWrapper.style.marginBottom = '20px';
-    table.style.marginBottom = '0';
+    var tableWrapper = document.createElement("DIV");
+    tableWrapper.style.overflowX = "auto";
+    tableWrapper.style.marginBottom = "20px";
+    table.style.marginBottom = "0";
     table.parentElement.insertBefore(tableWrapper, table);
     tableWrapper.appendChild(table);
 
     // Move the links column to the left.
-    $table.find('th.last,td.last').each(function(index, td){
+    $table.find("th.last,td.last").each(function (index, td) {
       var tr = td.parentElement;
       tr.insertBefore(td, tr.children[1]);
     });
 
     // Allow a render before calculating positions.
-    setTimeout(function(){
+    setTimeout(function () {
       // Freeze the left columns.
       var numFrozen = 3;
-      var $trs = $('#bulk_form').find('table tr');
-      var $headerTds = $trs.first().children('th,td');
+      var $trs = $("#bulk_form").find("table tr");
+      var $headerTds = $trs.first().children("th,td");
       var i, bgColor;
       var offsets = [];
       for (i = 0; i < numFrozen; i++) {
         offsets.push($($headerTds[i]).position().left);
       }
-      $trs.each(function(index, tr){
+      $trs.each(function (index, tr) {
         for (i = 0; i < numFrozen; i++) {
-          tr.children[i].style.position = 'sticky';
-          tr.children[i].style.left = (offsets[i]-offsets[0])+'px';
-          if (i === numFrozen-1) {
-            tr.children[i].style.boxShadow = '-1px 0 0 0 #ddd inset';
-            tr.children[i].style.paddingRight = '6px';
+          tr.children[i].style.position = "sticky";
+          tr.children[i].style.left = offsets[i] - offsets[0] + "px";
+          if (i === numFrozen - 1) {
+            tr.children[i].style.boxShadow = "-1px 0 0 0 #ddd inset";
+            tr.children[i].style.paddingRight = "6px";
           }
           if (index % 2 === 0) {
-            bgColor = '#fff';
-            if (index === 0 && tr.children[i].className.indexOf('headerSort') > -1) {
-              bgColor = '#e2eff6';
+            bgColor = "#fff";
+            if (
+              index === 0 &&
+              tr.children[i].className.indexOf("headerSort") > -1
+            ) {
+              bgColor = "#e2eff6";
             }
             tr.children[i].style.backgroundColor = bgColor;
           }
         }
       });
     }, 0);
-
   };
 
-  $(window).on('load', function(){ // on 'load' to allow link icons to load.
+  $(window).on("load", function () {
+    // on 'load' to allow link icons to load.
     horizontalScrollList();
-    $(document).on('rails_admin.dom_ready', horizontalScrollList);
+    $(document).on("rails_admin.dom_ready", horizontalScrollList);
   });
-
-}());
+})();
 ```
 
 Eslinted version (minus some no-parm reassign errors)
@@ -141,26 +147,28 @@ https://eslint.org/
 /* eslint-env jquery */
 
 const horizontalScrollList = () => {
-  const $table = $('#bulk_form').find('table');
+  const $table = $("#bulk_form").find("table");
   const table = $table[0];
 
   // Abort if there's nothing to do. Don't repeat ourselves, either.
-  if (!table || $table.hasClass('js-horiz-scroll')) { return; }
+  if (!table || $table.hasClass("js-horiz-scroll")) {
+    return;
+  }
 
   // Add our indicator class. Also some enhancements.
-  $table.addClass('js-horiz-scroll table-hover');
+  $table.addClass("js-horiz-scroll table-hover");
 
   // Make the table horizontally scrollable.
   // Inspiration from bootstrap's table-responsive.
-  const tableWrapper = document.createElement('DIV');
-  tableWrapper.style.overflowX = 'auto';
-  tableWrapper.style.marginBottom = '20px';
-  table.style.marginBottom = '0';
+  const tableWrapper = document.createElement("DIV");
+  tableWrapper.style.overflowX = "auto";
+  tableWrapper.style.marginBottom = "20px";
+  table.style.marginBottom = "0";
   table.parentElement.insertBefore(tableWrapper, table);
   tableWrapper.appendChild(table);
 
   // Move the links column to the left.
-  $table.find('th.last,td.last').each((index, td) => {
+  $table.find("th.last,td.last").each((index, td) => {
     const tr = td.parentElement;
     tr.insertBefore(td, tr.children[1]);
   });
@@ -169,8 +177,8 @@ const horizontalScrollList = () => {
   setTimeout(() => {
     // Freeze the left columns.
     const numFrozen = 3;
-    const $trs = $('#bulk_form').find('table tr');
-    const $headerTds = $trs.first().children('th,td');
+    const $trs = $("#bulk_form").find("table tr");
+    const $headerTds = $trs.first().children("th,td");
     let i;
     let bgColor;
     const offsets = [];
@@ -179,16 +187,19 @@ const horizontalScrollList = () => {
     }
     $trs.each((index, tr) => {
       for (i = 0; i < numFrozen; i += 1) {
-        tr.children[i].style.position = 'sticky';
-        tr.children[i].style.left = `${(offsets[i] - offsets[0])}px`;
+        tr.children[i].style.position = "sticky";
+        tr.children[i].style.left = `${offsets[i] - offsets[0]}px`;
         if (i === numFrozen - 1) {
-          tr.children[i].style.boxShadow = '-1px 0 0 0 #ddd inset';
-          tr.children[i].style.paddingRight = '6px';
+          tr.children[i].style.boxShadow = "-1px 0 0 0 #ddd inset";
+          tr.children[i].style.paddingRight = "6px";
         }
         if (index % 2 === 0) {
-          bgColor = '#fff';
-          if (index === 0 && tr.children[i].className.indexOf('headerSort') > -1) {
-            bgColor = '#e2eff6';
+          bgColor = "#fff";
+          if (
+            index === 0 &&
+            tr.children[i].className.indexOf("headerSort") > -1
+          ) {
+            bgColor = "#e2eff6";
           }
           tr.children[i].style.backgroundColor = bgColor;
         }
@@ -197,9 +208,10 @@ const horizontalScrollList = () => {
   }, 0);
 };
 
-$(window).on('load', () => { // on 'load' to allow link icons to load.
+$(window).on("load", () => {
+  // on 'load' to allow link icons to load.
   horizontalScrollList();
-  $(document).on('rails_admin.dom_ready', horizontalScrollList);
+  $(document).on("rails_admin.dom_ready", horizontalScrollList);
 });
 ```
 

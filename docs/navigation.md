@@ -1,7 +1,7 @@
 You can include/exclude models totally. They won't appear in RailsAdmin at all.
 
 By default, RailsAdmin automatically discovers all the models in the system and adds them to its list of models to
-be accessible through RailsAdmin. 
+be accessible through RailsAdmin.
 
 **Disallowlist Approach**
 
@@ -18,6 +18,7 @@ If you prefer a allowlist approach, then you can use the `included_models` confi
 ```ruby
 config.included_models = ["Class1", "Class2", "Class3"]
 ```
+
 Only the models explicitly listed will be put under RailsAdmin access, and the auto-discovery of models is skipped.
 
 The disallowlist is effective on top of that, still, so that if you also have:
@@ -30,7 +31,6 @@ then only `Class2` and `Class3` would be made available to RailsAdmin.
 
 The allowlist approach may be useful if RailsAdmin is used only for a part of the application and you want to make
 sure that new models are not automatically added to RailsAdmin, e.g. because of security concerns.
-
 
 Once done with the choice of model, you can customize the way they appear in the navigation.
 
@@ -56,7 +56,7 @@ RailsAdmin will use ActiveModel I18n API by default, so this shouldn't be needed
 
 ```ruby
 config.model 'Box' do
-  label "Beautiful box" 
+  label "Beautiful box"
   label_plural "Beautiful boxen"
 end
 ```
@@ -68,7 +68,7 @@ en:
   ...
   activerecord:
     models:
-      box: 
+      box:
         one: Beautiful box
         other: Beautiful boxen
     attributes:
@@ -123,6 +123,7 @@ you want to get the Team model's visibility, you use
 `RailsAdmin.config(Team).visible?`.
 
 **Treeview List**
+
 ```ruby
 # Given there are the following models: League, Team and Division
 

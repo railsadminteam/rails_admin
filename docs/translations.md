@@ -26,6 +26,7 @@ You need to manually import Flatpickr locales you want to use:
 ```
 
 ### For Importmap setup
+
 In addition to 'Webpack/Webpacker setup' above, you also need to adjust `config/importmap.rails_admin.rb` so the browser can pick up the Flatpickr locale correctly.
 
 ```diff
@@ -34,7 +35,6 @@ In addition to 'Webpack/Webpacker setup' above, you also need to adjust `config/
 +pin "flatpickr/dist/l10n/fr", to: "https://ga.jspm.io/npm:flatpickr@4.6.13/dist/l10n/fr.js"
  pin "jquery", to: "https://ga.jspm.io/npm:jquery@3.6.3/dist/jquery.js"
 ```
-
 
 ### For Asset pipeline setup
 
@@ -47,33 +47,34 @@ All supported locales are loaded by default, just changing locale value is enoug
 Make sure your existing locales do not have admin: key under :en, :es, :de etc. You will get translation missing warning then
 
 Community sourced translations:
-* [Arabic: ar](https://gist.github.com/yamanaltereh/6874413)
-* [Catalan: ca](https://gist.github.com/1764593)
-* [Chinese (Traditional): zh-TW](https://gist.github.com/2001808)
-* [Chinese (Simplified): zh-CN](https://gist.github.com/x-ji/d3be402de194a152a859)
-* [Czech: cs](https://gist.github.com/4618569)
-* [Danish: da](https://gist.github.com/1780778)
-* [Dutch: nl](https://gist.github.com/1909240)
-* [English: en](https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml)
-* [French: fr](https://gist.github.com/pacohigh/80a96616423859c521e4c7f7a19cbd87)
-* [German: de](https://gist.github.com/3188219#file_rails_admin.de.yml)
-* [Italian (Italy): it](https://gist.github.com/1700678#file_rails_admin.it.yml)
-* [Japanese: ja](https://gist.github.com/1662352#file_rails_admin.ja.yml)
-* [Korean: ko](https://gist.github.com/YoonjaeYoo/787eb279e5d46c7e96dc)
-* [Thai: th](https://gist.github.com/wittawasw/2a7d6c62d28613702753)
-* [Polish (Poland): pl](https://gist.github.com/1717477#file_rails_admin.pl.yml)
-* [Portuguese (Brazil): pt-BR](https://gist.github.com/1844723#file_rails_admin.pt_br.yml)
-* [Portuguese (Portugal): pt-PT](https://gist.github.com/1751856#file_rails_admin.pt-PT.yml)
-* [Russian (Russia): ru](https://gist.github.com/serghost/9832270cbddc5678a3ca)
-* [Slovenian (Slovenia): sl](https://gist.github.com/3290930#file_rails_admin.sl.yml)
-* [Spanish (Spain): es](https://gist.github.com/1647597#file_rails_admin.es.yml)
-* [Spanish (Latin American): es](https://gist.github.com/hernanvicente/8d7f8d92ae4c88e9b2d877fe63e9d4e0)
-* [Swedish: sv](https://gist.github.com/4433235)
-* [Norwegian: no](https://gist.github.com/2844960#file_rails_admin.nb.yml)
-* [Turkish: tr](https://gist.github.com/2888924#file_rails_admin.tr.yml)
-* [Ukrainian: uk](https://gist.github.com/nazarok/a6bf4186154f27b850350fa79e31f288#file-rails_admin-uk-yml)
 
-* Add your own (create a gist first)
+- [Arabic: ar](https://gist.github.com/yamanaltereh/6874413)
+- [Catalan: ca](https://gist.github.com/1764593)
+- [Chinese (Traditional): zh-TW](https://gist.github.com/2001808)
+- [Chinese (Simplified): zh-CN](https://gist.github.com/x-ji/d3be402de194a152a859)
+- [Czech: cs](https://gist.github.com/4618569)
+- [Danish: da](https://gist.github.com/1780778)
+- [Dutch: nl](https://gist.github.com/1909240)
+- [English: en](https://github.com/sferik/rails_admin/blob/master/config/locales/rails_admin.en.yml)
+- [French: fr](https://gist.github.com/pacohigh/80a96616423859c521e4c7f7a19cbd87)
+- [German: de](https://gist.github.com/3188219#file_rails_admin.de.yml)
+- [Italian (Italy): it](https://gist.github.com/1700678#file_rails_admin.it.yml)
+- [Japanese: ja](https://gist.github.com/1662352#file_rails_admin.ja.yml)
+- [Korean: ko](https://gist.github.com/YoonjaeYoo/787eb279e5d46c7e96dc)
+- [Thai: th](https://gist.github.com/wittawasw/2a7d6c62d28613702753)
+- [Polish (Poland): pl](https://gist.github.com/1717477#file_rails_admin.pl.yml)
+- [Portuguese (Brazil): pt-BR](https://gist.github.com/1844723#file_rails_admin.pt_br.yml)
+- [Portuguese (Portugal): pt-PT](https://gist.github.com/1751856#file_rails_admin.pt-PT.yml)
+- [Russian (Russia): ru](https://gist.github.com/serghost/9832270cbddc5678a3ca)
+- [Slovenian (Slovenia): sl](https://gist.github.com/3290930#file_rails_admin.sl.yml)
+- [Spanish (Spain): es](https://gist.github.com/1647597#file_rails_admin.es.yml)
+- [Spanish (Latin American): es](https://gist.github.com/hernanvicente/8d7f8d92ae4c88e9b2d877fe63e9d4e0)
+- [Swedish: sv](https://gist.github.com/4433235)
+- [Norwegian: no](https://gist.github.com/2844960#file_rails_admin.nb.yml)
+- [Turkish: tr](https://gist.github.com/2888924#file_rails_admin.tr.yml)
+- [Ukrainian: uk](https://gist.github.com/nazarok/a6bf4186154f27b850350fa79e31f288#file-rails_admin-uk-yml)
+
+- Add your own (create a gist first)
 
 You can find old included translations here:
 

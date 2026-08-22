@@ -1,10 +1,13 @@
 ## Automatically reload rails_admin configuration when in development mode
+
 In your `/config/initializers/rails_admin.rb` you should add:
+
 ```ruby
 config.parent_controller = ApplicationController.to_s
 ```
 
 And then in `ApplicationController`:
+
 ```ruby
 class ApplicationController < ActionController::Base
   protect_from_forgery
@@ -78,18 +81,17 @@ then delete `config/initializer/active_record.rb` and replace the model loading 
 
     models = ActiveRecord::Base.descendants
 
-
 When using Rails 3/4:
 
 If `config.cache_classes = false` (by default it's off in development, but on in production) enable your applications eager loading.
-    
+
 ```ruby
 Rails.application.configure do
   config.eager_load = true
 ```
 
 or
- 
+
 ```
 Rails.application.eager_load!
 ```
@@ -126,6 +128,7 @@ end
 ## Less Desirable Method ("Dirty" just sounds so... dirty.)
 
 #### Move your RailsAdmin.config block into the app controller for dynamic reloading of changes in dev, etc
+
 #### Then stare at the various examples below...
 
 ```ruby
@@ -154,23 +157,23 @@ class ApplicationController < ActionController::Base
                 list do
                     sort_by :name
                     field :name do
-                        formatted_value do 
-                            bindings[:view].content_tag(:a, "#{bindings[:object].name}" , :href => "/qabam/app/test_scenario/#{bindings[:object].id}/edit") 
-                        end 
+                        formatted_value do
+                            bindings[:view].content_tag(:a, "#{bindings[:object].name}" , :href => "/qabam/app/test_scenario/#{bindings[:object].id}/edit")
+                        end
                     end
                     field :mdm_status do
                         sortable :position
                         label "STATUS"
-                        pretty_value do 
-                            bindings[:view].content_tag(:span, value.name ) 
-                        end 
+                        pretty_value do
+                            bindings[:view].content_tag(:span, value.name )
+                        end
                     end
                     field :mdm_priority do
                         label "PRIORITY"
-                        pretty_value do 
-                            bindings[:view].content_tag(:span, value.name ) 
-                        end 
-                    end                        
+                        pretty_value do
+                            bindings[:view].content_tag(:span, value.name )
+                        end
+                    end
                 end
             end
 
@@ -184,22 +187,22 @@ class ApplicationController < ActionController::Base
                     field :case_number do
                         label "CASE NUMBER"
                         searchable :case_number
-                        formatted_value do 
-                            bindings[:view].content_tag(:a, "#{bindings[:object].case_number}" , :href => "/qabam/app/test_case/#{bindings[:object].id}/edit") 
-                        end 
+                        formatted_value do
+                            bindings[:view].content_tag(:a, "#{bindings[:object].case_number}" , :href => "/qabam/app/test_case/#{bindings[:object].id}/edit")
+                        end
                     end
                     field :test_scenario do
                         label "TEST SCENARIO"
-                        pretty_value do 
-                            bindings[:view].content_tag(:span, value.name ) 
-                        end 
+                        pretty_value do
+                            bindings[:view].content_tag(:span, value.name )
+                        end
                     end
                     field :mdm_status do
                         sortable :position
                         label "STATUS"
-                        pretty_value do 
-                            bindings[:view].content_tag(:span, value.name ) 
-                        end 
+                        pretty_value do
+                            bindings[:view].content_tag(:span, value.name )
+                        end
                     end
                 end
             end
@@ -210,16 +213,16 @@ class ApplicationController < ActionController::Base
                     sort_by :test_case_java_class_method
                     field :test_case_java_class_method do
                         label "TEST SUITE JAVA METHOD NAME"
-                        formatted_value do 
-                            bindings[:view].content_tag(:a, "#{bindings[:object].test_case_java_class_method}" , :href => "/qabam/app/test_script/#{bindings[:object].id}/edit") 
-                        end 
+                        formatted_value do
+                            bindings[:view].content_tag(:a, "#{bindings[:object].test_case_java_class_method}" , :href => "/qabam/app/test_script/#{bindings[:object].id}/edit")
+                        end
                     end
                     field :mdm_status do
                         sortable :position
                         label "STATUS"
-                        pretty_value do 
-                            bindings[:view].content_tag(:span, value.name ) 
-                        end 
+                        pretty_value do
+                            bindings[:view].content_tag(:span, value.name )
+                        end
                     end
                 end
             end
@@ -254,11 +257,11 @@ class ApplicationController < ActionController::Base
                 #configure :test_suite_java_svn_path do
                 #    help "Path to Java Class in SVN codeline."
                 #end
-                
+
                 # TODO scenario-actual date fields, read only, calculate based on min/max dates for cases/scripts (OR HIDE)
                 # TODO scenario-jquery file path selector for java svn path
                 # TODO scenario-have drop downs for product data populate dynamically based on previous field
-                
+
                 include_all_fields
                 exclude_fields :mdm_product_line, :mdm_product_family, :test_suite_java_svn_path
                 edit do
@@ -288,7 +291,7 @@ class ApplicationController < ActionController::Base
                         partial "child_multiselect_clearonsave"
                         help "Double-Click Items To Edit."
                         associated_collection_cache_all false
-                        associated_collection_scope do                            
+                        associated_collection_scope do
                             ts = bindings[:object]
                             Proc.new { |scope| scope = scope.where("test_cases.test_scenario_id = #{ts.id || 0} or test_cases.test_scenario_id is null") }
                         end
@@ -595,23 +598,23 @@ class ApplicationController < ActionController::Base
                 list do
                     sort_by :name
                     field :name do
-                        formatted_value do 
-                            bindings[:view].content_tag(:a, "#{bindings[:object].name}" , :href => "/qabam/app/user/#{bindings[:object].id}/edit") 
-                        end 
+                        formatted_value do
+                            bindings[:view].content_tag(:a, "#{bindings[:object].name}" , :href => "/qabam/app/user/#{bindings[:object].id}/edit")
+                        end
                     end
                     field :email do
                         sortable :position
                         label "EMAIL"
-                        pretty_value do 
-                            bindings[:view].content_tag(:span, value ) 
-                        end 
+                        pretty_value do
+                            bindings[:view].content_tag(:span, value )
+                        end
                     end
                     field :timezone do
                         label "TIME ZONE"
-                        pretty_value do 
-                            bindings[:view].content_tag(:span, value ) 
-                        end 
-                    end                        
+                        pretty_value do
+                            bindings[:view].content_tag(:span, value )
+                        end
+                    end
                 end
                 edit do
                     field :notification_email_types do
@@ -619,7 +622,7 @@ class ApplicationController < ActionController::Base
                       bindings[:form].select( "notification_email_types", bindings[:object].notification_email_types_enum, {}, { :multiple => true })
                     end
                   end
-                end            
+                end
                 #bindings[:controller].current_user.role == :admin
             end
 

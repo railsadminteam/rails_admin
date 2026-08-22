@@ -1,5 +1,5 @@
 ## Visibility and ordering
- 
+
 By default all fields are visible, but they are not presented in any particular
 order. If you specifically declare fields, only defined fields will be visible
 and they will be presented in the order defined:
@@ -14,8 +14,8 @@ RailsAdmin.config do |config|
   end
 end
 ```
-This would show only "name" and "created at" columns in the list view.
 
+This would show only "name" and "created at" columns in the list view.
 
 If you would like to configure fields in the default group without changing the other
 fields already included in the default group, you can use the `configure` block like this:
@@ -31,6 +31,7 @@ RailsAdmin.config do |config|
   end
 end
 ```
+
 This would hide the name field on the team list page, but it would not affect
 any of the other field defaults.
 
@@ -89,18 +90,18 @@ RailsAdmin.config do |config|
   end
 end
 ```
+
 Note that above example's authorization conditional is not runnable code, just
 an imaginary example. You need to provide RailsAdmin with your own
 authorization scheme for which you can find a guide at the end of this file.
 
-
 ### Exclusion
 
-By default *all* fields found on your model will be added to list/edit/export views,  if no field is found for the section and model.
+By default _all_ fields found on your model will be added to list/edit/export views, if no field is found for the section and model.
 
-But after you specify your *first* field with `field(field_name, field_type = found_column_type, &conf_block)` or `include_field` or `fields`, this behaviour will be canceled.
+But after you specify your _first_ field with `field(field_name, field_type = found_column_type, &conf_block)` or `include_field` or `fields`, this behaviour will be canceled.
 
-*Only* the specified fields will be added.
+_Only_ the specified fields will be added.
 If you don't want that very behavior, use `configure` instead of `field` (same signature).
 That way, that field won't be added to the section, just configured.
 
@@ -157,7 +158,7 @@ RailsAdmin.config do |config|
       include_fields_if do
         name =~ /displayed/
       end
- 
+
       include_fields :name, :title                # simply adding fields by their names (order will be maintained)
       fields :created_at, :updated_at do          # adding and configuring
         label do
@@ -182,7 +183,6 @@ RailsAdmin.config do |config|
   end
 end
 ```
-
 
 ## Label
 
@@ -413,11 +413,10 @@ en:
   admin:
     help:
       team:
-        email: '%{help}. Popular webmail addresses not allowed'
+        email: "%{help}. Popular webmail addresses not allowed"
 ```
 
 %{help} will be replaced by the rails_admin default generated help message.
-
 
 ## Overriding field type
 

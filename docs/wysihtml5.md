@@ -1,9 +1,9 @@
 http://jhollingworth.github.com/bootstrap-wysihtml5/
 
-* your rails_admin <= 0.6.5
- * Add `gem 'bootstrap-wysihtml5-rails', '0.3.1.24'` to your Gemfile that is the last version that supports Bootstrap 2.
-* your rails_admin >= 0.6.6
- * Add `gem 'bootstrap-wysihtml5-rails', '> 0.3.1.24'` to your Gemfile that supports Bootstrap 3.
+- your rails_admin <= 0.6.5
+- Add `gem 'bootstrap-wysihtml5-rails', '0.3.1.24'` to your Gemfile that is the last version that supports Bootstrap 2.
+- your rails_admin >= 0.6.6
+- Add `gem 'bootstrap-wysihtml5-rails', '> 0.3.1.24'` to your Gemfile that supports Bootstrap 3.
 
 Then update config file `config/initializers/rails_admin.rb`
 
@@ -27,6 +27,7 @@ field :description, :wysihtml5 do
   config_options toolbar: { fa: true }, # use font-awesome instead of glyphicon
                  html: true, # enables html editor
                  parserRules: { tags: { p:1 } } # support for <p> in html mode
-end   
+end
 ```
+
 [More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/wysihtml5.rb)

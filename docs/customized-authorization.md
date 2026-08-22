@@ -10,7 +10,6 @@ RailsAdmin.config do |config|
 end
 ```
 
-
 NOTE: If you are doing custom authorization or your authorization library's `current_user` method is not available in initializer use this:
 
 ```
@@ -18,6 +17,7 @@ config.parent_controller = "::ApplicationController"
 ```
 
 In case that more complex authorization rules need to be applied, like a user profile having limited access to models and actions, a custom extension can be implemented as any of the [already existing extensions](https://github.com/railsadminteam/rails_admin/tree/master/lib/rails_admin/extensions):
+
 ```ruby
 module RailsAdmin
   module Extensions

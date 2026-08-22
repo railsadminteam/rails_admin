@@ -39,7 +39,7 @@ The `:enum` field type is for when you need to display a list of potential value
 
 Other advantage, a **filter** with a select box will be added too.
 
-As usual with RailsAdmin, there are two ways to do this. 
+As usual with RailsAdmin, there are two ways to do this.
 
 ### Using the smart default approach
 
@@ -65,7 +65,7 @@ end
 
 ```ruby
 # you need to tell RailsAdmin that you want to use an `:enum` field
-field :color, :enum do 
+field :color, :enum do
   # if your model has a method that sends back the options:
   enum_method do
     :my_color_enum_instance_method
@@ -90,7 +90,7 @@ field :color, :enum do
 end
 ```
 
-*** If you are using enumerator in `has_one` association field, be aware to place `_id` after field's name in RailsAdmin initializer, otherwise you can have problems.
+\*\*\* If you are using enumerator in `has_one` association field, be aware to place `_id` after field's name in RailsAdmin initializer, otherwise you can have problems.
 
 ```ruby
 field :responsible_id, :enum do
@@ -110,9 +110,10 @@ end
 
 ### Integration with enum plugins
 
-* The [Enumerize gem](https://github.com/brainspec/enumerize) will automatically generate the appropriate _enum methods.
+- The [Enumerize gem](https://github.com/brainspec/enumerize) will automatically generate the appropriate \_enum methods.
 
-* The [bitmask_attributes gem](https://github.com/joelmoss/bitmask_attributes) can be configured this way:
+- The [bitmask_attributes gem](https://github.com/joelmoss/bitmask_attributes) can be configured this way:
+
 ```ruby
     configure :my_mask, :enum do
       enum_method do
@@ -138,7 +139,8 @@ end
     end
 ```
 
-* The [mongoid-enum gem](https://github.com/thetron/mongoid-enum) needs a bit of help to play with rails_admin:
+- The [mongoid-enum gem](https://github.com/thetron/mongoid-enum) needs a bit of help to play with rails_admin:
+
 ```ruby
 class Person
   include Mongoid::Document
@@ -159,10 +161,12 @@ end
 ```
 
 ### Multi-select ENUM example using User.roles as example...
+
 During Create/Update, display a Multi-Select Widget for :roles field.
 Stores/Retrieves the selected options as array into a single db string field as serialized array.
 
 #### model/user.rb
+
 ```ruby
 class User < ActiveRecord::Base
     serialize :roles, Array

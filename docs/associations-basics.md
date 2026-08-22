@@ -23,15 +23,18 @@ end
 You'll need to handle ordering in your model with a position column for example. See [here](has-many-through-association.md) for a comprehensive ActiveRecord example with a `has_many :through` association.
 
 #### Important
-You must specify attr_accessible for the singular-form _ids setter method of your associated model, e.g.,  a `has_one` association. This setter method comes automatically with ActiveRecord when you create a `has_many` association, but not for a `has_one` association. 
 
-For Rails 3, in the example above you would specify this at the top of your model: 
+You must specify attr_accessible for the singular-form \_ids setter method of your associated model, e.g., a `has_one` association. This setter method comes automatically with ActiveRecord when you create a `has_many` association, but not for a `has_one` association.
+
+For Rails 3, in the example above you would specify this at the top of your model:
+
 ```
 attr_accessible :fan_ids
 ```
+
 For Rails 4 and above you need to [define setters and getters](has-one-association.md) for `has_one` associations.
 
-If you fail to do this, the multiselect widget will simply not appear on your page. 
+If you fail to do this, the multiselect widget will simply not appear on your page.
 
 ### Editing records
 
@@ -48,7 +51,7 @@ See [associations scoping](associations-scoping.md) for more informations on how
 ### Inverse_of: Avoiding edit association spaghetti issues
 
 If you set the `:inverse_of` option on your relations, RailsAdmin will automatically populate the inverse relationship
-in the modal creation window. (link next to :belongs\_to and :has\_many multiselect widgets)
+in the modal creation window. (link next to :belongs_to and :has_many multiselect widgets)
 
 It will also hide the inverse relation on nested forms. As a good practice, you should always set `:inverse_of` options to all your associations, even if these are useless to ActiveRecord (in combination with :through and :as). RailsAdmin will take advantage of them. But it will bomb 'Unknown key: inverse_of' on HABTMs, you'll need to set them manually:
 

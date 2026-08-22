@@ -1,7 +1,7 @@
 ### Example authorizations for cancan:
 
 ```ruby
-  # with 
+  # with
   alias_action :update, :destroy, :create, :to => :write
 
   can :manage, :all

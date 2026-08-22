@@ -28,8 +28,7 @@ RailsAdmin.config do |config|
 end
 ```
 
-
-* [CanCanCan (recommended)](cancancan.md)
-* [CanCan with relation to current Model](cancan-remove-associated-action-buttons-in-forms.md)
-* [Declarative Authorization (possible)](declarative-authorization.md)
-* [Manually](customized-authorization.md)
+- [CanCanCan (recommended)](cancancan.md)
+- [CanCan with relation to current Model](cancan-remove-associated-action-buttons-in-forms.md)
+- [Declarative Authorization (possible)](declarative-authorization.md)
+- [Manually](customized-authorization.md)

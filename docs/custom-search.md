@@ -15,6 +15,7 @@ end
 ```
 
 # Example 2 using `pg_search`
+
 ```ruby
 config.model Player do
   list do

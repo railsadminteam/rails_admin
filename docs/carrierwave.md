@@ -1,4 +1,4 @@
-Once added to your Gemfile, and after ```bundle install``` has been run, Carrierwave is ready to be used with rails admin.  No further configuration is required to integrate it.
+Once added to your Gemfile, and after `bundle install` has been run, Carrierwave is ready to be used with rails admin. No further configuration is required to integrate it.
 
 Your model should look like this:
 
@@ -17,7 +17,8 @@ field :asset, :carrierwave
 Now a file upload field will be added to your model's form.
 
 ## Polymorphic association
-If you have an Asset model class as polymorphic and you want a thumbnail in you Article model. 
+
+If you have an Asset model class as polymorphic and you want a thumbnail in you Article model.
 
 Create the association:
 
@@ -81,11 +82,11 @@ end
 ```
 
 > In the latest version, you no longer need to define this `delete_#{name}` attribute to get files to be deleted. It will send identifiers of remaing files to the `#{name}`.
-[More here](https://github.com/railsadminteam/rails_admin/blob/master/app/views/rails_admin/main/_form_multiple_file_upload.html.erb)
+> [More here](https://github.com/railsadminteam/rails_admin/blob/master/app/views/rails_admin/main/_form_multiple_file_upload.html.erb)
 
 ### Want to preserve existing attachments when uploading more
 
-By default, CarrierWave's multiple upload feature discards existing ones when new files are uploaded. Here's a workaround: 
+By default, CarrierWave's multiple upload feature discards existing ones when new files are uploaded. Here's a workaround:
 
 ```ruby
 class Article < ActiveRecord::Base

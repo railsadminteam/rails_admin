@@ -2,7 +2,7 @@
 
 You may have business rules where you want to limit the members of a collection that are available for association with a particular record. For example, a Player might be a member of a League. When selecting Players for a Team, we wouldn't want to see all the Players we know about, just the ones in the same League as the Team.
 
-For all associations types (other than polymorphics at the moment) you can scope associable records with: 
+For all associations types (other than polymorphics at the moment) you can scope associable records with:
 
 ```ruby
 config.model Team do
@@ -34,7 +34,7 @@ Validating associations is up to your models, and you'll certainly want to set t
 
 This is good and all but it doesn't ensure anything about security and sanity!
 
- Now let's see the relation itself:
+Now let's see the relation itself:
 
 ```ruby
     class Team
@@ -42,13 +42,13 @@ This is good and all but it doesn't ensure anything about security and sanity!
     end
 ```
 
-console: 
+console:
 
 ```
  > Team.first.number_time_players.build
-=> #<Player id: nil, <snip> position: 1320166460, <snip>> 
+=> #<Player id: nil, <snip> position: 1320166460, <snip>>
  > Team.first.number_time_players.build
-=> #<Player id: nil, <snip> position: 1320166461, <snip>> 
+=> #<Player id: nil, <snip> position: 1320166461, <snip>>
  > Team.first.number_three_players
 Player Load (1.2ms)  SELECT "players".* FROM "players" WHERE "players"."team_id" = 1 AND "players"."position" = 1320167057
 ```
@@ -107,6 +107,7 @@ class Ability
   end
 end
 ```
+
 The advantage here is that user will never be able to see 'wrong' contacts and he won't be able to set a wrong email.
 More on cancan's own page.
 

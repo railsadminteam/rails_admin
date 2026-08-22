@@ -1,7 +1,9 @@
 Add
+
 ```ruby
 gem 'codemirror-rails'
 ```
+
 to your Gemfile.
 
 ```ruby
@@ -18,8 +20,10 @@ RailsAdmin.config do |config|
   end
 end
 ```
+
 This code that you see upper hide all other columns and left only description.
 Ruby 2.1.0 Rails 4.0.2 - this configuration helped me.
+
 ```ruby
 RailsAdmin.config do |config|
   config.model Team do

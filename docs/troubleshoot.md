@@ -1,8 +1,8 @@
 ## Known incompatibilities, from namespacing issues:
 
- * various [Twitter Bootstrap](https://github.com/twitter/bootstrap) Asset-Pipeline vendoring libraries (use RailsAdmin dependency [bootstrap-sass](https://github.com/thomas-mcdonald/bootstrap-sass))
- * [devise_invitable](https://github.com/scambra/devise_invitable) can result in an issue. See [this](http://stackoverflow.com/questions/6012792/devise-invitable-rails-admin-conflict) Stack Overflow question for more info.
- * [~~will_paginate~~](https://github.com/mislav/will_paginate) (Now we have a way to avoid method name collision. See ['Conflict between will_paginate and kaminari'](#conflict-between-will_paginate-and-kaminari) section below)
+- various [Twitter Bootstrap](https://github.com/twitter/bootstrap) Asset-Pipeline vendoring libraries (use RailsAdmin dependency [bootstrap-sass](https://github.com/thomas-mcdonald/bootstrap-sass))
+- [devise_invitable](https://github.com/scambra/devise_invitable) can result in an issue. See [this](http://stackoverflow.com/questions/6012792/devise-invitable-rails-admin-conflict) Stack Overflow question for more info.
+- [~~will_paginate~~](https://github.com/mislav/will_paginate) (Now we have a way to avoid method name collision. See ['Conflict between will_paginate and kaminari'](#conflict-between-will_paginate-and-kaminari) section below)
 
 ## Known fix for twitter-bootstrap-rails:
 
@@ -40,9 +40,9 @@ end
 # controllers/admin/base_controller.rb
 class Admin::BaseController < ActionController::Base
   around_action :use_default_locale
-  
+
   private
-  
+
   def use_default_locale(&block)
     # Executes the request with the I18n.default_locale.
     # https://github.com/ruby-i18n/i18n/commit/9b14943d5e814723296cd501283d9343985fca4e
@@ -53,7 +53,7 @@ end
 
 [Related Rails Guides](https://guides.rubyonrails.org/i18n.html#managing-the-locale-across-requests)
 
-***
+---
 
 ### Asset pipeline
 
@@ -88,15 +88,15 @@ config.assets.precompile += ['rails_admin/rails_admin.css', 'rails_admin/rails_a
 
 If you still have issue with the asset pipeline:
 
-* make sure you didn't commit your assets in public/assets
-* Some css/js assets are not meant to be compiled alone:
- * make sure you don't have any catch-all *.(css|js) in `config.assets.precompile`
- * make sure you don't have any catch-all `require_tree .` in application.(css|js)
-* copy all asset related configuration from application.rb and environment/*.rb files from a fresh (`rails new dummy`) rails app
-* remove old assets with `bundle exec rake assets:clean` when in development
-* read thoroughly the [Rails Guide](http://guides.rubyonrails.org/asset_pipeline.html)
+- make sure you didn't commit your assets in public/assets
+- Some css/js assets are not meant to be compiled alone:
+- make sure you don't have any catch-all \*.(css|js) in `config.assets.precompile`
+- make sure you don't have any catch-all `require_tree .` in application.(css|js)
+- copy all asset related configuration from application.rb and environment/\*.rb files from a fresh (`rails new dummy`) rails app
+- remove old assets with `bundle exec rake assets:clean` when in development
+- read thoroughly the [Rails Guide](http://guides.rubyonrails.org/asset_pipeline.html)
 
-***
+---
 
 ### Using model name AdminUser results in infinite redirection
 
@@ -104,14 +104,13 @@ This happens because Rails engine router is greedy. It matches `/admin_users/sig
 
 You can use a different URL scope for `RailsAdmin` by changing `mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'` in your `config/routes.rb`. e.g. You could do `mount RailsAdmin::Engine => '/foo_admin', ...`.
 
-***
+---
 
 ### Double insertion of NestedFields
 
 jquery_nested_form is evaluated twice. Check your assets. Don't commit your assets to public/assets. See [#924](https://github.com/sferik/rails_admin/issues/924)
 
-
-***
+---
 
 ### Conflict between will_paginate and kaminari
 
@@ -126,18 +125,19 @@ end
 
 to make kaminari to use different paginating method from will_paginate's.
 
-
-***
+---
 
 ### Redirect loop when visiting /admin
 
 In `config/routes.rb` switch lines for devise and RA so they are in this order:
+
 ```
 devise_for :admins
 mount RailsAdmin::Engine => '/admin', :as => 'rails_admin'
 ```
 
-***
+---
+
 ### No route matches [POST] for delete and update
 
 The problem was in missing middleware. I have added
@@ -145,9 +145,11 @@ The problem was in missing middleware. I have added
 ```
 config.middleware.use Rack::MethodOverride
 ```
-to ```/config/application.rb```
 
-***
+to `/config/application.rb`
+
+---
+
 ### ParserError on Webpacker production asset compilation
 
 You'll see an error like this if you try to use Webpacker 5.x and fontawesome-free 6.x together.

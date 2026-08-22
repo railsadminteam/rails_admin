@@ -1,7 +1,7 @@
 ```ruby
 class Player < ActiveRecord::Base
   belongs_to :team, :inverse_of => :players   # dropdown select: belongs_to association
-  # or for nested fields: 
+  # or for nested fields:
   accepts_nested_attributes_for :team, :allow_destroy => true
 end
 

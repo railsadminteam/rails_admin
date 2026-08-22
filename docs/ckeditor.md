@@ -30,6 +30,7 @@ end
 ## Misc
 
 Although ckeditor is loaded in modal windows (e.g. twb), by default changes are not saved by submitting the modal. This is because the underlying textarea gets not updated before the ajax post request is issued. To prevent this you can use the following code:
+
 ```coffeescript
 $(document).ready ->
   $(document).on 'mousedown', '.save-action', (e) -> # triggers also when submitting form with enter
@@ -39,7 +40,9 @@ $(document).ready ->
         editor.updateElement();
     return true;
 ```
+
 Add this code to assets/javascripts/rails_admin/custom/ckeditor_ajax.js.coffee and create a file assets/javascripts/rails_admin/custom/ui.js that loads this coffee file into asset pipeline:
+
 ```
 //= require rails_admin/custom/ckeditor_ajax
 ```

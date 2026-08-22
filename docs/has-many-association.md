@@ -6,7 +6,7 @@ class Team < ActiveRecord::Base
 
   # for a nested form: (natural choice for 1-n associations)
   accepts_nested_attributes_for :players, :allow_destroy => true
-    
+
   # uncomment if you don't use strong parameters
   # attr_accessible :players_attributes, :allow_destroy => true
 

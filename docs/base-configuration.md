@@ -74,7 +74,6 @@ Following file will be modified when successful, or RailAdmin will instruct you 
 
 - `webpack.config.js` - the configuration entry is added to let Webpack compile the RailsAdmin JavaScript asset
 
-
 ## Set the application name
 
 ```ruby
@@ -98,9 +97,9 @@ end
 # controllers/admin/base_controller.rb
 class Admin::BaseController < ActionController::Base
   around_action :use_default_locale
-  
+
   private
-  
+
   def use_default_locale(&block)
     # Executes the request with the I18n.default_locale.
     # https://github.com/ruby-i18n/i18n/commit/9b14943d5e814723296cd501283d9343985fca4e
@@ -124,7 +123,6 @@ end
 ```ruby
 config.label_methods << :description # Default is [:name, :title]
 ```
-
 
 ## Browser validations
 

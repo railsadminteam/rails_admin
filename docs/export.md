@@ -18,7 +18,7 @@ end
 
 ```ruby
   RailsAdmin.config do |config|
-    config.model 'Lesson' do 
+    config.model 'Lesson' do
       export do
         field :teacher, :string do
           export_value do

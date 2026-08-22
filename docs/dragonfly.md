@@ -1,6 +1,6 @@
 If a `asset_uid` column is found, it will be hidden (along with the optional `asset_name` column) and a `field :asset, :dragonfly` will be created.
 
-Due to the 'fire and forget' nature of Dragonfly and the obfuscated uid, RailsAdmin cannot always infer if asset is an image or not (show thumbnails or links?). 
+Due to the 'fire and forget' nature of Dragonfly and the obfuscated uid, RailsAdmin cannot always infer if asset is an image or not (show thumbnails or links?).
 
 It will try to read `asset_name` to see the extension for a smart guess. If absent, it will suppose it is an image.
 

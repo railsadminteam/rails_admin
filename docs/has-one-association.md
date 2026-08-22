@@ -9,7 +9,7 @@ class Player < ActiveRecord::Base
     attr_accessible :draft_attributes
     accepts_nested_attributes_for :draft, :allow_destroy => true
 
-  # or if you want a dropdown select: 
+  # or if you want a dropdown select:
 
     attr_accessible :draft_id
 

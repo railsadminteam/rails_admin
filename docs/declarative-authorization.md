@@ -14,7 +14,7 @@ end
 
 By default, access to the controllers will be denied to all users, so
 you need to write some authz rules so that the appropriate users can
-get access.  These rules will vary, but here's an example:
+get access. These rules will vary, but here's an example:
 
 ```ruby
 authorization do

@@ -65,7 +65,6 @@ end
 
 This content is mostly useful when the admin doing the data entry is not familiar with the system or as a way to display inline documentation.
 
-
 ## Syntax
 
 As in the list view, the edit views' configuration blocks can directly
@@ -113,7 +112,7 @@ associations for itself.
 
 ## Toggles
 
-By default, all field groups (other than :default) will have a toggle and start off active.  To change the default and have a field group start off with the toggle inactive, use 'active false'
+By default, all field groups (other than :default) will have a toggle and start off active. To change the default and have a field group start off with the toggle inactive, use 'active false'
 
 ```ruby
 RailsAdmin.config do |config|

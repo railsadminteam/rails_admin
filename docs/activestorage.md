@@ -27,6 +27,7 @@ class Article < ActiveRecord::Base
   after_save { asset.purge if remove_asset == '1' }
 end
 ```
+
 The method name is `remove_#{name}` by default, but you can configure it using `delete_method` option:
 
 ```ruby
@@ -36,6 +37,7 @@ end
 ```
 
 ### show correct file name of attachment
+
 ```ruby
 field :asset, :active_storage do
   delete_method :remove_asset
@@ -59,6 +61,7 @@ end
 ```
 
 ### Deleting Multiple attachments
+
 ```ruby
 class Article < ActiveRecord::Base
   has_many_attached :assets
@@ -69,6 +72,7 @@ class Article < ActiveRecord::Base
   end
 end
 ```
+
 <!-- `assets.where(id: remove_assets).find_each(&:purge)` does not work well when we add images -->
 
 ```ruby
@@ -85,6 +89,7 @@ end
 ```
 
 ### show thumbnails on show and edit views
+
 Showing thumbnails may require additional setup.
 
 For images, Rails 6 recommend installing the [`image_processing`](https://github.com/janko/image_processing) gem:

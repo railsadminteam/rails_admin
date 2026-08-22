@@ -2,44 +2,48 @@
 
 RailsAdmin uses [Hudson](http://hudson-ci.org/) as its continuous integration server.
 
-* Test builds are available for public browsing at [ci.railsadmin.org](http://ci.railsadmin.org/)
-* An RSS feed for following failed builds is available at [feed://ci.railsadmin.org/job/RailsAdmin/rssFailed](feed://ci.railsadmin.org/job/RailsAdmin/rssFailed)
+- Test builds are available for public browsing at [ci.railsadmin.org](http://ci.railsadmin.org/)
+- An RSS feed for following failed builds is available at [feed://ci.railsadmin.org/job/RailsAdmin/rssFailed](feed://ci.railsadmin.org/job/RailsAdmin/rssFailed)
 
 RailsAdmin is tested with
 
-* jruby-1.6.3 [ linux-i386-java ]
-* rbx-1.2.4-20110705 [ ]
-* ree-1.8.7-2011.03 [ i386 ]
-* ruby-1.8.7-p352 [ i386 ]
-* ruby-1.9.2-p290 [ i386 ]
+- jruby-1.6.3 [ linux-i386-java ]
+- rbx-1.2.4-20110705 [ ]
+- ree-1.8.7-2011.03 [ i386 ]
+- ruby-1.8.7-p352 [ i386 ]
+- ruby-1.9.2-p290 [ i386 ]
 
 and
 
-* MySQL
-* PostgreSQL
-* SQLite3
+- MySQL
+- PostgreSQL
+- SQLite3
 
-This document describes the Hudson setup used with RailsAdmin in case there's need to duplicate it manually. 
+This document describes the Hudson setup used with RailsAdmin in case there's need to duplicate it manually.
 
 ### Installing Hudson on Ubuntu
 
 1. Install key for the hudson repository:
+
 ```bash
    wget -O - http://hudson-ci.org/debian/hudson-ci.org.key | sudo apt-key add -
 ```
 
 2. Add Hudson as source to /etc/apt/sources.list:
+
 ```bash
    deb http://hudson-ci.org/debian binary/
 ```
 
 3. Install Hudson:
+
 ```bash
    sudo apt-get update
    sudo apt-get install hudson
 ```
 
 4. Install ruby1.9-dev to enable native extension building on Rubinius:
+
 ```bash
    sudo apt-get install ruby1.9-dev
 ```
@@ -47,11 +51,13 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
 5. Install RVM for the user hudson with rubies 1.8.7, 1.9.2, jruby, rbx-1.2.3 and ree. Also install bundler gem for each ruby.
 
 6. Start Hudson:
+
 ```bash
    sudo /etc/init.d/hudson start
 ```
 
 7. Hudson should be now accessible with a web browser at:
+
 ```bash
    http://YOUR_SERVER_IP:8080/
 ```
@@ -64,28 +70,28 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
 
 3. Select `Disable` for `TCP port for JNLP slave agents`
 
-3. Select `Hudson's own user database`
+4. Select `Hudson's own user database`
 
-4. Select `Matrix-based security`
+5. Select `Matrix-based security`
 
-5. Create user `Neo` ;)
+6. Create user `Neo` ;)
 
-6. Check all ACL rules in the table for user `Neo`
+7. Check all ACL rules in the table for user `Neo`
 
-7. Select only `Overall > Read` and `Job > Read` for system user `Anonymous`
+8. Select only `Overall > Read` and `Job > Read` for system user `Anonymous`
 
-8. Check `Prevent Cross Site Request Forgery exploits`
+9. Check `Prevent Cross Site Request Forgery exploits`
 
-9. Save (Button is in the very bottom of the screen)
+10. Save (Button is in the very bottom of the screen)
 
-9. Go to Manage `Hudson > Manage Users`
+11. Go to Manage `Hudson > Manage Users`
 
-10. Create user with username `Neo`
-
+12. Create user with username `Neo`
 
 ### Configure Hudson:
 
 1. Install following plugins via `Manage Hudson > Manage plugins`
+
 ```bash
     Hudson CVS Plug-in
     Git Plugin
@@ -109,7 +115,6 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
 
 6. Save (Button is in the very bottom of the screen)
 
-
 ### Create a job for RailsAdmin:
 
 1. Click `New Job` link on Hudson frontpage
@@ -117,6 +122,7 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
 2. Type `RailsAdmin` as the `Job name`, select `Build free-style software project` and click `Ok`
 
 3. Fill in settings:
+
 ```bash
     Github project [ https://github.com/sferik/rails_admin/ ]
 
@@ -161,7 +167,6 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
 
 4. Save the job
 
-
 ### Automate _continuous_ integration with a GitHub post-receive hook:
 
 1. Goto RailsAdmin repository's administrative view in GitHub
@@ -172,17 +177,18 @@ This document describes the Hudson setup used with RailsAdmin in case there's ne
 
 ### Additional tasks not covered in this document
 
-* Install Postgres 9.0, create user `rails_admin` and database `ci_rails_admin`
-* Install MySQL 5.1 (+ dev package for the mysql gem), create user `rails_admin` and database `ci_rails_admin`
-* Configure Nginx as proxy for Hudson accessible at `http://ci.railsadmin.org`
+- Install Postgres 9.0, create user `rails_admin` and database `ci_rails_admin`
+- Install MySQL 5.1 (+ dev package for the mysql gem), create user `rails_admin` and database `ci_rails_admin`
+- Configure Nginx as proxy for Hudson accessible at `http://ci.railsadmin.org`
 
 ### Links
-* [Hudson wiki: Installing Hudson on Ubuntu](http://wiki.hudson-ci.org/display/HUDSON/Installing+Hudson+on+Ubuntu)
-* [Install CI Hudson for Ruby on Ubuntu](http://www.allenwei.cn/install-ci-hudson-for-ruby-on-ubuntu/)
-* [Setting up Hudson behind Nginx](http://www.elfsternberg.com/2009/11/11/continual-integration-testing-for-web-applications-setting-up-hudson-behind-nginx/)
-* [Setting up Hudson on port 80 on a Debian or Ubuntu machine](http://www.zzorn.net/2009/11/setting-up-hudson-on-port-80-on-debian.html)
+
+- [Hudson wiki: Installing Hudson on Ubuntu](http://wiki.hudson-ci.org/display/HUDSON/Installing+Hudson+on+Ubuntu)
+- [Install CI Hudson for Ruby on Ubuntu](http://www.allenwei.cn/install-ci-hudson-for-ruby-on-ubuntu/)
+- [Setting up Hudson behind Nginx](http://www.elfsternberg.com/2009/11/11/continual-integration-testing-for-web-applications-setting-up-hudson-behind-nginx/)
+- [Setting up Hudson on port 80 on a Debian or Ubuntu machine](http://www.zzorn.net/2009/11/setting-up-hudson-on-port-80-on-debian.html)
 
 ### Postscript
 
-*The first part of this documentation was written after the actual installation, so there may be factual errors. The most important part though is the job settings, and that has been copied directly from working Hudson
-installation and is correct.*
+_The first part of this documentation was written after the actual installation, so there may be factual errors. The most important part though is the job settings, and that has been copied directly from working Hudson
+installation and is correct._
