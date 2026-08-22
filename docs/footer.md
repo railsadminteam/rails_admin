@@ -1,0 +1,1 @@
+[Home](https://github.com/sferik/rails_admin/wiki)
