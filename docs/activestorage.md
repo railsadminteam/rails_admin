@@ -92,7 +92,7 @@ end
 
 Showing thumbnails may require additional setup.
 
-For images, Rails 6 recommend installing the [`image_processing`](https://github.com/janko/image_processing) gem:
+For images, Rails recommends installing the [`image_processing`](https://github.com/janko/image_processing) gem:
 
 ```ruby
 # add to your gemfile

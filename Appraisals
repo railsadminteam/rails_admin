@@ -1,58 +1,5 @@
 # frozen_string_literal: true
 
-appraise 'rails-6.0' do
-  gem 'rails', '~> 6.0.0'
-  gem 'concurrent-ruby', '1.3.4' # Workaround for https://github.com/rails/rails/issues/54260
-  gem 'psych', '~> 3.3'
-  gem 'turbo-rails', '< 2.0.8'
-
-  group :test do
-    gem 'cancancan', ['~> 3.0', '< 3.6']
-    gem 'pundit', '~> 2.1.0'
-  end
-
-  group :active_record do
-    platforms :jruby do
-      gem 'activerecord-jdbcmysql-adapter', '~> 60.0'
-      gem 'activerecord-jdbcpostgresql-adapter', '~> 60.0'
-      gem 'activerecord-jdbcsqlite3-adapter', '~> 60.0'
-    end
-  end
-
-  group :mongoid do
-    gem 'cancancan-mongoid'
-    gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
-    gem 'database_cleaner-mongoid', '>= 2.0', require: false
-    gem 'kaminari-mongoid'
-    gem 'mongoid', '~> 7.0'
-    gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
-    gem 'shrine-mongoid', '~> 1.0'
-  end
-end
-
-appraise 'rails-6.1' do
-  gem 'rails', '~> 6.1.0'
-  gem 'concurrent-ruby', '1.3.4' # Workaround for https://github.com/rails/rails/issues/54260
-
-  group :active_record do
-    platforms :jruby do
-      gem 'activerecord-jdbcmysql-adapter', '~> 61.0'
-      gem 'activerecord-jdbcpostgresql-adapter', '~> 61.0'
-      gem 'activerecord-jdbcsqlite3-adapter', '~> 61.0'
-    end
-  end
-
-  group :mongoid do
-    gem 'cancancan-mongoid'
-    gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
-    gem 'database_cleaner-mongoid', '>= 2.0', require: false
-    gem 'kaminari-mongoid'
-    gem 'mongoid', '~> 7.0'
-    gem 'mongoid-paperclip', '>= 0.0.8', require: 'mongoid_paperclip'
-    gem 'shrine-mongoid', '~> 1.0'
-  end
-end
-
 appraise 'rails-7.0' do
   gem 'rails', '~> 7.0.0', '7.0.8.6' # Pinning until the fix for https://github.com/basecamp/trix/issues/1209 become available in actiontext
   gem 'concurrent-ruby', '1.3.4' # Workaround for https://github.com/rails/rails/issues/54260

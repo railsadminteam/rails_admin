@@ -47,7 +47,6 @@ module DummyApp
       config.active_record.yaml_column_permitted_classes = [Symbol] if [ActiveRecord::Base, ActiveRecord].any? { |klass| klass.respond_to?(:yaml_column_permitted_classes=) }
     end
     config.active_storage.service = :local if defined?(ActiveStorage)
-    config.active_storage.replace_on_assign_to_many = false if defined?(ActiveStorage) && ActiveStorage.version < Gem::Version.create('6.1')
 
     case CI_ASSET
     when :webpack

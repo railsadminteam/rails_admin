@@ -1,4 +1,4 @@
-Rails 6 is shipped with a new rich text editor, called ActionText. RailsAdmin can make use of it in two ways.
+Rails ships with a rich text editor, called ActionText. RailsAdmin can make use of it in two ways.
 
 ## Setting up the Rails part
 
@@ -16,25 +16,21 @@ end
 
 At this point RailsAdmin will use the CDN-delivered ActionText assets and it lacks some features like uploading attachments. You'll see a warning like `ActionText assets should be loaded statically...` in your browser console as well. To eliminate the warning and get the full features, please proceed to the next section.
 
-## Setting up the frontend
-
-The method you should take varies depending on how your application is configured to deliver RailsAdmin assets.
-
-### Sprockets with Rails 7.x
-
-RailsAdmin will automatically load required assets. No setup is needed.
-
-### Sprockets with Rails 6.x
-
-Since ActionText 6.x doesn't come with the Sprockets-based asset pipeline support, it'll be a bit tricky to set it up correctly. You can refer to [a StackOverflow answer](https://stackoverflow.com/a/72379459).
-
-Alternatively, if you don't need full features you can choose to suppress the warning by:
+Alternatively, if you don't need the full features you can choose to suppress the warning by:
 
 ```ruby
 field :action_text_field do
   warn_dynamic_load false
 end
 ```
+
+## Setting up the frontend
+
+The method you should take varies depending on how your application is configured to deliver RailsAdmin assets.
+
+### Sprockets
+
+RailsAdmin will automatically load required assets. No setup is needed.
 
 ### ImportMap
 

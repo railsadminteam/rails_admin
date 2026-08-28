@@ -14,7 +14,7 @@ if defined?(ActiveStorage)
     end
 
     describe '#thumb_method' do
-      it 'returns corresponding value which is to be passed to image_processing(ActiveStorage >= 6.0) or mini_magick(ActiveStorage 5.2)' do
+      it 'returns corresponding value which is to be passed to image_processing' do
         expect(field.thumb_method).to eq(resize_to_limit: [100, 100])
       end
     end

@@ -24,7 +24,7 @@
 <% if defined?(ActiveStorage::Engine) %>
 //= require activestorage
 <% end %>
-<% if defined?(ActionText::Engine) && Rails.gem_version >= Gem::Version.new('7.0') %>
+<% if defined?(ActionText::Engine) %>
 //= require trix
 //= require actiontext
 <% end %>
