@@ -9,9 +9,9 @@ class CreateActiveStorageTables < ActiveRecord::Migration[5.0]
       t.string   :content_type
       t.text     :metadata
       if t.respond_to? :bigint
-        t.bigint   :byte_size,  null: false
+        t.bigint :byte_size, null: false
       else
-        t.integer  :byte_size,  null: false
+        t.integer :byte_size, null: false
       end
       t.string   :checksum,   null: false
       t.datetime :created_at, null: false
