@@ -9,7 +9,6 @@ gem 'propshaft', require: false
 gem 'rails'
 gem 'sprockets-rails', require: false
 gem 'turbo-rails'
-gem 'vite_rails', require: false
 gem 'webrick'
 
 group :development, :test do

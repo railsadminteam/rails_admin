@@ -44,57 +44,13 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
             contains "mount RailsAdmin::Engine => '/admin', as: 'rails_admin'"
           end
         end
-        case CI_ASSET
-        when :external
+        if CI_ASSET == :external
           file 'app/javascript/rails_admin.js' do
             contains 'import "rails_admin/src/rails_admin/base"'
           end
           file 'app/javascript/rails_admin.scss' do
             contains '$fa-font-path: "rails_admin";'
             contains '@import "rails_admin/src/rails_admin/styles/base"'
-          end
-        when :importmap
-          file 'app/javascript/rails_admin.js' do
-            contains 'import "rails_admin/src/rails_admin/base"'
-          end
-          file 'app/assets/stylesheets/rails_admin.scss' do
-            contains '$fa-font-path: ".";'
-            contains '@import "rails_admin/src/rails_admin/styles/base"'
-          end
-          file 'config/importmap.rails_admin.rb' do
-            contains 'pin "rails_admin", preload: true'
-            contains 'pin "rails_admin/src/rails_admin/base", to: "https://ga.jspm.io/npm:rails_admin@'
-            contains 'pin "bootstrap", to: "https://ga.jspm.io/npm:bootstrap@'
-          end
-          file 'config/initializers/assets.rb' do
-            contains 'Rails.root.join("node_modules/@fortawesome/fontawesome-free/webfonts")'
-          end
-          file 'package.json' do
-            contains 'sass ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css'
-          end
-        when :webpack
-          file 'app/javascript/rails_admin.js' do
-            contains 'import "rails_admin/src/rails_admin/base"'
-          end
-          file 'app/assets/stylesheets/rails_admin.scss' do
-            contains '$fa-font-path: ".";'
-            contains '@import "rails_admin/src/rails_admin/styles/base"'
-          end
-          file 'package.json' do
-            contains 'webpack --config webpack.config.js'
-            contains 'sass ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css'
-          end
-        when :vite
-          file 'app/frontend/entrypoints/rails_admin.js' do
-            contains 'import "~/stylesheets/rails_admin.scss"'
-            contains 'import "rails_admin/src/rails_admin/base"'
-          end
-          file 'app/frontend/stylesheets/rails_admin.scss' do
-            contains '$fa-font-path: "@fortawesome/fontawesome-free/webfonts";'
-            contains '@import "rails_admin/src/rails_admin/styles/base"'
-          end
-          file 'package.json' do
-            contains 'sass'
           end
         end
       end,

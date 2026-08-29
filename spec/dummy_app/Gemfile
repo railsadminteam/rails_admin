@@ -31,9 +31,6 @@ gem 'rails_admin', path: '../../'
 gem 'shrine', '~> 3.0'
 
 group :development, :test do
-  gem 'cssbundling-rails', require: false
-  gem 'importmap-rails', require: false
-  gem 'vite_rails', require: false
 end
 
 # Gems used only for assets and not required
