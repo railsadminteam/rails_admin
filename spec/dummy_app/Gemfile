@@ -30,6 +30,8 @@ gem 'propshaft', require: false
 gem 'puma'
 gem 'rails_admin', path: '../../'
 gem 'shrine', '~> 3.0'
+# sassc-rails used to pull this in; the dummy app still boots under CI_ASSET=sprockets.
+gem 'sprockets-rails', require: false
 
 group :development, :test do
   gem 'cssbundling-rails', require: false
@@ -41,8 +43,6 @@ end
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sassc-rails', '~> 2.1'
-
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer'
 
