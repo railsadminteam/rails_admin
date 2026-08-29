@@ -9,9 +9,7 @@
 <% if asset_source.is_a?(Proc) %>
   <%= asset_source.call(self) %>
 <% else %>
-  <% handle_asset_dependency_error do %>
-    <%= stylesheet_link_tag "rails_admin", media: :all, data: {'turbo-track': 'reload'}, nonce: true %>
-    <%= javascript_include_tag "rails_admin", defer: true, data: {'turbo-track': 'reload'}, nonce: true %>
-  <% end %>
+  <%= stylesheet_link_tag "rails_admin", media: :all, data: {'turbo-track': 'reload'}, nonce: true %>
+  <%= javascript_include_tag "rails_admin", defer: true, data: {'turbo-track': 'reload'}, nonce: true %>
 <% end %>
 <%= render "layouts/rails_admin/head_custom" %>
