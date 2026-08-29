@@ -3,7 +3,6 @@
 appraise 'rails-7.0' do
   gem 'rails', '~> 7.0.0', '7.0.8.6' # Pinning until the fix for https://github.com/basecamp/trix/issues/1209 become available in actiontext
   gem 'concurrent-ruby', '1.3.4' # Workaround for https://github.com/rails/rails/issues/54260
-  gem 'importmap-rails', require: false
   gem 'nokogiri', '~> 1.16.0', platform: :jruby
 
   group :active_record do
@@ -31,7 +30,6 @@ end
 
 appraise 'rails-7.1' do
   gem 'rails', '~> 7.1.0'
-  gem 'importmap-rails', require: false
 
   group :active_record do
     platforms :ruby, :mswin, :mingw, :x64_mingw do
@@ -58,7 +56,6 @@ end
 
 appraise 'rails-7.2' do
   gem 'rails', '~> 7.2.0'
-  gem 'importmap-rails', require: false
 
   group :mongoid do
     gem 'cancancan-mongoid'
@@ -73,7 +70,6 @@ end
 
 appraise 'rails-8.0' do
   gem 'rails', '~> 8.0.0'
-  gem 'importmap-rails', require: false
 
   group :mongoid do
     gem 'cancancan-mongoid'
@@ -88,7 +84,6 @@ end
 
 appraise 'rails-8.1' do
   gem 'rails', '~> 8.1.0'
-  gem 'importmap-rails', require: false
 
   group :mongoid do
     gem 'cancancan-mongoid'

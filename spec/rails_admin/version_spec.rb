@@ -15,7 +15,7 @@ RSpec.describe 'RailsAdmin::Version' do
     it "shows a warning when actual_js_version couldn't detected" do
       allow(RailsAdmin::Version).to receive(:actual_js_version).and_return(nil)
       allow(RailsAdmin::Version).to receive(:js).and_return('3.0.1')
-      expect(RailsAdmin::Version).to receive(:warn).with(/yarn install/)
+      expect(RailsAdmin::Version).to receive(:warn).with(/Failed to detect the RailsAdmin npm package/)
       RailsAdmin::Version.warn_with_js_version
     end
 
@@ -28,7 +28,7 @@ RSpec.describe 'RailsAdmin::Version' do
   end
 
   describe '#js_version_from_node_modules' do
-    unless CI_ASSET == :sprockets
+    if CI_ASSET == :external
       let(:path) { Rails.root.join('node_modules/rails_admin/package.json') }
       before do
         @backup = File.read(path)

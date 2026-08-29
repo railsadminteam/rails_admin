@@ -11,6 +11,7 @@ if RUBY_ENGINE == 'jruby'
   require 'i18n/backend/simple'
 end
 
+require 'fileutils'
 require 'simplecov'
 require 'simplecov-lcov'
 
@@ -102,12 +103,17 @@ RSpec.configure do |config|
     end
   end
 
-  config.before(:all) do
-    case CI_ASSET
-    when :webpacker
-      Webpacker.instance.compiler.compile
-    when :vite
-      ViteRuby.instance.commands.build
+  config.before(:suite) do
+    dummy = File.expand_path('dummy_app', __dir__)
+    if CI_ASSET == :external
+      # Build rails_admin.{js,css} into the dummy app the way a jsbundling/cssbundling app would.
+      system('npm', 'install', '--silent', chdir: dummy) || raise('dummy app npm install failed')
+      system('npm', 'run', 'build', '--silent', chdir: dummy) || raise('dummy app asset build failed')
+    else
+      # sprockets/propshaft serve the gem's prebuilt app/assets/builds/rails_admin.{js,css}.
+      # A leftover :external build in the dummy app sits earlier on the asset path and would
+      # shadow it - drop it so switching CI_ASSET locally stays deterministic.
+      FileUtils.rm_f(Dir[File.join(dummy, 'app/assets/builds/rails_admin.{js,css}')])
     end
   end
 

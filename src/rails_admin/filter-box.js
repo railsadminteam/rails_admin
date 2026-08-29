@@ -1,6 +1,6 @@
 import jQuery from "jquery";
 import I18n from "./i18n.js";
-import flatpickr from "flatpickr";
+import flatpickr from "./flatpickr.js";
 
 (function ($) {
   var filters;
