@@ -2,7 +2,7 @@ import jQuery from "jquery";
 import "jquery-ui/ui/widgets/sortable.js";
 import * as bootstrap from "bootstrap";
 import flatpickr from "flatpickr";
-import I18n from "./i18n";
+import I18n from "./i18n.js";
 
 (function ($) {
   document.addEventListener("rails_admin.dom_ready", function (event) {

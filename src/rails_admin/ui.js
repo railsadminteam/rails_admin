@@ -1,6 +1,6 @@
 import jQuery from "jquery";
 import "jquery-ui/ui/effect.js";
-import I18n from "./i18n";
+import I18n from "./i18n.js";
 
 (function ($) {
   $(document).on("click", "#list input.toggle", function () {

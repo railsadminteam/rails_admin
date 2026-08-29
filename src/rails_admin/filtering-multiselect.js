@@ -1,6 +1,6 @@
 import jQuery from "jquery";
 import "jquery-ui/ui/widget.js";
-import I18n from "./i18n";
+import I18n from "./i18n.js";
 
 (function ($) {
   $.widget("ra.filteringMultiselect", $.ra.abstractSelect, {
