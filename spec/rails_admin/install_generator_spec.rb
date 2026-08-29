@@ -45,13 +45,6 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
           end
         end
         case CI_ASSET
-        when :webpacker
-          file 'app/javascript/packs/rails_admin.js' do
-            contains 'import "rails_admin/src/rails_admin/base"'
-          end
-          file 'app/javascript/stylesheets/rails_admin.scss' do
-            contains '@import "rails_admin/src/rails_admin/styles/base"'
-          end
         when :external
           file 'app/javascript/rails_admin.js' do
             contains 'import "rails_admin/src/rails_admin/base"'
