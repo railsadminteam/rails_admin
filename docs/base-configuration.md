@@ -20,46 +20,35 @@ RailsAdmin.config do |config|
 end
 ```
 
-### Sprockets (a.k.a. Asset Pipeline)
+### `:propshaft` / `:sprockets` (default)
 
-If your application was built on top of the Sprockets-based asset pipeline, this is the way to go.
-
-```bash
-$ rails g rails_admin:install --asset=sprockets
-```
-
-RailsAdmin will load `app/assets/javascripts/rails_admin/application.js` and `app/assets/stylesheets/rails_admin/application.css` via the asset pipeline. Since these files are already included in RailsAdmin, no further setup is needed in your Rails application.
-
-### ImportMap
-
-Use this if your application is configured to use ImportMap by using the gem `importmap-rails`, which became default from Rails 7.0.
+RailsAdmin ships a prebuilt `rails_admin.js` / `rails_admin.css` in the gem and
+serves it through whichever pipeline your app already uses. There is no build
+step and nothing to configure.
 
 ```bash
-$ rails g rails_admin:install --asset=importmap
+$ rails g rails_admin:install --asset=propshaft   # or --asset=sprockets
 ```
 
-Following files will be created in your application:
+### `:external`
 
-- `app/javascript/rails_admin.js` - JavaScript file to be loaded by RailsAdmin via ImportMap
-- `app/assets/stylesheets/rails_admin.scss` - SCSS file to build the RailsAdmin stylesheet by using `cssbundling-rails`
-- `config/importmap.rails_admin.rb` - ImportMap configuration used to load RailsAdmin JavaScript dependencies
-
-### Webpack
-
-You can choose to use `webpack` (not `webpacker`) via the `jsbundling-rails` gem.
+Use this when you want to build the bundle yourself - to change the Bootstrap
+theme, add dependencies, or avoid the CDN fallback for Trix. The installer
+generates `app/javascript/rails_admin.js` and `app/javascript/rails_admin.scss`
+that re-export `rails_admin/src/rails_admin/base`; wire them into your bundler
+(esbuild, Webpack, Vite, ...) so they output
+`app/assets/builds/rails_admin.{js,css}`.
 
 ```bash
-$ rails g rails_admin:install --asset=webpack
+$ rails g rails_admin:install --asset=external
 ```
 
-Following files will be created in your application:
+Passing `--asset=webpack` or `--asset=vite` is treated as `:external`.
 
-- `app/javascript/rails_admin.js` - JavaScript file to be compiled with Webpack
-- `app/assets/stylesheets/rails_admin.scss` - SCSS file to build the RailsAdmin stylesheet by using `cssbundling-rails`
+### A callable
 
-Following file will be modified when successful, or RailAdmin will instruct you on how to change:
-
-- `webpack.config.js` - the configuration entry is added to let Webpack compile the RailsAdmin JavaScript asset
+`config.asset_source` also accepts anything responding to `call(view)` that
+returns the `<head>` markup, if you need to serve the assets some other way.
 
 ## Set the application name
 
