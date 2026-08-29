@@ -8,6 +8,9 @@ Dir['lib/tasks/*.rake'].each { |rake| load rake }
 require 'bundler'
 Bundler::GemHelper.install_tasks
 
+# Abort `rake release` if the committed assets in app/assets/builds are stale.
+Rake::Task['release:guard_clean'].enhance(['rails_admin:verify_assets'])
+
 require 'rspec/core/rake_task'
 RSpec::Core::RakeTask.new(:spec)
 

@@ -12,8 +12,9 @@
   "main": "src/rails_admin/base.js",
   "sass": "src/rails_admin/styles/base.scss",
   "scripts": {
-    "link": "yarn link && cd spec/dummy_app && yarn link rails_admin",
-    "format": "prettier -w ."
+    "build": "node bin/build.js",
+    "format": "prettier -w .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": ">=5.15.0 <7.0.0",
@@ -26,6 +27,8 @@
     "jquery-ui": "^1.12.1 <1.14.0"
   },
   "devDependencies": {
-    "prettier": "^2.4.1"
+    "esbuild": "^0.25.0",
+    "prettier": "^2.4.1",
+    "sass": "^1.83.0"
   }
 }

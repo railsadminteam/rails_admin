@@ -15,6 +15,9 @@
 - Records from `AbstractModel#new` and `#get` on ActiveRecord no longer ignore `assign_attributes(nil)` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 - On Mongoid, `@object.save` in a custom action no longer saves the children of a new document's non-autosave `has_many` and `has_one` associations; use `@abstract_model.save(@object)` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 - Deprecate `#safe_send` on models, which RailsAdmin no longer uses; use `RailsAdmin::AbstractModel#read` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- RailsAdmin ships a prebuilt `rails_admin.{js,css}` bundle, which `:propshaft` and `:sprockets` serve with no build step and no Node; see [the upgrade guide](docs/upgrading-to-4.md) ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- The bundle carries jQuery, jQuery UI, Bootstrap, Popper, flatpickr with every locale, `@rails/activestorage` and the `@rails/actiontext` glue; Trix is still loaded from a CDN unless you bundle it yourself with `:external` ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- The asset toolchain moved to npm with a committed lockfile; `npm run build` (or `rake rails_admin:build_assets`) regenerates the bundle, and CI fails if the committed output is stale ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 
 ### Removed
 
