@@ -28,6 +28,7 @@
 - The `rails_admin/application.{js,css}` Sprockets manifests and the `ESModuleProcessor`, which RailsAdmin wired up itself; the prebuilt bundle is served as `rails_admin.{js,css}` ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - [BREAKING CHANGE] The `rails_admin/custom/*` override files; use the `_head_custom` partial or `:external` instead ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - The `sassc-rails` dependency handling, which the prebuilt CSS makes unnecessary ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- [BREAKING CHANGE] `config.asset_source = :webpacker` and `:vite`, which now raise; use `:external` instead - Webpacker is end-of-life, and Vite still builds the `:external` entrypoints ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 
 ### Fixed
 
