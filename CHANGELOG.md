@@ -25,6 +25,7 @@
 ### Removed
 
 - `#rails_admin_default_object_label_method` is no longer defined on models, and `object_label_method` is nil for a model which responds to none of `config.label_methods` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- The `rails_admin/application.{js,css}` Sprockets manifests and the `ESModuleProcessor`, which RailsAdmin wired up itself; the prebuilt bundle is served as `rails_admin.{js,css}` ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 
 ### Fixed
 
