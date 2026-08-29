@@ -10,7 +10,7 @@ module RailsAdmin
     include Generators::Utils::InstanceMethods
 
     argument :_namespace, type: :string, required: false, desc: 'RailsAdmin url namespace'
-    class_option :asset, type: :string, required: false, default: nil, desc: 'Asset delivery method [options: webpacker, webpack, sprockets, importmap, vite]'
+    class_option :asset, type: :string, required: false, default: nil, desc: 'Asset delivery method [options: propshaft, sprockets, external, webpack, importmap, vite]'
     desc 'RailsAdmin installation generator'
 
     def install
@@ -35,8 +35,6 @@ module RailsAdmin
         configure_for_webpack
       when 'importmap'
         configure_for_importmap
-      when 'webpacker'
-        configure_for_webpacker5
       when 'vite'
         configure_for_vite
       else
@@ -69,14 +67,6 @@ module RailsAdmin
         app/javascript/rails_admin.scss into your build so they output
         app/assets/builds/rails_admin.js and app/assets/builds/rails_admin.css.
       INSTRUCTIONS
-    end
-
-    def configure_for_webpacker5
-      run "yarn add rails_admin@#{RailsAdmin::Version.js}"
-      template 'rails_admin.webpacker.js', 'app/javascript/packs/rails_admin.js'
-      template 'rails_admin.scss.erb', 'app/javascript/stylesheets/rails_admin.scss'
-      # To work around https://github.com/railsadminteam/rails_admin/issues/3565
-      add_package_json_field('resolutions', {'rails_admin/@fortawesome/fontawesome-free' => '^5.15.0'})
     end
 
     def configure_for_vite

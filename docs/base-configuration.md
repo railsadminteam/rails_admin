@@ -30,19 +30,6 @@ $ rails g rails_admin:install --asset=sprockets
 
 RailsAdmin will load `app/assets/javascripts/rails_admin/application.js` and `app/assets/stylesheets/rails_admin/application.css` via the asset pipeline. Since these files are already included in RailsAdmin, no further setup is needed in your Rails application.
 
-### Webpacker
-
-If you have a pre-Rails7 application which have Webpacker installed, this is the option.
-
-```bash
-$ rails g rails_admin:install --asset=webpacker
-```
-
-Following files will be created in your application to be picked up by Webpacker:
-
-- `app/javascript/packs/rails_admin.js` - JavaScript file to be used by RailsAdmin
-- `app/javascript/stylesheets/rails_admin.scss` - SCSS file to build the RailsAdmin stylesheet
-
 ### ImportMap
 
 Use this if your application is configured to use ImportMap by using the gem `importmap-rails`, which became default from Rails 7.0.
