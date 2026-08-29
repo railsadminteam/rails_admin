@@ -10,7 +10,6 @@ gem 'rails'
 gem 'sprockets-rails', require: false
 gem 'turbo-rails'
 gem 'vite_rails', require: false
-gem 'webpacker', require: false
 gem 'webrick'
 
 group :development, :test do
