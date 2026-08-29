@@ -12,8 +12,6 @@ module RailsAdmin
   class Engine < Rails::Engine
     isolate_namespace RailsAdmin
 
-    attr_accessor :importmap
-
     config.action_dispatch.rescue_responses['RailsAdmin::ActionNotAllowed'] = :forbidden
 
     initializer 'RailsAdmin load UrlForExtension' do
@@ -40,19 +38,13 @@ module RailsAdmin
       end
     end
 
-    initializer 'RailsAdmin precompile hook', group: :all do |app|
-      case RailsAdmin.config.asset_source
-      when :sprockets
-        app.config.assets.precompile += %w[
-          rails_admin/application.js
-          rails_admin/application.css
-        ]
-        app.config.assets.paths << RailsAdmin::Engine.root.join('src')
-        require 'rails_admin/support/es_module_processor'
-        Sprockets.register_bundle_processor 'application/javascript', RailsAdmin::Support::ESModuleProcessor
-      when :importmap
-        self.importmap = Importmap::Map.new.draw(app.root.join('config/importmap.rails_admin.rb'))
-      end
+    initializer 'RailsAdmin assets', group: :all do |app|
+      next unless app.config.respond_to?(:assets)
+
+      builds_path = RailsAdmin::Engine.root.join('app/assets/builds').to_s
+      app.config.assets.paths << builds_path unless app.config.assets.paths.include?(builds_path)
+
+      app.config.assets.precompile += %w[rails_admin.js rails_admin.css] if RailsAdmin.config.asset_source == :sprockets
     end
 
     # Check for required middlewares, users may forget to use them in Rails API mode

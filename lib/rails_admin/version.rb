@@ -18,8 +18,9 @@ module RailsAdmin
       end
 
       def actual_js_version
-        case RailsAdmin.config.asset_source
-        when :webpacker, :webpack
+        # :propshaft / :sprockets serve the bundle shipped in the gem, which always matches.
+        # Only an app-built (:external) setup can drift from the gem's expected version.
+        if RailsAdmin.config.asset_source == :external
           js_version_from_node_modules
         else
           js
@@ -33,7 +34,7 @@ module RailsAdmin
         when js
           # Good
         when nil
-          warn "[Warning] Failed to detect RailsAdmin npm package, did you run 'yarn install'?"
+          warn '[Warning] Failed to detect the RailsAdmin npm package, did you install it?'
         else
           warn <<~MSG
             [Warning] RailsAdmin npm package version inconsistency detected, expected #{js} but actually used is #{actual_js_version}.

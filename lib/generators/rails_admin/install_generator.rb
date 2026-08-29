@@ -27,6 +27,10 @@ module RailsAdmin
       end
       display "Using [#{asset}] for asset delivery method"
       case asset
+      when 'sprockets', 'propshaft'
+        # RailsAdmin serves the bundle shipped in the gem; nothing to configure.
+      when 'external'
+        configure_for_external
       when 'webpack'
         configure_for_webpack
       when 'importmap'
@@ -35,8 +39,6 @@ module RailsAdmin
         configure_for_webpacker5
       when 'vite'
         configure_for_vite
-      when 'sprockets'
-        configure_for_sprockets
       else
         raise "Unknown asset source: #{asset}"
       end
@@ -47,21 +49,26 @@ module RailsAdmin
     def asset
       return options['asset'] if options['asset']
 
-      if defined?(Webpacker)
-        'webpacker'
+      if defined?(Propshaft)
+        'propshaft'
       elsif Rails.root.join('webpack.config.js').exist?
-        'webpack'
-      elsif Rails.root.join('config/importmap.rb').exist?
-        'importmap'
+        'external'
       elsif defined?(ViteRuby)
-        'vite'
+        'external'
       else
         'sprockets'
       end
     end
 
-    def configure_for_sprockets
-      gem 'sassc-rails'
+    def configure_for_external
+      template 'rails_admin.js', 'app/javascript/rails_admin.js'
+      @fa_font_path = 'rails_admin'
+      template 'rails_admin.scss.erb', 'app/javascript/rails_admin.scss'
+      say <<~INSTRUCTIONS, :yellow
+        Add the `rails_admin` npm package, then wire app/javascript/rails_admin.js and
+        app/javascript/rails_admin.scss into your build so they output
+        app/assets/builds/rails_admin.js and app/assets/builds/rails_admin.css.
+      INSTRUCTIONS
     end
 
     def configure_for_webpacker5

@@ -2,18 +2,8 @@
 <html>
 <head>
   <title>DummyApp</title>
-  <% case CI_ASSET %>
-  <% when :webpacker %>
-    <%= javascript_pack_tag "application" %>
-  <% when :importmap %>
-    <%= javascript_importmap_tags %>
-  <% when :vite %>
-    <%= vite_client_tag %>
-    <%= vite_javascript_tag 'application' %>
-  <% else %>
-    <%= stylesheet_link_tag    "application", media: "all" %>
-    <%= javascript_include_tag "application", type: 'module' %>
-  <% end %>
+  <%= stylesheet_link_tag "application", media: "all" %>
+  <%= javascript_include_tag "application", type: "module" %>
   <%= csrf_meta_tags %>
 </head>
 <body>

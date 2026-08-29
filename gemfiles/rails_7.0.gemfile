@@ -5,14 +5,14 @@ source "https://rubygems.org"
 gem "appraisal", ">= 2.0", require: false
 gem "devise", "~> 4.7"
 gem "net-smtp", require: false
+gem "propshaft", require: false
 gem "rails", "~> 7.0.0", "7.0.8.6"
-gem "sassc-rails", "~> 2.1"
+gem "sprockets-rails", require: false
 gem "turbo-rails"
 gem "vite_rails", require: false
 gem "webpacker", require: false
 gem "webrick"
 gem "concurrent-ruby", "1.3.4"
-gem "importmap-rails", require: false
 gem "nokogiri", "~> 1.16.0", platform: :jruby
 
 group :development, :test do

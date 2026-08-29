@@ -52,9 +52,13 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
           file 'app/javascript/stylesheets/rails_admin.scss' do
             contains '@import "rails_admin/src/rails_admin/styles/base"'
           end
-        when :sprockets
-          file 'Gemfile' do
-            contains 'sassc-rails'
+        when :external
+          file 'app/javascript/rails_admin.js' do
+            contains 'import "rails_admin/src/rails_admin/base"'
+          end
+          file 'app/javascript/rails_admin.scss' do
+            contains '$fa-font-path: "rails_admin";'
+            contains '@import "rails_admin/src/rails_admin/styles/base"'
           end
         when :importmap
           file 'app/javascript/rails_admin.js' do
