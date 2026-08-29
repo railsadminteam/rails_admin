@@ -21,6 +21,7 @@
 - The bundle carries jQuery, jQuery UI, Bootstrap, Popper, flatpickr with every locale, `@rails/activestorage` and the `@rails/actiontext` glue; Trix is still loaded from a CDN unless you bundle it yourself with `:external` ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - The asset toolchain moved to npm with a committed lockfile; `npm run build` (or `rake rails_admin:build_assets`) regenerates the bundle, and CI fails if the committed output is stale ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - `config.asset_source = :webpack` now maps to `:external`, and `:importmap` falls back to the detected pipeline, both with a deprecation warning ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- [BREAKING CHANGE] Sprockets applications move from the vendored Bootstrap 5.1 fork onto Bootstrap 5.3, which shifts some styling ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 
 ### Removed
 
@@ -29,6 +30,7 @@
 - [BREAKING CHANGE] The `rails_admin/custom/*` override files; use the `_head_custom` partial or `:external` instead ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - The `sassc-rails` dependency handling, which the prebuilt CSS makes unnecessary ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - [BREAKING CHANGE] `config.asset_source = :webpacker` and `:vite`, which now raise; use `:external` instead - Webpacker is end-of-life, and Vite still builds the `:external` entrypoints ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- The vendored Bootstrap, jQuery UI, Popper and flatpickr copies, which the bundle now resolves from npm ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 
 ### Fixed
 
