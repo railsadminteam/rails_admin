@@ -1,7 +1,7 @@
 import jQuery from "jquery";
 import "jquery-ui/ui/widget.js";
 import "jquery-ui/ui/widgets/autocomplete.js";
-import I18n from "./i18n";
+import I18n from "./i18n.js";
 
 (function ($) {
   "use strict";

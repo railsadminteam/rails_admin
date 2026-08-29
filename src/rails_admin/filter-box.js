@@ -1,5 +1,5 @@
 import jQuery from "jquery";
-import I18n from "./i18n";
+import I18n from "./i18n.js";
 import flatpickr from "flatpickr";
 
 (function ($) {
