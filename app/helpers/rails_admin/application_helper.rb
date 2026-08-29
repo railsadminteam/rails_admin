@@ -209,18 +209,6 @@ module RailsAdmin
       end
     end
 
-    def handle_asset_dependency_error
-      yield
-    rescue LoadError => e
-      if /sassc/.match?(e.message)
-        e = e.exception <<~MSG
-          #{e.message}
-          RailsAdmin requires the gem sassc-rails, make sure to put `gem 'sassc-rails'` to Gemfile.
-        MSG
-      end
-      raise e
-    end
-
     # Workaround for https://github.com/rails/rails/issues/31325
     def image_tag(source, options = {})
       if %w[ActiveStorage::Variant ActiveStorage::VariantWithRecord ActiveStorage::Preview].include? source.class.to_s
