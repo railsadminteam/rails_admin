@@ -7,6 +7,8 @@
 ### Added
 
 - Allow adapters for other ORMs to be provided from outside RailsAdmin, by registering them with `RailsAdmin::Adapters.register` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- `config.asset_source` accepts `:propshaft`, and a callable which renders the `<head>` tags itself ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- Add the `_head_custom` partial, so an application can inject its own tags into RailsAdmin's `<head>` with no build step ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 
 ### Changed
 
@@ -18,6 +20,7 @@
 - RailsAdmin ships a prebuilt `rails_admin.{js,css}` bundle, which `:propshaft` and `:sprockets` serve with no build step and no Node; see [the upgrade guide](docs/upgrading-to-4.md) ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - The bundle carries jQuery, jQuery UI, Bootstrap, Popper, flatpickr with every locale, `@rails/activestorage` and the `@rails/actiontext` glue; Trix is still loaded from a CDN unless you bundle it yourself with `:external` ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - The asset toolchain moved to npm with a committed lockfile; `npm run build` (or `rake rails_admin:build_assets`) regenerates the bundle, and CI fails if the committed output is stale ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- `config.asset_source = :webpack` now maps to `:external`, and `:importmap` falls back to the detected pipeline, both with a deprecation warning ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 
 ### Removed
 
