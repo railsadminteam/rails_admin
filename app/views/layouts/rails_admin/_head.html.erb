@@ -25,8 +25,6 @@
   <%= javascript_importmap_module_preload_tags(RailsAdmin::Engine.importmap) %>
   <%= javascript_importmap_shim_nonce_configuration_tag if respond_to? :javascript_importmap_shim_nonce_configuration_tag %>
   <%= javascript_importmap_shim_tag if respond_to? :javascript_importmap_shim_tag %>
-  <%= # Preload jQuery and make it global, unless jQuery UI fails to initialize
-      tag.script "import jQuery from 'jquery'; window.jQuery = jQuery;".html_safe, type: "module" %>
   <%= javascript_import_module_tag 'rails_admin' %>
 <% else
      raise "Unknown asset_source: #{RailsAdmin::config.asset_source}"
