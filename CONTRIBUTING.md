@@ -59,7 +59,7 @@ Then you need to do this one-time setup:
 bundle config build.mysql2 '-- --with-cflags="-Wno-error=implicit-function-declaration" --with-ldflags=-L/opt/homebrew/opt/zstd/lib'
 
 bundle install
-yarn install
+npm ci
 # install dependencies for each appraisal:
 bundle exec appraisal install
 # precompile assets in the dummy app:
