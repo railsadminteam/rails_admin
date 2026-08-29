@@ -277,6 +277,11 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
       end
     end
 
+    it "strips '_discard' from array values" do
+      expect(@abstract_model.send(:build_statement, :name, :enum, ['_discard'], nil)).to be_nil
+      expect(@abstract_model.send(:build_statement, :name, :enum, %w[_discard foo bar], nil)).to eq(name: {'$in' => %w[foo bar]})
+    end
+
     it "supports '_blank' operator" do
       [['_blank', ''], ['', '_blank']].each do |value, operator|
         expect(@abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(name: {'$in' => [nil, '']})
