@@ -31,6 +31,7 @@
 - The `sassc-rails` dependency handling, which the prebuilt CSS makes unnecessary ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - [BREAKING CHANGE] `config.asset_source = :webpacker` and `:vite`, which now raise; use `:external` instead - Webpacker is end-of-life, and Vite still builds the `:external` entrypoints ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - The vendored Bootstrap, jQuery UI, Popper and flatpickr copies, which the bundle now resolves from npm ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- The Font Awesome `.ttf` webfont; the face ships as woff2 only ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 
 ### Fixed
 
