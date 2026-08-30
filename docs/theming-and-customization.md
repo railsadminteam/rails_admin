@@ -23,6 +23,34 @@ This way you'll get the [Bootswatch Journal](https://bootswatch.com/journal/)-th
 
 <img src="https://user-images.githubusercontent.com/486678/148493782-4b730372-4dd8-4533-b120-b05669610820.png" width="50%" />
 
+## Retheming without a build (CSS custom properties)
+
+RailsAdmin exposes a handful of CSS custom properties on `body.rails_admin`.
+Override them from a stylesheet or a `_head_custom` `<style>` block (see below) to
+restyle the RailsAdmin chrome without recompiling its CSS.
+
+| Property                                        | Default                                     | Controls                                                                           |
+| ----------------------------------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `--ra-avatar-size`                              | `30px`                                      | avatar in the top navbar                                                           |
+| `--ra-nav-link-active-bg`                       | `$primary`                                  | sidebar link active / hover background                                             |
+| `--ra-nav-link-active-color`                    | contrast of `$primary`                      | sidebar link active / hover text (set this too whenever you change the background) |
+| `--ra-nav-toggle-color`                         | `$gray-600`                                 | sidebar section headings                                                           |
+| `--ra-nav-toggle-active-color`                  | `$gray-700`                                 | expanded sidebar section heading                                                   |
+| `--ra-nested-form-border-color`                 | `$primary`                                  | nested form left border (level 1)                                                  |
+| `--ra-nested-form-border-color-2` / `-3` / `-4` | lightened `$info` / `$warning` / `$success` | nested form border, levels 2–4                                                     |
+| `--ra-table-sort-caret-color`                   | `$dark`                                     | sort direction caret in list headers                                               |
+| `--ra-table-sort-active-bg`                     | `rgba($info, .25)`                          | sorted column header background                                                    |
+
+```erb
+<%# app/views/layouts/rails_admin/_head_custom.html.erb %>
+<style nonce="<%= content_security_policy_nonce %>">
+  body.rails_admin {
+    --ra-nav-link-active-bg: #6f42c1;
+    --ra-nav-link-active-color: #fff;
+  }
+</style>
+```
+
 # Customization
 
 There are 2 ways of adding user-defined JavaScript and stylesheets to RailsAdmin.

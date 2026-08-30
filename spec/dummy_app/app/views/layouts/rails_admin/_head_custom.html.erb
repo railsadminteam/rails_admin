@@ -1,6 +1,7 @@
 <%# Test hooks: exercise the RailsAdmin <head> customization point on every asset_source. %>
 <style nonce="<%= content_security_policy_nonce %>">
   .navbar-brand small { opacity: 0.99; }
+  body.rails_admin { --ra-nav-link-active-bg: rgb(1, 2, 3); }
 </style>
 <script nonce="<%= content_security_policy_nonce %>">
   window.domReadyTriggered = [];
