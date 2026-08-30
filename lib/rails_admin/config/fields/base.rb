@@ -180,7 +180,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :label do
-          (@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name name
+          (@label ||= {})[::I18n.locale] ||= abstract_model.human_attribute_name name
         end
 
         register_instance_option :hint do
@@ -197,7 +197,7 @@ module RailsAdmin
         # Accessor for field's length restrictions per validations
         #
         register_instance_option :valid_length do
-          @valid_length ||= abstract_model.model.validators_on(name).detect { |v| v.kind == :length }.try(&:options) || {}
+          @valid_length ||= abstract_model.attribute_length_options(name)
         end
 
         register_instance_option :partial do
@@ -215,20 +215,8 @@ module RailsAdmin
               :nil
             end
 
-          (@required ||= {})[context] ||= !!([name] + children_fields).uniq.detect do |column_name|
-            model = abstract_model.model
-            model.validators_on(column_name).detect do |v|
-              !(v.options[:allow_nil] || v.options[:allow_blank]) &&
-                %i[presence numericality attachment_presence].include?(v.kind) &&
-                (v.options[:on] == context || v.options[:on].blank?) &&
-                (v.options[:if].blank? && v.options[:unless].blank?)
-            end || model.reflect_on_all_associations(:belongs_to).detect do |a|
-              next unless a.name == column_name
-
-              required = a.options[:required] if a.options.key?(:required)
-              required = !a.options[:optional] if a.options.key?(:optional) && required.nil?
-              required.nil? ? abstract_model.belongs_to_required_by_default : required
-            end
+          (@required ||= {})[context] ||= ([name] + children_fields).uniq.any? do |column_name|
+            abstract_model.attribute_required?(column_name, context)
           end
         end
 

@@ -88,6 +88,10 @@ module RailsAdmin
       model.model_name.human
     end
 
+    def human_attribute_name(name)
+      model.human_attribute_name(name)
+    end
+
     def where(conditions)
       model.where(conditions)
     end
@@ -113,7 +117,41 @@ module RailsAdmin
       id
     end
 
+    # Whether the model makes the given attribute mandatory, either through a
+    # validation or through the options of a belongs_to association.
+    #
+    # +context+ is +:create+, +:update+ or +nil+ and is matched against the
+    # +:on+ option of a validation. Adapters may override this when their ORM
+    # expresses requiredness differently.
+    def attribute_required?(name, context)
+      !!(required_by_validation?(name, context) || required_by_association?(name))
+    end
+
+    # Options of the length validation defined on the given attribute, if any.
+    def attribute_length_options(name)
+      model.validators_on(name).detect { |validator| validator.kind == :length }.try(&:options) || {}
+    end
+
   private
+
+    def required_by_validation?(name, context)
+      model.validators_on(name).detect do |validator|
+        !(validator.options[:allow_nil] || validator.options[:allow_blank]) &&
+          %i[presence numericality attachment_presence].include?(validator.kind) &&
+          (validator.options[:on] == context || validator.options[:on].blank?) &&
+          (validator.options[:if].blank? && validator.options[:unless].blank?)
+      end
+    end
+
+    def required_by_association?(name)
+      model.reflect_on_all_associations(:belongs_to).detect do |association|
+        next unless association.name == name
+
+        required = association.options[:required] if association.options.key?(:required)
+        required = !association.options[:optional] if association.options.key?(:optional) && required.nil?
+        required.nil? ? belongs_to_required_by_default : required
+      end
+    end
 
     def initialize_active_record
       @adapter = :active_record
