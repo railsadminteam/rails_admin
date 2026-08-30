@@ -60,18 +60,34 @@ module RailsAdmin
           !virtual? || children_fields.first || false
         end
 
-        def sort_column
-          if sortable == true
-            "#{abstract_model.quoted_table_name}.#{abstract_model.quote_column_name(name)}"
-          elsif (sortable.is_a?(String) || sortable.is_a?(Symbol)) && sortable.to_s.include?('.') # just provide sortable, don't do anything smart
-            sortable
-          elsif sortable.is_a?(Hash) # just join sortable hash, don't do anything smart
+        # What to sort by, as a Criteria::Path wherever the configuration can be
+        # read as one. The adapter turns it into whatever its store needs.
+        #
+        # The table-qualified forms cannot be: their prefix is a table name, not
+        # an association name, so they are handed on untouched for the store to
+        # interpret.
+        def sort_order
+          case sortable
+          when true
+            RailsAdmin::Criteria::Path[name]
+          when Hash # <table> => <column>, passed through
             "#{sortable.keys.first}.#{sortable.values.first}"
-          elsif association? # use column on target table
-            "#{associated_model_config.abstract_model.quoted_table_name}.#{abstract_model.quote_column_name(sortable)}"
-          else # use described column in the field conf.
-            "#{abstract_model.quoted_table_name}.#{abstract_model.quote_column_name(sortable)}"
+          when String, Symbol
+            if sortable.to_s.include?('.') # "table.column", passed through
+              sortable
+            elsif association? # a column on the associated model
+              RailsAdmin::Criteria::Path[name, sortable]
+            else
+              RailsAdmin::Criteria::Path[sortable]
+            end
+          else
+            sortable
           end
+        end
+
+        # Deprecated: use #sort_order, which does not commit to a store's syntax.
+        def sort_column
+          abstract_model.sort_expression(sort_order)
         end
 
         register_instance_option :searchable do

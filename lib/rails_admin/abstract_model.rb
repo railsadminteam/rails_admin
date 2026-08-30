@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'rails_admin/criteria/path'
 require 'rails_admin/support/datetime'
 
 module RailsAdmin
@@ -101,6 +102,13 @@ module RailsAdmin
 
     def quote_column_name(name)
       name
+    end
+
+    # Render a sort target as an expression the store understands. Adapters that
+    # need qualification or quoting override this; anything already expressed in
+    # the store's own terms is handed through.
+    def sort_expression(order)
+      order.to_s
     end
 
     def to_s

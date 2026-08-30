@@ -72,7 +72,7 @@ module RailsAdmin
         if field.nil? || field.sortable == false # use default sort, asked field does not exist or is not sortable
           model_config.list.sort_by
         else
-          field.sort_column
+          field.sort_order
         end
 
       params[:sort_reverse] ||= 'false'

@@ -215,6 +215,10 @@ module RailsAdmin
         return scope unless options[:sort]
 
         case options[:sort]
+        when RailsAdmin::Criteria::Path
+          raise 'sorting by associated model column is not supported in Non-Relational databases' unless options[:sort].root?
+
+          field_name = options[:sort].attribute.to_s
         when String
           field_name, collection_name = options[:sort].split('.').reverse
           raise 'sorting by associated model column is not supported in Non-Relational databases' if collection_name && collection_name != table_name
