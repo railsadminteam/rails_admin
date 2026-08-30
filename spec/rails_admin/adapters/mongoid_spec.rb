@@ -3,42 +3,20 @@
 require 'spec_helper'
 
 RSpec.describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
-  describe '#associations' do
-    it 'returns Association class' do
-      expect(RailsAdmin::AbstractModel.new(Player).associations.first).
-        to be_a_kind_of RailsAdmin::Adapters::Mongoid::Association
-    end
+  it_behaves_like 'a RailsAdmin adapter' do
+    let(:adapter_record_type) { Mongoid::Document }
+    let(:adapter_property_type) { RailsAdmin::Adapters::Mongoid::Property }
+    let(:adapter_association_type) { RailsAdmin::Adapters::Mongoid::Association }
+    let(:adapter_missing_id) { '4f4f0824dcf2315093000000' }
   end
 
-  describe '#properties' do
-    it 'returns Property class' do
-      expect(RailsAdmin::AbstractModel.new(Player).properties.first).
-        to be_a_kind_of RailsAdmin::Adapters::Mongoid::Property
-    end
-  end
-
-  describe '#base_class' do
-    it 'returns inheritance base class' do
-      expect(RailsAdmin::AbstractModel.new(Hardball).base_class).to eq Ball
-    end
-  end
-
+  # Behavior shared with the other adapters lives in 'a RailsAdmin adapter'
+  # (spec/shared_examples/shared_examples_for_adapters.rb). Only what is specific
+  # to Mongoid stays here.
   describe 'data access methods' do
     before do
       @players = FactoryBot.create_list(:player, 3)
       @abstract_model = RailsAdmin::AbstractModel.new('Player')
-    end
-
-    it '#new returns a Mongoid::Document instance' do
-      expect(@abstract_model.new).to be_a(Mongoid::Document)
-    end
-
-    it '#get returns a Mongoid::Document instance' do
-      expect(@abstract_model.get(@players.first.id.to_s)).to eq(@players.first)
-    end
-
-    it '#get returns nil when id does not exist' do
-      expect(@abstract_model.get('4f4f0824dcf2315093000000')).to be_nil
     end
 
     context 'when Mongoid.raise_not_found_error is false' do
@@ -49,62 +27,19 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
       end
     end
 
-    it '#first returns a player' do
-      expect(@players).to include @abstract_model.first
-    end
-
-    it '#count returns count of items' do
-      expect(@abstract_model.count).to eq(@players.count)
-    end
-
-    it '#destroy destroys multiple items' do
-      @abstract_model.destroy(@players[0..1])
-      expect(Player.all).to eq(@players[2..2])
-    end
-
-    it '#where returns filtered results' do
-      expect(@abstract_model.where(name: @players.first.name).to_a).to eq([@players.first])
-    end
-
     describe '#all' do
-      it 'works without options' do
-        expect(@abstract_model.all.to_a).to match_array @players
-      end
-
       it 'supports eager loading' do
         expect(@abstract_model.all(include: :team).inclusions.collect(&:class_name)).to eq(['Team'])
       end
 
-      it 'supports limiting' do
-        expect(@abstract_model.all(limit: 2).to_a.size).to eq(2)
-      end
-
-      it 'supports retrieval by bulk_ids' do
-        expect(@abstract_model.all(bulk_ids: @players[0..1].collect { |player| player.id.to_s }).to_a).to match_array @players[0..1]
-      end
-
-      it 'supports pagination' do
-        expect(@abstract_model.all(sort: 'players._id', page: 2, per: 1).to_a).to eq(@players.sort_by(&:_id)[1..1])
+      # The 'collection.field' form is a Mongoid-only input format, accepted only
+      # when the collection is the model's own.
+      it 'supports ordering by a collection-qualified key' do
+        expect(@abstract_model.all(sort: 'players._id', sort_reverse: true).to_a).to eq(@players.sort)
+        expect(@abstract_model.all(sort: 'players._id', sort_reverse: false).to_a).to eq(@players.sort.reverse)
         # To prevent RSpec matcher to call Mongoid::Criteria#== method,
         # (we want to test equality of query result, not of Mongoid criteria)
         # to_a is added to invoke Mongoid query
-      end
-
-      it 'supports ordering' do
-        expect(@abstract_model.all(sort: 'players._id', sort_reverse: true).to_a).to eq(@players.sort)
-        expect(@abstract_model.all(sort: 'players._id', sort_reverse: false).to_a).to eq(@players.sort.reverse)
-      end
-
-      it 'supports querying' do
-        expect(@abstract_model.all(query: @players[1].name)).to eq(@players[1..1])
-      end
-
-      it 'supports filtering' do
-        expect(@abstract_model.all(filters: {'name' => {'0000' => {o: 'is', v: @players[1].name}}})).to eq(@players[1..1])
-      end
-
-      it 'ignores non-existent field name on filtering' do
-        expect { @abstract_model.all(filters: {'dummy' => {'0000' => {o: 'is', v: @players[1].name}}}) }.not_to raise_error
       end
     end
   end

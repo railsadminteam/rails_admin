@@ -4,6 +4,14 @@ require 'spec_helper'
 require 'timecop'
 
 RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
+  it_behaves_like 'a RailsAdmin adapter' do
+    let(:adapter_record_type) { ActiveRecord::Base }
+    let(:adapter_property_type) { RailsAdmin::Adapters::ActiveRecord::Property }
+    let(:adapter_association_type) { RailsAdmin::Adapters::ActiveRecord::Association }
+    let(:adapter_missing_id) { 'abc' }
+    let(:adapter_known_divergences) { %i[unknown_filter_field] }
+  end
+
   let(:activerecord_config) do
     if ::ActiveRecord::Base.respond_to? :connection_db_config
       ::ActiveRecord::Base.connection_db_config.configuration_hash
@@ -69,6 +77,9 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     end
   end
 
+  # Behavior shared with the other adapters lives in 'a RailsAdmin adapter'
+  # (spec/shared_examples/shared_examples_for_adapters.rb). Only what is specific
+  # to ActiveRecord stays here.
   describe 'data access methods' do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('Player') }
 
@@ -80,31 +91,13 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       ]
     end
 
-    it '#new returns an ActiveRecord instance' do
-      expect(abstract_model.new).to be_a(ActiveRecord::Base)
-    end
-
-    it '#get returns an ActiveRecord instance' do
-      expect(abstract_model.get(@players.first.id)).to eq(@players.first)
-    end
-
-    it '#get returns nil when id does not exist' do
-      expect(abstract_model.get('abc')).to be_nil
-    end
-
+    # Mongoid provides no GlobalID support, so this cannot be part of the shared
+    # contract. Regression test for the removal of the AbstractObject proxy (#2847).
     it '#get returns an object that can be passed to ActiveJob' do
       expect { NullJob.perform_later(abstract_model.get(@players.first.id)) }.not_to raise_error
     end
 
-    it '#first returns a player' do
-      expect(@players).to include abstract_model.first
-    end
-
     describe '#count' do
-      it 'returns count of items' do
-        expect(abstract_model.count).to eq(@players.count)
-      end
-
       context 'when default-scoped with select' do
         before do
           class PlayerWithDefaultScope < Player
@@ -120,30 +113,9 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       end
     end
 
-    it '#destroy destroys multiple items' do
-      abstract_model.destroy(@players[0..1])
-      expect(Player.all).to match_array(@players[2..])
-    end
-
-    it '#where returns filtered results' do
-      expect(abstract_model.where(name: @players.first.name)).to eq([@players.first])
-    end
-
     describe '#all' do
-      it 'works without options' do
-        expect(abstract_model.all).to match_array @players
-      end
-
       it 'supports eager loading' do
         expect(abstract_model.all(include: :team).includes_values).to eq([:team])
-      end
-
-      it 'supports limiting' do
-        expect(abstract_model.all(limit: 2).size).to eq(2)
-      end
-
-      it 'supports retrieval by bulk_ids' do
-        expect(abstract_model.all(bulk_ids: @players[0..1].collect(&:id))).to match_array @players[0..1]
       end
 
       it 'supports retrieval by bulk_ids with composite primary keys', composite_primary_keys: true do
@@ -152,21 +124,12 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
         ).to_sql.tr('`', '"')).to include 'WHERE ("fans_teams"."fan_id" = 1 AND "fans_teams"."team_id" = 2 OR "fans_teams"."fan_id" = 3 AND "fans_teams"."team_id" = 4)'
       end
 
-      it 'supports pagination' do
-        expect(abstract_model.all(sort: 'id', page: 2, per: 1)).to eq(@players[-2, 1])
-        expect(abstract_model.all(sort: 'id', page: 1, per: 2)).to eq(@players[-2, 2].reverse)
-      end
-
-      it 'supports ordering' do
-        expect(abstract_model.all(sort: 'id', sort_reverse: true)).to eq(@players.sort)
+      # Multiple columns, table-qualified hashes and rejection of invalid values
+      # are ActiveRecord-only input formats.
+      it 'supports ordering by multiple columns' do
         expect(abstract_model.all(sort: %w[id name], sort_reverse: true).to_sql.tr('`', '"')).to include('ORDER BY "players"."id" ASC, "players"."name" ASC')
         expect(abstract_model.all(include: :team, sort: {players: :name, teams: :name}, sort_reverse: true).to_sql.tr('`', '"')).to include('ORDER BY "players"."name" ASC, "teams"."name" ASC')
         expect { abstract_model.all(sort: 1, sort_reverse: true) }.to raise_error ArgumentError, /Unsupported/
-      end
-
-      it 'supports querying' do
-        results = abstract_model.all(query: @players[1].name)
-        expect(results).to eq(@players[1..1])
       end
 
       it 'supports multibyte querying' do
@@ -174,10 +137,6 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
           results = abstract_model.all(query: @players[4].name)
           expect(results).to eq(@players[4, 1])
         end
-      end
-
-      it 'supports filtering' do
-        expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'is', v: @players[1].name}}})).to eq(@players[1..1])
       end
     end
   end
