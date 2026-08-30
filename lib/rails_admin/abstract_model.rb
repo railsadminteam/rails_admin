@@ -43,6 +43,41 @@ module RailsAdmin
       def reset_polymorphic_parents
         @@polymorphic_parents = {}
       end
+
+      # A classifier answers "what is this attribute, in RailsAdmin's terms" for
+      # attributes whose meaning comes from the model layer rather than from the
+      # store: attachment libraries, enums and the like. Without it every field
+      # factory has to reach past the adapter and inspect the model class itself.
+      #
+      # The block receives the model class and a property, and returns a Role or
+      # nil to defer to the next classifier. Classifiers run last in, first out.
+      # A classifier must not ask the property for its role, or it recurses.
+      def register_classifier(&block)
+        classifiers.unshift(block)
+      end
+
+      def classifiers
+        @classifiers ||= []
+      end
+
+      def classify(model, property)
+        classifiers.each do |classifier|
+          role = classifier.call(model, property)
+          return role if role
+        end
+        nil
+      end
+    end
+
+    # What a property turned out to be, beyond its storage type.
+    #
+    # +kind+ names the thing (:shrine, :paperclip, :enum, ...), +name+ is the
+    # field name it should be surfaced under, and +children+ lists the columns
+    # that back it and therefore should not be shown on their own.
+    Role = Struct.new(:kind, :name, :children, keyword_init: true) do
+      def initialize(kind:, name:, children: [])
+        super
+      end
     end
 
     def initialize(model_or_model_name)

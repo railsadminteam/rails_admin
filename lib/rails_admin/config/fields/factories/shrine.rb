@@ -4,19 +4,30 @@ require 'rails_admin/config/fields'
 require 'rails_admin/config/fields/types'
 require 'rails_admin/config/fields/types/file_upload'
 
+RailsAdmin::AbstractModel.register_classifier do |model, property|
+  next unless defined?(::Shrine)
+
+  attachment_names = model.ancestors.select { |ancestor| ancestor.is_a?(Shrine::Attachment) }.map { |a| a.instance_variable_get('@name') }
+  next if attachment_names.blank?
+
+  attachment_name = attachment_names.detect { |name| name == property.name.to_s.chomp('_data').to_sym }
+  next unless attachment_name
+
+  RailsAdmin::AbstractModel::Role.new(
+    kind: :shrine,
+    name: attachment_name,
+    children: [:"#{attachment_name}_data"],
+  )
+end
+
 RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
-  next false unless defined?(::Shrine)
+  role = properties.try(:role)
+  next false unless role&.kind == :shrine
 
-  attachment_names = parent.abstract_model.model.ancestors.select { |m| m.is_a?(Shrine::Attachment) }.map { |a| a.instance_variable_get('@name') }
-  next false if attachment_names.blank?
-
-  attachment_name = attachment_names.detect { |a| a == properties.name.to_s.chomp('_data').to_sym }
-  next false unless attachment_name
-
-  field = RailsAdmin::Config::Fields::Types.load(:shrine).new(parent, attachment_name, properties)
+  field = RailsAdmin::Config::Fields::Types.load(:shrine).new(parent, role.name, properties)
   fields << field
 
-  data_field_name = :"#{attachment_name}_data"
+  data_field_name = role.children.first
   child_properties = parent.abstract_model.properties.detect { |p| p.name == data_field_name }
   next true unless child_properties
 
