@@ -4,6 +4,10 @@
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.3.0...HEAD)
 
+### Changed
+
+- Overriding `#sort_column` in a custom field no longer affects sorting; override `#sort_order` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+
 ### Fixed
 
 - Fix the list raising an error when an enum field's options come from a class method on the model ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))

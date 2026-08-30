@@ -140,6 +140,40 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     end
   end
 
+  describe '#sort_expression' do
+    let(:abstract_model) { RailsAdmin::AbstractModel.new('Player') }
+
+    it 'quotes the table and column names of a local attribute' do
+      expect(abstract_model.sort_expression(RailsAdmin::Criteria::Path[:name])).
+        to match(/^["`]players["`]\.["`]name["`]$/)
+    end
+
+    it 'quotes the table and column names of an associated attribute' do
+      expect(abstract_model.sort_expression(RailsAdmin::Criteria::Path[:team, :name])).
+        to match(/^["`]teams["`]\.["`]name["`]$/)
+    end
+
+    it 'uses the quoting style of the connection' do
+      adapter =
+        if ::ActiveRecord::Base.respond_to?(:connection_db_config)
+          ::ActiveRecord::Base.connection_db_config.configuration_hash[:adapter]
+        else
+          ::ActiveRecord::Base.connection_config[:adapter]
+        end
+      expected = adapter == 'mysql2' ? '`teams`.`name`' : '"teams"."name"'
+      expect(abstract_model.sort_expression(RailsAdmin::Criteria::Path[:team, :name])).to eq expected
+    end
+
+    it 'hands table-qualified strings through untouched' do
+      expect(abstract_model.sort_expression('teams.name')).to eq 'teams.name'
+    end
+
+    it 'rejects a path through an unknown association' do
+      expect { abstract_model.sort_expression(RailsAdmin::Criteria::Path[:nonexistent, :name]) }.
+        to raise_error ArgumentError, /Unknown association/
+    end
+  end
+
   describe '#query_scope' do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('Team') }
     let!(:teams) do

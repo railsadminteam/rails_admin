@@ -151,7 +151,24 @@ module RailsAdmin
         model.defined_enums[name.to_s]
       end
 
+      def sort_expression(order)
+        return order.to_s unless order.is_a?(RailsAdmin::Criteria::Path)
+
+        "#{sort_table_name(order)}.#{quote_column_name(order.attribute)}"
+      end
+
     private
+
+      # The table the path's attribute lives on. Only a single association hop
+      # is resolvable, which is all the field configuration can express.
+      def sort_table_name(path)
+        return quoted_table_name if path.root?
+
+        association = associations.detect { |a| a.name == path.associations.first }
+        raise ArgumentError.new("Unknown association in sort path: #{path}") unless association
+
+        RailsAdmin::AbstractModel.new(association.klass).quoted_table_name
+      end
 
       def primary_key_scope(scope, id)
         if primary_key.is_a? Array
@@ -172,8 +189,8 @@ module RailsAdmin
       def sort_scope(scope, options)
         direction = options[:sort_reverse] ? :asc : :desc
         case options[:sort]
-        when String, Symbol
-          scope.reorder("#{options[:sort]} #{direction}")
+        when RailsAdmin::Criteria::Path, String, Symbol
+          scope.reorder("#{sort_expression(options[:sort])} #{direction}")
         when Array
           scope.reorder(options[:sort].zip(Array.new(options[:sort].size) { direction }).to_h)
         when Hash
