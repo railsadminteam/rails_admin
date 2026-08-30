@@ -139,6 +139,14 @@ module RailsAdmin
         model.belongs_to_required_by_default
       end
 
+      def serialize_attribute(name, value)
+        model.type_for_attribute(name.to_s).serialize(value)
+      end
+
+      def deserialize_attribute(name, value)
+        model.type_for_attribute(name.to_s).deserialize(value)
+      end
+
     private
 
       def primary_key_scope(scope, id)

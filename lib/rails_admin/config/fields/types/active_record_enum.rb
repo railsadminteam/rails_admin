@@ -32,7 +32,7 @@ module RailsAdmin
           def parse_value(value)
             return unless value.present?
 
-            abstract_model.model.attribute_types[name.to_s].serialize(value)
+            abstract_model.serialize_attribute(name, value)
           end
 
           def parse_input(params)
@@ -49,11 +49,7 @@ module RailsAdmin
         private
 
           def parse_input_value(value)
-            abstract_model.model.attribute_types[name.to_s].deserialize(value)
-          end
-
-          def type_cast_value(value)
-            abstract_model.model.column_types[name.to_s].type_cast_from_user(value)
+            abstract_model.deserialize_attribute(name, value)
           end
         end
       end

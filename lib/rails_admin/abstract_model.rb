@@ -132,6 +132,20 @@ module RailsAdmin
       model.validators_on(name).detect { |validator| validator.kind == :length }.try(&:options) || {}
     end
 
+    # Convert a Ruby value into the representation the store holds for the given
+    # attribute, and back.
+    #
+    # Both default to passing the value through. Adapters override them when
+    # their ORM has a type system able to do better; the Mongoid adapter does
+    # not, so values reach it unconverted.
+    def serialize_attribute(_name, value)
+      value
+    end
+
+    def deserialize_attribute(_name, value)
+      value
+    end
+
   private
 
     def required_by_validation?(name, context)
