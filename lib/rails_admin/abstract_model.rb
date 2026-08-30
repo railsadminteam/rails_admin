@@ -181,6 +181,24 @@ module RailsAdmin
       value
     end
 
+    # The values of an enum defined on the given attribute, or nil.
+    #
+    # Only stores with a native enum concept answer this; the rest leave enums
+    # to the model, which is what Types::Enum asks about instead.
+    def attribute_enum_values(_name)
+      nil
+    end
+
+    # A throwaway record, for asking what an instance of this model responds to
+    # when no real one is at hand.
+    #
+    # Instantiating one is wasteful and runs the model's initialization, but
+    # method_defined? would miss anything served through method_missing, so the
+    # original behavior is kept until there is a reason to narrow it.
+    def dummy_record
+      model.new
+    end
+
   private
 
     def required_by_validation?(name, context)

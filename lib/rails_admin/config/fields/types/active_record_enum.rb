@@ -14,7 +14,7 @@ module RailsAdmin
           end
 
           register_instance_option :enum do
-            abstract_model.model.defined_enums[name.to_s]
+            abstract_model.attribute_enum_values(name)
           end
 
           register_instance_option :pretty_value do
