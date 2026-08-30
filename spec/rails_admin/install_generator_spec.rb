@@ -68,4 +68,30 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
     end
     expect(File.read(File.join(destination_root, 'config/initializers/rails_admin.rb'))).to include 'config.asset_source ='
   end
+
+  describe 'asset_source normalization' do
+    def initializer
+      File.read(File.join(destination_root, 'config/initializers/rails_admin.rb'))
+    end
+
+    it 'treats --asset=webpack as :external' do
+      Dir.chdir(destination_root) { run_generator %w[admin --asset=webpack --force] }
+      expect(initializer).to include 'config.asset_source = :external'
+      expect(destination_root).to(have_structure do
+        file('app/javascript/rails_admin.js') { contains 'rails_admin/src/rails_admin/base' }
+      end)
+    end
+
+    it 'writes :sprockets without generating an entrypoint' do
+      Dir.chdir(destination_root) { run_generator %w[admin --asset=sprockets --force] }
+      expect(initializer).to include 'config.asset_source = :sprockets'
+      expect(File.exist?(File.join(destination_root, 'app/javascript/rails_admin.js'))).to be false
+    end
+
+    it 'falls back to a supported source for the removed --asset=importmap' do
+      Dir.chdir(destination_root) { run_generator %w[admin --asset=importmap --force] }
+      expect(initializer).to match(/config\.asset_source = :(propshaft|sprockets|external)\b/)
+      expect(initializer).not_to include ':importmap'
+    end
+  end
 end
