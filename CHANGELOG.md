@@ -9,6 +9,7 @@
 - Allow adapters for other ORMs to be provided from outside RailsAdmin, by registering them with `RailsAdmin::Adapters.register` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 - `config.asset_source` accepts `:propshaft`, and a callable which renders the `<head>` tags itself ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - Add the `_head_custom` partial, so an application can inject its own tags into RailsAdmin's `<head>` with no build step ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- Add `--ra-*` CSS custom properties, so an application can retheme the RailsAdmin chrome without a build step ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 
 ### Changed
 
