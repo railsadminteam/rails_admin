@@ -82,9 +82,8 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
   # to ActiveRecord stays here.
   describe 'data access methods' do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('Player') }
-
-    before do
-      @players = FactoryBot.create_list(:player, 3) + [
+    let!(:players) do
+      FactoryBot.create_list(:player, 3) + [
         # Multibyte players
         FactoryBot.create(:player, name: 'Антоха'),
         FactoryBot.create(:player, name: 'Петруха'),
@@ -94,7 +93,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     # Mongoid provides no GlobalID support, so this cannot be part of the shared
     # contract. Regression test for the removal of the AbstractObject proxy (#2847).
     it '#get returns an object that can be passed to ActiveJob' do
-      expect { NullJob.perform_later(abstract_model.get(@players.first.id)) }.not_to raise_error
+      expect { NullJob.perform_later(abstract_model.get(players.first.id)) }.not_to raise_error
     end
 
     describe '#count' do
@@ -108,7 +107,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
         let(:abstract_model) { RailsAdmin::AbstractModel.new('PlayerWithDefaultScope') }
 
         it 'does not break' do
-          expect(abstract_model.count).to eq(@players.count)
+          expect(abstract_model.count).to eq(players.count)
         end
       end
     end
@@ -134,8 +133,8 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
       it 'supports multibyte querying' do
         unless activerecord_config[:adapter] == 'sqlite3'
-          results = abstract_model.all(query: @players[4].name)
-          expect(results).to eq(@players[4, 1])
+          results = abstract_model.all(query: players[4].name)
+          expect(results).to eq(players[4, 1])
         end
       end
     end
@@ -143,14 +142,13 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
   describe '#query_scope' do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('Team') }
-
-    before do
-      @teams = [{}, {name: 'somewhere foos'}, {manager: 'foo junior'}].
-               collect { |h| FactoryBot.create :team, h }
+    let!(:teams) do
+      [{}, {name: 'somewhere foos'}, {manager: 'foo junior'}].
+        collect { |h| FactoryBot.create :team, h }
     end
 
     it 'makes correct query' do
-      expect(abstract_model.all(query: 'foo')).to match_array @teams[1..2]
+      expect(abstract_model.all(query: 'foo')).to match_array teams[1..2]
     end
 
     context "when field's searchable_columns is empty" do
@@ -181,7 +179,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       end
 
       it 'parses value only once' do
-        expect(abstract_model.all(query: 'foo')).to match_array @teams[1]
+        expect(abstract_model.all(query: 'foo')).to match_array teams[1]
       end
     end
   end
@@ -189,10 +187,10 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
   describe '#filter_scope' do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('Team') }
 
-    before do
-      @division = FactoryBot.create :division, name: 'bar division'
-      @teams = [{}, {division: @division}, {name: 'somewhere foos', division: @division}, {name: 'nowhere foos'}].
-               collect { |h| FactoryBot.create :team, h }
+    let!(:division) { FactoryBot.create :division, name: 'bar division' }
+    let!(:teams) do
+      [{}, {division: division}, {name: 'somewhere foos', division: division}, {name: 'nowhere foos'}].
+        collect { |h| FactoryBot.create :team, h }
     end
 
     context 'without configuration' do
@@ -210,7 +208,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     end
 
     it 'makes correct query' do
-      expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'foo'}}, 'division' => {'0001' => {o: 'like', v: 'bar'}}}, include: :division)).to eq([@teams[2]])
+      expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'foo'}}, 'division' => {'0001' => {o: 'like', v: 'bar'}}}, include: :division)).to eq([teams[2]])
     end
 
     context 'when parsing is not idempotent' do
@@ -227,7 +225,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       end
 
       it 'parses value only once' do
-        expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'where'}}})).to match_array @teams[2]
+        expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'where'}}})).to match_array teams[2]
       end
     end
 
@@ -240,13 +238,13 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
       it 'only matches on prefix' do
         # Specified operator is honored and matches
-        expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'where'}}})).to match_array @teams[2..3]
+        expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'where'}}})).to match_array teams[2..3]
 
         # No operator falls back to the default_search_operator(starts_with) and doesn't match NON-PREFIX
         expect(abstract_model.all(filters: {'name' => {'0000' => {v: 'where'}}})).to be_empty
 
         # No operator falls back to the default_search_operator(starts_with) and doesn't match NON-PREFIX
-        expect(abstract_model.all(filters: {'name' => {'0000' => {v: 'somewhere'}}})).to match_array @teams[2]
+        expect(abstract_model.all(filters: {'name' => {'0000' => {v: 'somewhere'}}})).to match_array teams[2]
       end
     end
   end
