@@ -1,4 +1,3 @@
-import Rails from "@rails/ujs";
 import jQuery from "jquery";
 import "jquery-ui/ui/widget.js";
 import * as bootstrap from "bootstrap";
@@ -79,7 +78,13 @@ import * as bootstrap from "bootstrap";
         cancelButtonText = dialog.find(":submit[name=_continue]").html();
       dialog.find(".form-actions").remove();
 
-      form.attr("data-remote", true).attr("data-type", "json");
+      // We submit this form ourselves (see _submitForm) and want the JSON back,
+      // not a Turbo navigation - catch both the save button and an Enter keypress.
+      form.attr("data-turbo", "false");
+      form.off("submit.raRemoteForm").on("submit.raRemoteForm", function (e) {
+        e.preventDefault();
+        widget._submitForm(form);
+      });
       dialog.find(".modal-header-title").text(form.data("title"));
       dialog
         .find(".cancel-action")
@@ -96,63 +101,80 @@ import * as bootstrap from "bootstrap";
         .find(".save-action")
         .unbind()
         .click(function () {
-          Rails.fire(form[0], "submit");
+          form.trigger("submit.raRemoteForm");
           return false;
         })
         .html(saveButtonText);
 
       const event = new CustomEvent("rails_admin.dom_ready", { detail: form });
       document.dispatchEvent(event);
+    },
 
-      form.bind("ajax:complete", function (event) {
-        var data = event.detail[0];
-        if (data.status == 200) {
-          var json = JSON.parse(data.responseText);
-          var option =
-            '<option value="' +
-            json.id +
-            '" selected>' +
-            json.label +
-            "</option>";
-          var select = widget.element.find("select").filter(":hidden");
-
-          if (widget.element.find(".filtering-select").length) {
-            // select input
-            var input = widget.element
-              .find(".filtering-select")
-              .children(".ra-filtering-select-input");
-            input.val(json.label);
-            if (!select.find("option[value=" + json.id + "]").length) {
-              // not a replace
-              select.html(option).val(json.id);
-              widget.element.find(".update").removeClass("disabled");
-            }
-          } else {
-            // multi-select input
-            var multiselect = widget.element.find(".ra-multiselect");
-            if (multiselect.find("option[value=" + json.id + "]").length) {
-              // replace
-              select.find("option[value=" + json.id + "]").text(json.label);
-              multiselect
-                .find("option[value= " + json.id + "]")
-                .text(json.label);
-            } else {
-              // add
-              select.append(option);
-              multiselect
-                .find("select.ra-multiselect-selection")
-                .append(option);
-            }
-          }
-          widget._trigger("success");
-          dialog.each(function (index, element) {
-            bootstrap.Modal.getInstance(element).hide();
-          });
-        } else {
-          dialog.find(".modal-body").html(data.responseText);
-          widget._bindFormEvents();
-        }
+    _submitForm: function (form) {
+      var widget = this;
+      var csrf = document.querySelector('meta[name="csrf-token"]');
+      jQuery.ajax({
+        url: form.attr("action"),
+        method: (form.attr("method") || "post").toUpperCase(),
+        data: new FormData(form[0]),
+        processData: false,
+        contentType: false,
+        headers: {
+          "X-CSRF-Token": csrf ? csrf.content : "",
+          // JSON on success, the modal HTML (format.js) on validation errors.
+          Accept: "application/json, text/javascript",
+        },
+        complete: function (xhr) {
+          widget._handleFormResponse(xhr);
+        },
       });
+    },
+
+    _handleFormResponse: function (xhr) {
+      var widget = this,
+        dialog = this._getModal();
+      if (xhr.status == 200) {
+        var json = JSON.parse(xhr.responseText);
+        var option =
+          '<option value="' +
+          json.id +
+          '" selected>' +
+          json.label +
+          "</option>";
+        var select = widget.element.find("select").filter(":hidden");
+
+        if (widget.element.find(".filtering-select").length) {
+          // select input
+          var input = widget.element
+            .find(".filtering-select")
+            .children(".ra-filtering-select-input");
+          input.val(json.label);
+          if (!select.find("option[value=" + json.id + "]").length) {
+            // not a replace
+            select.html(option).val(json.id);
+            widget.element.find(".update").removeClass("disabled");
+          }
+        } else {
+          // multi-select input
+          var multiselect = widget.element.find(".ra-multiselect");
+          if (multiselect.find("option[value=" + json.id + "]").length) {
+            // replace
+            select.find("option[value=" + json.id + "]").text(json.label);
+            multiselect.find("option[value= " + json.id + "]").text(json.label);
+          } else {
+            // add
+            select.append(option);
+            multiselect.find("select.ra-multiselect-selection").append(option);
+          }
+        }
+        widget._trigger("success");
+        dialog.each(function (index, element) {
+          bootstrap.Modal.getInstance(element).hide();
+        });
+      } else {
+        dialog.find(".modal-body").html(xhr.responseText);
+        widget._bindFormEvents();
+      }
     },
 
     _getModal: function () {

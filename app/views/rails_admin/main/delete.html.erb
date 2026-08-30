@@ -9,11 +9,11 @@
 <%= form_for(@object, url: delete_path(model_name: @abstract_model.to_param, id: @object.id), html: {method: "delete"}) do %>
   <input name="return_to" type="<%= :hidden %>" value="<%= (params[:return_to].presence || request.referer) %>" />
   <div class="form-actions">
-    <button class="btn btn-danger" data-disable-with="<%= t("admin.form.confirmation") %>" type="submit">
+    <button class="btn btn-danger" data-turbo-submits-with="<%= t("admin.form.confirmation") %>" type="submit">
       <i class="fas fa-check"></i>
       <%= t("admin.form.confirmation") %>
     </button>
-    <button class="btn" data-disable-with="<%= t("admin.form.cancel") %>" name="_continue" type="submit">
+    <button class="btn" data-turbo-submits-with="<%= t("admin.form.cancel") %>" name="_continue" type="submit">
       <i class="fas fa-times"></i>
       <%= t("admin.form.cancel") %>
     </button>
