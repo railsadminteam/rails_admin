@@ -1,5 +1,7 @@
 [Troubleshoot? check me first](troubleshoot.md)
 
+[Upgrading to RailsAdmin 4.0](upgrading-to-4.md)
+
 ### Overview
 
 1. [Introduction to RailsAdmin](http://www.slideshare.net/benoitbenezech/rails-admin-overbest-practices)
@@ -7,12 +9,13 @@
 ### Configuration
 
 1. [Base RailsAdmin configuration](base-configuration.md)
-2. [Actions](actions.md)
-3. [Navigation](navigation.md)
-4. [Models](models.md)
-5. [Groups](groups.md)
-6. [Fields](fields.md)
-7. [Translations](translations.md)
+2. [Asset delivery](asset-delivery.md)
+3. [Actions](actions.md)
+4. [Navigation](navigation.md)
+5. [Models](models.md)
+6. [Groups](groups.md)
+7. [Fields](fields.md)
+8. [Translations](translations.md)
 
 ### Integration Testing
 

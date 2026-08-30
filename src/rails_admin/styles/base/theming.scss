@@ -3,9 +3,31 @@
   Keep it clean, people
 */
 
-$avatar-size: 30px;
-
 body.rails_admin {
+  /*
+    Theming custom properties. Override these from the host app (an
+    app/views/layouts/rails_admin/_head_custom.html.erb <style> block, or a
+    stylesheet targeting `body.rails_admin`) to retheme RailsAdmin without
+    rebuilding its CSS. Defaults reproduce the compiled-in Bootstrap theme.
+  */
+  --ra-avatar-size: 30px;
+  --ra-nav-link-active-bg: #{map-get($theme-colors, primary)};
+  --ra-nav-link-active-color: #{color-contrast(map-get($theme-colors, primary))};
+  --ra-nav-toggle-color: #{$gray-600};
+  --ra-nav-toggle-active-color: #{$gray-700};
+  --ra-nested-form-border-color: #{map-get($theme-colors, primary)};
+  --ra-nested-form-border-color-2: #{lighten(map-get($theme-colors, info), 20%)};
+  --ra-nested-form-border-color-3: #{lighten(
+      map-get($theme-colors, warning),
+      30%
+    )};
+  --ra-nested-form-border-color-4: #{lighten(
+      map-get($theme-colors, success),
+      40%
+    )};
+  --ra-table-sort-caret-color: #{$dark};
+  --ra-table-sort-active-bg: #{rgba($info, 0.25)};
+
   .thumbnail {
     display: inline-block;
   }
@@ -19,10 +41,10 @@ body.rails_admin {
 
       img {
         position: absolute;
-        top: calc((40px - $avatar-size) / 2);
+        top: calc((40px - var(--ra-avatar-size)) / 2);
 
         & + span {
-          margin-left: ($avatar-size + 5px);
+          margin-left: calc(var(--ra-avatar-size) + 5px);
         }
       }
     }
@@ -36,24 +58,24 @@ body.rails_admin {
       margin-top: calc(#{$grid-gutter-width} / 2);
       padding: 3px calc(#{$grid-gutter-width} / 2);
       font-weight: bold;
-      color: $gray-600;
+      color: var(--ra-nav-toggle-color);
     }
 
     .btn-toggle[aria-expanded="true"] {
-      color: $gray-700;
+      color: var(--ra-nav-toggle-active-color);
     }
 
     .btn-toggle-nav > li > a {
       padding: calc(#{$navbar-padding-y} / 2) calc(#{$grid-gutter-width} / 2);
 
       &.active {
-        background-color: map-get($theme-colors, primary);
-        color: color-contrast(map-get($theme-colors, primary));
+        background-color: var(--ra-nav-link-active-bg);
+        color: var(--ra-nav-link-active-color);
       }
 
       &:hover {
-        background-color: map-get($theme-colors, primary);
-        color: color-contrast(map-get($theme-colors, primary));
+        background-color: var(--ra-nav-link-active-bg);
+        color: var(--ra-nav-link-active-color);
       }
 
       &.nav-level-1 {
@@ -80,7 +102,7 @@ body.rails_admin {
     /* nested forms */
     .tab-content {
       .tab-pane {
-        border-left: 5px solid map-get($theme-colors, primary);
+        border-left: 5px solid var(--ra-nested-form-border-color);
         position: relative;
 
         fieldset {
@@ -111,7 +133,7 @@ body.rails_admin {
 
     /* double nesting, guys. Easy. */
     .tab-content .tab-content .tab-pane {
-      border-color: lighten(map-get($theme-colors, info), 20%);
+      border-color: var(--ra-nested-form-border-color-2);
       margin-left: 10px;
 
       .form-group {
@@ -121,7 +143,7 @@ body.rails_admin {
 
     /* triple nesting!*/
     .tab-content .tab-content .tab-content .tab-pane {
-      border-color: lighten(map-get($theme-colors, warning), 30%);
+      border-color: var(--ra-nested-form-border-color-3);
       margin-left: 20px;
 
       .form-group {
@@ -131,7 +153,7 @@ body.rails_admin {
 
     /* totally awesome! nesting on 4 levels! */
     .tab-content .tab-content .tab-content .tab-content .tab-pane {
-      border-color: lighten(map-get($theme-colors, success), 40%);
+      border-color: var(--ra-nested-form-border-color-4);
       margin-left: 30px;
 
       .form-group {
@@ -183,13 +205,13 @@ body.rails_admin {
         margin-right: -16px;
         border-width: 0 4px 4px;
         border-style: solid;
-        border-color: $dark transparent;
+        border-color: var(--ra-table-sort-caret-color) transparent;
         visibility: hidden;
       }
     }
     .headerSortUp,
     .headerSortDown {
-      background-color: rgba($info, 0.25);
+      background-color: var(--ra-table-sort-active-bg);
       text-shadow: 0 1px 1px rgba($light, 0.75);
     }
     .header:hover {
@@ -209,7 +231,7 @@ body.rails_admin {
         border-bottom: none;
         border-left: 4px solid transparent;
         border-right: 4px solid transparent;
-        border-top: 4px solid $dark;
+        border-top: 4px solid var(--ra-table-sort-caret-color);
         visibility: visible;
         @include box-shadow(none);
         opacity: 60;

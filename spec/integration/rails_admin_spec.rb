@@ -30,34 +30,27 @@ RSpec.describe RailsAdmin, type: :request do
   describe 'html head' do
     before { visit dashboard_path }
 
-    # NOTE: the [href^="/asset... syntax matches the start of a value. The reason
-    # we just do that is to avoid being confused by rails' asset_ids.
-    it 'loads stylesheets in header' do
-      case RailsAdmin.config.asset_source
-      when :sprockets
-        is_expected.to have_selector('head link[href^="/assets/rails_admin"][href$=".css"]', visible: false)
-      when :webpacker
-        is_expected.to have_no_selector('head link[href~="rails_admin"][href$=".css"]', visible: false)
-      end
+    it 'loads the RailsAdmin stylesheet' do
+      is_expected.to have_selector('head link[href*="rails_admin"][href$=".css"]', visible: false)
     end
 
-    it 'loads javascript files in body' do
-      case RailsAdmin.config.asset_source
-      when :sprockets
-        is_expected.to have_selector('head script[src^="/assets/rails_admin"][src$=".js"]', visible: false)
-      when :webpacker
-        is_expected.to have_selector('head script[src^="/packs-test/js/rails_admin"][src$=".js"]', visible: false)
-      end
+    it 'loads the RailsAdmin javascript' do
+      is_expected.to have_selector('head script[src*="rails_admin"][src$=".js"]', visible: false)
     end
   end
 
   describe 'custom theming' do
     before { visit dashboard_path }
 
-    if CI_ASSET == :sprockets
-      it 'applies the style overridden by assets in the application', js: true do
-        expect(find('.navbar-brand small').style('opacity')).to eq({'opacity' => '0.99'})
-      end
+    it 'renders the _head_custom override from the host app', js: true do
+      expect(find('.navbar-brand small').style('opacity')).to eq({'opacity' => '0.99'})
+    end
+
+    it 'lets the host app retheme via --ra-* custom properties', js: true do
+      value = page.evaluate_script(
+        "getComputedStyle(document.body).getPropertyValue('--ra-nav-link-active-bg').trim()",
+      )
+      expect(value).to eq('rgb(1, 2, 3)')
     end
   end
 
