@@ -1,4 +1,3 @@
-import Rails from "@rails/ujs";
 import "@hotwired/turbo-rails";
 import * as ActiveStorage from "@rails/activestorage";
 // The ActionText glue (~5 KB) so rich-text attachment uploads work out of the box.
@@ -32,9 +31,5 @@ import "./remote-form";
 import "./sidescroll";
 import "./ui";
 import "./widgets";
-
-if (!window._rails_loaded) {
-  Rails.start();
-}
 
 ActiveStorage.start();
