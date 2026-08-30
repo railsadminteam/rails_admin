@@ -6,6 +6,7 @@
 
 ### Fixed
 
+- Fix the list raising an error when an enum field's options come from a class method on the model ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 - Fix an error on Mongoid for a field configured as `:time` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 
 ## [3.3.0](https://github.com/railsadminteam/rails_admin/tree/v3.3.0) - 2024-12-08

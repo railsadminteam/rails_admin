@@ -45,6 +45,37 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
     end
   end
 
+  describe "when only the class responds to '\#{method}_enum'" do
+    before do
+      Team.singleton_class.class_eval do
+        def manager_enum
+          %w[Alice Bob]
+        end
+      end
+      RailsAdmin.config Team do
+        list do
+          field :manager, :enum
+        end
+      end
+    end
+
+    after do
+      Team.singleton_class.send(:remove_method, :manager_enum)
+    end
+
+    let(:field) { RailsAdmin.config(Team).list.fields.detect { |f| f.name == :manager } }
+
+    # The filters dropdown renders fields bound to a view but to no object,
+    # so the enumeration has to resolve without one.
+    it 'resolves the enumeration without a bound object' do
+      expect(field.with(view: nil).enum).to eq %w[Alice Bob]
+    end
+
+    it 'builds filter options without a bound object' do
+      expect { field.with(view: nil).filter_options }.not_to raise_error
+    end
+  end
+
   describe 'the enum instance method' do
     before do
       Team.class_eval do
