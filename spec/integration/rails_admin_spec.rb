@@ -45,6 +45,13 @@ RSpec.describe RailsAdmin, type: :request do
     it 'renders the _head_custom override from the host app', js: true do
       expect(find('.navbar-brand small').style('opacity')).to eq({'opacity' => '0.99'})
     end
+
+    it 'lets the host app retheme via --ra-* custom properties', js: true do
+      value = page.evaluate_script(
+        "getComputedStyle(document.body).getPropertyValue('--ra-nav-link-active-bg').trim()",
+      )
+      expect(value).to eq('rgb(1, 2, 3)')
+    end
   end
 
   describe 'navbar css class' do
