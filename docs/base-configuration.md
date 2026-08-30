@@ -4,51 +4,10 @@ configuration DSL which allows you to customize many aspects of the interface.
 
 ## Asset delivery
 
-Rails 7.0 drastically changed the way it integrates with JavaScript and CSS. RailsAdmin is made to be compatible with the change and it supports multiple asset delivery methods that are described in this section.
-
-For setting up the asset delivery, [the RailsAdmin installer](https://github.com/railsadminteam/rails_admin#installation) will basically auto-detect the asset delivery method and perform necessary configurations depending on the method it choose. But you can also manually specify the method to use.
-
-```bash
-$ rails g rails_admin:install --asset=sprockets
-```
-
-Once installation is finished, you can find the current asset delivery method in `config/initializers/rails_admin.rb`.
-
-```ruby
-RailsAdmin.config do |config|
-  config.asset_source = :sprockets
-end
-```
-
-### `:propshaft` / `:sprockets` (default)
-
-RailsAdmin ships a prebuilt `rails_admin.js` / `rails_admin.css` in the gem and
-serves it through whichever pipeline your app already uses. There is no build
-step and nothing to configure.
-
-```bash
-$ rails g rails_admin:install --asset=propshaft   # or --asset=sprockets
-```
-
-### `:external`
-
-Use this when you want to build the bundle yourself - to change the Bootstrap
-theme, add dependencies, or avoid the CDN fallback for Trix. The installer
-generates `app/javascript/rails_admin.js` and `app/javascript/rails_admin.scss`
-that re-export `rails_admin/src/rails_admin/base`; wire them into your bundler
-(esbuild, Webpack, Vite, ...) so they output
-`app/assets/builds/rails_admin.{js,css}`.
-
-```bash
-$ rails g rails_admin:install --asset=external
-```
-
-Passing `--asset=webpack` or `--asset=vite` is treated as `:external`.
-
-### A callable
-
-`config.asset_source` also accepts anything responding to `call(view)` that
-returns the `<head>` markup, if you need to serve the assets some other way.
+RailsAdmin ships a prebuilt bundle and serves it through your app's existing
+pipeline; `config.asset_source` (`:propshaft` / `:sprockets` / `:external` / a
+callable, auto-detected when unset) selects how. See
+[Asset delivery](asset-delivery.md) for the full picture.
 
 ## Set the application name
 

@@ -4,6 +4,26 @@
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.3.0...HEAD)
 
+### Asset delivery rework (4.0)
+
+See [docs/upgrading-to-4.md](docs/upgrading-to-4.md).
+
+- RailsAdmin ships a prebuilt `rails_admin.{js,css}` bundle; `:propshaft` and
+  `:sprockets` serve it with no build step and no Node
+- `config.asset_source`: added `:propshaft` and callable support; `:webpacker`
+  and `:vite` are removed (raise), `:webpack` maps to `:external`, `:importmap`
+  falls back to the detected pipeline (all with a deprecation warning)
+- `_head_custom.html.erb` partial and `--ra-*` CSS custom properties replace the
+  `rails_admin/custom/*` override files and the `rails_admin/application.*`
+  Sprockets manifests
+- Bundle jQuery/jQuery UI/Bootstrap 5.3/Popper/flatpickr (all locales) +
+  `@rails/activestorage` and the `@rails/actiontext` glue; Trix still loads from
+  a CDN unless bundled via `:external`
+- Dropped: `@rails/ujs`, the vendored Bootstrap 5.1 fork, `sassc-rails` handling,
+  the Font Awesome `.ttf`, the `ESModuleProcessor` / importmap pin generation
+- Toolchain moved to npm with a committed lockfile; `npm run build` /
+  `rake rails_admin:build_assets` regenerate the bundle, CI guards against drift
+
 ## [3.3.0](https://github.com/railsadminteam/rails_admin/tree/v3.3.0) - 2024-12-08
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.2.1...v3.3.0)
