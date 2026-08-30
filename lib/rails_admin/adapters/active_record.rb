@@ -147,6 +147,10 @@ module RailsAdmin
         model.type_for_attribute(name.to_s).deserialize(value)
       end
 
+      def attribute_enum_values(name)
+        model.defined_enums[name.to_s]
+      end
+
     private
 
       def primary_key_scope(scope, id)
