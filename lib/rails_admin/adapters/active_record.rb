@@ -154,20 +154,36 @@ module RailsAdmin
       def sort_expression(order)
         return order.to_s unless order.is_a?(RailsAdmin::Criteria::Path)
 
-        "#{sort_table_name(order)}.#{quote_column_name(order.attribute)}"
+        "#{quoted_path_table_name(order)}.#{quote_column_name(order.attribute)}"
+      end
+
+      # Unlike sorting, search statements are assembled unquoted, and the table
+      # half is read back out to build the relation's references.
+      def search_column(target)
+        return target.to_s unless target.is_a?(RailsAdmin::Criteria::Path)
+
+        "#{path_table_name(target)}.#{target.attribute}"
       end
 
     private
 
-      # The table the path's attribute lives on. Only a single association hop
+      # The model the path's attribute lives on. Only a single association hop
       # is resolvable, which is all the field configuration can express.
-      def sort_table_name(path)
-        return quoted_table_name if path.root?
+      def path_abstract_model(path)
+        return self if path.root?
 
         association = associations.detect { |a| a.name == path.associations.first }
-        raise ArgumentError.new("Unknown association in sort path: #{path}") unless association
+        raise ArgumentError.new("Unknown association in path: #{path}") unless association
 
-        RailsAdmin::AbstractModel.new(association.klass).quoted_table_name
+        RailsAdmin::AbstractModel.new(association.klass)
+      end
+
+      def path_table_name(path)
+        path_abstract_model(path).table_name
+      end
+
+      def quoted_path_table_name(path)
+        path_abstract_model(path).quoted_table_name
       end
 
       def primary_key_scope(scope, id)
@@ -202,21 +218,23 @@ module RailsAdmin
       end
 
       class WhereBuilder
-        def initialize(scope)
+        def initialize(scope, abstract_model)
           @statements = []
           @values = []
           @tables = []
           @scope = scope
+          @abstract_model = abstract_model
         end
 
         def add(field, value, operator)
           field.searchable_columns.flatten.each do |column_infos|
-            statement, value1, value2 = StatementBuilder.new(column_infos[:column], column_infos[:type], value, operator, @scope.connection.adapter_name).to_statement
+            column = @abstract_model.search_column(column_infos[:column])
+            statement, value1, value2 = StatementBuilder.new(column, column_infos[:type], value, operator, @scope.connection.adapter_name).to_statement
             @statements << statement if statement.present?
             @values << value1 unless value1.nil?
             @values << value2 unless value2.nil?
-            table, column = column_infos[:column].split('.')
-            @tables.push(table) if column
+            table, qualified = column.split('.')
+            @tables.push(table) if qualified
           end
         end
 
@@ -231,7 +249,7 @@ module RailsAdmin
         if config.list.search_by
           scope.send(config.list.search_by, query)
         else
-          wb = WhereBuilder.new(scope)
+          wb = WhereBuilder.new(scope, self)
           fields.each do |field|
             value = parse_field_value(field, query)
             wb.add(field, value, field.search_operator)
@@ -246,7 +264,7 @@ module RailsAdmin
       def filter_scope(scope, filters, fields = config.list.fields.select(&:filterable?))
         filters.each_pair do |field_name, filters_dump|
           filters_dump.each_value do |filter_dump|
-            wb = WhereBuilder.new(scope)
+            wb = WhereBuilder.new(scope, self)
             field = fields.detect { |f| f.name.to_s == field_name }
             value = parse_field_value(field, filter_dump[:v])
 
