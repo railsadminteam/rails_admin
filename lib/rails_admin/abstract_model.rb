@@ -111,6 +111,13 @@ module RailsAdmin
       order.to_s
     end
 
+    # Render a search target as the column reference the store understands.
+    # Overridden where reaching an associated attribute takes more than the
+    # dotted path itself.
+    def search_column(target)
+      target.to_s
+    end
+
     def to_s
       model.to_s
     end

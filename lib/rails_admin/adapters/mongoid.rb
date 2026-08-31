@@ -175,7 +175,26 @@ module RailsAdmin
         scope.where(statements.any? ? {'$and' => statements} : {})
       end
 
-      def parse_collection_name(column)
+      # Where a search target lives, as [collection, field] -- the collection is
+      # only used to group conditions and to tell apart what can be asked of this
+      # collection directly from what needs a second lookup.
+      def parse_collection_name(target)
+        return parse_collection_name_from_string(target.to_s) unless target.is_a?(RailsAdmin::Criteria::Path)
+
+        return [table_name, target.attribute.to_s] if target.root?
+
+        association = associations.detect { |a| a.name == target.associations.first }
+        if association.try(:embeds?)
+          # Embedded documents are reached by their field path, not by collection.
+          [table_name, target.to_s]
+        elsif association
+          [RailsAdmin::AbstractModel.new(association.klass).table_name, target.attribute.to_s]
+        else
+          [target.associations.first.to_s, target.attribute.to_s]
+        end
+      end
+
+      def parse_collection_name_from_string(column)
         collection_name, column_name = column.split('.')
         if associations.detect { |a| a.name == collection_name.to_sym }.try(:embeds?)
           [table_name, column]

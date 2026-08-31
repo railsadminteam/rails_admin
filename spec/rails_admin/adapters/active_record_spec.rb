@@ -174,6 +174,23 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     end
   end
 
+  describe '#search_column' do
+    let(:abstract_model) { RailsAdmin::AbstractModel.new('Team') }
+
+    # Search statements are assembled unquoted, unlike sort expressions.
+    it 'qualifies a local attribute with its own table' do
+      expect(abstract_model.search_column(RailsAdmin::Criteria::Path[:name])).to eq 'teams.name'
+    end
+
+    it 'qualifies an associated attribute with the associated table' do
+      expect(abstract_model.search_column(RailsAdmin::Criteria::Path[:division, :name])).to eq 'divisions.name'
+    end
+
+    it 'hands table-qualified strings through untouched' do
+      expect(abstract_model.search_column('leagues.name')).to eq 'leagues.name'
+    end
+  end
+
   describe '#query_scope' do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('Team') }
     let!(:teams) do
