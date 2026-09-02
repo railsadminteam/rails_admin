@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_admin/criteria/path'
+require 'rails_admin/criteria/period'
 require 'rails_admin/support/datetime'
 
 module RailsAdmin
@@ -269,7 +270,7 @@ module RailsAdmin
     protected
 
       def get_filtering_duration
-        FilteringDuration.new(@operator, @value).get_duration
+        RailsAdmin::Criteria::Period.new(@operator, @value).bounds
       end
 
       def build_statement_for_type_generic
@@ -340,55 +341,6 @@ module RailsAdmin
 
       def range_filter(_min, _max)
         raise 'You must override range_filter in your StatementBuilder'
-      end
-
-      class FilteringDuration
-        def initialize(operator, value)
-          @value = value
-          @operator = operator
-        end
-
-        def get_duration
-          case @operator
-          when 'between'   then between
-          when 'today'     then today
-          when 'yesterday' then yesterday
-          when 'this_week' then this_week
-          when 'last_week' then last_week
-          else default
-          end
-        end
-
-        def today
-          [Date.today, Date.today]
-        end
-
-        def yesterday
-          [Date.yesterday, Date.yesterday]
-        end
-
-        def this_week
-          [Date.today.beginning_of_week, Date.today.end_of_week]
-        end
-
-        def last_week
-          [1.week.ago.to_date.beginning_of_week,
-           1.week.ago.to_date.end_of_week]
-        end
-
-        def between
-          [@value[1], @value[2]]
-        end
-
-        def default
-          [default_date, default_date]
-        end
-
-      private
-
-        def default_date
-          Array.wrap(@value).first
-        end
       end
     end
   end
