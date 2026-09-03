@@ -30,6 +30,19 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
         expect(abstract_model.all(include: :team).inclusions.collect(&:class_name)).to eq(['Team'])
       end
 
+      # Without joins the associated attribute is out of reach, so a belongs_to
+      # falls back to the local foreign key. This is what the field configuration
+      # used to ask for directly after checking adapter_supports_joins?.
+      it 'sorts a belongs_to path by the local foreign key' do
+        expect(abstract_model.all(sort: RailsAdmin::Criteria::Path[:team, :name]).options[:sort]).
+          to eq('team_id' => -1)
+      end
+
+      it 'refuses to sort through an association without a local foreign key' do
+        expect { abstract_model.all(sort: RailsAdmin::Criteria::Path[:comments, :content]) }.
+          to raise_error(/not supported/)
+      end
+
       # The 'collection.field' form is a Mongoid-only input format, accepted only
       # when the collection is the model's own.
       it 'supports ordering by a collection-qualified key' do
