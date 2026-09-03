@@ -175,6 +175,20 @@ module RailsAdmin
         scope.where(statements.any? ? {'$and' => statements} : {})
       end
 
+      # Without joins an attribute on an associated document cannot be sorted on.
+      # For a belongs_to the local foreign key is the closest thing available,
+      # and is what the field configuration used to ask for on its own once it
+      # had checked whether the adapter supported joins.
+      def sort_field_name(path)
+        return path.attribute.to_s if path.root?
+
+        association = associations.detect { |a| a.name == path.associations.first }
+        foreign_key = association.foreign_key if association&.type == :belongs_to
+        raise 'sorting by associated model column is not supported in Non-Relational databases' unless foreign_key
+
+        foreign_key.to_s
+      end
+
       # Where a search target lives, as [collection, field] -- the collection is
       # only used to group conditions and to tell apart what can be asked of this
       # collection directly from what needs a second lookup.
@@ -235,9 +249,7 @@ module RailsAdmin
 
         case options[:sort]
         when RailsAdmin::Criteria::Path
-          raise 'sorting by associated model column is not supported in Non-Relational databases' unless options[:sort].root?
-
-          field_name = options[:sort].attribute.to_s
+          field_name = sort_field_name(options[:sort])
         when String
           field_name, collection_name = options[:sort].split('.').reverse
           raise 'sorting by associated model column is not supported in Non-Relational databases' if collection_name && collection_name != table_name

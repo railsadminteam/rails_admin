@@ -91,21 +91,14 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
       expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq(sort: 'categories.parent_category_id', sort_reverse: true)
     end
 
-    context 'using mongoid', mongoid: true do
-      it 'gives back the remote table with label name, as it does not support joins' do
-        controller.params = {sort: 'team', model_name: 'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to match(sort: 'players.team_id', sort_reverse: true)
-      end
-    end
-
-    context 'using active_record', active_record: true do
-      # Quoting is the adapter's business and is covered there; what the
-      # controller owes is the attribute to sort by, said in the model's terms.
-      it 'gives back a path to the associated column' do
-        controller.params = {sort: 'team', model_name: 'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).
-          to eq(sort: RailsAdmin::Criteria::Path[:team, :name], sort_reverse: true)
-      end
+    # What the controller owes is the attribute to sort by, said in the model's
+    # terms, and it is the same whichever store is behind it. Reaching it -- with
+    # a join, or by falling back to the local foreign key where joins are not
+    # available -- is each adapter's business and is covered in its own spec.
+    it 'gives back a path to the associated column' do
+      controller.params = {sort: 'team', model_name: 'players'}
+      expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).
+        to eq(sort: RailsAdmin::Criteria::Path[:team, :name], sort_reverse: true)
     end
   end
 
