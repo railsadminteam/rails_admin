@@ -246,32 +246,20 @@ module RailsAdmin
       end
 
       def query_scope(scope, query, fields = config.list.fields.select(&:queryable?))
-        if config.list.search_by
-          scope.send(config.list.search_by, query)
-        else
-          wb = WhereBuilder.new(scope, self)
-          fields.each do |field|
-            value = parse_field_value(field, query)
-            wb.add(field, value, field.search_operator)
-          end
-          # OR all query statements
-          wb.build
-        end
+        return scope.send(config.list.search_by, query) if config.list.search_by
+
+        wb = WhereBuilder.new(scope, self)
+        # OR all query statements
+        each_query_condition(query, fields) { |field, value, operator| wb.add(field, value, operator) }
+        wb.build
       end
 
-      # filters example => {"string_field"=>{"0055"=>{"o"=>"like", "v"=>"test_value"}}, ...}
-      # "0055" is the filter index, no use here. o is the operator, v the value
       def filter_scope(scope, filters, fields = config.list.fields.select(&:filterable?))
-        filters.each_pair do |field_name, filters_dump|
-          filters_dump.each_value do |filter_dump|
-            wb = WhereBuilder.new(scope, self)
-            field = fields.detect { |f| f.name.to_s == field_name }
-            value = parse_field_value(field, filter_dump[:v])
-
-            wb.add(field, value, (filter_dump[:o] || RailsAdmin::Config.default_search_operator))
-            # AND current filter statements to other filter statements
-            scope = wb.build
-          end
+        each_filter_condition(filters, fields) do |field, value, operator|
+          wb = WhereBuilder.new(scope, self)
+          wb.add(field, value, operator)
+          # AND current filter statements to other filter statements
+          scope = wb.build
         end
         scope
       end

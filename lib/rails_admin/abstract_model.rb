@@ -252,6 +252,39 @@ module RailsAdmin
       value.is_a?(Array) ? value.map { |v| field.parse_value(v) } : field.parse_value(value)
     end
 
+    # The search box asks every queryable field about the same term. Yields
+    # [field, parsed value, operator] so that each adapter is left with turning a
+    # condition into a scope and combining them, rather than reimplementing which
+    # fields take part and how their values are parsed.
+    def each_query_condition(query, fields)
+      return to_enum(:each_query_condition, query, fields) unless block_given?
+
+      fields.each do |field|
+        yield field, parse_field_value(field, query), field.search_operator
+      end
+    end
+
+    # Each filter as [field, parsed value, operator].
+    #
+    # Filters naming a field that does not exist are skipped, and a filter
+    # arriving without an operator falls back to the configured default -- the
+    # field types that offer no operator in the filter UI submit none.
+    #
+    # filters looks like {"string_field" => {"0055" => {"o" => "like", "v" => "x"}}}
+    # where "0055" is the filter index and has no meaning here.
+    def each_filter_condition(filters, fields)
+      return to_enum(:each_filter_condition, filters, fields) unless block_given?
+
+      filters.each_pair do |field_name, filters_dump|
+        field = fields.detect { |f| f.name.to_s == field_name }
+        next unless field
+
+        filters_dump.each_value do |filter_dump|
+          yield field, parse_field_value(field, filter_dump[:v]), (filter_dump[:o] || RailsAdmin::Config.default_search_operator)
+        end
+      end
+    end
+
     class StatementBuilder
       def initialize(column, type, value, operator)
         @column = column

@@ -11,8 +11,9 @@ require 'spec_helper'
 # Without it, a fix applied to one adapter never reaches the other and the two
 # drift apart. That has already happened more than once:
 #
-#   - filter_scope guards against unknown field names only in Mongoid
-#     (see the known divergence below)
+#   - filter_scope guarded against unknown field names only in Mongoid, and only
+#     ActiveRecord honoured the configured default search operator. Both were
+#     found by this suite and are now settled in one place.
 #   - WhereBuilder, composite primary keys and defined_enums exist only in
 #     ActiveRecord
 #
@@ -27,7 +28,6 @@ require 'spec_helper'
 #   adapter_property_type     expected type of #properties elements
 #   adapter_association_type  expected type of #associations elements
 #   adapter_missing_id        an id no record has
-#   adapter_known_divergences see below, defaults to []
 #
 # Not part of the contract yet, because the two adapters need different APIs to
 # observe them. They stay in the per-adapter suites until Phase 2 moves query
@@ -39,21 +39,8 @@ require 'spec_helper'
 #   - handing a record to GlobalID / ActiveJob, which Mongoid does not support;
 #     only "returns a raw instance" generalizes, so that is what is asserted here
 RSpec.shared_examples 'a RailsAdmin adapter' do
-  # Known divergences between adapters. Each one makes the corresponding example
-  # pending rather than removing it, so RSpec reports it as fixed once the
-  # adapters converge. Delete the entry when that happens.
-  #
-  #   :unknown_filter_field -- filtering on a field name that does not exist is
-  #                            ignored by Mongoid but raises NoMethodError in
-  #                            ActiveRecord
-  let(:adapter_known_divergences) { [] }
-
   let(:model_class) { Player }
   let(:abstract_model) { RailsAdmin::AbstractModel.new('Player') }
-
-  def diverges?(key)
-    adapter_known_divergences.include?(key)
-  end
 
   describe 'reflection' do
     it '#properties returns the adapter Property class' do
@@ -168,10 +155,17 @@ RSpec.shared_examples 'a RailsAdmin adapter' do
       end
 
       it 'ignores a filter on a non-existent field' do
-        pending 'the ActiveRecord adapter has no guard for unknown field names' if diverges?(:unknown_filter_field)
-
         expect { abstract_model.all(filters: {'dummy' => {'0000' => {o: 'is', v: players[1].name}}}).to_a }.
           not_to raise_error
+      end
+
+      # The field types that offer no operator in the filter UI submit none, so
+      # the configured default is what those filters end up using.
+      it 'falls back to the configured default search operator for a filter with no operator' do
+        RailsAdmin.config { |config| config.default_search_operator = 'starts_with' }
+
+        expect(abstract_model.all(filters: {'name' => {'0000' => {v: players[1].name}}}).to_a).to eq players[1..1]
+        expect(abstract_model.all(filters: {'name' => {'0000' => {v: players[1].name[1..]}}}).to_a).to be_empty
       end
     end
 

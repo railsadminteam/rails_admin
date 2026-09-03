@@ -9,7 +9,6 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     let(:adapter_property_type) { RailsAdmin::Adapters::ActiveRecord::Property }
     let(:adapter_association_type) { RailsAdmin::Adapters::ActiveRecord::Association }
     let(:adapter_missing_id) { 'abc' }
-    let(:adapter_known_divergences) { %i[unknown_filter_field] }
   end
 
   let(:activerecord_config) do
