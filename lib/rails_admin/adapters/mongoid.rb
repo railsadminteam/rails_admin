@@ -136,39 +136,25 @@ module RailsAdmin
       end
 
       def query_scope(scope, query, fields = config.list.fields.select(&:queryable?))
-        if config.list.search_by
-          scope.send(config.list.search_by, query)
-        else
-          statements = []
+        return scope.send(config.list.search_by, query) if config.list.search_by
 
-          fields.each do |field|
-            value = parse_field_value(field, query)
-            conditions_per_collection = make_field_conditions(field, value, field.search_operator)
-            statements.concat make_condition_for_current_collection(field, conditions_per_collection)
-          end
-
-          scope.where(statements.any? ? {'$or' => statements} : {})
+        statements = []
+        each_query_condition(query, fields) do |field, value, operator|
+          statements.concat make_condition_for_current_collection(field, make_field_conditions(field, value, operator))
         end
+
+        scope.where(statements.any? ? {'$or' => statements} : {})
       end
 
-      # filters example => {"string_field"=>{"0055"=>{"o"=>"like", "v"=>"test_value"}}, ...}
-      # "0055" is the filter index, no use here. o is the operator, v the value
       def filter_scope(scope, filters, fields = config.list.fields.select(&:filterable?))
         statements = []
 
-        filters.each_pair do |field_name, filters_dump|
-          filters_dump.each_value do |filter_dump|
-            field = fields.detect { |f| f.name.to_s == field_name }
-            next unless field
-
-            value = parse_field_value(field, filter_dump[:v])
-            conditions_per_collection = make_field_conditions(field, value, (filter_dump[:o] || 'default'))
-            field_statements = make_condition_for_current_collection(field, conditions_per_collection)
-            if field_statements.many?
-              statements << {'$or' => field_statements}
-            elsif field_statements.any?
-              statements << field_statements.first
-            end
+        each_filter_condition(filters, fields) do |field, value, operator|
+          field_statements = make_condition_for_current_collection(field, make_field_conditions(field, value, operator))
+          if field_statements.many?
+            statements << {'$or' => field_statements}
+          elsif field_statements.any?
+            statements << field_statements.first
           end
         end
 
