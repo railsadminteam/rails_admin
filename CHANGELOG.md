@@ -4,6 +4,10 @@
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.3.0...HEAD)
 
+### Added
+
+- Allow adapters for other ORMs to be provided from outside RailsAdmin, by registering them with `RailsAdmin::Adapters.register` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+
 ### Changed
 
 - Plugins which extend or reopen `RailsAdmin::Adapters::ActiveRecord` or `RailsAdmin::Adapters::Mongoid` to change how RailsAdmin reads or queries models need to target the adapter's `Reflection` or `Repository` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))

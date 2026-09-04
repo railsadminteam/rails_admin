@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'rails_admin/adapters'
 require 'rails_admin/adapters/statement_builder'
 require 'rails_admin/criteria/path'
 require 'rails_admin/criteria/period'
@@ -90,12 +91,12 @@ module RailsAdmin
 
     def initialize(model_or_model_name)
       @model_name = model_or_model_name.to_s
-      ancestors = model.ancestors.collect(&:to_s)
-      if ancestors.include?('ActiveRecord::Base') && !model.abstract_class? && model.table_exists?
-        initialize_active_record
-      elsif ancestors.include?('Mongoid::Document')
-        initialize_mongoid
-      end
+      registration = Adapters.detect(model)
+      return unless registration
+
+      @adapter = registration.name
+      @reflection = registration.reflection.new(self)
+      @repository = registration.repository.new(self)
     end
 
     # do not store a reference to the model, does not play well with ActiveReload/Rails3.2
