@@ -71,6 +71,9 @@ module RailsAdmin
           when true
             RailsAdmin::Criteria::Path[name]
           when Hash # <table> => <column>, passed through
+            # The key is interpolated as given, so it has to be a table name.
+            # searchable resolves a model class here, sortable never has; the
+            # asymmetry dates from 845f85ec, which introduced both.
             "#{sortable.keys.first}.#{sortable.values.first}"
           when String, Symbol
             if sortable.to_s.include?('.') # "table.column", passed through
