@@ -249,7 +249,7 @@ module RailsAdmin
         end
       end
 
-      class StatementBuilder < RailsAdmin::AbstractModel::StatementBuilder
+      class StatementBuilder < RailsAdmin::Adapters::StatementBuilder
       protected
 
         def unary_operators
