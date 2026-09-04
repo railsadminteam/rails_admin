@@ -13,7 +13,7 @@ module RailsAdmin
     StatementBuilder = RailsAdmin::Adapters::StatementBuilder
 
     cattr_accessor :all
-    attr_reader :adapter, :model_name
+    attr_reader :adapter, :model_name, :repository
 
     class << self
       def reset
@@ -103,26 +103,20 @@ module RailsAdmin
       @model_name.constantize
     end
 
+    # Everything that reaches the store is the repository's, and reaches it
+    # through here so that callers keep talking to one object.
+    delegate :new, :get, :first, :all, :count, :destroy, :scoped, :where,
+             :each_associated_children, :format_id, :parse_id,
+             :serialize_attribute, :deserialize_attribute,
+             :sort_expression, :search_column, :parse_object_id,
+             to: :repository
+
     def quoted_table_name
       table_name
     end
 
     def quote_column_name(name)
       name
-    end
-
-    # Render a sort target as an expression the store understands. Adapters that
-    # need qualification or quoting override this; anything already expressed in
-    # the store's own terms is handed through.
-    def sort_expression(order)
-      order.to_s
-    end
-
-    # Render a search target as the column reference the store understands.
-    # Overridden where reaching an associated attribute takes more than the
-    # dotted path itself.
-    def search_column(target)
-      target.to_s
     end
 
     def to_s
@@ -149,31 +143,6 @@ module RailsAdmin
       model.human_attribute_name(name)
     end
 
-    def where(conditions)
-      model.where(conditions)
-    end
-
-    def each_associated_children(object)
-      associations.each do |association|
-        case association.type
-        when :has_one
-          child = object.send(association.name)
-          yield(association, [child]) if child
-        when :has_many
-          children = object.send(association.name)
-          yield(association, Array.new(children))
-        end
-      end
-    end
-
-    def format_id(id)
-      id
-    end
-
-    def parse_id(id)
-      id
-    end
-
     # Whether the model makes the given attribute mandatory, either through a
     # validation or through the options of a belongs_to association.
     #
@@ -187,20 +156,6 @@ module RailsAdmin
     # Options of the length validation defined on the given attribute, if any.
     def attribute_length_options(name)
       model.validators_on(name).detect { |validator| validator.kind == :length }.try(&:options) || {}
-    end
-
-    # Convert a Ruby value into the representation the store holds for the given
-    # attribute, and back.
-    #
-    # Both default to passing the value through. Adapters override them when
-    # their ORM has a type system able to do better; the Mongoid adapter does
-    # not, so values reach it unconverted.
-    def serialize_attribute(_name, value)
-      value
-    end
-
-    def deserialize_attribute(_name, value)
-      value
     end
 
     # The values of an enum defined on the given attribute, or nil.
@@ -246,49 +201,14 @@ module RailsAdmin
       @adapter = :active_record
       require 'rails_admin/adapters/active_record'
       extend Adapters::ActiveRecord
+      @repository = Adapters::ActiveRecord::Repository.new(self)
     end
 
     def initialize_mongoid
       @adapter = :mongoid
       require 'rails_admin/adapters/mongoid'
       extend Adapters::Mongoid
-    end
-
-    def parse_field_value(field, value)
-      value.is_a?(Array) ? value.map { |v| field.parse_value(v) } : field.parse_value(value)
-    end
-
-    # The search box asks every queryable field about the same term. Yields
-    # [field, parsed value, operator] so that each adapter is left with turning a
-    # condition into a scope and combining them, rather than reimplementing which
-    # fields take part and how their values are parsed.
-    def each_query_condition(query, fields)
-      return to_enum(:each_query_condition, query, fields) unless block_given?
-
-      fields.each do |field|
-        yield field, parse_field_value(field, query), field.search_operator
-      end
-    end
-
-    # Each filter as [field, parsed value, operator].
-    #
-    # Filters naming a field that does not exist are skipped, and a filter
-    # arriving without an operator falls back to the configured default -- the
-    # field types that offer no operator in the filter UI submit none.
-    #
-    # filters looks like {"string_field" => {"0055" => {"o" => "like", "v" => "x"}}}
-    # where "0055" is the filter index and has no meaning here.
-    def each_filter_condition(filters, fields)
-      return to_enum(:each_filter_condition, filters, fields) unless block_given?
-
-      filters.each_pair do |field_name, filters_dump|
-        field = fields.detect { |f| f.name.to_s == field_name }
-        next unless field
-
-        filters_dump.each_value do |filter_dump|
-          yield field, parse_field_value(field, filter_dump[:v]), (filter_dump[:o] || RailsAdmin::Config.default_search_operator)
-        end
-      end
+      @repository = Adapters::Mongoid::Repository.new(self)
     end
   end
 end
