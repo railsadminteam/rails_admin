@@ -233,150 +233,150 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
 
     it "ignores '_discard' operator or value" do
       [['_discard', ''], ['', '_discard']].each do |value, operator|
-        expect(abstract_model.send(:build_statement, :name, :string, value, operator)).to be_nil
+        expect(abstract_model.repository.send(:build_statement, :name, :string, value, operator)).to be_nil
       end
     end
 
     it "supports '_blank' operator" do
       [['_blank', ''], ['', '_blank']].each do |value, operator|
-        expect(abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(name: {'$in' => [nil, '']})
+        expect(abstract_model.repository.send(:build_statement, :name, :string, value, operator)).to eq(name: {'$in' => [nil, '']})
       end
     end
 
     it "supports '_present' operator" do
       [['_present', ''], ['', '_present']].each do |value, operator|
-        expect(abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(name: {'$nin' => [nil, '']})
+        expect(abstract_model.repository.send(:build_statement, :name, :string, value, operator)).to eq(name: {'$nin' => [nil, '']})
       end
     end
 
     it "supports '_null' operator" do
       [['_null', ''], ['', '_null']].each do |value, operator|
-        expect(abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(name: nil)
+        expect(abstract_model.repository.send(:build_statement, :name, :string, value, operator)).to eq(name: nil)
       end
     end
 
     it "supports '_not_null' operator" do
       [['_not_null', ''], ['', '_not_null']].each do |value, operator|
-        expect(abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(name: {'$ne' => nil})
+        expect(abstract_model.repository.send(:build_statement, :name, :string, value, operator)).to eq(name: {'$ne' => nil})
       end
     end
 
     it "supports '_empty' operator" do
       [['_empty', ''], ['', '_empty']].each do |value, operator|
-        expect(abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(name: '')
+        expect(abstract_model.repository.send(:build_statement, :name, :string, value, operator)).to eq(name: '')
       end
     end
 
     it "supports '_not_empty' operator" do
       [['_not_empty', ''], ['', '_not_empty']].each do |value, operator|
-        expect(abstract_model.send(:build_statement, :name, :string, value, operator)).to eq(name: {'$ne' => ''})
+        expect(abstract_model.repository.send(:build_statement, :name, :string, value, operator)).to eq(name: {'$ne' => ''})
       end
     end
 
     it 'supports boolean type query' do
       %w[false f 0].each do |value|
-        expect(abstract_model.send(:build_statement, :field, :boolean, value, nil)).to eq(field: false)
+        expect(abstract_model.repository.send(:build_statement, :field, :boolean, value, nil)).to eq(field: false)
       end
       %w[true t 1].each do |value|
-        expect(abstract_model.send(:build_statement, :field, :boolean, value, nil)).to eq(field: true)
+        expect(abstract_model.repository.send(:build_statement, :field, :boolean, value, nil)).to eq(field: true)
       end
-      expect(abstract_model.send(:build_statement, :field, :boolean, 'word', nil)).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :boolean, 'word', nil)).to be_nil
     end
 
     it 'supports integer type query' do
-      expect(abstract_model.send(:build_statement, :field, :integer, '1', nil)).to eq(field: 1)
-      expect(abstract_model.send(:build_statement, :field, :integer, 'word', nil)).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :integer, '1', nil)).to eq(field: 1)
+      expect(abstract_model.repository.send(:build_statement, :field, :integer, 'word', nil)).to be_nil
     end
 
     it 'supports integer type range query' do
-      expect(abstract_model.send(:build_statement, :field, :integer, ['', '', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :integer, ['2', '', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :integer, ['', '3', ''], 'between')).to eq(field: {'$gte' => 3})
-      expect(abstract_model.send(:build_statement, :field, :integer, ['', '', '5'], 'between')).to eq(field: {'$lte' => 5})
-      expect(abstract_model.send(:build_statement, :field, :integer, ['', '10', '20'], 'between')).to eq(field: {'$gte' => 10, '$lte' => 20})
-      expect(abstract_model.send(:build_statement, :field, :integer, %w[15 10 20], 'between')).to eq(field: {'$gte' => 10, '$lte' => 20})
-      expect(abstract_model.send(:build_statement, :field, :integer, ['', 'word1', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :integer, ['', '', 'word2'], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :integer, ['', 'word3', 'word4'], 'between')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :integer, ['', '', ''], 'between')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :integer, ['2', '', ''], 'between')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :integer, ['', '3', ''], 'between')).to eq(field: {'$gte' => 3})
+      expect(abstract_model.repository.send(:build_statement, :field, :integer, ['', '', '5'], 'between')).to eq(field: {'$lte' => 5})
+      expect(abstract_model.repository.send(:build_statement, :field, :integer, ['', '10', '20'], 'between')).to eq(field: {'$gte' => 10, '$lte' => 20})
+      expect(abstract_model.repository.send(:build_statement, :field, :integer, %w[15 10 20], 'between')).to eq(field: {'$gte' => 10, '$lte' => 20})
+      expect(abstract_model.repository.send(:build_statement, :field, :integer, ['', 'word1', ''], 'between')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :integer, ['', '', 'word2'], 'between')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :integer, ['', 'word3', 'word4'], 'between')).to be_nil
     end
 
     it 'supports both decimal and float type queries' do
-      expect(abstract_model.send(:build_statement, :field, :decimal, '1.1', nil)).to eq(field: 1.1)
-      expect(abstract_model.send(:build_statement, :field, :decimal, 'word', nil)).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :decimal, '1.1', 'default')).to eq(field: 1.1)
-      expect(abstract_model.send(:build_statement, :field, :decimal, 'word', 'default')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :decimal, '1.1', 'between')).to eq(field: 1.1)
-      expect(abstract_model.send(:build_statement, :field, :decimal, 'word', 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['6.1', '', ''], 'default')).to eq(field: 6.1)
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['7.1', '10.1', ''], 'default')).to eq(field: 7.1)
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['8.1', '', '20.1'], 'default')).to eq(field: 8.1)
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['9.1', '10.1', '20.1'], 'default')).to eq(field: 9.1)
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['', '', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['2.1', '', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['', '3.1', ''], 'between')).to eq(field: {'$gte' => 3.1})
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['', '', '5.1'], 'between')).to eq(field: {'$lte' => 5.1})
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['', '10.1', '20.1'], 'between')).to eq(field: {'$gte' => 10.1, '$lte' => 20.1})
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['15.1', '10.1', '20.1'], 'between')).to eq(field: {'$gte' => 10.1, '$lte' => 20.1})
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['', 'word1', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['', '', 'word2'], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :decimal, ['', 'word3', 'word4'], 'between')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, '1.1', nil)).to eq(field: 1.1)
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, 'word', nil)).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, '1.1', 'default')).to eq(field: 1.1)
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, 'word', 'default')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, '1.1', 'between')).to eq(field: 1.1)
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, 'word', 'between')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, ['6.1', '', ''], 'default')).to eq(field: 6.1)
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, ['7.1', '10.1', ''], 'default')).to eq(field: 7.1)
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, ['8.1', '', '20.1'], 'default')).to eq(field: 8.1)
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, ['9.1', '10.1', '20.1'], 'default')).to eq(field: 9.1)
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, ['', '', ''], 'between')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, ['2.1', '', ''], 'between')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, ['', '3.1', ''], 'between')).to eq(field: {'$gte' => 3.1})
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, ['', '', '5.1'], 'between')).to eq(field: {'$lte' => 5.1})
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, ['', '10.1', '20.1'], 'between')).to eq(field: {'$gte' => 10.1, '$lte' => 20.1})
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, ['15.1', '10.1', '20.1'], 'between')).to eq(field: {'$gte' => 10.1, '$lte' => 20.1})
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, ['', 'word1', ''], 'between')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, ['', '', 'word2'], 'between')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :decimal, ['', 'word3', 'word4'], 'between')).to be_nil
 
-      expect(abstract_model.send(:build_statement, :field, :float, '1.1', nil)).to eq(field: 1.1)
-      expect(abstract_model.send(:build_statement, :field, :float, 'word', nil)).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :float, '1.1', 'default')).to eq(field: 1.1)
-      expect(abstract_model.send(:build_statement, :field, :float, 'word', 'default')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :float, '1.1', 'between')).to eq(field: 1.1)
-      expect(abstract_model.send(:build_statement, :field, :float, 'word', 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :float, ['6.1', '', ''], 'default')).to eq(field: 6.1)
-      expect(abstract_model.send(:build_statement, :field, :float, ['7.1', '10.1', ''], 'default')).to eq(field: 7.1)
-      expect(abstract_model.send(:build_statement, :field, :float, ['8.1', '', '20.1'], 'default')).to eq(field: 8.1)
-      expect(abstract_model.send(:build_statement, :field, :float, ['9.1', '10.1', '20.1'], 'default')).to eq(field: 9.1)
-      expect(abstract_model.send(:build_statement, :field, :float, ['', '', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :float, ['2.1', '', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :float, ['', '3.1', ''], 'between')).to eq(field: {'$gte' => 3.1})
-      expect(abstract_model.send(:build_statement, :field, :float, ['', '', '5.1'], 'between')).to eq(field: {'$lte' => 5.1})
-      expect(abstract_model.send(:build_statement, :field, :float, ['', '10.1', '20.1'], 'between')).to eq(field: {'$gte' => 10.1, '$lte' => 20.1})
-      expect(abstract_model.send(:build_statement, :field, :float, ['15.1', '10.1', '20.1'], 'between')).to eq(field: {'$gte' => 10.1, '$lte' => 20.1})
-      expect(abstract_model.send(:build_statement, :field, :float, ['', 'word1', ''], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :float, ['', '', 'word2'], 'between')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :float, ['', 'word3', 'word4'], 'between')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :float, '1.1', nil)).to eq(field: 1.1)
+      expect(abstract_model.repository.send(:build_statement, :field, :float, 'word', nil)).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :float, '1.1', 'default')).to eq(field: 1.1)
+      expect(abstract_model.repository.send(:build_statement, :field, :float, 'word', 'default')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :float, '1.1', 'between')).to eq(field: 1.1)
+      expect(abstract_model.repository.send(:build_statement, :field, :float, 'word', 'between')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :float, ['6.1', '', ''], 'default')).to eq(field: 6.1)
+      expect(abstract_model.repository.send(:build_statement, :field, :float, ['7.1', '10.1', ''], 'default')).to eq(field: 7.1)
+      expect(abstract_model.repository.send(:build_statement, :field, :float, ['8.1', '', '20.1'], 'default')).to eq(field: 8.1)
+      expect(abstract_model.repository.send(:build_statement, :field, :float, ['9.1', '10.1', '20.1'], 'default')).to eq(field: 9.1)
+      expect(abstract_model.repository.send(:build_statement, :field, :float, ['', '', ''], 'between')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :float, ['2.1', '', ''], 'between')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :float, ['', '3.1', ''], 'between')).to eq(field: {'$gte' => 3.1})
+      expect(abstract_model.repository.send(:build_statement, :field, :float, ['', '', '5.1'], 'between')).to eq(field: {'$lte' => 5.1})
+      expect(abstract_model.repository.send(:build_statement, :field, :float, ['', '10.1', '20.1'], 'between')).to eq(field: {'$gte' => 10.1, '$lte' => 20.1})
+      expect(abstract_model.repository.send(:build_statement, :field, :float, ['15.1', '10.1', '20.1'], 'between')).to eq(field: {'$gte' => 10.1, '$lte' => 20.1})
+      expect(abstract_model.repository.send(:build_statement, :field, :float, ['', 'word1', ''], 'between')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :float, ['', '', 'word2'], 'between')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :float, ['', 'word3', 'word4'], 'between')).to be_nil
     end
 
     it 'supports string type query' do
-      expect(abstract_model.send(:build_statement, :field, :string, '', nil)).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'was')).to be_nil
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'default')).to eq(field: /foo/i)
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'like')).to eq(field: /foo/i)
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'not_like')).to eq(field: /^((?!foo).)*$/i)
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'starts_with')).to eq(field: /^foo/i)
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'ends_with')).to eq(field: /foo$/i)
-      expect(abstract_model.send(:build_statement, :field, :string, 'foo', 'is')).to eq(field: 'foo')
+      expect(abstract_model.repository.send(:build_statement, :field, :string, '', nil)).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :string, 'foo', 'was')).to be_nil
+      expect(abstract_model.repository.send(:build_statement, :field, :string, 'foo', 'default')).to eq(field: /foo/i)
+      expect(abstract_model.repository.send(:build_statement, :field, :string, 'foo', 'like')).to eq(field: /foo/i)
+      expect(abstract_model.repository.send(:build_statement, :field, :string, 'foo', 'not_like')).to eq(field: /^((?!foo).)*$/i)
+      expect(abstract_model.repository.send(:build_statement, :field, :string, 'foo', 'starts_with')).to eq(field: /^foo/i)
+      expect(abstract_model.repository.send(:build_statement, :field, :string, 'foo', 'ends_with')).to eq(field: /foo$/i)
+      expect(abstract_model.repository.send(:build_statement, :field, :string, 'foo', 'is')).to eq(field: 'foo')
     end
 
     it 'supports date type query' do
-      expect(abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: ['', '2012-01-02', '2012-01-03'], o: 'between'}}).selector).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012, 1, 2), '$lte' => Date.new(2012, 1, 3)}}])
-      expect(abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: ['', '2012-01-03', ''], o: 'between'}}).selector).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012, 1, 3)}}])
-      expect(abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: ['', '', '2012-01-02'], o: 'between'}}).selector).to eq('$and' => [{'date_field' => {'$lte' => Date.new(2012, 1, 2)}}])
-      expect(abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: ['2012-01-02'], o: 'default'}}).selector).to eq('$and' => [{'date_field' => Date.new(2012, 1, 2)}])
-      expect(abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: [], o: 'today'}}).selector).to eq('$and' => [{'date_field' => Date.current}])
-      expect(abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: [], o: 'yesterday'}}).selector).to eq('$and' => [{'date_field' => Date.yesterday}])
-      expect(abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: [], o: 'this_week'}}).selector).to eq('$and' => [{'date_field' => {'$gte' => Date.current.beginning_of_week, '$lte' => Date.current.end_of_week}}])
-      expect(abstract_model.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: [], o: 'last_week'}}).selector).to eq('$and' => [{'date_field' => {'$gte' => 1.week.ago.to_date.beginning_of_week, '$lte' => 1.week.ago.to_date.end_of_week}}])
+      expect(abstract_model.repository.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: ['', '2012-01-02', '2012-01-03'], o: 'between'}}).selector).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012, 1, 2), '$lte' => Date.new(2012, 1, 3)}}])
+      expect(abstract_model.repository.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: ['', '2012-01-03', ''], o: 'between'}}).selector).to eq('$and' => [{'date_field' => {'$gte' => Date.new(2012, 1, 3)}}])
+      expect(abstract_model.repository.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: ['', '', '2012-01-02'], o: 'between'}}).selector).to eq('$and' => [{'date_field' => {'$lte' => Date.new(2012, 1, 2)}}])
+      expect(abstract_model.repository.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: ['2012-01-02'], o: 'default'}}).selector).to eq('$and' => [{'date_field' => Date.new(2012, 1, 2)}])
+      expect(abstract_model.repository.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: [], o: 'today'}}).selector).to eq('$and' => [{'date_field' => Date.current}])
+      expect(abstract_model.repository.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: [], o: 'yesterday'}}).selector).to eq('$and' => [{'date_field' => Date.yesterday}])
+      expect(abstract_model.repository.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: [], o: 'this_week'}}).selector).to eq('$and' => [{'date_field' => {'$gte' => Date.current.beginning_of_week, '$lte' => Date.current.end_of_week}}])
+      expect(abstract_model.repository.send(:filter_scope, FieldTest, 'date_field' => {'1' => {v: [], o: 'last_week'}}).selector).to eq('$and' => [{'date_field' => {'$gte' => 1.week.ago.to_date.beginning_of_week, '$lte' => 1.week.ago.to_date.end_of_week}}])
     end
 
     it 'supports datetime type query' do
-      expect(abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: ['', '2012-01-02T12:00:00', '2012-01-03T12:00:00'], o: 'between'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Time.zone.local(2012, 1, 2, 12), '$lte' => Time.zone.local(2012, 1, 3, 12)}}])
-      expect(abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: ['', '2012-01-03T12:00:00', ''], o: 'between'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Time.zone.local(2012, 1, 3, 12)}}])
-      expect(abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: ['', '', '2012-01-02T12:00:00'], o: 'between'}}).selector).to eq('$and' => [{'datetime_field' => {'$lte' => Time.zone.local(2012, 1, 2, 12)}}])
-      expect(abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: ['2012-01-02T12:00:00'], o: 'default'}}).selector).to eq('$and' => [{'datetime_field' => Time.zone.local(2012, 1, 2, 12)}])
-      expect(abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: [], o: 'today'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Date.current.beginning_of_day, '$lte' => Date.current.end_of_day}}])
-      expect(abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: [], o: 'yesterday'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Date.yesterday.beginning_of_day, '$lte' => Date.yesterday.end_of_day}}])
-      expect(abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: [], o: 'this_week'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Date.current.beginning_of_week.beginning_of_day, '$lte' => Date.current.end_of_week.end_of_day}}])
-      expect(abstract_model.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: [], o: 'last_week'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => 1.week.ago.to_date.beginning_of_week.beginning_of_day, '$lte' => 1.week.ago.to_date.end_of_week.end_of_day}}])
+      expect(abstract_model.repository.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: ['', '2012-01-02T12:00:00', '2012-01-03T12:00:00'], o: 'between'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Time.zone.local(2012, 1, 2, 12), '$lte' => Time.zone.local(2012, 1, 3, 12)}}])
+      expect(abstract_model.repository.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: ['', '2012-01-03T12:00:00', ''], o: 'between'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Time.zone.local(2012, 1, 3, 12)}}])
+      expect(abstract_model.repository.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: ['', '', '2012-01-02T12:00:00'], o: 'between'}}).selector).to eq('$and' => [{'datetime_field' => {'$lte' => Time.zone.local(2012, 1, 2, 12)}}])
+      expect(abstract_model.repository.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: ['2012-01-02T12:00:00'], o: 'default'}}).selector).to eq('$and' => [{'datetime_field' => Time.zone.local(2012, 1, 2, 12)}])
+      expect(abstract_model.repository.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: [], o: 'today'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Date.current.beginning_of_day, '$lte' => Date.current.end_of_day}}])
+      expect(abstract_model.repository.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: [], o: 'yesterday'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Date.yesterday.beginning_of_day, '$lte' => Date.yesterday.end_of_day}}])
+      expect(abstract_model.repository.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: [], o: 'this_week'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => Date.current.beginning_of_week.beginning_of_day, '$lte' => Date.current.end_of_week.end_of_day}}])
+      expect(abstract_model.repository.send(:filter_scope, FieldTest, 'datetime_field' => {'1' => {v: [], o: 'last_week'}}).selector).to eq('$and' => [{'datetime_field' => {'$gte' => 1.week.ago.to_date.beginning_of_week.beginning_of_day, '$lte' => 1.week.ago.to_date.end_of_week.end_of_day}}])
     end
 
     it 'supports enum type query' do
-      expect(abstract_model.send(:build_statement, :field, :enum, '1', nil)).to eq(field: {'$in' => ['1']})
+      expect(abstract_model.repository.send(:build_statement, :field, :enum, '1', nil)).to eq(field: {'$in' => ['1']})
     end
   end
 
