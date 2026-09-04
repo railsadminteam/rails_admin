@@ -268,7 +268,7 @@ module RailsAdmin
         StatementBuilder.new(column, type, value, operator, model.connection.adapter_name).to_statement
       end
 
-      class StatementBuilder < RailsAdmin::AbstractModel::StatementBuilder
+      class StatementBuilder < RailsAdmin::Adapters::StatementBuilder
         def initialize(column, type, value, operator, adapter_name)
           super column, type, value, operator
           @adapter_name = adapter_name
