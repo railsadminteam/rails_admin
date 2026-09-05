@@ -1,21 +1,17 @@
 # frozen_string_literal: true
 
 require 'rails_admin/adapters/repository'
-require 'rails_admin/adapters/active_record/object_extension'
 
 module RailsAdmin
   module Adapters
     module ActiveRecord
       class Repository < RailsAdmin::Adapters::Repository
         def new(params = {})
-          model.new(params).extend(ObjectExtension)
+          model.new(params)
         end
 
         def get(id, scope = scoped)
-          object = primary_key_scope(scope, id).first
-          return unless object
-
-          object.extend(ObjectExtension)
+          primary_key_scope(scope, id).first
         end
 
         def scoped

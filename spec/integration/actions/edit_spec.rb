@@ -793,6 +793,16 @@ RSpec.describe 'Edit action', type: :request do
     end
   end
 
+  # The form posts nothing under the model's key, which used to reach
+  # assign_attributes(nil).
+  context 'with nothing posted for the model' do
+    it 'does not raise' do
+      player = FactoryBot.create :player
+
+      expect { put edit_path(model_name: 'player', id: player.id) }.not_to raise_error
+    end
+  end
+
   context 'with invalid object' do
     before do
       @player = FactoryBot.create :player

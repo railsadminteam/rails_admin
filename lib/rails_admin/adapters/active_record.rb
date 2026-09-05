@@ -11,7 +11,6 @@ module RailsAdmin
 end
 
 require 'rails_admin/adapters/active_record/association'
-require 'rails_admin/adapters/active_record/object_extension'
 require 'rails_admin/adapters/active_record/property'
 require 'rails_admin/adapters/active_record/reflection'
 require 'rails_admin/adapters/active_record/repository'
