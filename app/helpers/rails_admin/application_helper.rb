@@ -75,7 +75,7 @@ module RailsAdmin
         "admin.actions.#{action.i18n_key}.#{label}",
         model_label: model_config&.label,
         model_label_plural: model_config&.label_plural,
-        object_label: model_config && object.try(model_config.object_label_method),
+        object_label: object && model_config&.object_label(object),
       )
     end
 

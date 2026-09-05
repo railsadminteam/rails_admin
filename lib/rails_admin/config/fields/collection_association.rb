@@ -23,7 +23,7 @@ module RailsAdmin
             i = 0
             super.sort_by { |a| [selected.index(a[1]) || selected.size, i += 1] }
           else
-            value.map { |o| [o.send(associated_object_label_method), format_key(o.send(associated_primary_key))] }
+            value.map { |o| [associated_model_config.object_label(o), format_key(o.send(associated_primary_key))] }
           end
         end
 

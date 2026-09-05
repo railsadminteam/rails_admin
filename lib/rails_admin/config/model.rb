@@ -53,9 +53,14 @@ module RailsAdmin
         @excluded = !RailsAdmin::AbstractModel.all.collect(&:model_name).include?(abstract_model.try(:model_name))
       end
 
-      def object_label
-        bindings[:object].send(object_label_method).presence ||
-          bindings[:object].send(:rails_admin_default_object_label_method)
+      # The label for one record: what object_label_method has to say about it,
+      # or a last resort built from the class and the id.
+      #
+      # Everything that shows a record by name goes through here, so that a
+      # record is called the same thing wherever it turns up.
+      def object_label(object = bindings[:object])
+        object.send(object_label_method).presence ||
+          object.send(:rails_admin_default_object_label_method)
       end
 
       # The display for a model instance (i.e. a single database record).

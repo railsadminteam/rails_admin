@@ -84,7 +84,7 @@ module RailsAdmin
         if object.new_record?
           I18n.t('admin.form.new_model', name: model_label)
         else
-          object.send(model_config.object_label_method).presence || "#{model_config.label} ##{object.id}"
+          model_config.object_label(object)
         end
 
       %(<span style="display:none" class="object-infos" data-model-label="#{model_label}" data-object-label="#{CGI.escapeHTML(object_label.to_s)}"></span>).html_safe
