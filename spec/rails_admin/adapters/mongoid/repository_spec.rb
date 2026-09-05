@@ -2,7 +2,13 @@
 
 require 'spec_helper'
 
-RSpec.describe 'RailsAdmin::Adapters::Mongoid::ObjectExtension', mongoid: true do
+# Saving a document that was built with children on a non-autosave has_many or
+# has_one takes two passes, because the children have nothing to point at until
+# the parent has an id. This used to be done by extending each record with an
+# after_create callback, which made the record undumpable -- Marshal refuses an
+# object with a singleton.
+RSpec.describe 'RailsAdmin::Adapters::Mongoid::Repository', mongoid: true do
+  let(:abstract_model) { RailsAdmin::AbstractModel.new('Team') }
   describe 'has_many association' do
     let(:players) { FactoryBot.create_list :player, 2 }
     before do
@@ -15,11 +21,11 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::ObjectExtension', mongoid: true d
       before do
         team.player_ids = players.collect(&:id)
         team.players.each { |player| expect(player).to receive(:save).once.and_call_original }
-        team.save
+        abstract_model.save(team)
       end
 
       context 'with autosave: false' do
-        let(:team) { FactoryBot.build(:team).extend(RailsAdmin::Adapters::Mongoid::ObjectExtension) }
+        let(:team) { FactoryBot.build(:team) }
 
         it 'persists associated documents changes on save' do
           expect(team.reload.players).to match_array players
@@ -27,7 +33,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::ObjectExtension', mongoid: true d
       end
 
       context 'with autosave: true' do
-        let(:team) { TeamWithAutoSave.new(FactoryBot.attributes_for(:team)).extend(RailsAdmin::Adapters::Mongoid::ObjectExtension) }
+        let(:team) { TeamWithAutoSave.new(FactoryBot.attributes_for(:team)) }
 
         it 'persists associated documents changes on save' do
           expect(team.reload.players).to match_array players
@@ -36,13 +42,13 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::ObjectExtension', mongoid: true d
     end
 
     context 'on update' do
-      let(:team) { FactoryBot.create(:team).extend(RailsAdmin::Adapters::Mongoid::ObjectExtension) }
+      let(:team) { FactoryBot.create(:team) }
       before do
         team.player_ids = players.collect(&:id)
       end
 
       context 'with autosave: false' do
-        let(:team) { FactoryBot.create(:team).extend(RailsAdmin::Adapters::Mongoid::ObjectExtension) }
+        let(:team) { FactoryBot.create(:team) }
 
         it 'persists associated documents changes on assignment' do
           expect(team.reload.players).to match_array players
@@ -50,7 +56,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::ObjectExtension', mongoid: true d
       end
 
       context 'with autosave: true' do
-        let(:team) { TeamWithAutoSave.create(FactoryBot.attributes_for(:team)).extend(RailsAdmin::Adapters::Mongoid::ObjectExtension) }
+        let(:team) { TeamWithAutoSave.create(FactoryBot.attributes_for(:team)) }
 
         it 'persists associated documents changes on assignment' do
           expect(team.reload.players).to match_array players
@@ -60,6 +66,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::ObjectExtension', mongoid: true d
   end
 
   describe 'has_one association' do
+    let(:abstract_model) { RailsAdmin::AbstractModel.new('Player') }
     let(:draft) { FactoryBot.create(:draft) }
     before do
       class PlayerWithAutoSave < Player
@@ -71,11 +78,11 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::ObjectExtension', mongoid: true d
       before do
         player.draft = draft
         expect(player.draft._target).to receive(:save).once.and_call_original
-        player.save
+        abstract_model.save(player)
       end
 
       context 'with autosave: false' do
-        let(:player) { FactoryBot.build(:player).extend(RailsAdmin::Adapters::Mongoid::ObjectExtension) }
+        let(:player) { FactoryBot.build(:player) }
 
         it 'persists associated documents changes on save' do
           expect(player.reload.draft).to eq draft
@@ -83,7 +90,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::ObjectExtension', mongoid: true d
       end
 
       context 'with autosave: true' do
-        let(:player) { PlayerWithAutoSave.new(FactoryBot.attributes_for(:player)).extend(RailsAdmin::Adapters::Mongoid::ObjectExtension) }
+        let(:player) { PlayerWithAutoSave.new(FactoryBot.attributes_for(:player)) }
 
         it 'persists associated documents changes on save' do
           expect(player.reload.draft).to eq draft
@@ -97,7 +104,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::ObjectExtension', mongoid: true d
       end
 
       context 'with autosave: false' do
-        let(:player) { FactoryBot.create(:player).extend(RailsAdmin::Adapters::Mongoid::ObjectExtension) }
+        let(:player) { FactoryBot.create(:player) }
 
         it 'persists associated documents changes on assignment' do
           expect(player.reload.draft).to eq draft
@@ -105,7 +112,7 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid::ObjectExtension', mongoid: true d
       end
 
       context 'with autosave: true' do
-        let(:player) { PlayerWithAutoSave.create(FactoryBot.attributes_for(:player)).extend(RailsAdmin::Adapters::Mongoid::ObjectExtension) }
+        let(:player) { PlayerWithAutoSave.create(FactoryBot.attributes_for(:player)) }
 
         it 'persists associated documents changes on assignment' do
           expect(player.reload.draft).to eq draft
