@@ -108,11 +108,9 @@ module RailsAdmin
     end
 
     def hidden_field(method, options = {})
-      if method == :id && object.id.is_a?(Array)
-        super method, {value: RailsAdmin.config.composite_keys_serializer.serialize(object.id)}
-      else
-        super
-      end
+      return super unless method == :id && object.id.is_a?(Array)
+
+      super method, {value: RailsAdmin.config(object.class).abstract_model.format_id(object.id)}
     end
 
   protected
