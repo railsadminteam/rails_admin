@@ -12,6 +12,7 @@
 
 - Plugins which extend or reopen `RailsAdmin::Adapters::ActiveRecord` or `RailsAdmin::Adapters::Mongoid` to change how RailsAdmin reads or queries models need to target the adapter's `Reflection` or `Repository` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 - Overriding `#sort_column` in a custom field no longer affects sorting; override `#sort_order` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- Deprecate `#safe_send` on models, which RailsAdmin no longer uses; use `RailsAdmin::AbstractModel#read` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 
 ### Removed
 

@@ -17,7 +17,7 @@ RSpec.describe 'MultipleFileUpload field', type: :request do
         delete_method 'boolean_field'
         reorderable true
         def value
-          bindings[:object].safe_send(name)&.split
+          abstract_model.read(bindings[:object], name)&.split
         end
       end
     end

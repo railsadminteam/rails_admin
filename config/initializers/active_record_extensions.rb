@@ -8,6 +8,7 @@ ActiveSupport.on_load(:active_record) do
       end
 
       def safe_send(value)
+        RailsAdmin.deprecator.warn('#safe_send is deprecated, please use RailsAdmin::AbstractModel#read.')
         if has_attribute?(value)
           read_attribute(value)
         else

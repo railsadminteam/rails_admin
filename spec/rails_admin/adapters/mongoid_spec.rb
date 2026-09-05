@@ -397,6 +397,14 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
     end
   end
 
+  describe 'Mongoid::Document#safe_send' do
+    it 'is deprecated' do
+      allow(RailsAdmin.deprecator).to receive(:warn)
+      Player.new(number: 23).safe_send(:number)
+      expect(RailsAdmin.deprecator).to have_received(:warn).with(/safe_send is deprecated/)
+    end
+  end
+
   describe 'serialization' do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('FieldTest') }
     let(:controller) { RailsAdmin::MainController.new }

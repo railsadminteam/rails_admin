@@ -46,6 +46,10 @@ module RailsAdmin
           Array.wrap(objects).each(&:destroy)
         end
 
+        def read(record, name)
+          record.has_attribute?(name) ? record.read_attribute(name) : record.send(name)
+        end
+
         def format_id(id)
           return id unless primary_keys.many?
 

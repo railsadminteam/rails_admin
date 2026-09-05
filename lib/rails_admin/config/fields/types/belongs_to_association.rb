@@ -30,9 +30,9 @@ module RailsAdmin
 
           def selected_id
             if association.foreign_key.is_a?(Array)
-              format_key(association.foreign_key.map { |attribute| bindings[:object].safe_send(attribute) })
+              format_key(association.foreign_key.map { |attribute| abstract_model.read(bindings[:object], attribute) })
             else
-              bindings[:object].safe_send(association.key_accessor)
+              abstract_model.read(bindings[:object], association.key_accessor)
             end
           end
 

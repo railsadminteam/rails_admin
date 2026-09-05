@@ -20,6 +20,7 @@ module RailsAdmin
         end
 
         def safe_send(value)
+          RailsAdmin.deprecator.warn('#safe_send is deprecated, please use RailsAdmin::AbstractModel#read.')
           if attributes.detect { |k, _v| k.to_s == value.to_s }
             read_attribute(value)
           else

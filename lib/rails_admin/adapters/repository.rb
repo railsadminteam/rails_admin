@@ -19,6 +19,20 @@ module RailsAdmin
       delegate :model, :config, :associations, :primary_key, :primary_keys, :table_name,
                :quoted_table_name, :quote_column_name, to: :abstract_model
 
+      # Read one attribute from a record: the value the store holds, rather than
+      # what a reader of the same name would return.
+      #
+      # It began as a way around a column named +format+, which on Rails 3
+      # reached Kernel#format when it was sent, because attribute methods were
+      # not defined until method_missing had been hit (955cca09, 2011). Rails
+      # defines them earlier now and that particular collision is gone, but the
+      # rule it left behind is what a model redefining a reader still meets.
+      #
+      # Adapters say how their store tells an attribute from a method.
+      def read(record, name)
+        record.send(name)
+      end
+
       def where(conditions)
         model.where(conditions)
       end
