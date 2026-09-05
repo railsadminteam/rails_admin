@@ -59,8 +59,17 @@ module RailsAdmin
       # Everything that shows a record by name goes through here, so that a
       # record is called the same thing wherever it turns up.
       def object_label(object = bindings[:object])
-        object.send(object_label_method).presence ||
-          object.send(:rails_admin_default_object_label_method)
+        (object_label_method && object.send(object_label_method).presence) ||
+          default_object_label(object)
+      end
+
+      # What to call a record that has nothing to be called by.
+      #
+      # Models used to have to carry this themselves, as
+      # rails_admin_default_object_label_method, because it was reached by
+      # sending object_label_method to the record like any other label method.
+      def default_object_label(object)
+        object.new_record? ? "new #{object.class}" : "#{object.class} ##{object.id}"
       end
 
       # The display for a model instance (i.e. a single database record).
@@ -68,7 +77,9 @@ module RailsAdmin
       # any methods that may have been added to the label_methods array via Configuration.
       # Failing all of these, it'll return the class name followed by the model's id.
       register_instance_option :object_label_method do
-        @object_label_method ||= Config.label_methods.detect { |method| (@dummy_object ||= abstract_model.model.new).respond_to? method } || :rails_admin_default_object_label_method
+        # nil when the model answers to none of them, which #object_label reads
+        # as "nothing to call it by" and #default_object_label then handles.
+        @object_label_method ||= Config.label_methods.detect { |method| (@dummy_object ||= abstract_model.model.new).respond_to? method }
       end
 
       register_instance_option :label do
