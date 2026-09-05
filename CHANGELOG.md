@@ -16,6 +16,7 @@
 ### Fixed
 
 - Fix the list raising an error when an enum field's options come from a class method on the model ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- Fix records whose label method returns blank being shown without a label, such as in association fields and history ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 - Fix the "Today" and "This week" date filters selecting the wrong dates while the system clock and the application time zone disagree on the date ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 - Fix `config.default_search_operator` not applying to filters on Mongoid ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 - Fix an error on Mongoid for a field configured as `:time` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))

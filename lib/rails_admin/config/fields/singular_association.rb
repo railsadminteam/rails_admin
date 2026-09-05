@@ -11,7 +11,7 @@ module RailsAdmin
         end
 
         register_instance_option :formatted_value do
-          (o = value) && o.send(associated_model_config.object_label_method)
+          (o = value) && associated_model_config.object_label(o)
         end
 
         register_instance_option :partial do

@@ -53,9 +53,19 @@ module RailsAdmin
         @excluded = !RailsAdmin::AbstractModel.all.collect(&:model_name).include?(abstract_model.try(:model_name))
       end
 
-      def object_label
-        bindings[:object].send(object_label_method).presence ||
-          bindings[:object].send(:rails_admin_default_object_label_method)
+      # The label for one record: what object_label_method has to say about it.
+      # When it has nothing to say, +fallback+ if one is given; failing that, and
+      # for a model with no label method at all, a last resort built from the
+      # class and the id.
+      #
+      # Everything that shows a record by name goes through here, so that a
+      # record is called the same thing wherever it turns up.
+      #
+      # +fallback+ is positional because model configs are reached through
+      # proxies that do not forward keyword arguments.
+      def object_label(object = bindings[:object], fallback = nil)
+        object.send(object_label_method).presence || fallback ||
+          object.send(:rails_admin_default_object_label_method)
       end
 
       # The display for a model instance (i.e. a single database record).

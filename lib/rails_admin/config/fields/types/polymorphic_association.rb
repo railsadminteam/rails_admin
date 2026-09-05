@@ -22,7 +22,7 @@ module RailsAdmin
           end
 
           register_instance_option :formatted_value do
-            (o = value) && o.send(RailsAdmin.config(o).object_label_method)
+            (o = value) && RailsAdmin.config(o).object_label(o)
           end
 
           register_instance_option :sortable do
