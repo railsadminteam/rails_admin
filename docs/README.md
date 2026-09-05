@@ -103,6 +103,10 @@
 - [Custom action](custom-action.md)
 - [Custom field](custom-field.md)
 
+### Contributing
+
+- [Code architecture for contributors](code-architecture-for-contributors.md) - how the layers fit together, and how to add an ORM adapter
+
 ### Styling
 
 - [List view table styling](list-view-table-styling.md)
