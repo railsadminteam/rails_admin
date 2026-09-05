@@ -346,7 +346,7 @@ module RailsAdmin
 
         # Reader for field's value
         def value
-          bindings[:object].safe_send(name)
+          abstract_model.read(bindings[:object], name)
         rescue NoMethodError => e
           raise e.exception <<~ERROR
             #{e.message}

@@ -178,6 +178,24 @@ RSpec.shared_examples 'a RailsAdmin adapter' do
       end
     end
 
+    describe '#read' do
+      # An edit form shows, and saves back, the value the store holds, so a
+      # reader the model has redefined is not what is read.
+      it 'reads what the store holds, not what a reader of the same name says' do
+        record = players.first
+        stored = record.name
+        def record.name
+          'what the model says instead'
+        end
+
+        expect(abstract_model.read(record, :name)).to eq stored
+      end
+
+      it 'falls back to the method for anything the store does not hold' do
+        expect(abstract_model.read(players.first, :team)).to eq players.first.team
+      end
+    end
+
     describe '#where' do
       it 'returns filtered results' do
         expect(abstract_model.where(name: players.first.name).to_a).to eq [players.first]
