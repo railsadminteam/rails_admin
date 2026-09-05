@@ -155,12 +155,13 @@ module RailsAdmin
 
       private
 
+        # A key travels through the DOM and comes back as a URL or form
+        # parameter, so it is the associated model's repository that decides how
+        # it is written down.
         def format_key(key)
-          if key.is_a?(Array)
-            RailsAdmin.config.composite_keys_serializer.serialize(key)
-          else
-            key
-          end
+          return if key.nil? # the association is not set
+
+          associated_model_config.abstract_model.format_id(key)
         end
       end
     end
