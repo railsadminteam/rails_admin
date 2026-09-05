@@ -2,7 +2,6 @@
 
 require 'rails_admin/adapters/repository'
 require 'rails_admin/adapters/mongoid/bson'
-require 'rails_admin/adapters/mongoid/object_extension'
 
 module RailsAdmin
   module Adapters
@@ -13,14 +12,11 @@ module RailsAdmin
         end
 
         def new(params = {})
-          model.new(params).extend(ObjectExtension)
+          model.new(params)
         end
 
         def get(id, scope = scoped)
-          object = scope.find(id)
-          return nil unless object
-
-          object.extend(ObjectExtension)
+          scope.find(id)
         rescue StandardError => e
           raise e if %w[
             Mongoid::Errors::DocumentNotFound
@@ -73,7 +69,37 @@ module RailsAdmin
           Array.wrap(objects).each(&:destroy)
         end
 
+        # A document that is not saved yet has no id, so children put on a
+        # has_many or has_one have nothing to point back at. Mongoid fills that
+        # in on save only where the association is autosave; otherwise the
+        # children are still unsaved once the parent finally has an id, so they
+        # get a second pass.
+        #
+        # Embedded documents are stored inside the parent and need none of this,
+        # which is why the macro is matched as it is rather than through #type.
+        def save(record)
+          created = record.new_record?
+          record.save.tap { |saved| save_referenced_children(record) if saved && created }
+        end
+
       private
+
+        # Read from the record's own class, which for a subclass may say
+        # something different about autosave than the model this repository is
+        # for.
+        def save_referenced_children(record)
+          record.class.relations.each_value do |relation|
+            association = Association.new(relation, record.class)
+            next if association.autosave?
+
+            case association.macro
+            when :has_many
+              record.send(association.name).each(&:save)
+            when :has_one
+              record.send(association.name)&.save
+            end
+          end
+        end
 
         def build_statement(column, type, value, operator)
           StatementBuilder.new(column, type, value, operator).to_statement

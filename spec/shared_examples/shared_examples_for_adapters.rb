@@ -91,6 +91,15 @@ RSpec.shared_examples 'a RailsAdmin adapter' do
         expect(abstract_model.get(adapter_missing_id)).to be_nil
       end
 
+      # Anything added to a record individually -- a proxy, an extended module,
+      # a singleton callback -- makes it something other than what the model
+      # produces. Marshal is the cheapest way to notice: it refuses an object
+      # that carries a singleton, which is what an after_create hook added per
+      # record used to leave behind.
+      it 'returns a record that can be handled like any other' do
+        expect { Marshal.dump(abstract_model.get(ids.first)) }.not_to raise_error
+      end
+
       # This is why the AbstractObject proxy had to go (#2847).
       #
       # case/when dispatches through Module#===, that is rb_obj_is_kind_of at the

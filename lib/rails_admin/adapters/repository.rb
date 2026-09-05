@@ -33,6 +33,12 @@ module RailsAdmin
         record.send(name)
       end
 
+      # Persist a record, and whatever else the store needs doing to call it
+      # saved. Answers the way the record's own #save does.
+      def save(record)
+        record.save
+      end
+
       def where(conditions)
         model.where(conditions)
       end
