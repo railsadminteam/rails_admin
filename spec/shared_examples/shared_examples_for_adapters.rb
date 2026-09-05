@@ -58,6 +58,15 @@ RSpec.shared_examples 'a RailsAdmin adapter' do
     it '#primary_key is exposed' do
       expect(abstract_model.primary_key).to be_present
     end
+
+    # Callers inside the gem ask in the plural so that a composite key needs no
+    # special case, which only works if the plural is an array even when the key
+    # has one column.
+    it '#primary_keys is an array of symbols, whatever the key looks like' do
+      expect(abstract_model.primary_keys).to be_an(Array)
+      expect(abstract_model.primary_keys).to all(be_a(Symbol))
+      expect(abstract_model.primary_keys).to eq Array(abstract_model.primary_key).collect(&:to_sym)
+    end
   end
 
   describe 'data access' do

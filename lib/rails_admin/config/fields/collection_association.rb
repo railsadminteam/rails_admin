@@ -40,7 +40,7 @@ module RailsAdmin
         end
 
         def parse_input(params)
-          return unless associated_model_config.abstract_model.primary_key.is_a?(Array)
+          return unless associated_model_config.abstract_model.primary_keys.many?
 
           if nested_form
             params[method_name].each_value do |value|

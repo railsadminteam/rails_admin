@@ -107,7 +107,7 @@ module RailsAdmin
     # What the model is, and what can be done with it, are the two halves of an
     # adapter. AbstractModel is the one object callers talk to; it owns neither
     # answer and forwards both.
-    delegate :properties, :associations, :base_class, :primary_key, :table_name,
+    delegate :properties, :associations, :base_class, :primary_key, :primary_keys, :table_name,
              :quoted_table_name, :quote_column_name, :encoding, :embedded?, :cyclic?,
              :adapter_supports_joins?, :belongs_to_required_by_default,
              :pretty_name, :human_attribute_name, :attribute_required?,

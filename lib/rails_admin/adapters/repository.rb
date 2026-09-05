@@ -16,7 +16,7 @@ module RailsAdmin
         @abstract_model = abstract_model
       end
 
-      delegate :model, :config, :associations, :primary_key, :table_name,
+      delegate :model, :config, :associations, :primary_key, :primary_keys, :table_name,
                :quoted_table_name, :quote_column_name, to: :abstract_model
 
       def where(conditions)

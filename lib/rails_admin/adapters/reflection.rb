@@ -18,6 +18,17 @@ module RailsAdmin
 
       delegate :model, to: :abstract_model
 
+      # The columns the primary key is made of, always as an array of symbols --
+      # a single-column key is an array of one.
+      #
+      # #primary_key answers in the store's own shape, a name or an array of
+      # them, and keeps doing so for callers outside the gem. Everything inside
+      # asks in the plural instead, so that a composite key is not a special case
+      # each caller has to remember to notice.
+      def primary_keys
+        Array(primary_key).collect(&:to_sym)
+      end
+
       # Stores that neither qualify nor quote identifiers use the names as they
       # are; ActiveRecord asks its connection instead.
       def quoted_table_name
