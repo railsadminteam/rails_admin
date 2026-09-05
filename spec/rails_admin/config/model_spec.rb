@@ -168,14 +168,25 @@ RSpec.describe RailsAdmin::Config::Model do
     let!(:teams) do
       [FactoryBot.create(:team, created_at: 1.day.ago), FactoryBot.create(:team, created_at: 2.days.ago)]
     end
-    before do
-      RailsAdmin.config(Team) do
-        last_created_at { abstract_model.model.maximum(:created_at) }
-      end
+
+    it 'is when the record added last was created' do
+      expect(RailsAdmin.config(Team).last_created_at.to_date).to eq 2.days.ago.to_date
     end
 
-    it 'allow customization' do
-      expect(RailsAdmin.config(Team).last_created_at.to_date).to eq 1.day.ago.to_date
+    it 'is nil for a model with nothing to go by' do
+      expect(RailsAdmin.config(Comment).last_created_at).to be_nil
+    end
+
+    context 'when customized' do
+      before do
+        RailsAdmin.config(Team) do
+          last_created_at { abstract_model.model.maximum(:created_at) }
+        end
+      end
+
+      it 'allow customization' do
+        expect(RailsAdmin.config(Team).last_created_at.to_date).to eq 1.day.ago.to_date
+      end
     end
   end
 end
