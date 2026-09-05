@@ -47,23 +47,19 @@ module RailsAdmin
         end
 
         def format_id(id)
-          if primary_key.is_a? Array
-            RailsAdmin.config.composite_keys_serializer.serialize(id)
-          else
-            id
-          end
+          return id unless primary_keys.many?
+
+          RailsAdmin.config.composite_keys_serializer.serialize(id)
         end
 
         def parse_id(id)
-          if primary_key.is_a?(Array)
-            ids = RailsAdmin.config.composite_keys_serializer.deserialize(id)
-            primary_key.each_with_index do |key, i|
-              ids[i] = model.type_for_attribute(key).cast(ids[i])
-            end
-            ids
-          else
-            id
+          return id unless primary_keys.many?
+
+          ids = RailsAdmin.config.composite_keys_serializer.deserialize(id)
+          primary_keys.each_with_index do |key, i|
+            ids[i] = model.type_for_attribute(key).cast(ids[i])
           end
+          ids
         end
 
         def serialize_attribute(name, value)
@@ -110,18 +106,16 @@ module RailsAdmin
         end
 
         def primary_key_scope(scope, id)
-          if primary_key.is_a? Array
-            scope.where(primary_key.zip(parse_id(id)).to_h)
-          else
-            scope.where(primary_key => id)
-          end
+          scope.where(primary_keys.zip(Array(parse_id(id))).to_h)
         end
 
+        # A composite key has to be matched one whole key at a time, which costs
+        # an OR per id; a single-column key gets the IN it deserves.
         def bulk_scope(scope, options)
-          if primary_key.is_a? Array
+          if primary_keys.many?
             options[:bulk_ids].map { |id| primary_key_scope(scope, id) }.reduce(&:or)
           else
-            scope.where(primary_key => options[:bulk_ids])
+            scope.where(primary_keys.first => options[:bulk_ids])
           end
         end
 
