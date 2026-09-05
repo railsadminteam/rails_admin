@@ -19,10 +19,6 @@ module RailsAdmin
           end
         end
 
-        def rails_admin_default_object_label_method
-          new_record? ? "new #{self.class}" : "#{self.class} ##{id}"
-        end
-
         def safe_send(value)
           if attributes.detect { |k, _v| k.to_s == value.to_s }
             read_attribute(value)

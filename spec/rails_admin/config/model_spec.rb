@@ -50,9 +50,31 @@ RSpec.describe RailsAdmin::Config::Model do
   end
 
   describe '#object_label_method' do
-    it 'is first of Config.label_methods if found as a column on model, or :rails_admin_default_object_label_method' do
-      expect(RailsAdmin.config(Comment).object_label_method).to eq(:rails_admin_default_object_label_method)
+    it 'is the first of Config.label_methods the model answers to' do
       expect(RailsAdmin.config(Division).object_label_method).to eq(:name)
+    end
+
+    it 'is nil when the model answers to none of them' do
+      expect(RailsAdmin.config(Comment).object_label_method).to be_nil
+    end
+  end
+
+  describe '#object_label' do
+    it 'asks the record for the configured label method' do
+      expect(RailsAdmin.config(Division).object_label(Division.new(name: 'Yankees'))).to eq 'Yankees'
+    end
+
+    it 'falls back to the class and the id when the model has no label method' do
+      comment = FactoryBot.create :comment
+      expect(RailsAdmin.config(Comment).object_label(comment)).to eq "Comment ##{comment.id}"
+    end
+
+    it 'falls back for a record that is not saved yet' do
+      expect(RailsAdmin.config(Comment).object_label(Comment.new)).to eq 'new Comment'
+    end
+
+    it 'falls back when the configured label method has nothing to say' do
+      expect(RailsAdmin.config(Division).object_label(Division.new)).to eq 'new Division'
     end
   end
 

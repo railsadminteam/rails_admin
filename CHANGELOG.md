@@ -13,6 +13,10 @@
 - Plugins which extend or reopen `RailsAdmin::Adapters::ActiveRecord` or `RailsAdmin::Adapters::Mongoid` to change how RailsAdmin reads or queries models need to target the adapter's `Reflection` or `Repository` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 - Overriding `#sort_column` in a custom field no longer affects sorting; override `#sort_order` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 
+### Removed
+
+- `#rails_admin_default_object_label_method` is no longer defined on models, and `object_label_method` is nil for a model which responds to none of `config.label_methods` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+
 ### Fixed
 
 - Fix the list raising an error when an enum field's options come from a class method on the model ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))

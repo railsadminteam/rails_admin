@@ -64,8 +64,18 @@ module RailsAdmin
       # +fallback+ is positional because model configs are reached through
       # proxies that do not forward keyword arguments.
       def object_label(object = bindings[:object], fallback = nil)
-        object.send(object_label_method).presence || fallback ||
-          object.send(:rails_admin_default_object_label_method)
+        return default_object_label(object) unless object_label_method
+
+        object.send(object_label_method).presence || fallback || default_object_label(object)
+      end
+
+      # What to call a record that has nothing to be called by.
+      #
+      # Models used to have to carry this themselves, as
+      # rails_admin_default_object_label_method, because it was reached by
+      # sending object_label_method to the record like any other label method.
+      def default_object_label(object)
+        object.new_record? ? "new #{object.class}" : "#{object.class} ##{object.id}"
       end
 
       # The display for a model instance (i.e. a single database record).
@@ -73,7 +83,9 @@ module RailsAdmin
       # any methods that may have been added to the label_methods array via Configuration.
       # Failing all of these, it'll return the class name followed by the model's id.
       register_instance_option :object_label_method do
-        @object_label_method ||= Config.label_methods.detect { |method| (@dummy_object ||= abstract_model.model.new).respond_to? method } || :rails_admin_default_object_label_method
+        # nil when the model answers to none of them, which #object_label reads
+        # as "nothing to call it by" and #default_object_label then handles.
+        @object_label_method ||= Config.label_methods.detect { |method| (@dummy_object ||= abstract_model.model.new).respond_to? method }
       end
 
       register_instance_option :label do
