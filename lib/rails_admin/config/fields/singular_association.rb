@@ -38,6 +38,11 @@ module RailsAdmin
           return unless nested_form && params[method_name].try(:[], :id).present?
 
           ids = associated_model_config.abstract_model.parse_id(params[method_name][:id])
+          # The composite_primary_keys gem wants its own representation of the key
+          # here; ActiveRecord has had composite keys of its own since 7.1 and
+          # takes the array as it is. This is the only place the gem is still
+          # supported, and it is only reachable below 7.1 -- so it goes when
+          # support for Rails 7.0 does.
           ids = ids.to_composite_keys.to_s if ids.respond_to?(:to_composite_keys)
           params[method_name][:id] = ids
         end
