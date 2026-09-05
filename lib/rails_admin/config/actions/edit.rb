@@ -26,7 +26,8 @@ module RailsAdmin
             elsif request.put? # UPDATE
               sanitize_params_for!(request.xhr? ? :modal : :update)
 
-              @object.assign_attributes(params[@abstract_model.param_key])
+              # A form that posted nothing for the model leaves nothing to assign.
+              @object.assign_attributes(params[@abstract_model.param_key] || {})
               @authorization_adapter&.authorize(:update, @abstract_model, @object)
               changes = @object.changes
               if @object.save
