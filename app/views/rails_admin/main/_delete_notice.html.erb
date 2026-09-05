@@ -11,7 +11,7 @@
   <% end %>
   <ul>
     <% @abstract_model.each_associated_children(object) do |association, children| %>
-      <% humanized_association = @abstract_model.model.human_attribute_name association.name %>
+      <% humanized_association = @abstract_model.human_attribute_name association.name %>
       <% limit = children.count > 12 ? 10 : children.count %>
       <% children.first(limit).each do |child| %>
         <%= content_tag :li, class: dom_class(child) do %>

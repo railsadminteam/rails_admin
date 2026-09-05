@@ -79,7 +79,7 @@ module RailsAdmin
       register_instance_option :object_label_method do
         # nil when the model answers to none of them, which #object_label reads
         # as "nothing to call it by" and #default_object_label then handles.
-        @object_label_method ||= Config.label_methods.detect { |method| (@dummy_object ||= abstract_model.model.new).respond_to? method }
+        @object_label_method ||= Config.label_methods.detect { |method| (@dummy_object ||= abstract_model.dummy_record).respond_to? method }
       end
 
       register_instance_option :label do
@@ -123,7 +123,7 @@ module RailsAdmin
       end
 
       register_instance_option :last_created_at do
-        abstract_model.model.last.try(:created_at) if abstract_model.properties.detect { |c| c.name == :created_at }
+        abstract_model.first(sort: abstract_model.primary_key).try(:created_at) if abstract_model.properties.detect { |c| c.name == :created_at }
       end
 
       # Act as a proxy for the base section configuration that actually
