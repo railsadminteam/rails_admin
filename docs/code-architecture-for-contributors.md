@@ -208,6 +208,9 @@ different APIs to observe it.
 ## Rules that are checked
 
 Three of the rules above are enforced, by custom RuboCop cops in `rubocop/`.
+They cover the templates too, through
+[rubocop-erb](https://github.com/r7kamura/rubocop-erb) -- most of the violations
+found so far were in a view.
 
 | cop                           | rule                                                                                                         |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------ |
@@ -226,6 +229,12 @@ line with a reason:
 abstract_model.model.accessible_by(ability, action)
 # rubocop:enable RailsAdmin/RawModelAccess
 ```
+
+The templates are checked, not corrected. The styling cops are excluded from
+`**/*.erb` in `.rubocop.yml`, both because they have never run on the views and
+because autocorrect through rubocop-erb does not always produce valid Ruby --
+`count = count + n` came back as `count ++= n`, and 216 specs with it. Leave
+`rubocop -A` alone where the views are concerned.
 
 One rule from the same list is **not** enforced: an adapter should not read
 `RailsAdmin::Config`, and nine places still do — the fields a search or a filter
