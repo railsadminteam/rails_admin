@@ -31,6 +31,7 @@ module RailsAdmin
           Mongoid::Errors::InvalidFind
           Moped::Errors::InvalidObjectId
           BSON::InvalidObjectId
+          BSON::Error::InvalidObjectId
         ].exclude?(e.class.to_s)
       end
 
@@ -111,6 +112,10 @@ module RailsAdmin
         false
       end
 
+      def belongs_to_required_by_default
+        ::Mongoid.belongs_to_required_by_default
+      end
+
     private
 
       def build_statement(column, type, value, operator)
@@ -152,7 +157,7 @@ module RailsAdmin
         statements = []
 
         filters.each_pair do |field_name, filters_dump|
-          filters_dump.each do |_, filter_dump|
+          filters_dump.each_value do |filter_dump|
             field = fields.detect { |f| f.name.to_s == field_name }
             next unless field
 
@@ -250,8 +255,12 @@ module RailsAdmin
         end
 
         def build_statement_for_boolean
-          return {@column => false} if %w[false f 0].include?(@value)
-          return {@column => true} if %w[true t 1].include?(@value)
+          case @value
+          when 'false', 'f', '0'
+            {@column => false}
+          when 'true', 't', '1'
+            {@column => true}
+          end
         end
 
         def column_for_value(value)

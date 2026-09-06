@@ -22,31 +22,53 @@ RSpec.describe 'HasOneAssociation field', type: :request do
     end
 
     it 'creates an object with correct associations' do
-      post new_path(model_name: 'player', player: FactoryBot.attributes_for(:player).merge(name: 'Jackie Robinson', draft_id: @draft.id))
+      visit new_path(model_name: 'player')
+      fill_in 'Name', with: 'Jackie Robinson'
+      fill_in 'Number', with: @draft.player.number + 1
+      select("Draft ##{@draft.id}", from: 'Draft')
+      click_button 'Save'
+      is_expected.to have_content 'Player successfully created'
       @player = Player.where(name: 'Jackie Robinson').first
       @draft.reload
       expect(@player.draft).to eq(@draft)
+    end
+
+    context 'with default_value' do
+      before do
+        id = @draft.id
+        RailsAdmin.config Player do
+          configure :draft do
+            default_value id
+          end
+        end
+      end
+
+      it 'shows the value as selected' do
+        visit new_path(model_name: 'player')
+        expect(find('select#player_draft_id').value).to eq @draft.id.to_s
+      end
     end
   end
 
   context 'on update' do
     before do
-      @player = FactoryBot.create :player
-      @draft = FactoryBot.create :draft
-      @number = @draft.player.number + 1 # to avoid collision
-      put edit_path(model_name: 'player', id: @player.id, player: {name: 'Jackie Robinson', draft_id: @draft.id, number: @number, position: 'Second baseman'})
-      @player.reload
-    end
-
-    it 'updates an object with correct attributes' do
-      expect(@player.name).to eq('Jackie Robinson')
-      expect(@player.number).to eq(@number)
-      expect(@player.position).to eq('Second baseman')
+      @drafts = FactoryBot.create_list :draft, 2
+      @player = FactoryBot.create :player, draft: @drafts[0]
+      visit edit_path(model_name: 'player', id: @player.id)
     end
 
     it 'updates an object with correct associations' do
-      @draft.reload
-      expect(@player.draft).to eq(@draft)
+      select("Draft ##{@drafts[1].id}", from: 'Draft')
+      click_button 'Save'
+      @player.reload
+      expect(@player.draft).to eq(@drafts[1])
+    end
+
+    it 'clears the current selection' do
+      select('', from: 'Draft')
+      click_button 'Save'
+      @player.reload
+      expect(@player.draft).to be nil
     end
   end
 
@@ -91,7 +113,7 @@ RSpec.describe 'HasOneAssociation field', type: :request do
         visit edit_path(model_name: 'managing_user', id: user.id)
         find('input.ra-filtering-select-input').set('T')
         page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
-        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: team.name)
         page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("#{team.name}")).click()}
         click_button 'Save'
         is_expected.to have_content 'Managing user successfully updated'
@@ -142,7 +164,7 @@ RSpec.describe 'HasOneAssociation field', type: :request do
         fill_in 'Name', with: 'someone'
         find('.fanship_field input.ra-filtering-select-input').set(fanship.fan_id)
         page.execute_script("document.querySelector('.fanship_field input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
-        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: "Fanship ##{fanship.id}")
         page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Fanship ##{fanship.id}")).click()}
         click_button 'Save'
         is_expected.to have_content 'Fan successfully created'

@@ -48,7 +48,7 @@ import jQuery from 'jquery';
       // Make a unique ID for the new child
       var regexp  = new RegExp('new_' + assoc, 'g');
       var new_id  = this.newId();
-      content     = $.trim(content.replace(regexp, new_id));
+      content     = content.replace(regexp, new_id).trim();
 
       var field = this.insertFields(content, assoc, link);
       // bubble up event upto document (through form)
@@ -71,13 +71,13 @@ import jQuery from 'jquery';
     removeFields: function(e) {
       var $link = $(e.currentTarget),
           assoc = $link.data('association'); // Name of child to be removed
-      
+
       var hiddenField = $link.prev('input[type=hidden]');
       hiddenField.val('1');
-      
+
       var field = $link.closest('.fields');
       field.hide();
-      
+
       field
         .trigger({ type: 'nested:fieldRemoved', field: field })
         .trigger({ type: 'nested:fieldRemoved:' + assoc, field: field });

@@ -2,7 +2,106 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.2...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.3.0...HEAD)
+
+## [3.3.0](https://github.com/railsadminteam/rails_admin/tree/v3.3.0) - 2024-12-08
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.2.1...v3.3.0)
+
+### Added
+
+- Rails 8.0 support ([#3702](https://github.com/railsadminteam/rails_admin/pull/3702))
+
+## [3.2.1](https://github.com/railsadminteam/rails_admin/tree/v3.2.0) - 2024-10-10
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.2.0...v3.2.1)
+
+### Fixed
+
+- Disable Turbo's prefetch behavior globally, to prevent custom actions unintentionally triggered ([f54a102](https://github.com/railsadminteam/rails_admin/commit/f54a102c6b0a420244ef044503944574ef1dfbd2), [#3701](https://github.com/railsadminteam/rails_admin/issues/3701))
+
+## [3.2.0](https://github.com/railsadminteam/rails_admin/tree/v3.2.0) - 2024-09-08
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.2.0.rc...v3.2.0)
+
+### Fixed
+
+- Fix polymorphic id doesn't reset properly in an edge case ([7b2ffb1](https://github.com/railsadminteam/rails_admin/commit/7b2ffb12386e06a0e6e0bace6d331fc5af989e38), [#3630](https://github.com/railsadminteam/rails_admin/pull/3630))
+
+## [3.2.0.rc](https://github.com/railsadminteam/rails_admin/tree/v3.2.0.rc) - 2024-08-25
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.2.0.beta...v3.2.0.rc)
+
+### Added
+
+- ActiveRecord 7.1 composite primary keys support ([53b89c9](https://github.com/railsadminteam/rails_admin/commit/53b89c9161e48c0f9b4ecd5f544398c9360ea50f))
+
+### Changed
+
+- Introduce SingularAssociation and CollectionAssociation to tidy up the view files ([876be11](https://github.com/railsadminteam/rails_admin/commit/876be11ec01237596b2f27e15239e86418ce7610))
+
+### Fixed
+
+- Fix to show a thumbnail of all representable ActiveStorage attachments ([#3656](https://github.com/railsadminteam/rails_admin/pull/3656), [7754ac3](https://github.com/railsadminteam/rails_admin/commit/7754ac34eb8e0af7605b2e52ae0646b17e9bb0c6))
+- Fix to detect images properly in FileUpload and MultipleFileUpload field ([35c8702](https://github.com/railsadminteam/rails_admin/commit/35c8702351aa300bddcc950d36d68b80742f5011), [#3633](https://github.com/railsadminteam/rails_admin/pull/3633))
+- Fix to reset polymorphic id selection upon type change ([#3630](https://github.com/railsadminteam/rails_admin/pull/3630), [13114e5](https://github.com/railsadminteam/rails_admin/commit/13114e5629d49eab14d58df1319eb068dacedba7))
+- Lock jQuery UI version due to incompatibility with 1.14 ([5245d5b](https://github.com/railsadminteam/rails_admin/commit/5245d5bb91691d646219b5243f3f881a0144a3fd), [#3692](https://github.com/railsadminteam/rails_admin/issues/3692))
+
+## [3.2.0.beta](https://github.com/railsadminteam/rails_admin/tree/v3.2.0.beta) - 2024-07-13
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.4...v3.2.0.beta)
+
+### Added
+
+- Allow turbo-rails 2 in gemspec ([#3671](https://github.com/railsadminteam/rails_admin/pull/3671))
+- ViteRuby integration ([#3643](https://github.com/railsadminteam/rails_admin/pull/3643), [0e12e5b](https://github.com/railsadminteam/rails_admin/commit/0e12e5b465997c14d5b7a4d500a0d4cebed21aa9))
+- Support client-side dynamic scoping ([12715f2](https://github.com/railsadminteam/rails_admin/commit/12715f2dd12d97f0676e548e4271906df424b89d), [#2934](https://github.com/railsadminteam/rails_admin/issues/2934))
+- Add support for `%-l` option to Flatpickr ([#3616](https://github.com/railsadminteam/rails_admin/pull/3616))
+
+### Changed
+
+- Handle has_one assignment on the field level, making patched has_one getters/setters unnecessary ([91737ab](https://github.com/railsadminteam/rails_admin/commit/91737ab3c2fa22cbe08aedd28770a12704fde6c7))
+
+### Fixed
+
+- Use require_relative to avoid modifying $LOAD_PATH in gemspec ([#3690](https://github.com/railsadminteam/rails_admin/pull/3690))
+- Tidy up trailing whitespace in gem post_install_message ([#3689](https://github.com/railsadminteam/rails_admin/pull/3689))
+- Fix enum filter breaking when pre-populated ([d62f604](https://github.com/railsadminteam/rails_admin/commit/d62f604cc8d7d1434f7dfe0c5aca3aaf3dc2547b), [#3651](https://github.com/railsadminteam/rails_admin/issues/3651))
+- Fix error on searching or sorting by ActiveStorage field ([dba6c4b](https://github.com/railsadminteam/rails_admin/commit/dba6c4b815fbe4aa4f62a13b660e865a89151838), [#3678](https://github.com/railsadminteam/rails_admin/issues/3678))
+- Fix to remove trailing slash from meta tags ([#3672](https://github.com/railsadminteam/rails_admin/pull/3672))
+- Fix default config path for ImportmapFormatter being misspelled ([#3676](https://github.com/railsadminteam/rails_admin/pull/3676))
+- Fix table names not quoted properly on sorting ([#3652](https://github.com/railsadminteam/rails_admin/pull/3652), [#1631](https://github.com/railsadminteam/rails_admin/issues/1631))
+- Fix ActiveStorage/ActionText detection less likely to cause false positives ([073b809](https://github.com/railsadminteam/rails_admin/commit/073b809853b6bc231841e3f8dd9d35875220c616), [#3659](https://github.com/railsadminteam/rails_admin/issues/3659))
+- Fix boolean fields in a Mongoid embedded document fails to be updated ([#3555](https://github.com/railsadminteam/rails_admin/pull/3555), [#3554](https://github.com/railsadminteam/rails_admin/issues/3554))
+- Fix wrongly referring to `:update_only` in nested fields ([#3649](https://github.com/railsadminteam/rails_admin/pull/3649))
+- Fix to use HTML `q` element for better localization support ([#3636](https://github.com/railsadminteam/rails_admin/pull/3636))
+- Fix `is_blank` and `is_present` filters breaking for uuid columns ([#3629](https://github.com/railsadminteam/rails_admin/pull/3629), [#3669](https://github.com/railsadminteam/rails_admin/issues/3669))
+- Fix polymorphic association target classes not set correctly in subclasses ([2a89ebc](https://github.com/railsadminteam/rails_admin/commit/2a89ebcfa96243697988f6570b9c9be19a7a01b5), [#3631](https://github.com/railsadminteam/rails_admin/issues/3631))
+
+### Security
+
+- Validate `return_to` param using `request.base_url` to prevent arbitrary redirection ([#3627](https://github.com/railsadminteam/rails_admin/pull/3627))
+
+## [3.1.4](https://github.com/railsadminteam/rails_admin/tree/v3.1.4) - 2024-07-09
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.3...v3.1.4)
+
+### Fixed
+
+- Fix [32f91e4](https://github.com/railsadminteam/rails_admin/commit/32f91e4b49205e44d3931c2e36d9f7273384a250) broke fields with HTML tags ([758d249](https://github.com/railsadminteam/rails_admin/commit/758d249d950062be6840f9c96e2a286e02b92a1e), [#3686](https://github.com/railsadminteam/rails_admin/issues/3686#issuecomment-2215491140))
+
+## [3.1.3](https://github.com/railsadminteam/rails_admin/tree/v3.1.3) - 2024-07-06
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.1.2...v3.1.3)
+
+### Fixed
+
+- Fix bson 5.0 compatibility ([13da4f0](https://github.com/railsadminteam/rails_admin/commit/13da4f0191f5185dadecdfe9e6fc9ca808f7f73d))
+- Fix Importmap 2.0 compatibility ([bd0cf97](https://github.com/railsadminteam/rails_admin/commit/bd0cf97530d93dc66577e5d1ea0da2ebf3b57737))
+
+### Security
+
+- Fix XSS vulnerability in the list view ([b5a287d](https://github.com/railsadminteam/rails_admin/commit/b5a287d82e2cbd1737a1a01e11ede2911cce7fef), [GHSA-8qgm-g2vv-vwvc](https://github.com/railsadminteam/rails_admin/security/advisories/GHSA-8qgm-g2vv-vwvc))
 
 ## [3.1.2](https://github.com/railsadminteam/rails_admin/tree/v3.1.2) - 2023-03-23
 
@@ -637,7 +736,7 @@
 - Fix Syntax Error in removal of new nested entity([#2539](https://github.com/railsadminteam/rails_admin/pull/2539))
 - Fix momentjs translations for '%-d' format day of the month([#2540](https://github.com/railsadminteam/rails_admin/pull/2540))
 - Fix Mongoid BSON object field ([#2495](https://github.com/railsadminteam/rails_admin/issues/2495))
-- Make browser ignore validaitons of removed nested child models([#2443](https://github.com/railsadminteam/rails_admin/issues/2443), [#2490](https://github.com/railsadminteam/rails_admin/pull/2490))
+- Make browser ignore validations of removed nested child models([#2443](https://github.com/railsadminteam/rails_admin/issues/2443), [#2490](https://github.com/railsadminteam/rails_admin/pull/2490))
 
 ## [0.8.1](https://github.com/railsadminteam/rails_admin/tree/v0.8.1) - 2015-11-24
 

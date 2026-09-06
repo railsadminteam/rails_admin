@@ -62,15 +62,15 @@ module RailsAdmin
 
         def sort_column
           if sortable == true
-            "#{abstract_model.table_name}.#{name}"
+            "#{abstract_model.quoted_table_name}.#{abstract_model.quote_column_name(name)}"
           elsif (sortable.is_a?(String) || sortable.is_a?(Symbol)) && sortable.to_s.include?('.') # just provide sortable, don't do anything smart
             sortable
           elsif sortable.is_a?(Hash) # just join sortable hash, don't do anything smart
             "#{sortable.keys.first}.#{sortable.values.first}"
-          elsif association # use column on target table
-            "#{associated_model_config.abstract_model.table_name}.#{sortable}"
+          elsif association? # use column on target table
+            "#{associated_model_config.abstract_model.quoted_table_name}.#{abstract_model.quote_column_name(sortable)}"
           else # use described column in the field conf.
-            "#{abstract_model.table_name}.#{sortable}"
+            "#{abstract_model.quoted_table_name}.#{abstract_model.quote_column_name(sortable)}"
           end
         end
 
@@ -216,11 +216,18 @@ module RailsAdmin
             end
 
           (@required ||= {})[context] ||= !!([name] + children_fields).uniq.detect do |column_name|
-            abstract_model.model.validators_on(column_name).detect do |v|
+            model = abstract_model.model
+            model.validators_on(column_name).detect do |v|
               !(v.options[:allow_nil] || v.options[:allow_blank]) &&
                 %i[presence numericality attachment_presence].include?(v.kind) &&
                 (v.options[:on] == context || v.options[:on].blank?) &&
                 (v.options[:if].blank? && v.options[:unless].blank?)
+            end || model.reflect_on_all_associations(:belongs_to).detect do |a|
+              next unless a.name == column_name
+
+              required = a.options[:required] if a.options.key?(:required)
+              required = !a.options[:optional] if a.options.key?(:optional) && required.nil?
+              required.nil? ? abstract_model.belongs_to_required_by_default : required
             end
           end
         end
@@ -357,7 +364,7 @@ module RailsAdmin
 
         def generic_field_help
           model = abstract_model.model_name.underscore
-          model_lookup = "admin.help.#{model}.#{name}".to_sym
+          model_lookup = :"admin.help.#{model}.#{name}"
           translated = I18n.translate(model_lookup, help: generic_help, default: [generic_help])
           (translated.is_a?(Hash) ? translated.to_a.first[1] : translated).html_safe
         end

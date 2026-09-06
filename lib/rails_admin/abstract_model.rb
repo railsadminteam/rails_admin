@@ -60,6 +60,14 @@ module RailsAdmin
       @model_name.constantize
     end
 
+    def quoted_table_name
+      table_name
+    end
+
+    def quote_column_name(name)
+      name
+    end
+
     def to_s
       model.to_s
     end
@@ -97,17 +105,20 @@ module RailsAdmin
       end
     end
 
+    def format_id(id)
+      id
+    end
+
+    def parse_id(id)
+      id
+    end
+
   private
 
     def initialize_active_record
       @adapter = :active_record
-      if defined?(::CompositePrimaryKeys)
-        require 'rails_admin/adapters/composite_primary_keys'
-        extend Adapters::CompositePrimaryKeys
-      else
-        require 'rails_admin/adapters/active_record'
-        extend Adapters::ActiveRecord
-      end
+      require 'rails_admin/adapters/active_record'
+      extend Adapters::ActiveRecord
     end
 
     def initialize_mongoid

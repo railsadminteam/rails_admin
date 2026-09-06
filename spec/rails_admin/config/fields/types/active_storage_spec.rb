@@ -14,7 +14,7 @@ if defined?(ActiveStorage)
     end
 
     describe '#thumb_method' do
-      it 'returns corresponding value which is to be passed to image_processing(ActiveStorage >= 6.0) or mini_magick(ActiveStorage 5.2)' do
+      it 'returns corresponding value which is to be passed to image_processing' do
         expect(field.thumb_method).to eq(resize_to_limit: [100, 100])
       end
     end
@@ -42,6 +42,15 @@ if defined?(ActiveStorage)
           expect(field.image?).to be_falsy
         end
       end
+
+      context 'when attachment is a PDF file' do
+        let(:record) { FactoryBot.create :field_test, active_storage_asset: {io: StringIO.new('dummy'), filename: 'test.pdf', content_type: 'application/pdf'} }
+        before { allow(ActiveStorage::Previewer::PopplerPDFPreviewer).to receive(:accept?).and_return(true) }
+
+        it 'returns true' do
+          expect(field.image?).to be_truthy
+        end
+      end
     end
 
     describe '#resource_url' do
@@ -66,6 +75,15 @@ if defined?(ActiveStorage)
 
         it 'returns original url' do
           expect(field.resource_url(true)).not_to match(/representations/)
+        end
+      end
+
+      context 'when attachment is a PDF file' do
+        let(:record) { FactoryBot.create :field_test, active_storage_asset: {io: StringIO.new('dummy'), filename: 'test.pdf', content_type: 'application/pdf'} }
+        before { allow(ActiveStorage::Previewer::PopplerPDFPreviewer).to receive(:accept?).and_return(true) }
+
+        it 'returns variant\'s url' do
+          expect(field.resource_url(true)).to match(/representations/)
         end
       end
     end
@@ -121,6 +139,18 @@ if defined?(ActiveStorage)
         it 'puts the direct upload url in html_attributes' do
           expect(field.html_attributes[:data]&.[](:direct_upload_url)).to eq 'http://www.example.com/rails/active_storage/direct_uploads'
         end
+      end
+    end
+
+    describe '#searchable' do
+      it 'is false' do
+        expect(field.searchable).to be false
+      end
+    end
+
+    describe '#sortable' do
+      it 'is false' do
+        expect(field.sortable).to be false
       end
     end
   end

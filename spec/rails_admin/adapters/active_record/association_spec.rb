@@ -215,6 +215,18 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record:
       expect(@category.associations.detect { |a| a.name == :librarian }.klass).to eq [ARUser]
       expect(@blog.associations.detect { |a| a.name == :librarian }.klass).to eq [ARProfile]
     end
+
+    describe 'on a subclass' do
+      before do
+        class ARReview < ARComment; end
+        allow(RailsAdmin::Config).to receive(:models_pool).and_return(%w[ARBlog ARPost ARCategory ARUser ARProfile ARComment ARReview])
+      end
+      subject { RailsAdmin::AbstractModel.new(ARReview).associations.detect { |a| a.name == :commentable } }
+
+      it 'returns correct target klasses' do
+        expect(subject.klass).to eq [ARBlog, ARPost]
+      end
+    end
   end
 
   describe 'polymorphic inverse has_many association' do
@@ -230,7 +242,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord::Association', active_record:
       expect(subject.key_accessor).to eq :a_r_comment_ids
       expect(subject.as).to eq :commentable
       expect(subject.polymorphic?).to be_falsey
-      expect(subject.inverse_of).to be_nil
+      expect(subject.inverse_of).to eq :commentable
       expect(subject.read_only?).to be_falsey
       expect(subject.nested_options).to be_nil
     end

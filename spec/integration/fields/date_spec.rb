@@ -18,13 +18,13 @@ RSpec.describe 'Date field', type: :request do
     end
 
     it 'correctly returns a record' do
-      visit index_path(model_name: 'field_test', f: {date_field: {'1' => {v: [nil, '2021-01-03T00:00:00', nil], o: 'between'}}})
+      visit index_path(model_name: 'field_test', f: {date_field: {'1' => {v: ['', '2021-01-03T00:00:00', ''], o: 'between'}}})
       is_expected.to have_content '1 field test'
       is_expected.to have_content field_tests[1].id
     end
 
     it 'does not break when the condition is not filled' do
-      visit index_path(model_name: 'field_test', f: {date_field: {'1' => {v: [nil, '', ''], o: 'between'}}})
+      visit index_path(model_name: 'field_test', f: {date_field: {'1' => {v: ['', '', ''], o: 'between'}}})
       is_expected.to have_content '2 field test'
     end
 
@@ -37,7 +37,7 @@ RSpec.describe 'Date field', type: :request do
       end
 
       it 'correctly returns a record' do
-        visit index_path(model_name: 'field_test', f: {date_field: {'1' => {v: [nil, '2021-01-03T00:00:00', nil], o: 'between'}}})
+        visit index_path(model_name: 'field_test', f: {date_field: {'1' => {v: ['', '2021-01-03T00:00:00', ''], o: 'between'}}})
         is_expected.to have_content '1 field test'
         is_expected.to have_content field_tests[1].id
       end

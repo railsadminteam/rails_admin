@@ -13,6 +13,7 @@ RSpec.describe RailsAdmin::Support::Datetime do
       '%Y-%m-%dT%H:%M:%S%:z' => 'Y-m-d\TH:i:S+00:00',
       '%HH%MM%SS' => 'H\Hi\MS\S',
       'a%-Ha%-Ma%-Sa%:za' => '\aH\ai\as\a+00:00\a',
+      '%B %-d at %-l:%M %p' => 'F j \a\t h:i K',
     }.each do |strftime_format, flatpickr_format|
       it "convert strftime_format to flatpickr_format - example #{strftime_format}" do
         expect(RailsAdmin::Support::Datetime.to_flatpickr_format(strftime_format)).to eq flatpickr_format

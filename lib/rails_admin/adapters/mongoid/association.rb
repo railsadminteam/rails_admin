@@ -46,7 +46,7 @@ module RailsAdmin
 
         def klass
           if polymorphic? && %i[referenced_in belongs_to].include?(macro)
-            polymorphic_parents(:mongoid, model.name, name) || []
+            polymorphic_parents(:mongoid, association.inverse_class_name, name) || []
           else
             association.klass
           end
@@ -92,9 +92,9 @@ module RailsAdmin
         def key_accessor
           case macro.to_sym
           when :has_many
-            "#{name.to_s.singularize}_ids".to_sym
+            :"#{name.to_s.singularize}_ids"
           when :has_one
-            "#{name}_id".to_sym
+            :"#{name}_id"
           when :embedded_in, :embeds_one, :embeds_many
             nil
           else
@@ -111,7 +111,7 @@ module RailsAdmin
         end
 
         def inverse_of
-          association.inverse_of.try :to_sym
+          association.inverse_of.try(:to_sym) || as
         end
 
         def read_only?

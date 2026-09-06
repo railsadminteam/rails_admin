@@ -33,7 +33,7 @@ module RailsAdmin
 
         def klass
           if options[:polymorphic]
-            polymorphic_parents(:active_record, model.name.to_s, name) || []
+            polymorphic_parents(:active_record, association.active_record.name.to_s, name) || []
           else
             association.klass
           end
@@ -42,16 +42,29 @@ module RailsAdmin
         def primary_key
           return nil if polymorphic?
 
-          case type
-          when :has_one
-            association.klass.primary_key
+          value =
+            case type
+            when :has_one
+              association.klass.primary_key
+            else
+              association.association_primary_key
+            end
+
+          if value.is_a? Array
+            :id
           else
-            association.association_primary_key
-          end.try(:to_sym)
+            value.to_sym
+          end
         end
 
         def foreign_key
-          association.foreign_key.to_sym
+          if association.options[:query_constraints].present?
+            association.options[:query_constraints].map(&:to_sym)
+          elsif association.foreign_key.is_a?(Array)
+            association.foreign_key.map(&:to_sym)
+          else
+            association.foreign_key.to_sym
+          end
         end
 
         def foreign_key_nullable?
@@ -71,11 +84,15 @@ module RailsAdmin
         def key_accessor
           case type
           when :has_many, :has_and_belongs_to_many
-            "#{name.to_s.singularize}_ids".to_sym
+            :"#{name.to_s.singularize}_ids"
           when :has_one
-            "#{name}_id".to_sym
+            :"#{name}_id"
           else
-            foreign_key
+            if foreign_key.is_a?(Array)
+              :"#{name}_id"
+            else
+              foreign_key
+            end
           end
         end
 
@@ -88,7 +105,7 @@ module RailsAdmin
         end
 
         def inverse_of
-          options[:inverse_of].try :to_sym
+          options[:inverse_of].try(:to_sym) || as
         end
 
         def read_only?

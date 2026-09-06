@@ -10,7 +10,7 @@ module RailsAdmin
     include Generators::Utils::InstanceMethods
 
     argument :_namespace, type: :string, required: false, desc: 'RailsAdmin url namespace'
-    class_option :asset, type: :string, required: false, default: nil, desc: 'Asset delivery method [options: webpacker, webpack, sprockets, importmap]'
+    class_option :asset, type: :string, required: false, default: nil, desc: 'Asset delivery method [options: webpacker, webpack, sprockets, importmap, vite]'
     desc 'RailsAdmin installation generator'
 
     def install
@@ -33,6 +33,8 @@ module RailsAdmin
         configure_for_importmap
       when 'webpacker'
         configure_for_webpacker5
+      when 'vite'
+        configure_for_vite
       when 'sprockets'
         configure_for_sprockets
       else
@@ -51,6 +53,8 @@ module RailsAdmin
         'webpack'
       elsif Rails.root.join('config/importmap.rb').exist?
         'importmap'
+      elsif defined?(ViteRuby)
+        'vite'
       else
         'sprockets'
       end
@@ -66,6 +70,14 @@ module RailsAdmin
       template 'rails_admin.scss.erb', 'app/javascript/stylesheets/rails_admin.scss'
       # To work around https://github.com/railsadminteam/rails_admin/issues/3565
       add_package_json_field('resolutions', {'rails_admin/@fortawesome/fontawesome-free' => '^5.15.0'})
+    end
+
+    def configure_for_vite
+      vite_source_code_dir = ViteRuby.config.source_code_dir
+      run "yarn add rails_admin@#{RailsAdmin::Version.js} sass"
+      template('rails_admin.vite.js', File.join(vite_source_code_dir, 'entrypoints', 'rails_admin.js'))
+      @fa_font_path = '@fortawesome/fontawesome-free/webfonts'
+      template('rails_admin.scss.erb', File.join(vite_source_code_dir, 'stylesheets', 'rails_admin.scss'))
     end
 
     def configure_for_webpack

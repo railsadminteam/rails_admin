@@ -15,7 +15,7 @@ module RailsAdmin
       end
 
       def get(id, scope = scoped)
-        object = scope.where(primary_key => id).first
+        object = primary_key_scope(scope, id).first
         return unless object
 
         object.extend(ObjectExtension)
@@ -72,6 +72,14 @@ module RailsAdmin
 
       delegate :primary_key, :table_name, to: :model, prefix: false
 
+      def quoted_table_name
+        model.quoted_table_name
+      end
+
+      def quote_column_name(name)
+        model.connection.quote_column_name(name)
+      end
+
       def encoding
         adapter =
           if ::ActiveRecord::Base.respond_to?(:connection_db_config)
@@ -107,10 +115,46 @@ module RailsAdmin
         true
       end
 
+      def format_id(id)
+        if primary_key.is_a? Array
+          RailsAdmin.config.composite_keys_serializer.serialize(id)
+        else
+          id
+        end
+      end
+
+      def parse_id(id)
+        if primary_key.is_a?(Array)
+          ids = RailsAdmin.config.composite_keys_serializer.deserialize(id)
+          primary_key.each_with_index do |key, i|
+            ids[i] = model.type_for_attribute(key).cast(ids[i])
+          end
+          ids
+        else
+          id
+        end
+      end
+
+      def belongs_to_required_by_default
+        model.belongs_to_required_by_default
+      end
+
     private
 
+      def primary_key_scope(scope, id)
+        if primary_key.is_a? Array
+          scope.where(primary_key.zip(parse_id(id)).to_h)
+        else
+          scope.where(primary_key => id)
+        end
+      end
+
       def bulk_scope(scope, options)
-        scope.where(primary_key => options[:bulk_ids])
+        if primary_key.is_a? Array
+          options[:bulk_ids].map { |id| primary_key_scope(scope, id) }.reduce(&:or)
+        else
+          scope.where(primary_key => options[:bulk_ids])
+        end
       end
 
       def sort_scope(scope, options)
@@ -172,7 +216,7 @@ module RailsAdmin
       # "0055" is the filter index, no use here. o is the operator, v the value
       def filter_scope(scope, filters, fields = config.list.fields.select(&:filterable?))
         filters.each_pair do |field_name, filters_dump|
-          filters_dump.each do |_, filter_dump|
+          filters_dump.each_value do |filter_dump|
             wb = WhereBuilder.new(scope)
             field = fields.detect { |f| f.name.to_s == field_name }
             value = parse_field_value(field, filter_dump[:v])
@@ -201,6 +245,8 @@ module RailsAdmin
           case @type
           when :boolean
             boolean_unary_operators
+          when :uuid
+            uuid_unary_operators
           when :integer, :decimal, :float
             numeric_unary_operators
           else
@@ -230,6 +276,7 @@ module RailsAdmin
           )
         end
         alias_method :numeric_unary_operators, :boolean_unary_operators
+        alias_method :uuid_unary_operators, :boolean_unary_operators
 
         def range_filter(min, max)
           if min && max && min == max
@@ -255,8 +302,12 @@ module RailsAdmin
         end
 
         def build_statement_for_boolean
-          return ["(#{@column} IS NULL OR #{@column} = ?)", false] if %w[false f 0].include?(@value)
-          return ["(#{@column} = ?)", true] if %w[true t 1].include?(@value)
+          case @value
+          when 'false', 'f', '0'
+            ["(#{@column} IS NULL OR #{@column} = ?)", false]
+          when 'true', 't', '1'
+            ["(#{@column} = ?)", true]
+          end
         end
 
         def column_for_value(value)

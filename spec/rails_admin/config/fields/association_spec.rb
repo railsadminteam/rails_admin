@@ -28,6 +28,91 @@ RSpec.describe RailsAdmin::Config::Fields::Association do
     end
   end
 
+  describe '#dynamic_scope_relationships' do
+    let(:player) { FactoryBot.create(:player, team: FactoryBot.create(:team)) }
+    let(:field) { RailsAdmin.config('Draft').fields.detect { |f| f.name == :player } }
+
+    it 'returns the relationship of fields in this model and in the associated model' do
+      RailsAdmin.config Draft do
+        field :team
+        field :player do
+          dynamically_scope_by :team
+        end
+      end
+      expect(field.dynamic_scope_relationships).to eq({team_id: :team})
+    end
+
+    it 'accepts Array' do
+      RailsAdmin.config Draft do
+        field :team
+        field :notes
+        field :player do
+          dynamically_scope_by %i[team notes]
+        end
+      end
+      expect(field.dynamic_scope_relationships).to eq({team_id: :team, notes: :notes})
+    end
+
+    it 'accepts Hash' do
+      RailsAdmin.config Draft do
+        field :round
+        field :player do
+          dynamically_scope_by({round: :number})
+        end
+      end
+      expect(field.dynamic_scope_relationships).to eq({round: :number})
+    end
+
+    it 'accepts mixture of Array and Hash' do
+      RailsAdmin.config Draft do
+        field :team
+        field :round
+        field :player do
+          dynamically_scope_by [:team, {round: :number}]
+        end
+      end
+      expect(field.dynamic_scope_relationships).to eq({team_id: :team, round: :number})
+    end
+
+    it 'raises error if the field does not exist in this model' do
+      RailsAdmin.config Draft do
+        field :player do
+          dynamically_scope_by :team
+        end
+      end
+      expect { field.dynamic_scope_relationships }.to raise_error "Field 'team' was given for #dynamically_scope_by but not found in 'Draft'"
+    end
+
+    it 'raises error if the field does not exist in the associated model' do
+      RailsAdmin.config Player do
+        field :name
+      end
+      RailsAdmin.config Draft do
+        field :team
+        field :player do
+          dynamically_scope_by :team
+        end
+      end
+      expect { field.dynamic_scope_relationships }.to raise_error "Field 'team' was given for #dynamically_scope_by but not found in 'Player'"
+    end
+
+    it 'raises error if the target field is not filterable' do
+      RailsAdmin.config Player do
+        field :name
+        field :team do
+          filterable false
+        end
+      end
+      RailsAdmin.config Draft do
+        field :team
+        field :player do
+          dynamically_scope_by :team
+        end
+      end
+      expect { field.dynamic_scope_relationships }.to raise_error "Field 'team' in 'Player' can't be used for dynamic scoping because it's not filterable"
+    end
+  end
+
   describe '#removable?', active_record: true do
     context 'with non-nullable foreign key' do
       let(:field) { RailsAdmin.config('FieldTest').fields.detect { |f| f.name == :nested_field_tests } }

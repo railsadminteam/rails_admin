@@ -4,6 +4,7 @@ require 'kaminari'
 require 'nested_form'
 require 'rails'
 require 'rails_admin'
+require 'rails_admin/extensions/url_for_extension'
 require 'rails_admin/version'
 require 'turbo-rails'
 
@@ -14,6 +15,10 @@ module RailsAdmin
     attr_accessor :importmap
 
     config.action_dispatch.rescue_responses['RailsAdmin::ActionNotAllowed'] = :forbidden
+
+    initializer 'RailsAdmin load UrlForExtension' do
+      RailsAdmin::Engine.routes.singleton_class.prepend(RailsAdmin::Extensions::UrlForExtension)
+    end
 
     initializer 'RailsAdmin reload config in development' do |app|
       config.initializer_path = app.root.join('config/initializers/rails_admin.rb')

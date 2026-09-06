@@ -13,9 +13,9 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
     fields << field
     associations =
       if properties.type == :has_many
-        ["#{name}_attachments".to_sym, "#{name}_blobs".to_sym]
+        [:"#{name}_attachments", :"#{name}_blobs"]
       else
-        ["#{name}_attachment".to_sym, "#{name}_blob".to_sym]
+        [:"#{name}_attachment", :"#{name}_blob"]
       end
     children_fields = associations.map do |child_name|
       child_association = parent.abstract_model.associations.detect { |p| p.name.to_sym == child_name }

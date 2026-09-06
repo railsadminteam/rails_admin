@@ -157,7 +157,7 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
   describe 'for enum field' do
     before do
       RailsAdmin.config Team do
-        field :color
+        field :color, :enum
       end
     end
 
@@ -169,6 +169,15 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
       find('.filter .switch-select .fa-plus').click
       expect(find('#filters_box select')['multiple']).to be true
       expect(find('#filters_box select')['name']).to match(/\[\]$/)
+    end
+
+    context 'with the filter pre-populated' do
+      it 'does not break' do
+        visit index_path(model_name: 'team', f: {color: {'1' => {v: 'red'}}})
+        is_expected.to have_css('.filter select[name^="f[color]"]')
+        expect(find('.filter select[name^="f[color]"]').value).to eq 'red'
+        expect(all('#filters_box option').map(&:text)).to include 'white', 'black', 'red', 'green', 'blu<e>é'
+      end
     end
   end
 

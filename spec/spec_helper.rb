@@ -3,7 +3,6 @@
 # Configure Rails Environment
 ENV['RAILS_ENV'] = 'test'
 CI_ORM = (ENV['CI_ORM'] || :active_record).to_sym
-CI_TARGET_ORMS = %i[active_record mongoid].freeze
 PK_COLUMN = {active_record: :id, mongoid: :_id}[CI_ORM]
 
 if RUBY_ENGINE == 'jruby'
@@ -49,11 +48,24 @@ Rails.backtrace_cleaner.remove_silencers!
 require 'capybara/cuprite'
 Capybara.javascript_driver = :cuprite
 Capybara.register_driver(:cuprite) do |app|
-  Capybara::Cuprite::Driver.new(app, js_errors: true, logger: ConsoleLogger)
+  # Refs. https://github.com/rubycdp/ferrum/issues/470
+  Capybara::Cuprite::Driver.new(app, flatten: RUBY_ENGINE != 'jruby', js_errors: true, logger: ConsoleLogger)
 end
 Capybara.server = :webrick
 
 RailsAdmin.setup_all_extensions
+
+# Rails 8 draws routes lazily in development and test (Rails::Engine::LazyRouteSet),
+# and the first access is what triggers the draw. That path is not thread-safe:
+# RoutesReloader#execute flips @loaded to true *before* reloading, and reloading
+# undefines every named route helper before redefining it. A second thread landing
+# in that window gets nil from #reload_routes_unless_loaded, so LazyRouteSet's
+# method_missing falls through to super and raises NoMethodError instead of waiting.
+#
+# js: true examples serve requests from WEBrick threads while the example itself
+# calls route helpers, so both sides race to trigger the very first draw. Warm the
+# routes up here, while still single-threaded, so nothing has to draw them later.
+Rails.application.reload_routes_unless_loaded if Rails.application.respond_to?(:reload_routes_unless_loaded)
 
 RSpec.configure do |config|
   config.expect_with :rspec do |c|
@@ -68,6 +80,7 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers
 
   config.include Capybara::DSL, type: :request
+  config.include Capybara::RSpecMatchers, type: :request
 
   config.verbose_retry = true
   config.display_try_failure_messages = true
@@ -75,11 +88,27 @@ RSpec.configure do |config|
     example.run_with_retry retry: (ENV['CI'] && RUBY_ENGINE == 'jruby' ? 3 : 2)
   end
   config.retry_callback = proc do |example|
-    Capybara.reset! if example.metadata[:js]
+    example.metadata[:retry] = 6 if [Ferrum::DeadBrowserError, Ferrum::NoExecutionContextError, Ferrum::TimeoutError].include?(example.exception.class)
+    if example.metadata[:js]
+      attempt = 0
+      begin
+        Capybara.reset!
+      rescue Ferrum::TimeoutError, Ferrum::NoExecutionContextError
+        attempt += 1
+        raise if attempt >= 5
+
+        retry
+      end
+    end
   end
 
   config.before(:all) do
-    Webpacker.instance.compiler.compile if CI_ASSET == :webpacker
+    case CI_ASSET
+    when :webpacker
+      Webpacker.instance.compiler.compile
+    when :vite
+      ViteRuby.instance.commands.build
+    end
   end
 
   config.before do |example|
@@ -102,11 +131,11 @@ RSpec.configure do |config|
 
   CI_TARGET_ORMS.each do |orm|
     if orm == CI_ORM
-      config.filter_run_excluding "skip_#{orm}".to_sym => true
+      config.filter_run_excluding "skip_#{orm}": true
     else
       config.filter_run_excluding orm => true
     end
   end
 
-  config.filter_run_excluding composite_primary_keys: true unless defined?(CompositePrimaryKeys)
+  config.filter_run_excluding composite_primary_keys: true unless defined?(ActiveRecord) && ActiveRecord.gem_version >= Gem::Version.new('7.1') || defined?(CompositePrimaryKeys)
 end

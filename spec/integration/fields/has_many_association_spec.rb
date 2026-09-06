@@ -47,6 +47,22 @@ RSpec.describe 'HasManyAssociation field', type: :request do
       expect(@league.divisions).not_to include(@divisions[1])
       expect(@league.divisions).not_to include(@divisions[2])
     end
+
+    context 'with default_value' do
+      before do
+        ids = [@divisions[2].id]
+        RailsAdmin.config League do
+          configure :divisions do
+            default_value ids
+          end
+        end
+      end
+
+      it 'shows the value as selected' do
+        visit new_path(model_name: 'league')
+        expect(find('select#league_division_ids').value).to eq [@divisions[2].id.to_s]
+      end
+    end
   end
 
   context 'on update' do
@@ -211,6 +227,19 @@ RSpec.describe 'HasManyAssociation field', type: :request do
         click_button 'Save'
         is_expected.to have_content 'Fan successfully updated'
         expect(fan.reload.fanships.map(&:team_id)).to match_array fanships.map(&:team_id)[0..1]
+      end
+
+      context 'with invalid key' do
+        before do
+          allow_any_instance_of(RailsAdmin::Config::Fields::Types::HasManyAssociation).
+            to receive(:collection).and_return([["Fanship ##{fanships[0].id}", 'invalid']])
+        end
+
+        it 'fails to update' do
+          visit edit_path(model_name: 'fan', id: fan.id)
+          select("Fanship ##{fanships[0].id}", from: 'Fanships')
+          expect { click_button 'Save' }.to raise_error ActiveRecord::RecordNotFound
+        end
       end
     end
 

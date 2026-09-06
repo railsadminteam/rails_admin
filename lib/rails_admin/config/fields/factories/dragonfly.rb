@@ -10,7 +10,7 @@ RailsAdmin::Config::Fields.register_factory do |parent, properties, fields|
     field = RailsAdmin::Config::Fields::Types.load(:dragonfly).new(parent, attachment_name, properties)
     children_fields = []
     extensions.each do |ext|
-      children_column_name = "#{attachment_name}_#{ext}".to_sym
+      children_column_name = :"#{attachment_name}_#{ext}"
       child_properties = parent.abstract_model.properties.detect { |p| p.name.to_s == children_column_name.to_s }
       next unless child_properties
 

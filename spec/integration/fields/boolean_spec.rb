@@ -44,6 +44,29 @@ RSpec.describe 'Boolean field', type: :request do
     end
   end
 
+  context 'when the boolean is in an embedded document' do
+    before do
+      RailsAdmin.config FieldTest do
+        field :comment
+      end
+
+      RailsAdmin.config Comment do
+        field :content, :boolean
+      end
+    end
+
+    it 'can be updated', js: true do
+      visit edit_path(model_name: 'field_test', id: field_test.id)
+
+      # toggle open the embedded document section
+      find('#field_test_comment_attributes_field .add_nested_fields').click
+      # set the value to false and assert the values
+      find('.boolean_type label.danger').click
+      click_button 'Save and edit'
+      expect(field_test.reload.comment.content).to eq '0'
+    end
+  end
+
   context 'if not nullable' do
     before do
       RailsAdmin.config FieldTest do
@@ -75,6 +98,38 @@ RSpec.describe 'Boolean field', type: :request do
       click_button 'Save and edit'
       expect(page).to have_selector('.boolean_type input[value="0"][checked]')
       expect(field_test.reload.boolean_field).to be false
+    end
+  end
+
+  context 'if the database column is not nullable', active_record: true do
+    before do
+      RailsAdmin.config FieldTest do
+        field :non_nullable_boolean_field
+      end
+    end
+
+    it 'shows 2 radio buttons' do
+      visit new_path(model_name: 'field_test')
+      is_expected.to have_content 'New Field test'
+      expect(all('[name="field_test[non_nullable_boolean_field]"]').map { |e| e['value'] }).to eq %w[1 0]
+    end
+
+    it 'can be updated' do
+      visit edit_path(model_name: 'field_test', id: field_test.id)
+
+      # change the value to true and assert the values
+      find('.boolean_type label.success').click
+      click_button 'Save and edit'
+      # validate that the success button rendered and is active
+      expect(page).to have_selector('.boolean_type input[value="1"][checked]')
+      # validate the value is true
+      expect(field_test.reload.non_nullable_boolean_field).to be true
+
+      # change the value to false and assert the values
+      find('.boolean_type label.danger').click
+      click_button 'Save and edit'
+      expect(page).to have_selector('.boolean_type input[value="0"][checked]')
+      expect(field_test.reload.non_nullable_boolean_field).to be false
     end
   end
 end

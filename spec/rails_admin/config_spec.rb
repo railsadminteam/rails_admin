@@ -294,7 +294,7 @@ RSpec.describe RailsAdmin::Config do
   describe '.parent_controller=' do
     context 'if RailsAdmin::ApplicationController is already loaded' do
       before do
-        # preload cotrollers (e.g. when config.eager_load = true)
+        # preload controllers (e.g. when config.eager_load = true)
         RailsAdmin::MainController
       end
 

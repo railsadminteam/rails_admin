@@ -12,7 +12,7 @@ RSpec.describe 'MultipleActiveStorage field', type: :request, active_record: tru
     end
     # To suppress 'SQLite3::BusyException: database is locked' exception
     @original = page.driver.browser.url_blacklist # rubocop:disable Naming/InclusiveLanguage
-    page.driver.browser.url_blacklist = ['/rails/active_storage/representations'] # rubocop:disable Naming/InclusiveLanguage
+    page.driver.browser.url_blacklist = [%r{/rails/active_storage/representations}] # rubocop:disable Naming/InclusiveLanguage
   end
   after { page.driver.browser.url_blacklist = @original } # rubocop:disable Naming/InclusiveLanguage
 

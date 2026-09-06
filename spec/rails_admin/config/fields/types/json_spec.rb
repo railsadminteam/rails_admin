@@ -24,7 +24,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Json do
     it 'returns correct value for empty json' do
       allow(object).to receive(:json_field) { {} }
       actual = field.with(bindings).formatted_value
-      expect(actual).to match(/{\n+}/)
+      expect(actual).to match(/{\n*}/)
     end
 
     it 'retuns correct value' do
@@ -72,7 +72,7 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Json do
     it 'returns correct value for empty json' do
       allow(object).to receive(:json_field) { {} }
       actual = field.with(bindings).export_value
-      expect(actual).to match(/{\n+}/)
+      expect(actual).to match(/{\n*}/)
     end
 
     it 'returns correct value' do

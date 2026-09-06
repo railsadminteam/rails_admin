@@ -108,21 +108,13 @@ RSpec.describe 'Nested many widget', type: :request, js: true do
   context 'with nested_attributes_options given' do
     before do
       allow(FieldTest.nested_attributes_options).to receive(:[]).with(any_args).
-        and_return(allow_destroy: true, update_only: false)
-    end
-
-    it 'does not show add button when :update_only is true' do
-      allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
-        and_return(allow_destroy: true, update_only: true)
-      visit new_path(model_name: 'field_test')
-      is_expected.to have_selector('.toggler')
-      is_expected.not_to have_selector('#field_test_nested_field_tests_attributes_field .add_nested_fields')
+        and_return(allow_destroy: true)
     end
 
     it 'does not show destroy button except for newly created when :allow_destroy is false', js: false do
       nested_field_tests
       allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
-        and_return(allow_destroy: false, update_only: false)
+        and_return(allow_destroy: false)
       visit edit_path(model_name: 'field_test', id: field_test.id)
       expect(find('#field_test_nested_field_tests_attributes_0_title').value).to eq('title 1')
       is_expected.not_to have_selector('form .remove_nested_fields')

@@ -23,19 +23,16 @@ module RailsAdmin
             end
 
             register_instance_option :image? do
-              if value
-                mime_type = Mime::Type.lookup_by_extension(value.filename.extension_without_delimiter)
-                mime_type.to_s.match?(/^image/)
-              end
+              value && (value.representable? || value.content_type.match?(/^image/))
             end
 
             def resource_url(thumb = false)
               return nil unless value
 
-              if thumb && value.variable?
-                variant = value.variant(thumb_method)
+              if thumb && value.representable?
+                representation = value.representation(thumb_method)
                 Rails.application.routes.url_helpers.rails_blob_representation_path(
-                  variant.blob.signed_id, variant.variation.key, variant.blob.filename, only_path: true
+                  representation.blob.signed_id, representation.variation.key, representation.blob.filename, only_path: true
                 )
               else
                 Rails.application.routes.url_helpers.rails_blob_path(value, only_path: true)
@@ -48,7 +45,7 @@ module RailsAdmin
           end
 
           register_instance_option :keep_method do
-            method_name if ::ActiveStorage.replace_on_assign_to_many
+            method_name if ::ActiveStorage.gem_version >= Gem::Version.new('7.1') || ::ActiveStorage.replace_on_assign_to_many
           end
 
           register_instance_option :delete_method do
@@ -69,6 +66,14 @@ module RailsAdmin
             }.merge(
               direct? && {data: {direct_upload_url: bindings[:view].main_app.rails_direct_uploads_url}} || {},
             )
+          end
+
+          register_instance_option :searchable do
+            false
+          end
+
+          register_instance_option :sortable do
+            false
           end
         end
       end

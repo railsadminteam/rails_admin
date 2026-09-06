@@ -350,7 +350,7 @@ RSpec.describe 'Index action', type: :request do
 
   describe 'fields' do
     before do
-      if defined?(CompositePrimaryKeys)
+      if defined?(ActiveRecord) && ActiveRecord.gem_version >= Gem::Version.new('7.1') || defined?(CompositePrimaryKeys)
         RailsAdmin.config Fan do
           configure(:fanships) { hide }
           configure(:fanship) { hide }
@@ -673,6 +673,31 @@ RSpec.describe 'Index action', type: :request do
       @players = FactoryBot.create_list :player, 2, team: @team
       visit index_path(model_name: 'team')
       expect(find('tbody tr:nth-child(1) td:nth-child(4)')).to have_content(@players.sort_by(&:id).collect(&:name).join(', '))
+    end
+
+    describe 'with title attribute' do
+      it 'does not allow XSS' do
+        RailsAdmin.config Team do
+          list do
+            field :name
+          end
+        end
+        @team = FactoryBot.create :team, name: '" onclick="alert()" "'
+        visit index_path(model_name: 'team')
+        expect(find('tbody tr:nth-child(1) td:nth-child(2)')['onclick']).to be_nil
+        expect(find('tbody tr:nth-child(1) td:nth-child(2)')['title']).to eq '" onclick="alert()" "'
+      end
+
+      it 'does not break values with HTML tags' do
+        RailsAdmin.config Player do
+          list do
+            field :team
+          end
+        end
+        @player = FactoryBot.create :player, team: FactoryBot.create(:team)
+        visit index_path(model_name: 'player')
+        expect(find('tbody tr:nth-child(1) td:nth-child(2)')['title']).to eq @player.team.name
+      end
     end
   end
 
@@ -1220,7 +1245,7 @@ RSpec.describe 'Index action', type: :request do
     end
   end
 
-  context 'with composite_primary_keys', composite_primary_keys: true do
+  context 'with composite primary keys', composite_primary_keys: true do
     let!(:fanships) { FactoryBot.create_list(:fanship, 3) }
 
     it 'shows the list' do
@@ -1231,6 +1256,25 @@ RSpec.describe 'Index action', type: :request do
         is_expected.to have_content fanship.team.name
       end
       is_expected.to have_content '3 fanships'
+    end
+
+    context 'using custom serializer' do
+      before do
+        RailsAdmin.config.composite_keys_serializer = Class.new do
+          def self.serialize(keys)
+            keys.join(',')
+          end
+
+          def self.deserialize(string)
+            string.split(',')
+          end
+        end
+      end
+
+      it 'shows the member action links accordingly' do
+        visit index_path(model_name: 'fanship')
+        is_expected.to have_css(%(a[href$="/admin/fanship/#{fanships[0].fan_id},#{fanships[0].team_id}/edit"]))
+      end
     end
   end
 end

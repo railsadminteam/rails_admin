@@ -10,7 +10,10 @@ default: &default
 
   # Additional paths webpack should lookup modules
   # ['app/assets', 'engine/foo/app/assets']
-  additional_paths: ["node_modules/rails_admin/src"]
+  additional_paths:
+    - node_modules/rails_admin/src
+    - node_modules/@hotwired/turbo
+    - node_modules/@hotwired/turbo-rails
 
   # Reload manifest.json on all requests so we reload latest compiled packs
   cache_manifest: false

@@ -195,7 +195,7 @@ RSpec.describe 'New action', type: :request do
     end
   end
 
-  context 'with composite_primary_keys', composite_primary_keys: true do
+  context 'with composite primary keys', composite_primary_keys: true do
     let!(:fan) { FactoryBot.create(:fan) }
     let!(:team) { FactoryBot.create(:team) }
 

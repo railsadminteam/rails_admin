@@ -9,7 +9,7 @@ module RailsAdmin
         base.send :extend, ClassMethods
       end
 
-      def has_option?(name) # rubocop:disable Naming/PredicateName
+      def has_option?(name) # rubocop:disable Naming/PredicatePrefix?
         options = self.class.instance_variable_get('@config_options')
         options&.key?(name)
       end
@@ -57,7 +57,8 @@ module RailsAdmin
 
           # If it's a boolean create an alias for it and remove question mark
           if option_name.end_with?('?')
-            scope.send(:define_method, "#{option_name.chop!}?") do
+            option_name = option_name.chop
+            scope.send(:define_method, "#{option_name}?") do
               send(option_name)
             end
           end

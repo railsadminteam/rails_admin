@@ -12,13 +12,28 @@ RSpec.describe 'BelongsToAssociation field', type: :request do
   end
 
   describe 'on create' do
-    before do
-      FactoryBot.create :draft
-      visit new_path(model_name: 'player')
-    end
+    let!(:draft) { FactoryBot.create :draft }
+    let(:team) { FactoryBot.create :team }
 
     it 'shows selects' do
+      visit new_path(model_name: 'player')
       is_expected.to have_selector('select#player_team_id')
+    end
+
+    context 'with default_value' do
+      before do
+        id = team.id
+        RailsAdmin.config Player do
+          configure :team do
+            default_value id
+          end
+        end
+      end
+
+      it 'shows the value as selected' do
+        visit new_path(model_name: 'player')
+        expect(find('select#player_team_id').value).to eq team.id.to_s
+      end
     end
   end
 
@@ -64,7 +79,7 @@ RSpec.describe 'BelongsToAssociation field', type: :request do
         visit edit_path(model_name: 'managed_team', id: teams[0].id)
         find('input.ra-filtering-select-input').set('M')
         page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
-        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: "ManagingUser ##{users[1].id}")
         page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("ManagingUser ##{users[1].id}")).click()}
         click_button 'Save'
         teams[0].reload
@@ -86,6 +101,20 @@ RSpec.describe 'BelongsToAssociation field', type: :request do
         is_expected.to have_content 'Favorite player successfully updated'
         expect(FavoritePlayer.all.map(&:fanship)).to eq [fanship]
       end
+
+      context 'with invalid key' do
+        before do
+          allow_any_instance_of(RailsAdmin::Config::Fields::Types::BelongsToAssociation).
+            to receive(:collection).and_return([["Fanship ##{fanship.id}", 'invalid']])
+        end
+
+        it 'fails to update' do
+          visit edit_path(model_name: 'favorite_player', id: favorite_player.id)
+          select("Fanship ##{fanship.id}", from: 'Fanship')
+          click_button 'Save'
+          is_expected.to have_content 'Fanship must exist'
+        end
+      end
     end
 
     describe 'via remote-sourced field' do
@@ -101,7 +130,7 @@ RSpec.describe 'BelongsToAssociation field', type: :request do
         visit edit_path(model_name: 'favorite_player', id: favorite_player.id)
         find('.fanship_field input.ra-filtering-select-input').set(fanship.fan_id)
         page.execute_script("document.querySelector('.fanship_field input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
-        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+        expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: "Fanship ##{fanship.id}")
         page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Fanship ##{fanship.id}")).click()}
         click_button 'Save'
         is_expected.to have_content 'Favorite player successfully updated'

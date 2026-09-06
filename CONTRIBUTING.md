@@ -35,7 +35,11 @@ Example installation on macOS using Homebrew:
 brew install imagemagick
 # install google chrome with cask:
 brew install brew-cask
-brew cask install google-chrome
+brew install google-chrome --cask
+# install mysql
+brew install mysql
+# install openssl
+brew install openssl@3
 ```
 
 Example installation on Ubuntu:
@@ -50,6 +54,10 @@ sudo apt update -y && wget https://dl.google.com/linux/direct/google-chrome-stab
 Then you need to do this one-time setup:
 
 ```bash
+# On Mac, you may run into problems with the mysql2 gem that require flags to be set in bundle config
+# See: https://github.com/brianmario/mysql2/issues/1345
+bundle config build.mysql2 '-- --with-cflags="-Wno-error=implicit-function-declaration" --with-ldflags=-L/opt/homebrew/opt/zstd/lib'
+
 bundle install
 yarn install
 # install dependencies for each appraisal:

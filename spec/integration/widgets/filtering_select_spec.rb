@@ -10,6 +10,7 @@ RSpec.describe 'Filtering select widget', type: :request, js: true do
   before do
     RailsAdmin.config Player do
       field :team
+      field :number
     end
   end
 
@@ -24,23 +25,22 @@ RSpec.describe 'Filtering select widget', type: :request, js: true do
     it 'supports filtering' do
       find('input.ra-filtering-select-input').set('ge')
       page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
-      is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+      is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: 'Los Angeles Dodgers')
       expect(all(:css, 'ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to match_array ['Los Angeles Dodgers', 'Texas Rangers']
       find('input.ra-filtering-select-input').set('Los')
       page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
-      is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+      is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: 'Los Angeles Dodgers')
       expect(all(:css, 'ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to eq ['Los Angeles Dodgers']
       find('input.ra-filtering-select-input').set('Mets')
       page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
-      is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+      is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: 'No objects found')
       expect(all(:css, 'ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to match_array ['No objects found']
     end
 
     it 'sets id of the selected item' do
       find('input.ra-filtering-select-input').set('Tex')
       page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
-      is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a')
-      expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+      is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: 'Texas Rangers')
       page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Texas Rangers")).click()}
       expect(find('#player_team_id', visible: false).value).to eq teams[1].id.to_s
     end
@@ -52,8 +52,7 @@ RSpec.describe 'Filtering select widget', type: :request, js: true do
       expect(find('#player_team_id', visible: false).value).to eq teams[0].id.to_s
       find('input.ra-filtering-select-input').set('Tex')
       page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
-      is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a')
-      expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+      is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: 'Texas Rangers')
       page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Texas Rangers")).click()}
       expect(find('#player_team_id', visible: false).value).to eq teams[1].id.to_s
     end
@@ -124,13 +123,66 @@ RSpec.describe 'Filtering select widget', type: :request, js: true do
     it 'supports filtering' do
       find('input.ra-filtering-select-input').set('ge')
       page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
-      is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+      is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: 'Los Angeles Dodgers')
       expect(all(:css, 'ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to match_array ['Los Angeles Dodgers', 'Texas Rangers']
       teams[0].update name: 'Cincinnati Reds'
       find('input.ra-filtering-select-input').set('Red')
       page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
-      is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a')
+      is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: 'Cincinnati Reds')
       expect(all(:css, 'ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to eq ['Cincinnati Reds']
+    end
+  end
+
+  describe 'dynamic scoping' do
+    let!(:players) { FactoryBot.create_list :player, 2, team: teams[1] }
+    let!(:freelancer) { FactoryBot.create :player, team: nil }
+
+    context 'with single field' do
+      before do
+        player
+        RailsAdmin.config Draft do
+          field :team
+          field :player do
+            dynamically_scope_by :team
+          end
+        end
+        visit new_path(model_name: 'draft')
+      end
+
+      it 'changes selection candidates based on value of the specified field' do
+        expect(all('#draft_player_id option', visible: false).map(&:value).filter(&:present?)).to be_empty
+        find('[data-input-for="draft_team_id"] input.ra-filtering-select-input').set('Tex')
+        page.execute_script(%{document.querySelector('[data-input-for="draft_team_id"] input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))})
+        is_expected.to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: 'Texas Rangers')
+        page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Texas Rangers")).click()}
+        within('[data-input-for="draft_player_id"].filtering-select') { find('.dropdown-toggle').click }
+        expect(all(:css, 'ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to match_array players.map(&:name)
+      end
+
+      it 'allows filtering by blank value' do
+        within('[data-input-for="draft_player_id"].filtering-select') { find('.dropdown-toggle').click }
+        expect(all(:css, 'ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to match_array [freelancer.name]
+      end
+    end
+
+    context 'with multiple fields' do
+      before do
+        player
+        RailsAdmin.config Draft do
+          field :team
+          field :player do
+            dynamically_scope_by [:team, {round: :number}]
+          end
+          field :round
+        end
+        visit new_path(model_name: 'draft', draft: {team_id: teams[1].id})
+      end
+
+      it 'changes selection candidates based on value of the specified fields' do
+        fill_in 'draft[round]', with: players[1].number
+        within('[data-input-for="draft_player_id"].filtering-select') { find('.dropdown-toggle').click }
+        expect(all(:css, 'ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to match_array [players[1].name]
+      end
     end
   end
 end

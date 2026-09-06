@@ -108,8 +108,8 @@ module RailsAdmin
     end
 
     def hidden_field(method, options = {})
-      if method == :id
-        super method, {value: object.id.to_s}
+      if method == :id && object.id.is_a?(Array)
+        super method, {value: RailsAdmin.config.composite_keys_serializer.serialize(object.id)}
       else
         super
       end
@@ -149,9 +149,10 @@ module RailsAdmin
   private
 
     def nested_field_association?(field, nested_in)
-      field.inverse_of.presence && nested_in.presence && field.inverse_of == nested_in.name &&
-        (@template.instance_variable_get(:@model_config).abstract_model == field.abstract_model ||
-         field.name == nested_in.inverse_of)
+      nested_in.presence &&
+        (field.name == nested_in.inverse_of ||
+         (field.inverse_of.presence && field.inverse_of == nested_in.name &&
+          @template.instance_variable_get(:@model_config).abstract_model == field.abstract_model))
     end
   end
 end

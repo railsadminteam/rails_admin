@@ -160,7 +160,7 @@ RSpec.describe 'Export action', type: :request do
     end
   end
 
-  context 'with composite_primary_keys', composite_primary_keys: true do
+  context 'with composite primary keys', composite_primary_keys: true do
     let!(:fanship) { FactoryBot.create(:fanship) }
 
     it 'exports to CSV' do

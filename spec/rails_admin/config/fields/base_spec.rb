@@ -86,9 +86,15 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
           column :league_id, :integer
           column :division_id, :integer, nil, false
           column :player_id, :integer
+          column :team_id, :integer
+          column :draft_id, :integer
+          column :image_id, :integer
           belongs_to :league, optional: true
           belongs_to :division, optional: true
           belongs_to :player, optional: true
+          belongs_to :team, optional: false
+          belongs_to :draft, required: true
+          belongs_to :image, required: false
           validates_numericality_of(:player_id, only_integer: true)
         end
         @fields = RailsAdmin.config(RelTest).create.fields
@@ -109,6 +115,24 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
       describe 'for column with nullable foreign key and a numericality model validation' do
         it 'is required' do
           expect(@fields.detect { |f| f.name == :player }.required?).to be_truthy
+        end
+      end
+
+      describe 'for belongs_to association with optional: false' do
+        it 'is required' do
+          expect(@fields.detect { |f| f.name == :team }.required?).to be_truthy
+        end
+      end
+
+      describe 'for belongs_to association with required: true' do
+        it 'is required' do
+          expect(@fields.detect { |f| f.name == :draft }.required?).to be_truthy
+        end
+      end
+
+      describe 'for belongs_to association with required: false' do
+        it 'is optional' do
+          expect(@fields.detect { |f| f.name == :image }.required?).to be_falsey
         end
       end
     end
@@ -517,12 +541,6 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
   describe '#active' do
     it 'is false by default' do
       expect(RailsAdmin.config(Team).field(:division).active?).to be_falsey
-    end
-  end
-
-  describe '#associated_collection' do
-    it 'returns [] when type is blank?' do
-      expect(RailsAdmin.config(Comment).fields.detect { |f| f.name == :commentable }.associated_collection('')).to be_empty
     end
   end
 

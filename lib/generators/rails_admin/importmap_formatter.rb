@@ -6,12 +6,13 @@ module RailsAdmin
   class ImportmapFormatter
     attr_reader :packager
 
-    def initialize(path = 'confing/importmap.rails_admin.rb')
+    def initialize(path = 'config/importmap.rails_admin.rb')
       @packager = Importmap::Packager.new(path)
     end
 
     def format
       imports = packager.import("rails_admin@#{RailsAdmin::Version.js}", from: 'jspm.io')
+      imports = imports[:imports] if imports.key?(:imports)
 
       # Use ESM compatible version to work around https://github.com/cljsjs/packages/issues/1579
       imports['@popperjs/core'].gsub!('lib/index.js', 'dist/esm/popper.js')

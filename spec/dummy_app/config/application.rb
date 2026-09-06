@@ -23,6 +23,8 @@ when :sprockets, :webpack
 when :importmap
   require 'sprockets/railtie'
   require 'importmap-rails'
+when :vite
+  require 'vite_rails'
 end
 
 # Require the gems listed in Gemfile, including any gems
@@ -35,7 +37,8 @@ module DummyApp
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
     config.load_defaults Rails.version[0, 3]
-    config.eager_load_paths.reject! { |p| p =~ %r{/app/([^/]+)} && !%W[controllers jobs locales mailers #{CI_ORM}].include?(Regexp.last_match[1]) }
+    (CI_TARGET_ORMS - [CI_ORM]).each { |orm| config.paths.add "app/#{orm}", eager_load: false }
+    config.eager_load_paths = (config.try(:all_eager_load_paths) || config.eager_load_paths).reject { |p| p =~ %r{/app/([^/]+)} && !%W[controllers jobs locales mailers #{CI_ORM}].include?(Regexp.last_match[1]) }
     config.eager_load_paths += %W[#{config.root}/app/eager_loaded]
     config.autoload_paths += %W[#{config.root}/lib]
     config.i18n.load_path += Dir[Rails.root.join('app', 'locales', '*.{rb,yml}').to_s]
@@ -44,7 +47,6 @@ module DummyApp
       config.active_record.yaml_column_permitted_classes = [Symbol] if [ActiveRecord::Base, ActiveRecord].any? { |klass| klass.respond_to?(:yaml_column_permitted_classes=) }
     end
     config.active_storage.service = :local if defined?(ActiveStorage)
-    config.active_storage.replace_on_assign_to_many = false if defined?(ActiveStorage) && ActiveStorage.version < Gem::Version.create('6.1')
 
     case CI_ASSET
     when :webpack

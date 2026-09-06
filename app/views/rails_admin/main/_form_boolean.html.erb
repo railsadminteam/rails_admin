@@ -1,10 +1,10 @@
-<%-cases={'1': [true, 'btn-outline-success'], '0': [false, 'btn-outline-danger']}%>
-<%-cases[''] = [nil, 'btn-outline-secondary'] if field.nullable? %>
+<% cases = {'1': [true, 'btn-outline-success'], '0': [false, 'btn-outline-danger']} %>
+<% cases[:''] = [nil, 'btn-outline-secondary'] if field.nullable? %>
 <div class="btn-group" role="group">
-<% cases.each do |text, (value, btn_class)| %>
+  <% cases.each do |text, (value, btn_class)| %>
     <%= form.radio_button field.method_name, text, field.html_attributes.reverse_merge({ checked: field.form_value == value, required: field.required, class: 'btn-check' }) %>
-    <label for="<%= form.object_name %>_<%= field.method_name %>_<%= text %>" class="<%= field.css_classes[value] %> btn <%= btn_class %>">
-    <%= field.labels[value].html_safe %>
-    </label>
-<% end %>
+    <%= form.label "#{field.method_name}_#{text}", class: "#{field.css_classes[value]} btn #{btn_class}" do %>
+      <%= field.labels[value].html_safe %>
+    <% end %>
+  <% end %>
 </div>

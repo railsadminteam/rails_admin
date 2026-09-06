@@ -879,7 +879,7 @@ RSpec.describe 'Edit action', type: :request do
     end
   end
 
-  context 'with composite_primary_keys', composite_primary_keys: true do
+  context 'with composite primary keys', composite_primary_keys: true do
     let(:fanship) { FactoryBot.create(:fanship) }
 
     it 'edits the object' do
@@ -887,6 +887,35 @@ RSpec.describe 'Edit action', type: :request do
       fill_in 'Since', with: '2000-01-23'
       click_button 'Save'
       expect { fanship.reload }.to change { fanship.since }.from(nil).to(Date.new(2000, 1, 23))
+    end
+
+    context 'using custom serializer' do
+      before do
+        RailsAdmin.config.composite_keys_serializer = Class.new do
+          def self.serialize(keys)
+            keys.join(',')
+          end
+
+          def self.deserialize(string)
+            string.split(',')
+          end
+        end
+      end
+
+      it 'edits the object' do
+        visit edit_path(model_name: 'fanship', id: "#{fanship.fan_id},#{fanship.team_id}")
+        fill_in 'Since', with: '2000-01-23'
+        click_button 'Save'
+        expect { fanship.reload }.to change { fanship.since }.from(nil).to(Date.new(2000, 1, 23))
+      end
+    end
+
+    context 'receiving invalid id' do
+      it 'returns 404' do
+        visit edit_path(model_name: 'fanship', id: '11')
+        expect(page.driver.status_code).to eq(404)
+        is_expected.to have_content("Fanship with id '11' could not be found")
+      end
     end
   end
 end

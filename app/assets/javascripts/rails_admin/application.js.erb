@@ -9,6 +9,7 @@
 //=  require 'rails_admin/popper'
 //=  require 'rails_admin/bootstrap'
 
+//=  require 'rails_admin/abstract-select'
 //=  require 'rails_admin/filter-box'
 //=  require 'rails_admin/filtering-multiselect'
 //=  require 'rails_admin/filtering-select'
@@ -20,10 +21,10 @@
 //=  require 'rails_admin/ui'
 //=  require 'rails_admin/custom/ui'
 
-<% if defined?(ActiveStorage) %>
+<% if defined?(ActiveStorage::Engine) %>
 //= require activestorage
 <% end %>
-<% if defined?(ActionText) && Rails.gem_version >= Gem::Version.new('7.0') %>
+<% if defined?(ActionText::Engine) %>
 //= require trix
 //= require actiontext
 <% end %>

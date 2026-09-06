@@ -18,4 +18,21 @@ module.exports = {
       maxChunks: 1,
     }),
   ],
+  module: {
+    rules: [
+      {
+        test: /\.(js|mjs)$/,
+        include: [
+          path.resolve(__dirname, "app/javascript"),
+          /node_modules\/@hotwired\/turbo(?:-rails)?\//,
+        ],
+        use: {
+          loader: "babel-loader",
+          options: {
+            configFile: path.resolve(__dirname, "babel.config.js"),
+          },
+        },
+      },
+    ],
+  },
 };

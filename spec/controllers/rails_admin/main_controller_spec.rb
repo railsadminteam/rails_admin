@@ -65,22 +65,60 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
       end
     end
 
+    context 'with a virtual field' do
+      before do
+        RailsAdmin.config('Player') do
+          base do
+            field :virtual do
+              sortable :name
+            end
+          end
+
+          list do
+            sort_by :virtual
+          end
+        end
+      end
+
+      it 'returns the query referenced in the sortable' do
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to match(sort: /["`]?players["`]?\.["`]?name["`]?/, sort_reverse: true)
+      end
+    end
+
     it 'works with belongs_to associations with label method virtual' do
       controller.params = {sort: 'parent_category', model_name: 'categories'}
       expect(controller.send(:get_sort_hash, RailsAdmin.config(Category))).to eq(sort: 'categories.parent_category_id', sort_reverse: true)
     end
 
-    context 'using mongoid, not supporting joins', mongoid: true do
-      it 'gives back the remote table with label name' do
+    context 'using mongoid', mongoid: true do
+      it 'gives back the remote table with label name, as it does not support joins' do
         controller.params = {sort: 'team', model_name: 'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: 'players.team_id', sort_reverse: true)
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to match(sort: 'players.team_id', sort_reverse: true)
       end
     end
 
-    context 'using active_record, supporting joins', active_record: true do
+    context 'using active_record', active_record: true do
+      let(:connection_config) do
+        if ActiveRecord::Base.respond_to?(:connection_db_config)
+          ActiveRecord::Base.connection_db_config.configuration_hash
+        else
+          ActiveRecord::Base.connection_config
+        end
+      end
+
       it 'gives back the local column' do
         controller.params = {sort: 'team', model_name: 'players'}
-        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to eq(sort: 'teams.name', sort_reverse: true)
+        expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))).to match(sort: /^["`]teams["`]\.["`]name["`]$/, sort_reverse: true)
+      end
+
+      it 'quotes the table and column names it returns as :sort' do
+        controller.params = {sort: 'team', model_name: 'players'}
+        case connection_config[:adapter]
+        when 'mysql2'
+          expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))[:sort]).to eq '`teams`.`name`'
+        else
+          expect(controller.send(:get_sort_hash, RailsAdmin.config(Player))[:sort]).to eq '"teams"."name"'
+        end
       end
     end
   end
@@ -293,8 +331,8 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
     it "uses target model's primary key" do
       @user = FactoryBot.create :managing_user
       @team = FactoryBot.create :managed_team, user: @user
-      get :index, model_name: 'managing_user', source_object_id: @team.id, source_abstract_model: 'managing_user', associated_collection: 'teams', current_action: :create, compact: true, format: :json
-      expect(response.body).to match(/"id":"#{@user.id}"/)
+      get :index, model_name: 'managed_team', source_object_id: @user.id, source_abstract_model: 'managing_user', associated_collection: 'teams', current_action: :create, compact: true, format: :json
+      expect(response.body).to match(/"id":"#{@team.id}"/)
     end
 
     context 'as JSON' do
@@ -434,7 +472,7 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
           'delete_paperclip_asset' => 'test',
           'should_not_be_here' => 'test',
         }.merge(defined?(ActiveStorage) ? {'active_storage_asset' => 'test', 'remove_active_storage_asset' => 'test', 'active_storage_assets' => 'test', 'remove_active_storage_assets' => 'test'} : {}).
-          merge(defined?(Shrine) ? {'shrine_asset' => 'test', 'remove_shrine_asset' => 'test'} : {}),
+         merge(defined?(Shrine) ? {'shrine_asset' => 'test', 'remove_shrine_asset' => 'test'} : {}),
       )
 
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
@@ -468,6 +506,72 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
         'commentable_id' => 'test',
         'commentable_type' => 'test',
       )
+    end
+  end
+
+  describe 'back_or_index' do
+    before do
+      allow(controller).to receive(:index_path).and_return(index_path)
+    end
+
+    let(:index_path) { '/' }
+
+    it 'returns back to index when return_to is not defined' do
+      controller.params = {}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to return_to url when it starts with same protocol and host' do
+      return_to_url = "http://#{request.host}/teams"
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(return_to_url)
+    end
+
+    it 'returns back to return_to url when it contains a path' do
+      return_to_url = '/teams'
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(return_to_url)
+    end
+
+    it 'returns back to index path when return_to path does not start with slash' do
+      return_to_url = 'teams'
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to index path when return_to url does not start with full protocol' do
+      return_to_url = "#{request.host}/teams"
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to index path when return_to url starts with double slash' do
+      return_to_url = "//#{request.host}/teams"
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to index path when return_to url starts with triple slash' do
+      return_to_url = "///#{request.host}/teams"
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to index path when return_to url does not have host' do
+      return_to_url = 'http:///teams'
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to index path when return_to url starts with different protocol' do
+      return_to_url = "other://#{request.host}/teams"
+      controller.params = {return_to: return_to_url}
+      expect(controller.send(:back_or_index)).to eq(index_path)
+    end
+
+    it 'returns back to index path when return_to does not start with the same protocol and host' do
+      controller.params = {return_to: "http://google.com?#{request.host}"}
+      expect(controller.send(:back_or_index)).to eq(index_path)
     end
   end
 end
