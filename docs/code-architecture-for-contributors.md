@@ -205,6 +205,34 @@ existed only in Mongoid. If you change adapter behaviour, put the expectation
 here rather than in one of the per-adapter suites, unless the two genuinely need
 different APIs to observe it.
 
+## Rules that are checked
+
+Three of the rules above are enforced, by custom RuboCop cops in `rubocop/`.
+
+| cop                           | rule                                                                                                         |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `RailsAdmin/RawModelAccess`   | Ask the abstract model for what it already answers, rather than `abstract_model.model.<the store's own API>` |
+| `RailsAdmin/RecordDecoration` | Do not `extend` a record or touch its singleton, in an adapter                                               |
+| `RailsAdmin/AdapterReference` | Do not name `RailsAdmin::Adapters::…` from Config or a view                                                  |
+
+`RawModelAccess` lists the methods the facade answers, and nothing else.
+Reaching the model class is not wrong in itself — calling a method the
+application defined, using it as a Ruby class, handing it to another library —
+and those uses are left alone. If a legitimate one is flagged, disable it on the
+line with a reason:
+
+```ruby
+# rubocop:disable RailsAdmin/RawModelAccess -- CanCanCan wants the class
+abstract_model.model.accessible_by(ability, action)
+# rubocop:enable RailsAdmin/RawModelAccess
+```
+
+One rule from the same list is **not** enforced: an adapter should not read
+`RailsAdmin::Config`, and nine places still do — the fields a search or a filter
+runs over come from `config.list`, and the composite key serializer and the
+default search operator are read globally. Getting rid of those means the
+criteria carrying the fields with them, which has not been done.
+
 ## The monkey patches that remain
 
 `config/initializers/active_record_extensions.rb` and
