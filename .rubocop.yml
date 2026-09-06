@@ -2,6 +2,7 @@ inherit_from: .rubocop_todo.yml
 
 require:
   - rubocop-performance
+  - ./rubocop/rails_admin_cops
 
 AllCops:
   Exclude:
@@ -222,3 +223,20 @@ Style/TrailingCommaInArrayLiteral:
 
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: "comma"
+
+# Rules about how the layers are allowed to reach each other. See
+# docs/code-architecture-for-contributors.md.
+RailsAdmin/AdapterReference:
+  Include:
+    - "app/**/*"
+    - "lib/rails_admin/config/**/*"
+    - "lib/rails_admin/support/**/*"
+
+RailsAdmin/RawModelAccess:
+  Include:
+    - "app/**/*"
+    - "lib/**/*"
+
+RailsAdmin/RecordDecoration:
+  Include:
+    - "lib/rails_admin/adapters/**/*"
