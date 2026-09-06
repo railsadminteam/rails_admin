@@ -1,7 +1,7 @@
 import Rails from "@rails/ujs";
 import "@hotwired/turbo-rails";
-import "./jquery";
-import "./vendor/jquery_nested_form";
+import "./jquery.js";
+import "./vendor/jquery_nested_form.js";
 import "bootstrap";
 
 // These jQuery-UI indirect dependencies need to be preloaded to be used within Import maps
@@ -17,15 +17,15 @@ import "jquery-ui/ui/widget.js";
 import "jquery-ui/ui/widgets/menu.js";
 import "jquery-ui/ui/widgets/mouse.js";
 
-import "./abstract-select";
-import "./filter-box";
-import "./filtering-multiselect";
-import "./filtering-select";
-import "./nested-form-hooks";
-import "./remote-form";
-import "./sidescroll";
-import "./ui";
-import "./widgets";
+import "./abstract-select.js";
+import "./filter-box.js";
+import "./filtering-multiselect.js";
+import "./filtering-select.js";
+import "./nested-form-hooks.js";
+import "./remote-form.js";
+import "./sidescroll.js";
+import "./ui.js";
+import "./widgets.js";
 
 if (!window._rails_loaded) {
   Rails.start();
