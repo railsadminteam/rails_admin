@@ -29,6 +29,38 @@ RSpec.describe RailsAdmin::Config::HasFields do
     expect { RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.visible? }.to raise_error(/undefined method [`']\[\]' for nil/)
   end
 
+  it 'keeps a field hidden in a section when it is explicitly configured hidden at the base level' do
+    RailsAdmin.config do |config|
+      config.model Team do
+        configure :name do
+          hide { true }
+        end
+
+        edit do
+          field :name
+        end
+      end
+    end
+
+    expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :name }).not_to be_visible
+  end
+
+  it 'keeps a field visible in a section when it is explicitly configured visible at the base level' do
+    RailsAdmin.config do |config|
+      config.model Team do
+        configure :division_id do
+          visible true
+        end
+
+        edit do
+          field :division_id
+        end
+      end
+    end
+
+    expect(RailsAdmin.config(Team).edit.fields.detect { |f| f.name == :division_id }).to be_visible
+  end
+
   it 'assigns properties to new one on overriding existing field' do
     RailsAdmin.config do |config|
       config.model Team do

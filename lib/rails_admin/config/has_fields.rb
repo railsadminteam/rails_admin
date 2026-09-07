@@ -9,8 +9,9 @@ module RailsAdmin
         field = _fields.detect { |f| name == f.name }
 
         # some fields are hidden by default (belongs_to keys, has_many associations in list views.)
-        # unhide them if config specifically defines them
-        field.show if field && !field.instance_variable_get("@#{field.name}_registered").is_a?(Proc)
+        # unhide them if config specifically defines them, unless visibility has already been
+        # explicitly configured (e.g. via `hide`/`show`/`visible`) at a base/parent level.
+        field.show if field && !field.instance_variable_get(:@visible_registered)
         # Specify field as virtual if type is not specifically set and field was not
         # found in default stack
         if field.nil? && type.nil?
