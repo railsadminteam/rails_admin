@@ -196,8 +196,13 @@ module RailsAdmin
 
         # Accessor for field's length restrictions per validations
         #
+        # Bounds given as a Proc (e.g. Devise's password length validation) are
+        # dropped, as they can't be compared against the column limit and are
+        # only meant to be resolved at validation time.
         register_instance_option :valid_length do
-          @valid_length ||= abstract_model.model.validators_on(name).detect { |v| v.kind == :length }.try(&:options) || {}
+          @valid_length ||=
+            (abstract_model.model.validators_on(name).detect { |v| v.kind == :length }.try(&:options) || {}).
+            reject { |_, bound| bound.is_a?(Proc) }
         end
 
         register_instance_option :partial do
