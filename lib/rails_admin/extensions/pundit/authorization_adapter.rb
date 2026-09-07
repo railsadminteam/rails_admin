@@ -44,7 +44,8 @@ module RailsAdmin
         def query(_action, abstract_model)
           @controller.send(:policy_scope, abstract_model.model.all)
         rescue ::Pundit::NotDefinedError
-          abstract_model.model.all
+          # Fail closed: a missing policy scope must not be treated as "no restriction".
+          abstract_model.none
         end
 
         # This is called in the new/create actions to determine the initial attributes for new

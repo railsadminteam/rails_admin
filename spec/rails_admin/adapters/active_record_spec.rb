@@ -100,6 +100,10 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       expect(@players).to include abstract_model.first
     end
 
+    it '#none matches nothing, even when merged into another relation' do
+      expect(abstract_model.scoped.merge(abstract_model.none).to_a).to eq []
+    end
+
     describe '#count' do
       it 'returns count of items' do
         expect(abstract_model.count).to eq(@players.count)

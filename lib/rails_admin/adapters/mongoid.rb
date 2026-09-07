@@ -39,6 +39,11 @@ module RailsAdmin
         model.scoped
       end
 
+      # Criteria#none is lost when merged into another criteria
+      def none
+        scoped.in(_id: [])
+      end
+
       def first(options = {}, scope = nil)
         all(options, scope).first
       end

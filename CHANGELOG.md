@@ -7,6 +7,7 @@
 ### Security
 
 - Fix JSON/XML export calling arbitrary methods and exposing fields outside the export configuration; the index and show actions' JSON/XML output is now limited to their sections' fields too ([GHSA-22g3-g835-fqqw](https://github.com/railsadminteam/rails_admin/security/advisories/GHSA-22g3-g835-fqqw))
+- Fix the Pundit adapter granting access to every record of a model whose policy has no `Scope` ([GHSA-qm4x-chm3-xppc](https://github.com/railsadminteam/rails_admin/security/advisories/GHSA-qm4x-chm3-xppc))
 
 ## [3.3.0](https://github.com/railsadminteam/rails_admin/tree/v3.3.0) - 2024-12-08
 

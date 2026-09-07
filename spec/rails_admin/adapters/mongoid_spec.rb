@@ -53,6 +53,10 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
       expect(@players).to include @abstract_model.first
     end
 
+    it '#none matches nothing, even when merged into another criteria' do
+      expect(@abstract_model.scoped.merge(@abstract_model.none).to_a).to eq []
+    end
+
     it '#count returns count of items' do
       expect(@abstract_model.count).to eq(@players.count)
     end

@@ -25,6 +25,10 @@ module RailsAdmin
         model.all
       end
 
+      def none
+        model.none
+      end
+
       def first(options = {}, scope = nil)
         all(options, scope).first
       end
