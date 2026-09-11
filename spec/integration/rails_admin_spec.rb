@@ -47,6 +47,9 @@ RSpec.describe RailsAdmin, type: :request do
         is_expected.to have_selector('head script[src^="/assets/rails_admin"][src$=".js"]', visible: false)
       when :webpacker
         is_expected.to have_selector('head script[src^="/packs-test/js/rails_admin"][src$=".js"]', visible: false)
+      when :importmap
+        is_expected.to have_selector('head script[type="module"]', text: 'import "rails_admin"', visible: false)
+        is_expected.not_to have_selector('head script[type="module"]', text: 'window.jQuery', visible: false)
       end
     end
   end
