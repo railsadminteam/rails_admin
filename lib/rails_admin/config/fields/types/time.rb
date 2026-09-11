@@ -10,7 +10,7 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           def parse_value(value)
-            abstract_model.model.type_for_attribute(name.to_s).serialize(super)&.change(year: 2000, month: 1, day: 1)
+            abstract_model.serialize_attribute(name, super)&.change(year: 2000, month: 1, day: 1)
           end
 
           register_instance_option :filter_operators do

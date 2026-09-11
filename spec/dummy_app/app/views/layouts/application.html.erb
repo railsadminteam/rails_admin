@@ -11,7 +11,7 @@
     <%= vite_client_tag %>
     <%= vite_javascript_tag 'application' %>
   <% else %>
-    <%= stylesheet_link_tag    "application", media: "all" %>
+    <%= stylesheet_link_tag "application", media: "all" %>
     <%= javascript_include_tag "application", type: 'module' %>
   <% end %>
   <%= csrf_meta_tags %>

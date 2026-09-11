@@ -34,6 +34,8 @@ group :test do
   gem 'rspec-rails', '>= 4.0.0.beta2'
   gem 'rspec-retry'
   gem 'rubocop', ['~> 1.20', '!= 1.22.2'], require: false
+  # herb, which rubocop-erb parses templates with, has no JRuby build.
+  gem 'rubocop-erb', require: false, platforms: :ruby
   gem 'rubocop-performance', require: false
   gem 'shrine', '~> 3.0'
   gem 'simplecov', '>= 0.9', require: false

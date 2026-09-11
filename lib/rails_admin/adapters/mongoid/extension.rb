@@ -19,10 +19,6 @@ module RailsAdmin
           end
         end
 
-        def rails_admin_default_object_label_method
-          new_record? ? "new #{self.class}" : "#{self.class} ##{id}"
-        end
-
         def safe_send(value)
           if attributes.detect { |k, _v| k.to_s == value.to_s }
             read_attribute(value)
@@ -32,8 +28,21 @@ module RailsAdmin
         end
 
         module ClassMethods
-          # Mongoid accepts_nested_attributes_for does not store options in accessible scope,
-          # so we intercept the call and store it in instance variable which can be accessed from outside
+          # Keeps the options of accepts_nested_attributes_for, because Mongoid
+          # does not (checked against 9.1). It hands them to the block that
+          # defines the setter and keeps nothing: Model.nested_attributes only
+          # maps "xs_attributes" to its setter, and the association carries the
+          # autosave flag but nothing else.
+          #
+          # RailsAdmin needs allow_destroy to decide whether a nested form
+          # offers to remove an existing record. Guessing it wrong is not
+          # something anyone would notice: Mongoid takes _destroy out of the
+          # attributes before finding out it is not allowed to destroy, so the
+          # record is updated like any other and the row the user removed is
+          # simply still there after saving, with nothing raised.
+          #
+          # The defaults are ActiveRecord's own, so that nested_options has the
+          # same shape whichever adapter answered it.
           def accepts_nested_attributes_for_with_rails_admin(*args)
             options = args.extract_options!
             args.each do |arg|

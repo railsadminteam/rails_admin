@@ -53,7 +53,7 @@ module RailsAdmin
                     if @association
                       @association.collection(@objects).collect { |(label, id)| {id: id, label: label} }
                     else
-                      @objects.collect { |object| {id: object.id.to_s, label: object.send(@model_config.object_label_method).to_s} }
+                      @objects.collect { |object| {id: object.id.to_s, label: @model_config.object_label(object).to_s} }
                     end
                   else
                     @objects.to_json(@schema)

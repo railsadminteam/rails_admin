@@ -1,11 +1,20 @@
 # frozen_string_literal: true
 
+require 'rails_admin/adapters'
+require 'rails_admin/adapters/statement_builder'
+require 'rails_admin/criteria/path'
+require 'rails_admin/criteria/period'
 require 'rails_admin/support/datetime'
 
 module RailsAdmin
   class AbstractModel
+    # Moved to RailsAdmin::Adapters::StatementBuilder, which is where the
+    # adapters that subclass it now live. Kept so that out-of-tree adapters
+    # subclassing the old name keep working.
+    StatementBuilder = RailsAdmin::Adapters::StatementBuilder
+
     cattr_accessor :all
-    attr_reader :adapter, :model_name
+    attr_reader :adapter, :model_name, :reflection, :repository
 
     class << self
       def reset
@@ -43,16 +52,51 @@ module RailsAdmin
       def reset_polymorphic_parents
         @@polymorphic_parents = {}
       end
+
+      # A classifier answers "what is this attribute, in RailsAdmin's terms" for
+      # attributes whose meaning comes from the model layer rather than from the
+      # store: attachment libraries, enums and the like. Without it every field
+      # factory has to reach past the adapter and inspect the model class itself.
+      #
+      # The block receives the model class and a property, and returns a Role or
+      # nil to defer to the next classifier. Classifiers run last in, first out.
+      # A classifier must not ask the property for its role, or it recurses.
+      def register_classifier(&block)
+        classifiers.unshift(block)
+      end
+
+      def classifiers
+        @classifiers ||= []
+      end
+
+      def classify(model, property)
+        classifiers.each do |classifier|
+          role = classifier.call(model, property)
+          return role if role
+        end
+        nil
+      end
+    end
+
+    # What a property turned out to be, beyond its storage type.
+    #
+    # +kind+ names the thing (:shrine, :paperclip, :enum, ...), +name+ is the
+    # field name it should be surfaced under, and +children+ lists the columns
+    # that back it and therefore should not be shown on their own.
+    Role = Struct.new(:kind, :name, :children, keyword_init: true) do
+      def initialize(kind:, name:, children: [])
+        super
+      end
     end
 
     def initialize(model_or_model_name)
       @model_name = model_or_model_name.to_s
-      ancestors = model.ancestors.collect(&:to_s)
-      if ancestors.include?('ActiveRecord::Base') && !model.abstract_class? && model.table_exists?
-        initialize_active_record
-      elsif ancestors.include?('Mongoid::Document')
-        initialize_mongoid
-      end
+      registration = Adapters.detect(model)
+      return unless registration
+
+      @adapter = registration.name
+      @reflection = registration.reflection.new(self)
+      @repository = registration.repository.new(self)
     end
 
     # do not store a reference to the model, does not play well with ActiveReload/Rails3.2
@@ -60,13 +104,21 @@ module RailsAdmin
       @model_name.constantize
     end
 
-    def quoted_table_name
-      table_name
-    end
+    # What the model is, and what can be done with it, are the two halves of an
+    # adapter. AbstractModel is the one object callers talk to; it owns neither
+    # answer and forwards both.
+    delegate :properties, :associations, :base_class, :primary_key, :primary_keys, :table_name,
+             :quoted_table_name, :quote_column_name, :encoding, :embedded?, :cyclic?,
+             :adapter_supports_joins?, :belongs_to_required_by_default,
+             :pretty_name, :human_attribute_name, :attribute_required?,
+             :attribute_length_options, :attribute_enum_values, :dummy_record,
+             to: :reflection
 
-    def quote_column_name(name)
-      name
-    end
+    delegate :new, :get, :first, :all, :count, :destroy, :scoped, :where, :read, :save,
+             :each_associated_children, :format_id, :parse_id,
+             :serialize_attribute, :deserialize_attribute,
+             :sort_expression, :search_column, :parse_object_id,
+             to: :repository
 
     def to_s
       model.to_s
@@ -84,192 +136,18 @@ module RailsAdmin
       @model_name.split('::').collect(&:underscore).join('_')
     end
 
-    def pretty_name
-      model.model_name.human
-    end
-
-    def where(conditions)
-      model.where(conditions)
-    end
-
-    def each_associated_children(object)
-      associations.each do |association|
-        case association.type
-        when :has_one
-          child = object.send(association.name)
-          yield(association, [child]) if child
-        when :has_many
-          children = object.send(association.name)
-          yield(association, Array.new(children))
-        end
-      end
-    end
-
-    def format_id(id)
-      id
-    end
-
-    def parse_id(id)
-      id
-    end
-
-  private
-
     def initialize_active_record
       @adapter = :active_record
       require 'rails_admin/adapters/active_record'
-      extend Adapters::ActiveRecord
+      @reflection = Adapters::ActiveRecord::Reflection.new(self)
+      @repository = Adapters::ActiveRecord::Repository.new(self)
     end
 
     def initialize_mongoid
       @adapter = :mongoid
       require 'rails_admin/adapters/mongoid'
-      extend Adapters::Mongoid
-    end
-
-    def parse_field_value(field, value)
-      value.is_a?(Array) ? value.map { |v| field.parse_value(v) } : field.parse_value(value)
-    end
-
-    class StatementBuilder
-      def initialize(column, type, value, operator)
-        @column = column
-        @type = type
-        @value = value
-        @operator = operator
-      end
-
-      def to_statement
-        return if [@operator, @value].any? { |v| v == '_discard' }
-
-        unary_operators[@operator] || unary_operators[@value] ||
-          build_statement_for_type_generic
-      end
-
-    protected
-
-      def get_filtering_duration
-        FilteringDuration.new(@operator, @value).get_duration
-      end
-
-      def build_statement_for_type_generic
-        build_statement_for_type || begin
-          case @type
-          when :date
-            build_statement_for_date
-          when :datetime, :timestamp, :time
-            build_statement_for_datetime_or_timestamp
-          end
-        end
-      end
-
-      def build_statement_for_type
-        raise 'You must override build_statement_for_type in your StatementBuilder'
-      end
-
-      def build_statement_for_integer_decimal_or_float
-        case @value
-        when Array
-          val, range_begin, range_end = *@value.collect do |v|
-            next unless v.to_i.to_s == v || v.to_f.to_s == v
-
-            @type == :integer ? v.to_i : v.to_f
-          end
-          case @operator
-          when 'between'
-            range_filter(range_begin, range_end)
-          else
-            column_for_value(val) if val
-          end
-        else
-          if @value.to_i.to_s == @value || @value.to_f.to_s == @value
-            @type == :integer ? column_for_value(@value.to_i) : column_for_value(@value.to_f)
-          end
-        end
-      end
-
-      def build_statement_for_date
-        start_date, end_date = get_filtering_duration
-        if start_date
-          start_date = begin
-            start_date.to_date
-          rescue StandardError
-            nil
-          end
-        end
-        if end_date
-          end_date = begin
-            end_date.to_date
-          rescue StandardError
-            nil
-          end
-        end
-        range_filter(start_date, end_date)
-      end
-
-      def build_statement_for_datetime_or_timestamp
-        start_date, end_date = get_filtering_duration
-        start_date = start_date.beginning_of_day if start_date.is_a?(Date)
-        end_date = end_date.end_of_day if end_date.is_a?(Date)
-        range_filter(start_date, end_date)
-      end
-
-      def unary_operators
-        raise 'You must override unary_operators in your StatementBuilder'
-      end
-
-      def range_filter(_min, _max)
-        raise 'You must override range_filter in your StatementBuilder'
-      end
-
-      class FilteringDuration
-        def initialize(operator, value)
-          @value = value
-          @operator = operator
-        end
-
-        def get_duration
-          case @operator
-          when 'between'   then between
-          when 'today'     then today
-          when 'yesterday' then yesterday
-          when 'this_week' then this_week
-          when 'last_week' then last_week
-          else default
-          end
-        end
-
-        def today
-          [Date.today, Date.today]
-        end
-
-        def yesterday
-          [Date.yesterday, Date.yesterday]
-        end
-
-        def this_week
-          [Date.today.beginning_of_week, Date.today.end_of_week]
-        end
-
-        def last_week
-          [1.week.ago.to_date.beginning_of_week,
-           1.week.ago.to_date.end_of_week]
-        end
-
-        def between
-          [@value[1], @value[2]]
-        end
-
-        def default
-          [default_date, default_date]
-        end
-
-      private
-
-        def default_date
-          Array.wrap(@value).first
-        end
-      end
+      @reflection = Adapters::Mongoid::Reflection.new(self)
+      @repository = Adapters::Mongoid::Repository.new(self)
     end
   end
 end

@@ -120,10 +120,8 @@ RailsAdmin.config do |config|
 
         sortable :win_percentage
 
-        # if you need to specify the join association name:
+        # if you need to specify the join association name, give the table name:
         # (See #526 and http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html#label-Table+Aliasing)
-        sortable {Team => :win_percentage}
-        # or
         sortable {:teams => :win_percentage}
         # or
         sortable "teams.win_percentage"

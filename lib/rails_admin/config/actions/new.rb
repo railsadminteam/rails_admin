@@ -39,10 +39,11 @@ module RailsAdmin
               @object = @abstract_model.new
               sanitize_params_for!(request.xhr? ? :modal : :create)
 
-              @object.assign_attributes(params[@abstract_model.param_key])
+              # A form that posted nothing for the model leaves nothing to assign.
+              @object.assign_attributes(params[@abstract_model.param_key] || {})
               @authorization_adapter&.authorize(:create, @abstract_model, @object)
 
-              if @object.save
+              if @abstract_model.save(@object)
                 @auditing_adapter&.create_object(@object, @abstract_model, _current_user)
                 respond_to do |format|
                   format.html { redirect_to_on_success }

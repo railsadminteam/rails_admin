@@ -33,7 +33,6 @@ Naming/AccessorMethodName:
   Exclude:
     - "app/controllers/rails_admin/application_controller.rb"
     - "app/controllers/rails_admin/main_controller.rb"
-    - "lib/rails_admin/abstract_model.rb"
 
 # Offense count: 2
 # Configuration parameters: EnforcedStyleForLeadingUnderscores.

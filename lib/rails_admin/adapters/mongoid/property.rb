@@ -65,6 +65,13 @@ module RailsAdmin
           false
         end
 
+        # @see RailsAdmin::AbstractModel.register_classifier
+        def role
+          return @role if defined?(@role)
+
+          @role = RailsAdmin::AbstractModel.classify(model, self)
+        end
+
         def read_only?
           model.readonly_attributes.include? property.name.to_s
         end

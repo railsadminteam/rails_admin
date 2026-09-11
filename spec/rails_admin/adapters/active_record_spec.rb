@@ -4,6 +4,13 @@ require 'spec_helper'
 require 'timecop'
 
 RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
+  it_behaves_like 'a RailsAdmin adapter' do
+    let(:adapter_record_type) { ActiveRecord::Base }
+    let(:adapter_property_type) { RailsAdmin::Adapters::ActiveRecord::Property }
+    let(:adapter_association_type) { RailsAdmin::Adapters::ActiveRecord::Association }
+    let(:adapter_missing_id) { 'abc' }
+  end
+
   let(:activerecord_config) do
     if ::ActiveRecord::Base.respond_to? :connection_db_config
       ::ActiveRecord::Base.connection_db_config.configuration_hash
@@ -69,42 +76,26 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     end
   end
 
+  # Behavior shared with the other adapters lives in 'a RailsAdmin adapter'
+  # (spec/shared_examples/shared_examples_for_adapters.rb). Only what is specific
+  # to ActiveRecord stays here.
   describe 'data access methods' do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('Player') }
-
-    before do
-      @players = FactoryBot.create_list(:player, 3) + [
+    let!(:players) do
+      FactoryBot.create_list(:player, 3) + [
         # Multibyte players
         FactoryBot.create(:player, name: 'Антоха'),
         FactoryBot.create(:player, name: 'Петруха'),
       ]
     end
 
-    it '#new returns an ActiveRecord instance' do
-      expect(abstract_model.new).to be_a(ActiveRecord::Base)
-    end
-
-    it '#get returns an ActiveRecord instance' do
-      expect(abstract_model.get(@players.first.id)).to eq(@players.first)
-    end
-
-    it '#get returns nil when id does not exist' do
-      expect(abstract_model.get('abc')).to be_nil
-    end
-
+    # Mongoid provides no GlobalID support, so this cannot be part of the shared
+    # contract. Regression test for the removal of the AbstractObject proxy (#2847).
     it '#get returns an object that can be passed to ActiveJob' do
-      expect { NullJob.perform_later(abstract_model.get(@players.first.id)) }.not_to raise_error
-    end
-
-    it '#first returns a player' do
-      expect(@players).to include abstract_model.first
+      expect { NullJob.perform_later(abstract_model.get(players.first.id)) }.not_to raise_error
     end
 
     describe '#count' do
-      it 'returns count of items' do
-        expect(abstract_model.count).to eq(@players.count)
-      end
-
       context 'when default-scoped with select' do
         before do
           class PlayerWithDefaultScope < Player
@@ -115,35 +106,14 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
         let(:abstract_model) { RailsAdmin::AbstractModel.new('PlayerWithDefaultScope') }
 
         it 'does not break' do
-          expect(abstract_model.count).to eq(@players.count)
+          expect(abstract_model.count).to eq(players.count)
         end
       end
     end
 
-    it '#destroy destroys multiple items' do
-      abstract_model.destroy(@players[0..1])
-      expect(Player.all).to match_array(@players[2..])
-    end
-
-    it '#where returns filtered results' do
-      expect(abstract_model.where(name: @players.first.name)).to eq([@players.first])
-    end
-
     describe '#all' do
-      it 'works without options' do
-        expect(abstract_model.all).to match_array @players
-      end
-
       it 'supports eager loading' do
         expect(abstract_model.all(include: :team).includes_values).to eq([:team])
-      end
-
-      it 'supports limiting' do
-        expect(abstract_model.all(limit: 2).size).to eq(2)
-      end
-
-      it 'supports retrieval by bulk_ids' do
-        expect(abstract_model.all(bulk_ids: @players[0..1].collect(&:id))).to match_array @players[0..1]
       end
 
       it 'supports retrieval by bulk_ids with composite primary keys', composite_primary_keys: true do
@@ -152,46 +122,83 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
         ).to_sql.tr('`', '"')).to include 'WHERE ("fans_teams"."fan_id" = 1 AND "fans_teams"."team_id" = 2 OR "fans_teams"."fan_id" = 3 AND "fans_teams"."team_id" = 4)'
       end
 
-      it 'supports pagination' do
-        expect(abstract_model.all(sort: 'id', page: 2, per: 1)).to eq(@players[-2, 1])
-        expect(abstract_model.all(sort: 'id', page: 1, per: 2)).to eq(@players[-2, 2].reverse)
-      end
-
-      it 'supports ordering' do
-        expect(abstract_model.all(sort: 'id', sort_reverse: true)).to eq(@players.sort)
+      # Multiple columns, table-qualified hashes and rejection of invalid values
+      # are ActiveRecord-only input formats.
+      it 'supports ordering by multiple columns' do
         expect(abstract_model.all(sort: %w[id name], sort_reverse: true).to_sql.tr('`', '"')).to include('ORDER BY "players"."id" ASC, "players"."name" ASC')
         expect(abstract_model.all(include: :team, sort: {players: :name, teams: :name}, sort_reverse: true).to_sql.tr('`', '"')).to include('ORDER BY "players"."name" ASC, "teams"."name" ASC')
         expect { abstract_model.all(sort: 1, sort_reverse: true) }.to raise_error ArgumentError, /Unsupported/
       end
 
-      it 'supports querying' do
-        results = abstract_model.all(query: @players[1].name)
-        expect(results).to eq(@players[1..1])
-      end
-
       it 'supports multibyte querying' do
         unless activerecord_config[:adapter] == 'sqlite3'
-          results = abstract_model.all(query: @players[4].name)
-          expect(results).to eq(@players[4, 1])
+          results = abstract_model.all(query: players[4].name)
+          expect(results).to eq(players[4, 1])
         end
       end
+    end
+  end
 
-      it 'supports filtering' do
-        expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'is', v: @players[1].name}}})).to eq(@players[1..1])
-      end
+  describe '#sort_expression' do
+    let(:abstract_model) { RailsAdmin::AbstractModel.new('Player') }
+
+    it 'quotes the table and column names of a local attribute' do
+      expect(abstract_model.sort_expression(RailsAdmin::Criteria::Path[:name])).
+        to match(/^["`]players["`]\.["`]name["`]$/)
+    end
+
+    it 'quotes the table and column names of an associated attribute' do
+      expect(abstract_model.sort_expression(RailsAdmin::Criteria::Path[:team, :name])).
+        to match(/^["`]teams["`]\.["`]name["`]$/)
+    end
+
+    it 'uses the quoting style of the connection' do
+      adapter =
+        if ::ActiveRecord::Base.respond_to?(:connection_db_config)
+          ::ActiveRecord::Base.connection_db_config.configuration_hash[:adapter]
+        else
+          ::ActiveRecord::Base.connection_config[:adapter]
+        end
+      expected = adapter == 'mysql2' ? '`teams`.`name`' : '"teams"."name"'
+      expect(abstract_model.sort_expression(RailsAdmin::Criteria::Path[:team, :name])).to eq expected
+    end
+
+    it 'hands table-qualified strings through untouched' do
+      expect(abstract_model.sort_expression('teams.name')).to eq 'teams.name'
+    end
+
+    it 'rejects a path through an unknown association' do
+      expect { abstract_model.sort_expression(RailsAdmin::Criteria::Path[:nonexistent, :name]) }.
+        to raise_error ArgumentError, /Unknown association/
+    end
+  end
+
+  describe '#search_column' do
+    let(:abstract_model) { RailsAdmin::AbstractModel.new('Team') }
+
+    # Search statements are assembled unquoted, unlike sort expressions.
+    it 'qualifies a local attribute with its own table' do
+      expect(abstract_model.search_column(RailsAdmin::Criteria::Path[:name])).to eq 'teams.name'
+    end
+
+    it 'qualifies an associated attribute with the associated table' do
+      expect(abstract_model.search_column(RailsAdmin::Criteria::Path[:division, :name])).to eq 'divisions.name'
+    end
+
+    it 'hands table-qualified strings through untouched' do
+      expect(abstract_model.search_column('leagues.name')).to eq 'leagues.name'
     end
   end
 
   describe '#query_scope' do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('Team') }
-
-    before do
-      @teams = [{}, {name: 'somewhere foos'}, {manager: 'foo junior'}].
-               collect { |h| FactoryBot.create :team, h }
+    let!(:teams) do
+      [{}, {name: 'somewhere foos'}, {manager: 'foo junior'}].
+        collect { |h| FactoryBot.create :team, h }
     end
 
     it 'makes correct query' do
-      expect(abstract_model.all(query: 'foo')).to match_array @teams[1..2]
+      expect(abstract_model.all(query: 'foo')).to match_array teams[1..2]
     end
 
     context "when field's searchable_columns is empty" do
@@ -222,7 +229,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       end
 
       it 'parses value only once' do
-        expect(abstract_model.all(query: 'foo')).to match_array @teams[1]
+        expect(abstract_model.all(query: 'foo')).to match_array teams[1]
       end
     end
   end
@@ -230,10 +237,10 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
   describe '#filter_scope' do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('Team') }
 
-    before do
-      @division = FactoryBot.create :division, name: 'bar division'
-      @teams = [{}, {division: @division}, {name: 'somewhere foos', division: @division}, {name: 'nowhere foos'}].
-               collect { |h| FactoryBot.create :team, h }
+    let!(:division) { FactoryBot.create :division, name: 'bar division' }
+    let!(:teams) do
+      [{}, {division: division}, {name: 'somewhere foos', division: division}, {name: 'nowhere foos'}].
+        collect { |h| FactoryBot.create :team, h }
     end
 
     context 'without configuration' do
@@ -251,7 +258,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     end
 
     it 'makes correct query' do
-      expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'foo'}}, 'division' => {'0001' => {o: 'like', v: 'bar'}}}, include: :division)).to eq([@teams[2]])
+      expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'foo'}}, 'division' => {'0001' => {o: 'like', v: 'bar'}}}, include: :division)).to eq([teams[2]])
     end
 
     context 'when parsing is not idempotent' do
@@ -268,7 +275,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       end
 
       it 'parses value only once' do
-        expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'where'}}})).to match_array @teams[2]
+        expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'where'}}})).to match_array teams[2]
       end
     end
 
@@ -281,13 +288,13 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
 
       it 'only matches on prefix' do
         # Specified operator is honored and matches
-        expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'where'}}})).to match_array @teams[2..3]
+        expect(abstract_model.all(filters: {'name' => {'0000' => {o: 'like', v: 'where'}}})).to match_array teams[2..3]
 
         # No operator falls back to the default_search_operator(starts_with) and doesn't match NON-PREFIX
         expect(abstract_model.all(filters: {'name' => {'0000' => {v: 'where'}}})).to be_empty
 
         # No operator falls back to the default_search_operator(starts_with) and doesn't match NON-PREFIX
-        expect(abstract_model.all(filters: {'name' => {'0000' => {v: 'somewhere'}}})).to match_array @teams[2]
+        expect(abstract_model.all(filters: {'name' => {'0000' => {v: 'somewhere'}}})).to match_array teams[2]
       end
     end
   end
@@ -296,7 +303,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
     let(:abstract_model) { RailsAdmin::AbstractModel.new('FieldTest') }
 
     def build_statement(type, value, operator)
-      abstract_model.send(:build_statement, :field, type, value, operator)
+      abstract_model.repository.send(:build_statement, :field, type, value, operator)
     end
 
     it "ignores '_discard' operator or value" do
@@ -549,33 +556,33 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       let(:scope) { FieldTest.all }
 
       it 'supports date type query' do
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', '2012-02-01', '2012-03-01'], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.date_field BETWEEN ? AND ?)', Date.new(2012, 2, 1), Date.new(2012, 3, 1))))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', '2012-03-01', ''], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.date_field >= ?)', Date.new(2012, 3, 1))))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', '', '2012-02-01'], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.date_field <= ?)', Date.new(2012, 2, 1))))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['2012-02-01'], o: 'default'}}))).to eq(predicates_for(scope.where('(field_tests.date_field = ?)', Date.new(2012, 2, 1))))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: [], o: 'today'}}))).to eq(predicates_for(scope.where('(field_tests.date_field = ?)', Date.today)))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: [], o: 'yesterday'}}))).to eq(predicates_for(scope.where('(field_tests.date_field = ?)', Date.yesterday)))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: [], o: 'this_week'}}))).to eq(predicates_for(scope.where('(field_tests.date_field BETWEEN ? AND ?)', Date.today.beginning_of_week, Date.today.end_of_week)))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'date_field' => {'1' => {v: [], o: 'last_week'}}))).to eq(predicates_for(scope.where('(field_tests.date_field BETWEEN ? AND ?)', 1.week.ago.to_date.beginning_of_week, 1.week.ago.to_date.end_of_week)))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', '2012-02-01', '2012-03-01'], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.date_field BETWEEN ? AND ?)', Date.new(2012, 2, 1), Date.new(2012, 3, 1))))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', '2012-03-01', ''], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.date_field >= ?)', Date.new(2012, 3, 1))))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['', '', '2012-02-01'], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.date_field <= ?)', Date.new(2012, 2, 1))))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'date_field' => {'1' => {v: ['2012-02-01'], o: 'default'}}))).to eq(predicates_for(scope.where('(field_tests.date_field = ?)', Date.new(2012, 2, 1))))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'date_field' => {'1' => {v: [], o: 'today'}}))).to eq(predicates_for(scope.where('(field_tests.date_field = ?)', Date.current)))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'date_field' => {'1' => {v: [], o: 'yesterday'}}))).to eq(predicates_for(scope.where('(field_tests.date_field = ?)', Date.yesterday)))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'date_field' => {'1' => {v: [], o: 'this_week'}}))).to eq(predicates_for(scope.where('(field_tests.date_field BETWEEN ? AND ?)', Date.current.beginning_of_week, Date.current.end_of_week)))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'date_field' => {'1' => {v: [], o: 'last_week'}}))).to eq(predicates_for(scope.where('(field_tests.date_field BETWEEN ? AND ?)', 1.week.ago.to_date.beginning_of_week, 1.week.ago.to_date.end_of_week)))
       end
 
       it 'supports datetime type query' do
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', '2012-02-01T12:00:00', '2012-03-01T12:00:00'], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.datetime_field BETWEEN ? AND ?)', Time.utc(2012, 2, 1, 12), Time.utc(2012, 3, 1, 12))))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', '2012-03-01T12:00:00', ''], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.datetime_field >= ?)', Time.utc(2012, 3, 1, 12))))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', '', '2012-02-01T12:00:00'], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.datetime_field <= ?)', Time.utc(2012, 2, 1, 12))))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['2012-02-01T12:00:00'], o: 'default'}}))).to eq(predicates_for(scope.where('(field_tests.datetime_field = ?)', Time.utc(2012, 2, 1, 12))))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: [], o: 'today'}}))).to eq(predicates_for(scope.where('(field_tests.datetime_field BETWEEN ? AND ?)', Date.today.beginning_of_day, Date.today.end_of_day)))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: [], o: 'yesterday'}}))).to eq(predicates_for(scope.where('(field_tests.datetime_field BETWEEN ? AND ?)', Date.yesterday.beginning_of_day, Date.yesterday.end_of_day)))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: [], o: 'this_week'}}))).to eq(predicates_for(scope.where('(field_tests.datetime_field BETWEEN ? AND ?)', Date.today.beginning_of_week.beginning_of_day, Date.today.end_of_week.end_of_day)))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: [], o: 'last_week'}}))).to eq(predicates_for(scope.where('(field_tests.datetime_field BETWEEN ? AND ?)', 1.week.ago.beginning_of_week, 1.week.ago.end_of_week)))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', '2012-02-01T12:00:00', '2012-03-01T12:00:00'], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.datetime_field BETWEEN ? AND ?)', Time.utc(2012, 2, 1, 12), Time.utc(2012, 3, 1, 12))))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', '2012-03-01T12:00:00', ''], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.datetime_field >= ?)', Time.utc(2012, 3, 1, 12))))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['', '', '2012-02-01T12:00:00'], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.datetime_field <= ?)', Time.utc(2012, 2, 1, 12))))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: ['2012-02-01T12:00:00'], o: 'default'}}))).to eq(predicates_for(scope.where('(field_tests.datetime_field = ?)', Time.utc(2012, 2, 1, 12))))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: [], o: 'today'}}))).to eq(predicates_for(scope.where('(field_tests.datetime_field BETWEEN ? AND ?)', Date.current.beginning_of_day, Date.current.end_of_day)))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: [], o: 'yesterday'}}))).to eq(predicates_for(scope.where('(field_tests.datetime_field BETWEEN ? AND ?)', Date.yesterday.beginning_of_day, Date.yesterday.end_of_day)))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: [], o: 'this_week'}}))).to eq(predicates_for(scope.where('(field_tests.datetime_field BETWEEN ? AND ?)', Date.current.beginning_of_week.beginning_of_day, Date.current.end_of_week.end_of_day)))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'datetime_field' => {'1' => {v: [], o: 'last_week'}}))).to eq(predicates_for(scope.where('(field_tests.datetime_field BETWEEN ? AND ?)', 1.week.ago.beginning_of_week, 1.week.ago.end_of_week)))
       end
 
       it 'supports time type query' do
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'time_field' => {'1' => {v: ['', '2000-01-01T12:00:00', '2000-01-01T14:00:00'], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.time_field BETWEEN ? AND ?)', Time.utc(2000, 1, 1, 12), Time.utc(2000, 1, 1, 14))))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'time_field' => {'1' => {v: ['', '2000-01-01T14:00:00', ''], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.time_field >= ?)', Time.utc(2000, 1, 1, 14))))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'time_field' => {'1' => {v: ['', '', '2000-01-01T12:00:00'], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.time_field <= ?)', Time.utc(2000, 1, 1, 12))))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'time_field' => {'1' => {v: ['2000-01-01T12:00:00'], o: 'default'}}))).to eq(predicates_for(scope.where('(field_tests.time_field = ?)', Time.utc(2000, 1, 1, 12))))
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'time_field' => {'1' => {v: ['2021-02-03T12:00:00'], o: 'default'}}))).to eq(predicates_for(scope.where('(field_tests.time_field = ?)', Time.utc(2000, 1, 1, 12))))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'time_field' => {'1' => {v: ['', '2000-01-01T12:00:00', '2000-01-01T14:00:00'], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.time_field BETWEEN ? AND ?)', Time.utc(2000, 1, 1, 12), Time.utc(2000, 1, 1, 14))))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'time_field' => {'1' => {v: ['', '2000-01-01T14:00:00', ''], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.time_field >= ?)', Time.utc(2000, 1, 1, 14))))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'time_field' => {'1' => {v: ['', '', '2000-01-01T12:00:00'], o: 'between'}}))).to eq(predicates_for(scope.where('(field_tests.time_field <= ?)', Time.utc(2000, 1, 1, 12))))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'time_field' => {'1' => {v: ['2000-01-01T12:00:00'], o: 'default'}}))).to eq(predicates_for(scope.where('(field_tests.time_field = ?)', Time.utc(2000, 1, 1, 12))))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'time_field' => {'1' => {v: ['2021-02-03T12:00:00'], o: 'default'}}))).to eq(predicates_for(scope.where('(field_tests.time_field = ?)', Time.utc(2000, 1, 1, 12))))
       end
     end
 
@@ -587,11 +594,11 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       let(:scope) { FieldTest.all }
 
       it 'supports integer enum type query' do
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'integer_enum_field' => {'1' => {v: 2, o: 'default'}}))).to eq(predicates_for(scope.where('(field_tests.integer_enum_field IN (?))', [2])))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'integer_enum_field' => {'1' => {v: 2, o: 'default'}}))).to eq(predicates_for(scope.where('(field_tests.integer_enum_field IN (?))', [2])))
       end
 
       it 'supports string enum type query' do
-        expect(predicates_for(abstract_model.send(:filter_scope, scope, 'string_enum_field' => {'1' => {v: 'm', o: 'default'}}))).to eq(predicates_for(scope.where('(field_tests.string_enum_field IN (?))', ['m'])))
+        expect(predicates_for(abstract_model.repository.send(:filter_scope, scope, 'string_enum_field' => {'1' => {v: 'm', o: 'default'}}))).to eq(predicates_for(scope.where('(field_tests.string_enum_field IN (?))', ['m'])))
       end
     end
 

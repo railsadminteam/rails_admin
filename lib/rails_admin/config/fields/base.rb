@@ -60,18 +60,37 @@ module RailsAdmin
           !virtual? || children_fields.first || false
         end
 
-        def sort_column
-          if sortable == true
-            "#{abstract_model.quoted_table_name}.#{abstract_model.quote_column_name(name)}"
-          elsif (sortable.is_a?(String) || sortable.is_a?(Symbol)) && sortable.to_s.include?('.') # just provide sortable, don't do anything smart
-            sortable
-          elsif sortable.is_a?(Hash) # just join sortable hash, don't do anything smart
+        # What to sort by, as a Criteria::Path wherever the configuration can be
+        # read as one. The adapter turns it into whatever its store needs.
+        #
+        # The table-qualified forms cannot be: their prefix is a table name, not
+        # an association name, so they are handed on untouched for the store to
+        # interpret.
+        def sort_order
+          case sortable
+          when true
+            RailsAdmin::Criteria::Path[name]
+          when Hash # <table> => <column>, passed through
+            # The key is interpolated as given, so it has to be a table name.
+            # searchable resolves a model class here, sortable never has; the
+            # asymmetry dates from 845f85ec, which introduced both.
             "#{sortable.keys.first}.#{sortable.values.first}"
-          elsif association? # use column on target table
-            "#{associated_model_config.abstract_model.quoted_table_name}.#{abstract_model.quote_column_name(sortable)}"
-          else # use described column in the field conf.
-            "#{abstract_model.quoted_table_name}.#{abstract_model.quote_column_name(sortable)}"
+          when String, Symbol
+            if sortable.to_s.include?('.') # "table.column", passed through
+              sortable
+            elsif association? # a column on the associated model
+              RailsAdmin::Criteria::Path[name, sortable]
+            else
+              RailsAdmin::Criteria::Path[sortable]
+            end
+          else
+            sortable
           end
+        end
+
+        # Deprecated: use #sort_order, which does not commit to a store's syntax.
+        def sort_column
+          abstract_model.sort_expression(sort_order)
         end
 
         register_instance_option :searchable do
@@ -113,36 +132,39 @@ module RailsAdmin
           false
         end
 
-        # list of columns I should search for that field [{ column: 'table_name.column', type: field.type }, {..}]
+        # What to search for this field: [{column: <target>, type: <field type>}, ..]
+        #
+        # A target is a Criteria::Path wherever the configuration can be read as
+        # one, so that the adapter decides how to reach the attribute. The
+        # table-qualified forms cannot be read that way -- their prefix names a
+        # table, not an association -- so they stay strings and are handed to the
+        # store as they are. Overriding this option with strings keeps working.
         register_instance_option :searchable_columns do
           @searchable_columns ||=
             case searchable
             when true
-              [{column: "#{abstract_model.table_name}.#{name}", type: type}]
+              [{column: RailsAdmin::Criteria::Path[name], type: type}]
             when false
               []
             when :all # valid only for associations
-              table_name = associated_model_config.abstract_model.table_name
-              associated_model_config.list.fields.collect { |f| {column: "#{table_name}.#{f.name}", type: f.type} }
+              associated_model_config.list.fields.collect do |f|
+                {column: RailsAdmin::Criteria::Path[name, f.name], type: f.type}
+              end
             else
               [searchable].flatten.collect do |f|
-                if f.is_a?(String) && f.include?('.')                            #  table_name.column
-                  table_name, column = f.split '.'
-                  type = nil
-                elsif f.is_a?(Hash)                                              #  <Model|table_name> => <attribute|column>
+                if f.is_a?(String) && f.include?('.')                            #  table_name.column, passed through
+                  {column: f, type: :string}
+                elsif f.is_a?(Hash)                                              #  <Model|table_name> => <attribute|column>, passed through
                   am = AbstractModel.new(f.keys.first) if f.keys.first.is_a?(Class)
                   table_name = am&.table_name || f.keys.first
-                  column = f.values.first
                   property = am&.properties&.detect { |p| p.name == f.values.first.to_sym }
-                  type = property&.type
-                else                                                             #  <attribute|column>
+                  {column: "#{table_name}.#{f.values.first}", type: (property&.type || :string)}
+                else                                                             #  <attribute>
                   am = (association? ? associated_model_config.abstract_model : abstract_model)
-                  table_name = am.table_name
-                  column = f
                   property = am.properties.detect { |p| p.name == f.to_sym }
-                  type = property&.type
+                  path = association? ? RailsAdmin::Criteria::Path[name, f] : RailsAdmin::Criteria::Path[f]
+                  {column: path, type: (property&.type || :string)}
                 end
-                {column: "#{table_name}.#{column}", type: (type || :string)}
               end
             end
         end
@@ -180,7 +202,7 @@ module RailsAdmin
         #
         # @see RailsAdmin::AbstractModel.properties
         register_instance_option :label do
-          (@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name name
+          (@label ||= {})[::I18n.locale] ||= abstract_model.human_attribute_name name
         end
 
         register_instance_option :hint do
@@ -197,7 +219,7 @@ module RailsAdmin
         # Accessor for field's length restrictions per validations
         #
         register_instance_option :valid_length do
-          @valid_length ||= abstract_model.model.validators_on(name).detect { |v| v.kind == :length }.try(&:options) || {}
+          @valid_length ||= abstract_model.attribute_length_options(name)
         end
 
         register_instance_option :partial do
@@ -215,20 +237,8 @@ module RailsAdmin
               :nil
             end
 
-          (@required ||= {})[context] ||= !!([name] + children_fields).uniq.detect do |column_name|
-            model = abstract_model.model
-            model.validators_on(column_name).detect do |v|
-              !(v.options[:allow_nil] || v.options[:allow_blank]) &&
-                %i[presence numericality attachment_presence].include?(v.kind) &&
-                (v.options[:on] == context || v.options[:on].blank?) &&
-                (v.options[:if].blank? && v.options[:unless].blank?)
-            end || model.reflect_on_all_associations(:belongs_to).detect do |a|
-              next unless a.name == column_name
-
-              required = a.options[:required] if a.options.key?(:required)
-              required = !a.options[:optional] if a.options.key?(:optional) && required.nil?
-              required.nil? ? abstract_model.belongs_to_required_by_default : required
-            end
+          (@required ||= {})[context] ||= ([name] + children_fields).uniq.any? do |column_name|
+            abstract_model.attribute_required?(column_name, context)
           end
         end
 
@@ -336,7 +346,7 @@ module RailsAdmin
 
         # Reader for field's value
         def value
-          bindings[:object].safe_send(name)
+          abstract_model.read(bindings[:object], name)
         rescue NoMethodError => e
           raise e.exception <<~ERROR
             #{e.message}
