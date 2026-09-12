@@ -62,4 +62,28 @@ RSpec.describe RailsAdmin::Config::Actions::Base do
       expect(RailsAdmin::Config::Actions.find(:delete, controller: double(authorized?: true), abstract_model: RailsAdmin::AbstractModel.new(ReadOnlyComment), object: ReadOnlyComment.new)).to be_nil
     end
   end
+
+  describe '#linkable?' do
+    def index_action
+      RailsAdmin::Config::Actions.find(:index, controller: double(authorized?: true), abstract_model: RailsAdmin::AbstractModel.new(Player))
+    end
+
+    it 'is true for the default GET-only action' do
+      expect(index_action.linkable?).to be true
+    end
+
+    it 'matches an uppercase or string verb' do
+      RailsAdmin.config do |config|
+        config.actions { index { http_methods %w[GET] } }
+      end
+      expect(index_action.linkable?).to be true
+    end
+
+    it 'is false without a GET among the verbs' do
+      RailsAdmin.config do |config|
+        config.actions { index { http_methods %i[post put] } }
+      end
+      expect(index_action.linkable?).to be false
+    end
+  end
 end

@@ -203,6 +203,19 @@ RSpec.describe RailsAdmin::ApplicationHelper, type: :helper do
         expect(helper.menu_for(:root)).not_to match(/Dashboard/)
       end
 
+      it 'includes actions whose verbs list GET in any case' do
+        RailsAdmin.config do |config|
+          config.actions do
+            dashboard do
+              http_methods %i[GET]
+            end
+          end
+        end
+
+        @action = RailsAdmin::Config::Actions.find :dashboard
+        expect(helper.menu_for(:root)).to match(/Dashboard/)
+      end
+
       it 'shows actions which are marked as show_in_menu' do
         I18n.backend.store_translations(
           :en, admin: {actions: {

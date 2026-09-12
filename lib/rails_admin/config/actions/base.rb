@@ -149,6 +149,14 @@ module RailsAdmin
 
         # Off API.
 
+        # Whether the action can be rendered as a plain <a> link, i.e. visiting
+        # its URL performs it. Actions that require a non-GET verb need a
+        # button/form instead, so callers render them as text or a disabled
+        # link. Tolerates verbs written as `:GET` or `"get"`.
+        def linkable?
+          http_methods.include?(:get) || http_methods.any? { |verb| verb.to_s.casecmp?('get') }
+        end
+
         def key
           self.class.key
         end
