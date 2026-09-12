@@ -38,15 +38,3 @@ RailsAdmin.config do |config|
   end
 end
 ```
-
-Use this to configure lists table width:
-
-```ruby
-RailsAdmin.config do |config|
-  config.total_columns_width = 1000
-end
-```
-
-It will use field's name CSS class to set a width for header and data columns.
-
-Also see how to [show all fields on one page in a horizontally-scrolling table](horizontally-scrolling-table-with-frozen-columns-in-list-view.md).

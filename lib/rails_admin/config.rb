@@ -283,14 +283,6 @@ module RailsAdmin
         end
       end
 
-      def total_columns_width=(_)
-        ActiveSupport::Deprecation.warn('The total_columns_width configuration option is deprecated and has no effect.')
-      end
-
-      def sidescroll=(_)
-        ActiveSupport::Deprecation.warn('The sidescroll configuration option was removed, it is always enabled now.')
-      end
-
       # Setup actions to be used.
       def actions(&block)
         return unless block

@@ -106,7 +106,6 @@
 ### Styling
 
 - [List view table styling](list-view-table-styling.md)
-- [Horizontally scrolling table with frozen columns in list view](horizontally-scrolling-table-with-frozen-columns-in-list-view.md)
 
 ### Routing
 

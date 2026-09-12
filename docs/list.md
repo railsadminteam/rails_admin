@@ -2,17 +2,9 @@ Section used for the index view.
 
 It inherits its configuration from the `base` section.
 
-### Width of the list table
-
-```ruby
-RailsAdmin.config do |config|
-  config.total_columns_width = 1000
-end
-```
-
-Also see how to [show all columns on one page in a horizontally-scrolling table](horizontally-scrolling-table-with-frozen-columns-in-list-view.md).
-
 ### Width of individual columns
+
+The table scrolls horizontally, with checkboxes/actions/ID columns frozen, so every column is always shown regardless of table width.
 
 By default, columns have a `max-width` of 120px, and no `min-width`. While there does not appear to be fine-grained controls for max-/min-width, you can specify a fixed width in pixels for individual columns:
 

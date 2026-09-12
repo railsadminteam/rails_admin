@@ -276,8 +276,6 @@ module RailsAdmin
           false
         end
 
-        register_deprecated_instance_option :eager_load?, :eager_load
-
         def eager_load_values
           case eager_load
           when true

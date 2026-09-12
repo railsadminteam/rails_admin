@@ -82,10 +82,6 @@ module RailsAdmin
             :form_datetime
           end
 
-          register_deprecated_instance_option :momentjs_format do
-            ActiveSupport::Deprecation.warn('The momentjs_format configuration option is deprecated, please use flatpickr_format with corresponding values here: https://flatpickr.js.org/formatting/')
-          end
-
           def form_value
             value&.in_time_zone&.strftime('%FT%T') || form_default_value
           end

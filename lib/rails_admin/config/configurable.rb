@@ -85,7 +85,7 @@ module RailsAdmin
         def register_deprecated_instance_option(option_name, replacement_option_name = nil, scope = self)
           scope.send(:define_method, option_name) do |*args, &block|
             if replacement_option_name
-              ActiveSupport::Deprecation.warn("The #{option_name} configuration option is deprecated, please use #{replacement_option_name}.")
+              RailsAdmin.deprecator.warn("The #{option_name} configuration option is deprecated, please use #{replacement_option_name}.")
               send(replacement_option_name, *args, &block)
             elsif block_given?
               yield

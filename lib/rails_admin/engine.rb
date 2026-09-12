@@ -20,6 +20,10 @@ module RailsAdmin
       RailsAdmin::Engine.routes.singleton_class.prepend(RailsAdmin::Extensions::UrlForExtension)
     end
 
+    initializer 'RailsAdmin deprecator' do |app|
+      app.deprecators[:rails_admin] = RailsAdmin.deprecator if app.respond_to?(:deprecators)
+    end
+
     initializer 'RailsAdmin reload config in development' do |app|
       config.initializer_path = app.root.join('config/initializers/rails_admin.rb')
 

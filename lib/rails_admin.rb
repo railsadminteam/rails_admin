@@ -38,6 +38,13 @@ module RailsAdmin
     end
   end
 
+  # RailsAdmin's own deprecation warnings go through this, so an application can
+  # configure or silence them independently. Registered as
+  # +app.deprecators[:rails_admin]+ on Rails 7.1+.
+  def self.deprecator
+    @deprecator ||= ActiveSupport::Deprecation.new('5.0', 'RailsAdmin')
+  end
+
   # Backwards-compatible with safe_yaml/load when SafeYAML isn't available.
   # Evaluates available YAML loaders at boot and creates appropriate method,
   # so no conditionals are required at runtime.

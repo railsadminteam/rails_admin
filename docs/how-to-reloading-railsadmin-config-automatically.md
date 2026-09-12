@@ -150,7 +150,6 @@ class ApplicationController < ActionController::Base
         RailsAdmin.config do |config|
 
             config.default_items_per_page = 25
-            config.total_columns_width = 1000
 
             # LIST TestScenario
             config.model TestScenario do
@@ -182,7 +181,6 @@ class ApplicationController < ActionController::Base
                 list do
                     #columns_width = 15
                     sort_by :case_number
-                    sort_reverse false
                     #filters [:test_scenario, :case_number, :mdm_status]
                     field :case_number do
                         label "CASE NUMBER"

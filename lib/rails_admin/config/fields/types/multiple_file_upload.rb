@@ -29,8 +29,6 @@ module RailsAdmin
               nil
             end
 
-            register_deprecated_instance_option :delete_key, :delete_value
-
             register_instance_option :pretty_value do
               if value.presence
                 v = bindings[:view]
