@@ -305,6 +305,11 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       end
     end
 
+    it "strips '_discard' from array values" do
+      expect(build_statement(:enum, ['_discard'], nil)).to be_nil
+      expect(build_statement(:enum, %w[_discard foo bar], nil)).to eq(['(field IN (?))', %w[foo bar]])
+    end
+
     describe 'string type queries' do
       it 'supports string type query' do
         expect(build_statement(:string, '', nil)).to be_nil
