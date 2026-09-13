@@ -102,7 +102,10 @@ import flatpickr from "flatpickr";
                 $(this).attr("selected", true);
             });
             if (multiple)
-              control.find("option[value^=_],option[disabled]").hide();
+              control
+                .find("option[value^=_],option[disabled]")
+                .hide()
+                .prop("selected", false);
           }
           break;
         case "citext":
