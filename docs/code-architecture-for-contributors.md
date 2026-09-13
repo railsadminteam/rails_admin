@@ -75,6 +75,7 @@ Reaches the store.
 |                                                            |                                                                      |
 | ---------------------------------------------------------- | -------------------------------------------------------------------- |
 | `new`, `get`, `first`, `all`, `count`, `destroy`, `scoped` | reading and writing records                                          |
+| `each_record(scope)`                                       | every record of a scope, in its order, without loading them all      |
 | `save(record)`                                             | persisting, including whatever else the store needs to call it saved |
 | `read(record, name)`                                       | one attribute, as the store holds it                                 |
 | `format_id`, `parse_id`                                    | how an id travels through a URL, and back                            |

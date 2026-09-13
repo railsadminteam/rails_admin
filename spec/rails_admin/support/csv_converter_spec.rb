@@ -17,6 +17,32 @@ RSpec.describe RailsAdmin::CSVConverter do
     expect(RailsAdmin::CSVConverter.new(objects, schema).to_csv({})[2]).to match(/Number,Name/)
   end
 
+  describe 'with a scope' do
+    before do
+      RailsAdmin.config(Player) do
+        export do
+          field :name
+        end
+      end
+      %w[b c a].each { |name| FactoryBot.create(:player, name: name) }
+    end
+
+    let(:objects) { RailsAdmin::AbstractModel.new('Player').all(sort: RailsAdmin::Criteria::Path[:name], sort_reverse: true) }
+
+    subject { RailsAdmin::CSVConverter.new(objects, {only: %i[name]}).to_csv({})[2].lines.drop(1).collect(&:chomp) }
+
+    it 'writes the rows in the order of the scope' do
+      is_expected.to eq %w[a b c]
+    end
+
+    # The rows are fetched in batches while the CSV is written, so having every
+    # record loaded up front as well would only double the memory used.
+    it 'does not load every record before writing', active_record: true do
+      subject
+      expect(objects).not_to be_loaded
+    end
+  end
+
   describe '#generate_csv_header' do
     let(:objects) { FactoryBot.create_list :player, 1 }
     before do

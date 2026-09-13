@@ -34,6 +34,40 @@ RSpec.describe 'Export action', type: :request do
     expect { find_button('Export to csv').trigger('click') }.not_to raise_error
   end
 
+  describe 'the order of the rows' do
+    # In place of the player above: these are created in an order that neither
+    # sorting by id nor sorting by name gives back, so that each expectation
+    # can only be met one way.
+    let!(:player) { nil }
+
+    before do
+      %w[b c a].each { |name| FactoryBot.create(:player, name: name) }
+    end
+
+    def exported_names
+      click_button 'Export to csv'
+      csv = CSV.parse page.driver.response.body.force_encoding('utf-8')
+      csv[1..].collect { |row| row[csv[0].index('Name')] }
+    end
+
+    def listed_names(params)
+      visit index_path(params)
+      all('td.name_field').collect(&:text)
+    end
+
+    it 'follows the list when it is sorted by default' do
+      expected = listed_names(model_name: 'player')
+      visit export_path(model_name: 'player')
+      expect(exported_names).to eq expected
+    end
+
+    it 'follows the list when it is sorted by a column' do
+      expected = listed_names(model_name: 'player', sort: 'name')
+      visit export_path(model_name: 'player', sort: 'name')
+      expect(exported_names).to eq expected
+    end
+  end
+
   it 'does not break when nothing is checked' do
     visit export_path(model_name: 'comment')
     all('input[type="checkbox"]').each(&:uncheck)

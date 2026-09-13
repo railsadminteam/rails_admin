@@ -19,6 +19,18 @@ module RailsAdmin
       delegate :model, :config, :associations, :primary_key, :primary_keys, :table_name,
                :quoted_table_name, :quote_column_name, to: :abstract_model
 
+      # Yield the records of a scope one at a time, in the order it is sorted in,
+      # without holding all of them at once. What an export walks.
+      #
+      # Anything that is not a scope, such as an array of records, is taken as it
+      # comes. A store whose query already streams in order needs nothing more
+      # than #each, which is all this does.
+      def each_record(scope, &block)
+        return to_enum(:each_record, scope) unless block
+
+        scope.each(&block)
+      end
+
       # Read one attribute from a record: the value the store holds, rather than
       # what a reader of the same name would return.
       #

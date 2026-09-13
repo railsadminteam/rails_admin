@@ -6,6 +6,8 @@ module RailsAdmin
   module Adapters
     module ActiveRecord
       class Repository < RailsAdmin::Adapters::Repository
+        BATCH_SIZE = 1000
+
         def new(params = {})
           model.new(params)
         end
@@ -40,6 +42,34 @@ module RailsAdmin
 
         def destroy(objects)
           Array.wrap(objects).each(&:destroy)
+        end
+
+        # A relation loads whole when it is iterated, so the records are fetched
+        # in batches. find_each does that, but only in primary key order, which is
+        # why an export used to come out in a different order from the list.
+        #
+        # A sort by the primary key alone still goes to find_each, which walks the
+        # key and so stays fast however far in it gets. Any other sort is fetched
+        # a page at a time by offset, with the primary key added as a tie-break:
+        # rows that sort equal are otherwise free to come back in a different
+        # order for each page, and stitching the pages together could repeat one
+        # row and lose another.
+        def each_record(scope, &block)
+          return to_enum(:each_record, scope) unless block
+          return super unless scope.is_a?(::ActiveRecord::Relation)
+          # Already cut down to size, and batching would replace the limit.
+          return scope.each(&block) if scope.limit_value || scope.offset_value
+          return scope.find_each(batch_size: BATCH_SIZE, &block) if scope.order_values.empty?
+
+          # find_each in the composite_primary_keys gem does not keep a descending
+          # order across a composite key. Only reachable below Rails 7.1, so this
+          # goes with support for Rails 7.0, as the gem does.
+          direction = primary_key_order(scope) unless primary_keys.many? && defined?(::CompositePrimaryKeys)
+          if direction
+            scope.reorder(nil).find_each(batch_size: BATCH_SIZE, order: direction, &block)
+          else
+            each_record_by_offset(scope, &block)
+          end
         end
 
         def read(record, name)
@@ -107,6 +137,30 @@ module RailsAdmin
 
         def primary_key_scope(scope, id)
           scope.where(primary_keys.zip(Array(parse_id(id))).to_h)
+        end
+
+        # The direction a scope is sorted in when it is sorted by the primary key
+        # and nothing else, or nil. Rather than reading the order back out of the
+        # SQL, each way #all could have sorted by the key is rebuilt through
+        # #sort_scope and compared, so what is recognised is exactly what #all
+        # produces.
+        def primary_key_order(scope)
+          sorts = [primary_key]
+          sorts << RailsAdmin::Criteria::Path[primary_keys.first] unless primary_keys.many?
+          %i[desc asc].detect do |direction|
+            sorts.any? do |sort|
+              sort_scope(scope, sort: sort, sort_reverse: direction == :asc).order_values == scope.order_values
+            end
+          end
+        end
+
+        def each_record_by_offset(scope, &block)
+          scope = scope.order(*primary_keys.collect { |key| Arel.sql("#{quoted_table_name}.#{quote_column_name(key)}") })
+          (0..).step(BATCH_SIZE) do |offset|
+            batch = scope.limit(BATCH_SIZE).offset(offset).to_a
+            batch.each(&block)
+            break if batch.size < BATCH_SIZE
+          end
         end
 
         # A composite key has to be matched one whole key at a time, which costs

@@ -137,6 +137,63 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
         end
       end
     end
+
+    # The shared suite asks only that records come out in order; how the batches
+    # are fetched to get there is ActiveRecord's own business.
+    describe '#each_record' do
+      def queries_during(&block)
+        queries = []
+        callback = ->(*, payload) { queries << payload[:sql].tr('`', '"') unless payload[:name] == 'SCHEMA' }
+        ActiveSupport::Notifications.subscribed(callback, 'sql.active_record', &block)
+        queries
+      end
+
+      before { stub_const('RailsAdmin::Adapters::ActiveRecord::Repository::BATCH_SIZE', 2) }
+
+      it 'walks a sort by the primary key in keyset batches, with no offset' do
+        scope = abstract_model.all(sort: abstract_model.primary_key)
+        records = nil
+        queries = queries_during { records = abstract_model.each_record(scope).to_a }
+
+        expect(records).to eq scope.to_a
+        expect(queries.size).to be > 1
+        expect(queries.grep(/OFFSET/)).to be_empty
+      end
+
+      # Rows that sort equal are otherwise free to come back in a different order
+      # for each batch, and an export stitched together from those batches can
+      # repeat one row and miss another.
+      it 'breaks ties by the primary key when sorting by anything else' do
+        Player.update_all(name: 'same')
+        scope = abstract_model.all(sort: RailsAdmin::Criteria::Path[:name])
+        records = nil
+        queries = queries_during { records = abstract_model.each_record(scope).to_a }
+
+        expect(records.collect(&:id)).to match_array players.collect(&:id)
+        expect(queries.first).to match(/ORDER BY "players"\."name" desc, "players"\."id"/)
+        expect(queries.grep(/OFFSET/)).not_to be_empty
+      end
+
+      it 'keeps a limit the scope already has' do
+        scope = abstract_model.all(sort: RailsAdmin::Criteria::Path[:name], limit: 3)
+
+        expect(abstract_model.each_record(scope).to_a).to eq scope.to_a
+      end
+
+      it 'follows a sort by a composite primary key, either way', composite_primary_keys: true do
+        5.times { FactoryBot.create :fanship }
+        fanships = RailsAdmin::AbstractModel.new('Fanship')
+
+        [false, true].each do |sort_reverse|
+          scope = fanships.all(sort: fanships.primary_key, sort_reverse: sort_reverse)
+          expect(fanships.each_record(scope).to_a).to eq scope.to_a
+        end
+      end
+
+      it 'walks a scope with no order the way find_each does' do
+        expect(abstract_model.each_record(Player.all).to_a).to match_array players
+      end
+    end
   end
 
   describe '#sort_expression' do

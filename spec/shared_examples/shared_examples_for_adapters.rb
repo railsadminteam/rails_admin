@@ -187,6 +187,26 @@ RSpec.shared_examples 'a RailsAdmin adapter' do
       end
     end
 
+    describe '#each_record' do
+      # An export has to come out in the order the list is shown in, which is
+      # whatever #all was asked to sort by.
+      it 'yields every record in the order of the default sort' do
+        scope = abstract_model.all(sort: abstract_model.primary_key)
+
+        expect(abstract_model.each_record(scope).to_a).to eq scope.to_a
+      end
+
+      it 'yields every record in the order of a sort by another attribute' do
+        scope = abstract_model.all(sort: RailsAdmin::Criteria::Path[:name], sort_reverse: true)
+
+        expect(abstract_model.each_record(scope).to_a).to eq scope.to_a
+      end
+
+      it 'takes records that are not a scope as they come' do
+        expect(abstract_model.each_record(players.reverse).to_a).to eq players.reverse
+      end
+    end
+
     describe '#read' do
       # An edit form shows, and saves back, the value the store holds, so a
       # reader the model has redefined is not what is read.
