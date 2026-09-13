@@ -16,15 +16,10 @@ require 'active_storage/engine' if CI_ORM == :active_record
 require 'action_text/engine' if CI_ORM == :active_record
 
 case CI_ASSET
-when :webpacker
-  require 'webpacker'
-when :sprockets, :webpack
+when :propshaft
+  require 'propshaft'
+when :sprockets, :external
   require 'sprockets/railtie'
-when :importmap
-  require 'sprockets/railtie'
-  require 'importmap-rails'
-when :vite
-  require 'vite_rails'
 end
 
 # Require the gems listed in Gemfile, including any gems
@@ -48,22 +43,11 @@ module DummyApp
     end
     config.active_storage.service = :local if defined?(ActiveStorage)
 
-    case CI_ASSET
-    when :webpack
+    if CI_ASSET == :external
+      # The dummy app builds rails_admin.{js,css} into app/assets/builds, like a
+      # jsbundling/cssbundling app would.
+      config.assets.paths << Rails.root.join('app/assets/builds').to_s
       config.assets.precompile += %w[rails_admin.js rails_admin.css]
-    when :importmap
-      config.assets.paths << RailsAdmin::Engine.root.join('src')
-      config.assets.precompile += %w[rails_admin.js rails_admin.css]
-      config.importmap.cache_sweepers << RailsAdmin::Engine.root.join('src')
-    end
-
-    initializer :ignore_unused_assets_path, after: :append_assets_path, group: :all do |app|
-      case CI_ASSET
-      when :webpack, :importmap
-        app.config.assets.paths.delete(Rails.root.join('app', 'assets', 'javascripts').to_s)
-      when :sprockets
-        app.config.assets.paths.delete(Rails.root.join('app', 'assets', 'builds').to_s)
-      end
     end
   end
 end

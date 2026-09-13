@@ -44,60 +44,13 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
             contains "mount RailsAdmin::Engine => '/admin', as: 'rails_admin'"
           end
         end
-        case CI_ASSET
-        when :webpacker
-          file 'app/javascript/packs/rails_admin.js' do
-            contains 'import "rails_admin/src/rails_admin/base"'
-          end
-          file 'app/javascript/stylesheets/rails_admin.scss' do
-            contains '@import "rails_admin/src/rails_admin/styles/base"'
-          end
-        when :sprockets
-          file 'Gemfile' do
-            contains 'sassc-rails'
-          end
-        when :importmap
+        if CI_ASSET == :external
           file 'app/javascript/rails_admin.js' do
             contains 'import "rails_admin/src/rails_admin/base"'
           end
-          file 'app/assets/stylesheets/rails_admin.scss' do
-            contains '$fa-font-path: ".";'
+          file 'app/javascript/rails_admin.scss' do
+            contains '$fa-font-path: "rails_admin";'
             contains '@import "rails_admin/src/rails_admin/styles/base"'
-          end
-          file 'config/importmap.rails_admin.rb' do
-            contains 'pin "rails_admin", preload: true'
-            contains 'pin "rails_admin/src/rails_admin/base", to: "https://ga.jspm.io/npm:rails_admin@'
-            contains 'pin "bootstrap", to: "https://ga.jspm.io/npm:bootstrap@'
-          end
-          file 'config/initializers/assets.rb' do
-            contains 'Rails.root.join("node_modules/@fortawesome/fontawesome-free/webfonts")'
-          end
-          file 'package.json' do
-            contains 'sass ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css'
-          end
-        when :webpack
-          file 'app/javascript/rails_admin.js' do
-            contains 'import "rails_admin/src/rails_admin/base"'
-          end
-          file 'app/assets/stylesheets/rails_admin.scss' do
-            contains '$fa-font-path: ".";'
-            contains '@import "rails_admin/src/rails_admin/styles/base"'
-          end
-          file 'package.json' do
-            contains 'webpack --config webpack.config.js'
-            contains 'sass ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css'
-          end
-        when :vite
-          file 'app/frontend/entrypoints/rails_admin.js' do
-            contains 'import "~/stylesheets/rails_admin.scss"'
-            contains 'import "rails_admin/src/rails_admin/base"'
-          end
-          file 'app/frontend/stylesheets/rails_admin.scss' do
-            contains '$fa-font-path: "@fortawesome/fontawesome-free/webfonts";'
-            contains '@import "rails_admin/src/rails_admin/styles/base"'
-          end
-          file 'package.json' do
-            contains 'sass'
           end
         end
       end,
@@ -114,5 +67,31 @@ RSpec.describe RailsAdmin::InstallGenerator, type: :generator do
       run_generator
     end
     expect(File.read(File.join(destination_root, 'config/initializers/rails_admin.rb'))).to include 'config.asset_source ='
+  end
+
+  describe 'asset_source normalization' do
+    def initializer
+      File.read(File.join(destination_root, 'config/initializers/rails_admin.rb'))
+    end
+
+    it 'treats --asset=webpack as :external' do
+      Dir.chdir(destination_root) { run_generator %w[admin --asset=webpack --force] }
+      expect(initializer).to include 'config.asset_source = :external'
+      expect(destination_root).to(have_structure do
+        file('app/javascript/rails_admin.js') { contains 'rails_admin/src/rails_admin/base' }
+      end)
+    end
+
+    it 'writes :sprockets without generating an entrypoint' do
+      Dir.chdir(destination_root) { run_generator %w[admin --asset=sprockets --force] }
+      expect(initializer).to include 'config.asset_source = :sprockets'
+      expect(File.exist?(File.join(destination_root, 'app/javascript/rails_admin.js'))).to be false
+    end
+
+    it 'falls back to a supported source for the removed --asset=importmap' do
+      Dir.chdir(destination_root) { run_generator %w[admin --asset=importmap --force] }
+      expect(initializer).to match(/config\.asset_source = :(propshaft|sprockets|external)\b/)
+      expect(initializer).not_to include ':importmap'
+    end
   end
 end

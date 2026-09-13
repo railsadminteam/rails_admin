@@ -24,11 +24,14 @@ Gem::Specification.new do |spec|
   spec.summary = 'Admin for Rails'
   spec.version = RailsAdmin::Version
   spec.post_install_message = <<~MSG
-    ### Upgrading RailsAdmin from 2.x.x to 3.x.x ###
+    ### Upgrading to RailsAdmin 4.0 ###
 
-    Due to introduction of Webpack/Webpacker support, some additional dependencies and configuration will be needed.
-    Running `bin/rails g rails_admin:install` will suggest required changes, based on the current setup of your app.
+    RailsAdmin now ships a prebuilt JS/CSS bundle - :propshaft and :sprockets
+    apps no longer need a build step. Re-run `bin/rails g rails_admin:install`.
+    config.asset_source = :webpacker / :vite are removed; :importmap falls back
+    to the detected pipeline.
 
-    For a complete list of changes, see https://github.com/railsadminteam/rails_admin/blob/master/CHANGELOG.md
+    Upgrade guide: https://github.com/railsadminteam/rails_admin/blob/master/docs/upgrading-to-4.md
+    Changelog:     https://github.com/railsadminteam/rails_admin/blob/master/CHANGELOG.md
   MSG
 end
