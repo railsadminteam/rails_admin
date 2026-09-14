@@ -21,7 +21,7 @@ module RailsAdmin
           [value].flatten.select(&:present?).collect do |associated|
             amc = polymorphic? ? RailsAdmin.config(associated) : associated_model_config # perf optimization for non-polymorphic associations
             am = amc.abstract_model
-            wording = associated.send(amc.object_label_method)
+            wording = amc.object_label(associated)
             can_see = !am.embedded? && (show_action = v.action(:show, am, associated))
             can_see ? v.link_to(wording, v.url_for(action: show_action.action_name, model_name: am.to_param, id: associated.id)) : ERB::Util.html_escape(wording)
           end.to_sentence.html_safe.presence || '-'
@@ -36,7 +36,7 @@ module RailsAdmin
 
         # use the association name as a key, not the association key anymore!
         register_instance_option :label do
-          (@label ||= {})[::I18n.locale] ||= abstract_model.model.human_attribute_name association.name
+          (@label ||= {})[::I18n.locale] ||= abstract_model.human_attribute_name association.name
         end
 
         # scope for possible associable records
@@ -137,7 +137,7 @@ module RailsAdmin
         # Returns collection of all selectable records
         def collection(scope = nil)
           (scope || bindings[:controller].list_entries(associated_model_config, :index, associated_collection_scope, false)).
-            map { |o| [o.send(associated_object_label_method), format_key(o.send(associated_primary_key)).to_s] }
+            map { |o| [associated_model_config.object_label(o), format_key(o.send(associated_primary_key)).to_s] }
         end
 
         # has many?
@@ -155,12 +155,13 @@ module RailsAdmin
 
       private
 
+        # A key travels through the DOM and comes back as a URL or form
+        # parameter, so it is the associated model's repository that decides how
+        # it is written down.
         def format_key(key)
-          if key.is_a?(Array)
-            RailsAdmin.config.composite_keys_serializer.serialize(key)
-          else
-            key
-          end
+          return if key.nil? # the association is not set
+
+          associated_model_config.abstract_model.format_id(key)
         end
       end
     end

@@ -348,10 +348,15 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
     end
   end
 
+  # Targets that can be read as an attribute reached through associations come
+  # back as a Criteria::Path, leaving the adapter to decide what that means for
+  # its store. Table-qualified configurations stay strings; see the adapter specs
+  # for what each of these compiles to.
   describe '#searchable_columns' do
     describe 'for belongs_to fields' do
       it 'finds label method on the opposite side for belongs_to associations by default' do
-        expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.searchable_columns.collect { |c| c[:column] }).to eq(['divisions.name', 'teams.division_id'])
+        expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.searchable_columns.collect { |c| c[:column] }).
+          to eq([RailsAdmin::Criteria::Path[:division, :name], 'teams.division_id'])
       end
 
       it 'searches on opposite table for belongs_to' do
@@ -360,7 +365,8 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
             searchable :custom_id
           end
         end
-        expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.searchable_columns.collect { |c| c[:column] }).to eq(['divisions.custom_id'])
+        expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.searchable_columns.collect { |c| c[:column] }).
+          to eq([RailsAdmin::Criteria::Path[:division, :custom_id]])
       end
 
       it 'searches on asked table with model name' do
@@ -383,9 +389,9 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
     end
 
     describe 'for basic type fields' do
-      it 'uses base table and find correct column type' do
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :text_field }.searchable_columns).to eq([{column: 'field_tests.text_field', type: :text}])
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :integer_field }.searchable_columns).to eq([{column: 'field_tests.integer_field', type: :integer}])
+      it 'uses the attribute itself and finds the correct column type' do
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :text_field }.searchable_columns).to eq([{column: RailsAdmin::Criteria::Path[:text_field], type: :text}])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :integer_field }.searchable_columns).to eq([{column: RailsAdmin::Criteria::Path[:integer_field], type: :integer}])
       end
 
       it 'is customizable to another field on the same table' do
@@ -394,7 +400,7 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
             searchable :date_field
           end
         end
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :time_field }.searchable_columns).to eq([{column: 'field_tests.date_field', type: :date}])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :time_field }.searchable_columns).to eq([{column: RailsAdmin::Criteria::Path[:date_field], type: :date}])
       end
 
       it 'is customizable to another field on another table with :table_name' do
@@ -418,15 +424,18 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
 
     describe 'for mapped fields' do
       it 'of paperclip should find the underlying column on the base table' do
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :paperclip_asset }.searchable_columns.collect { |c| c[:column] }).to eq(['field_tests.paperclip_asset_file_name'])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :paperclip_asset }.searchable_columns.collect { |c| c[:column] }).
+          to eq([RailsAdmin::Criteria::Path[:paperclip_asset_file_name]])
       end
 
       it 'of dragonfly should find the underlying column on the base table' do
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :dragonfly_asset }.searchable_columns.collect { |c| c[:column] }).to eq(['field_tests.dragonfly_asset_name'])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :dragonfly_asset }.searchable_columns.collect { |c| c[:column] }).
+          to eq([RailsAdmin::Criteria::Path[:dragonfly_asset_name]])
       end
 
       it 'of carrierwave should find the underlying column on the base table' do
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_asset }.searchable_columns.collect { |c| c[:column] }).to eq(['field_tests.carrierwave_asset'])
+        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_asset }.searchable_columns.collect { |c| c[:column] }).
+          to eq([RailsAdmin::Criteria::Path[:carrierwave_asset]])
       end
     end
   end

@@ -1,7 +1,23 @@
 inherit_from: .rubocop_todo.yml
 
+# rubocop-erb ships Exclude lists of its own for cops that do not make sense in
+# a template; without this .rubocop_todo.yml replaces them instead of adding to
+# them.
+inherit_mode:
+  merge:
+    - Exclude
+
+# RuboCop had never looked at the templates before rubocop-erb, and the styling
+# cops would rewrite them wholesale. Worse, autocorrect through rubocop-erb does
+# not always produce valid Ruby -- `count = count + n` came back as
+# `count ++= n`. The templates are checked, not corrected: rubocop-erb is here
+# for the RailsAdmin cops, which have no autocorrect of their own.
+plugins:
+  - rubocop-erb
+
 require:
   - rubocop-performance
+  - ./rubocop/rails_admin_cops
 
 AllCops:
   Exclude:
@@ -41,6 +57,8 @@ Layout/SpaceBeforeBrackets:
 
 Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
+  Exclude:
+    - "**/*.erb"
 
 Lint/AmbiguousAssignment:
   Enabled: true
@@ -195,6 +213,8 @@ Style/NilLambda:
 
 Style/QuotedSymbols:
   Enabled: true
+  Exclude:
+    - "**/*.erb"
 
 Style/RaiseArgs:
   EnforcedStyle: compact
@@ -222,3 +242,104 @@ Style/TrailingCommaInArrayLiteral:
 
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: "comma"
+
+# Rules about how the layers are allowed to reach each other. See
+# docs/code-architecture-for-contributors.md.
+RailsAdmin/AdapterReference:
+  Include:
+    - "app/**/*"
+    - "lib/rails_admin/config/**/*"
+    - "lib/rails_admin/support/**/*"
+
+RailsAdmin/RawModelAccess:
+  Include:
+    - "app/**/*"
+    - "lib/**/*"
+
+RailsAdmin/RecordDecoration:
+  Include:
+    - "lib/rails_admin/adapters/**/*"
+
+Style/StringLiterals:
+  Exclude:
+    - "**/*.erb"
+
+Layout/ExtraSpacing:
+  Exclude:
+    - "**/*.erb"
+
+Style/NestedParenthesizedCalls:
+  Exclude:
+    - "**/*.erb"
+
+Layout/SpaceBeforeBlockBraces:
+  Exclude:
+    - "**/*.erb"
+
+Style/RedundantSelf:
+  Exclude:
+    - "**/*.erb"
+
+Style/StringConcatenation:
+  Exclude:
+    - "**/*.erb"
+
+Style/HashSyntax:
+  Exclude:
+    - "**/*.erb"
+
+Style/StringLiteralsInInterpolation:
+  Exclude:
+    - "**/*.erb"
+
+Layout/SpaceAfterColon:
+  Exclude:
+    - "**/*.erb"
+
+Layout/SpaceAroundOperators:
+  Exclude:
+    - "**/*.erb"
+
+Style/IfUnlessModifierOfIfUnless:
+  Exclude:
+    - "**/*.erb"
+
+Style/RedundantCondition:
+  Exclude:
+    - "**/*.erb"
+
+Style/SafeNavigation:
+  Exclude:
+    - "**/*.erb"
+
+Style/WordArray:
+  Exclude:
+    - "**/*.erb"
+
+Layout/SpaceAfterComma:
+  Exclude:
+    - "**/*.erb"
+
+Layout/SpaceInsideBlockBraces:
+  Exclude:
+    - "**/*.erb"
+
+Performance/StringReplacement:
+  Exclude:
+    - "**/*.erb"
+
+Style/ColonMethodCall:
+  Exclude:
+    - "**/*.erb"
+
+Style/InverseMethods:
+  Exclude:
+    - "**/*.erb"
+
+Style/NegatedIf:
+  Exclude:
+    - "**/*.erb"
+
+Style/SelfAssignment:
+  Exclude:
+    - "**/*.erb"

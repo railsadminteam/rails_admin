@@ -157,6 +157,14 @@ RSpec.describe 'New action', type: :request do
     end
   end
 
+  # The form posts nothing under the model's key, which used to reach
+  # assign_attributes(nil).
+  context 'with nothing posted for the model' do
+    it 'does not raise' do
+      expect { post new_path(model_name: 'player') }.not_to raise_error
+    end
+  end
+
   context 'with invalid object' do
     before do
       post new_path(model_name: 'player', player: {id: 1})

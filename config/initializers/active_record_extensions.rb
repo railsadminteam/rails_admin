@@ -7,11 +7,8 @@ ActiveSupport.on_load(:active_record) do
         RailsAdmin.config(self, &block)
       end
 
-      def rails_admin_default_object_label_method
-        new_record? ? "new #{self.class}" : "#{self.class} ##{id}"
-      end
-
       def safe_send(value)
+        RailsAdmin.deprecator.warn('#safe_send is deprecated, please use RailsAdmin::AbstractModel#read.')
         if has_attribute?(value)
           read_attribute(value)
         else

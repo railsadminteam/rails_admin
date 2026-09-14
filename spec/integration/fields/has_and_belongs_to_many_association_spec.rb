@@ -71,7 +71,7 @@ RSpec.describe 'HasAndBelongsToManyAssociation field', type: :request do
       expect(find("select#managing_user_player_names option[value=\"#{players[0].name}\"]")).to be_selected
       expect(find("select#managing_user_ball_ids option[value=\"#{balls[0].color}\"]")).to be_selected
       select(players[1].name, from: 'Players')
-      select(balls[1].rails_admin_default_object_label_method, from: 'Balls')
+      select(RailsAdmin.config(Ball).object_label(balls[1]), from: 'Balls')
       click_button 'Save'
       expect(ManagingUser.first.players).to match_array players
       expect(ManagingUser.first.balls).to match_array balls

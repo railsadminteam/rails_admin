@@ -5,6 +5,8 @@ require File.expand_path('../../config/initializers/active_record_extensions', _
 
 RSpec.describe 'ActiveRecord::Base', active_record: true do
   describe '#safe_send' do
+    before { allow(RailsAdmin.deprecator).to receive(:warn) }
+
     it 'only calls #read_attribute once' do
       @player = Player.new
       @player.number = 23
@@ -13,6 +15,11 @@ RSpec.describe 'ActiveRecord::Base', active_record: true do
         original_method.call(*args)
       end
       expect(@player.safe_send(:number)).to eq(23)
+    end
+
+    it 'is deprecated' do
+      Player.new.safe_send(:number)
+      expect(RailsAdmin.deprecator).to have_received(:warn).with(/safe_send is deprecated/)
     end
   end
 end

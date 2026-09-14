@@ -32,7 +32,7 @@ module RailsAdmin
                 scope = @authorization_adapter&.query(:index, config.abstract_model)
                 current_count = config.abstract_model.count({}, scope)
                 @max = current_count > @max ? current_count : @max
-                name = config.abstract_model.model.name
+                name = config.abstract_model.model_name
                 @count[name] = current_count
                 @most_recent_created[name] = config.last_created_at
               end
