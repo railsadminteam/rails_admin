@@ -2,6 +2,7 @@
 
 require 'rails_admin/config/lazy_model'
 require 'rails_admin/config/sections/list'
+require 'rails_admin/support/asset_source'
 require 'rails_admin/support/composite_keys_serializer'
 require 'active_support/core_ext/module/attribute_accessors'
 
@@ -82,7 +83,9 @@ module RailsAdmin
       attr_accessor :navigation_static_links
       attr_accessor :navigation_static_label
 
-      # Set where RailsAdmin fetches JS/CSS from, defaults to :sprockets
+      # How RailsAdmin serves its JS/CSS: :propshaft / :sprockets (bundle shipped in the
+      # gem, no build step), :external (your app builds it), or a callable rendering the
+      # <head> tags itself. nil (default) auto-detects the pipeline.
       attr_writer :asset_source
 
       # For customization of composite keys representation
@@ -247,17 +250,7 @@ module RailsAdmin
       end
 
       def asset_source
-        @asset_source ||=
-          begin
-            detected = defined?(Sprockets) ? :sprockets : :invalid
-            unless ARGV.join(' ').include? 'rails_admin:install'
-              warn <<~MSG
-                [Warning] After upgrading RailsAdmin to 3.x you haven't set asset_source yet, using :#{detected} as the default.
-                To suppress this message, run 'rails rails_admin:install' to setup the asset delivery method suitable to you.
-              MSG
-            end
-            detected
-          end
+        @asset_source = RailsAdmin::Support::AssetSource.resolve(@asset_source)
       end
 
       def default_hidden_fields=(fields)

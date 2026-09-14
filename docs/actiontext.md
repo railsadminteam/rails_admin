@@ -26,65 +26,28 @@ end
 
 ## Setting up the frontend
 
-The method you should take varies depending on how your application is configured to deliver RailsAdmin assets.
+### `:propshaft` / `:sprockets` (default)
 
-### Sprockets
+The bundle already includes the `@rails/actiontext` and `@rails/activestorage`
+glue, so attachment uploads work out of the box. Trix itself is loaded from a CDN
+when a `<trix-editor>` appears - to serve it statically, use `:external` below.
 
-RailsAdmin will automatically load required assets. No setup is needed.
+### `:external`
 
-### ImportMap
-
-Install the ActionText NPM package.
-
-```bash
-$ yarn add @rails/actiontext
-```
-
-Add following contents to files within your Rails application.
-
-`config/importmap.rails_admin.rb` (be sure to use the latest version for each package!)
-
-```ruby
-pin '@rails/actioncable/src', to: 'https://ga.jspm.io/npm:@rails/actioncable@7.0.4/src/index.js'
-pin '@rails/actiontext', to: 'https://ga.jspm.io/npm:@rails/actiontext@7.0.4-1/app/assets/javascripts/actiontext.js'
-pin '@rails/activestorage', to: 'https://ga.jspm.io/npm:@rails/activestorage@7.0.4/app/assets/javascripts/activestorage.esm.js'
-pin 'trix', to: 'https://ga.jspm.io/npm:trix@2.0.0-beta.0/dist/trix.js'
-```
+Add Trix (and its stylesheet) to the bundle you build:
 
 `app/javascript/rails_admin.js`
 
 ```js
+import "rails_admin/src/rails_admin/base";
 import "trix";
-import "@rails/actiontext";
 ```
 
-`app/assets/stylesheets/rails_admin.scss`
+`app/javascript/rails_admin.scss`
 
-```css
+```scss
 @import "trix/dist/trix";
+@import "rails_admin/src/rails_admin/styles/base";
 ```
 
-### Webpacker or Webpack
-
-Install the ActionText NPM package.
-
-```bash
-$ yarn add @rails/actiontext
-```
-
-Add following contents to files within your Rails application.
-
-`app/javascript/packs/rails_admin.js` or `app/javascript/rails_admin.js`
-
-```js
-import "trix";
-import "@rails/actiontext";
-```
-
-`app/javascript/stylesheets/rails_admin.scss` or `app/assets/stylesheets/rails_admin.scss`
-
-```css
-@import "trix/dist/trix";
-```
-
-[More here](https://github.com/sferik/rails_admin/blob/master/lib/rails_admin/config/fields/types/action_text.rb)
+[More here](https://github.com/railsadminteam/rails_admin/blob/master/lib/rails_admin/config/fields/types/action_text.rb)

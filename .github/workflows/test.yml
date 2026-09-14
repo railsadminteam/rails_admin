@@ -15,18 +15,18 @@ jobs:
         gemfile: [gemfiles/rails_8.1.gemfile]
         orm: [active_record]
         adapter: [sqlite3]
-        asset: [webpack]
+        asset: [propshaft]
         include:
+          - ruby: "3.4"
+            gemfile: gemfiles/rails_8.1.gemfile
+            orm: active_record
+            adapter: sqlite3
+            asset: external
           - ruby: 2.7
             gemfile: gemfiles/rails_7.0.gemfile
             orm: active_record
             adapter: sqlite3
             asset: sprockets
-          - ruby: 2.7
-            gemfile: gemfiles/rails_7.0.gemfile
-            orm: active_record
-            adapter: sqlite3
-            asset: webpacker
           - ruby: "3.0"
             gemfile: gemfiles/rails_7.0.gemfile
             orm: active_record
@@ -51,7 +51,7 @@ jobs:
             gemfile: gemfiles/rails_8.1.gemfile
             orm: active_record
             adapter: mysql2
-            asset: importmap
+            asset: propshaft
           - ruby: "3.4"
             gemfile: gemfiles/rails_8.1.gemfile
             orm: active_record
@@ -61,7 +61,7 @@ jobs:
             gemfile: gemfiles/rails_8.1.gemfile
             orm: active_record
             adapter: sqlite3
-            asset: vite
+            asset: external
           - ruby: "3.4"
             gemfile: gemfiles/rails_8.1.gemfile
             orm: active_record
@@ -148,10 +148,13 @@ jobs:
         env:
           MAKEFLAGS: make --jobs 4
           BUNDLE_WITHOUT: development
+      # Only the :external asset_source builds anything; :propshaft / :sprockets
+      # serve the committed bundle, so those jobs run with no Node at all.
       - name: Set up Node
+        if: matrix.asset == 'external'
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
       - name: Install ImageMagick
         run: sudo apt-get install imagemagick
       - name: Setup application
@@ -160,17 +163,10 @@ jobs:
           CI_ASSET: ${{ matrix.asset }}
           CI_DB_ADAPTER: ${{ matrix.adapter }}
           RAILS_ENV: test
-          NODE_OPTIONS: --openssl-legacy-provider
         run: |
-          yarn install
+          if [ "${{ matrix.asset }}" = "external" ]; then npm ci; fi
           cd spec/dummy_app
           bundle exec rake rails_admin:prepare_ci_env db:create db:schema:load
-          yarn install
-          case "$CI_ASSET" in
-          "webpack" ) yarn build && yarn build:css ;;
-          "importmap" ) yarn build:css ;;
-          esac
-          cd ../../
       - name: Run tests
         run: bundle exec rspec
       - name: Coveralls Parallel
@@ -194,6 +190,26 @@ jobs:
           github-token: ${{ secrets.github_token }}
           parallel-finished: true
 
+  assets:
+    name: Precompiled assets (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ["20", "22"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Install dependencies
+        run: npm ci
+      - name: Rebuild assets
+        run: npm run build
+      - name: Check committed assets are up to date
+        run: git diff --exit-code -- app/assets/builds
+
   prettier:
     name: Prettier
     runs-on: ubuntu-latest
@@ -201,10 +217,12 @@ jobs:
       - uses: actions/checkout@v4
       - name: Set up Node.js
         uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       - name: Install dependencies
-        run: yarn install
+        run: npm ci
       - name: Run check
-        run: yarn run prettier --check .
+        run: npm run format:check
 
   rubocop:
     name: RuboCop

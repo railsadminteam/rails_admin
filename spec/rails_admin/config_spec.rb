@@ -3,6 +3,20 @@
 require 'spec_helper'
 
 RSpec.describe RailsAdmin::Config do
+  describe '.asset_source' do
+    after { RailsAdmin::Config.reset }
+
+    it 'resolves and memoizes the value through Support::AssetSource' do
+      RailsAdmin::Config.asset_source = :external
+      expect(RailsAdmin::Config.asset_source).to eq :external
+    end
+
+    it 'auto-detects the pipeline when unset' do
+      RailsAdmin::Config.asset_source = nil
+      expect(RailsAdmin::Config.asset_source).to be_in(%i[propshaft sprockets])
+    end
+  end
+
   describe '.included_models' do
     it 'only uses included models' do
       RailsAdmin.config.included_models = [Team, League]
