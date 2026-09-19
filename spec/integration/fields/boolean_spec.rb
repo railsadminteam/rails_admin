@@ -63,6 +63,7 @@ RSpec.describe 'Boolean field', type: :request do
       # set the value to false and assert the values
       find('.boolean_type label.danger').click
       click_button 'Save and edit'
+      is_expected.to have_content 'Field test successfully updated'
       expect(field_test.reload.comment.content).to eq '0'
     end
   end
