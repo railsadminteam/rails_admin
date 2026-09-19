@@ -70,15 +70,11 @@ RSpec.describe 'PolymorphicAssociation field', type: :request do
       visit edit_path(model_name: 'comment', id: comment.id)
       expect(find('select#comment_commentable_type').value).to eq 'Team'
       expect(find('select#comment_commentable_id', visible: false).value).to eq team.id.to_s
-      find('input.ra-filtering-select-input').set('Los')
-      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
-      expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: 'Los Angeles Dodgers')
-      expect(all('ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to eq ['Los Angeles Dodgers']
+      filter_by 'Los'
+      expect_autocomplete_items ['Los Angeles Dodgers']
       select 'Player', from: 'comment[commentable_type]'
-      find('input.ra-filtering-select-input').set('Rob')
-      page.execute_script("document.querySelector('input.ra-filtering-select-input').dispatchEvent(new KeyboardEvent('keydown'))")
-      expect(page).to have_selector('ul.ui-autocomplete li.ui-menu-item a', text: 'Jackie Robinson')
-      expect(all('ul.ui-autocomplete li.ui-menu-item a').map(&:text)).to eq ['Rob Wooten', 'Jackie Robinson']
+      filter_by 'Rob'
+      expect_autocomplete_items ['Rob Wooten', 'Jackie Robinson']
       page.execute_script %{[...document.querySelectorAll('ul.ui-autocomplete li.ui-menu-item')].find(e => e.innerText.includes("Jackie Robinson")).click()}
       click_button 'Save'
       is_expected.to have_content 'Comment successfully updated'
