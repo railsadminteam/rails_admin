@@ -21,6 +21,7 @@ RSpec.describe 'Shrine field', type: :request, active_record: true do
     expect(page).to have_content 'Field test failed to be created'
     fill_in 'field_test[string_field]', with: ''
     click_button 'Save'
+    expect(page).to have_content 'Field test successfully created'
     expect(FieldTest.first.shrine_asset).to exist
   end
 end

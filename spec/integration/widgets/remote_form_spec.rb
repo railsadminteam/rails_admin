@@ -35,8 +35,9 @@ RSpec.describe 'Remote form widget', type: :request, js: true do
       is_expected.to have_content 'New League'
       fill_in 'Name', with: 'National League'
       find('#modal .save-action').click
-      expect(find('#division_custom_league_id', visible: false).value).to eq League.first.id.to_s
+      is_expected.to have_field(class: 'ra-filtering-select-input', with: 'National League')
       expect(League.pluck(:name)).to eq ['National League']
+      expect(find('#division_custom_league_id', visible: false).value).to eq League.first.id.to_s
     end
 
     it 'updates the associated record' do
@@ -46,6 +47,7 @@ RSpec.describe 'Remote form widget', type: :request, js: true do
       is_expected.to have_content "Edit League '#{league.name}'"
       fill_in 'Name', with: 'National League'
       find('#modal .save-action').click
+      is_expected.to have_field(class: 'ra-filtering-select-input', with: 'National League')
       expect(find('#division_custom_league_id', visible: false).value).to eq league.id.to_s
       expect(league.reload.name).to eq 'National League'
     end
@@ -94,6 +96,7 @@ RSpec.describe 'Remote form widget', type: :request, js: true do
       is_expected.to have_content "Edit Division 'National League Central'"
       fill_in 'Name', with: 'National League East'
       find('#modal .save-action').click
+      is_expected.to have_css('.ra-multiselect-selection option', text: 'National League East')
       expect(find('#league_division_ids', visible: false).value).to eq [division.id.to_s]
       expect(division.reload.name).to eq 'National League East'
     end
