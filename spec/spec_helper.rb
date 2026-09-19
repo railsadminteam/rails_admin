@@ -49,7 +49,13 @@ require 'capybara/cuprite'
 Capybara.javascript_driver = :cuprite
 Capybara.register_driver(:cuprite) do |app|
   # Refs. https://github.com/rubycdp/ferrum/issues/470
-  Capybara::Cuprite::Driver.new(app, flatten: RUBY_ENGINE != 'jruby', js_errors: true, logger: ConsoleLogger)
+  #
+  # A cold CI runner regularly takes longer than Ferrum's ten second default to
+  # get the first Chrome up far enough to report its websocket URL, which shows
+  # up as a Ferrum::ProcessTimeoutError on whichever js example happens to run
+  # first. Waiting longer costs nothing when the browser does start.
+  Capybara::Cuprite::Driver.new(app, flatten: RUBY_ENGINE != 'jruby', js_errors: true, logger: ConsoleLogger,
+                                     process_timeout: 60)
 end
 Capybara.server = :webrick
 
@@ -87,6 +93,17 @@ RSpec.configure do |config|
   config.around :each, :js do |example|
     example.run_with_retry retry: (ENV['CI'] && RUBY_ENGINE == 'jruby' ? 3 : 2)
   end
+  # Capybara's own after hook resets the sessions before it restores the driver,
+  # so when resetting raises - which a browser that died during a js example
+  # reliably does - the driver is left pointing at cuprite, and the non-js
+  # examples that follow run through the browser instead of rack_test. They then
+  # fail in ways that have nothing to do with what they test: a download rather
+  # than a rendered page, for one. after hooks run in reverse order of
+  # definition, so this one restores the driver before Capybara can give up.
+  config.after do
+    Capybara.use_default_driver
+  end
+
   config.retry_callback = proc do |example|
     example.metadata[:retry] = 6 if [Ferrum::DeadBrowserError, Ferrum::NoExecutionContextError, Ferrum::TimeoutError].include?(example.exception.class)
     if example.metadata[:js]
