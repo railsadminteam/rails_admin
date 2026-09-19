@@ -10,7 +10,10 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :sortable do
-            @sortable ||= abstract_model.adapter_supports_joins? && associated_model_config.abstract_model.properties.collect(&:name).include?(associated_model_config.object_label_method) ? associated_model_config.object_label_method : {abstract_model.table_name => method_name}
+            # Sort by whatever labels the associated record, when that is an
+            # attribute the store knows about. Reaching it may take a join or may
+            # not be possible at all, but that is the adapter's problem now.
+            @sortable ||= associated_model_config.abstract_model.properties.collect(&:name).include?(associated_model_config.object_label_method) ? associated_model_config.object_label_method : {abstract_model.table_name => method_name}
           end
 
           register_instance_option :searchable do
@@ -27,9 +30,9 @@ module RailsAdmin
 
           def selected_id
             if association.foreign_key.is_a?(Array)
-              format_key(association.foreign_key.map { |attribute| bindings[:object].safe_send(attribute) })
+              format_key(association.foreign_key.map { |attribute| abstract_model.read(bindings[:object], attribute) })
             else
-              bindings[:object].safe_send(association.key_accessor)
+              abstract_model.read(bindings[:object], association.key_accessor)
             end
           end
 
@@ -37,7 +40,8 @@ module RailsAdmin
             return super if nested_form
             return unless params[method_name].present? && association.foreign_key.is_a?(Array)
 
-            association.foreign_key.zip(RailsAdmin.config.composite_keys_serializer.deserialize(params.delete(method_name))).each do |key, value|
+            keys = associated_model_config.abstract_model.parse_id(params.delete(method_name))
+            association.foreign_key.zip(keys).each do |key, value|
               params[key] = value
             end
           end

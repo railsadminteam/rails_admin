@@ -48,5 +48,29 @@ RSpec.describe 'RailsAdmin::FormBuilder', type: :helper do
         expect(@builder.object_infos).to eql '<span style="display:none" class="object-infos" data-model-label="Fan" data-object-label="foo"></span>'
       end
     end
+
+    # A nested form names a record whose label method has nothing to say after
+    # the model label, where the rest of the admin uses the class name.
+    context 'when the label method has nothing to say' do
+      before do
+        RailsAdmin.config(Fan) { label 'Supporter' }
+        @object.name = ''
+      end
+
+      it 'labels it with the model label and the id' do
+        expect(@builder.object_infos).to include %(data-object-label="Supporter ##{@object.id}")
+      end
+    end
+
+    context 'when the model has no label method' do
+      before { RailsAdmin.config(Comment) { label 'Remark' } }
+
+      it 'labels it with the class and the id' do
+        object = Comment.create!
+        builder = RailsAdmin::FormBuilder.new(:comment, object, helper, {})
+
+        expect(builder.object_infos).to include %(data-object-label="Comment ##{object.id}")
+      end
+    end
   end
 end

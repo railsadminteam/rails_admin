@@ -4,6 +4,34 @@
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.3.0...HEAD)
 
+### Added
+
+- Allow adapters for other ORMs to be provided from outside RailsAdmin, by registering them with `RailsAdmin::Adapters.register` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+
+### Changed
+
+- Plugins which extend or reopen `RailsAdmin::Adapters::ActiveRecord` or `RailsAdmin::Adapters::Mongoid` to change how RailsAdmin reads or queries models need to target the adapter's `Reflection` or `Repository` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- Overriding `#sort_column` in a custom field no longer affects sorting; override `#sort_order` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- Records from `AbstractModel#new` and `#get` on ActiveRecord no longer ignore `assign_attributes(nil)` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- On Mongoid, `@object.save` in a custom action no longer saves the children of a new document's non-autosave `has_many` and `has_one` associations; use `@abstract_model.save(@object)` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- Deprecate `#safe_send` on models, which RailsAdmin no longer uses; use `RailsAdmin::AbstractModel#read` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+
+### Removed
+
+- `#rails_admin_default_object_label_method` is no longer defined on models, and `object_label_method` is nil for a model which responds to none of `config.label_methods` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+
+### Fixed
+
+- Fix CSV export ignoring the order the list is sorted in; an export of a list which is not explicitly sorted now comes out newest first, as the list does ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752), [#2580](https://github.com/railsadminteam/rails_admin/issues/2580))
+- Fix CSV export holding every record in memory at once ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752), [#2580](https://github.com/railsadminteam/rails_admin/issues/2580))
+- Fix the list raising an error when an enum field's options come from a class method on the model ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- Fix records whose label method returns blank being shown without a label, such as in association fields and history ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- Fix the "Today" and "This week" date filters selecting the wrong dates while the system clock and the application time zone disagree on the date ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- Fix `config.default_search_operator` not applying to filters on Mongoid ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- Fix an error on Mongoid for a field configured as `:time` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- Fix records whose composite primary key contains an underscore being unreachable ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- Fix records loaded by RailsAdmin on Mongoid failing to be dumped with Marshal, as `Rails.cache.write` does ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+
 ## [3.3.0](https://github.com/railsadminteam/rails_admin/tree/v3.3.0) - 2024-12-08
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.2.1...v3.3.0)

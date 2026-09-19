@@ -9,7 +9,8 @@ module RailsAdmin
       @associations = []
       schema ||= {}
 
-      return self if (@objects = objects).blank?
+      # Not blank?, which loads a relation whole just to find out.
+      return self if (@objects = objects).nil? || objects.empty?
 
       @model = objects.dup.first.class
       @abstract_model = RailsAdmin::AbstractModel.new(@model)
@@ -63,12 +64,11 @@ module RailsAdmin
 
     def generate_csv_string(options)
       generator_options = (options[:generator] || {}).symbolize_keys.delete_if { |_, value| value.blank? }
-      method = @objects.respond_to?(:find_each) ? :find_each : :each
 
       CSV.generate(**generator_options) do |csv|
         csv << generate_csv_header unless options[:skip_header]
 
-        @objects.send(method) do |object|
+        @abstract_model&.each_record(@objects) do |object|
           csv << generate_csv_row(object)
         end
       end

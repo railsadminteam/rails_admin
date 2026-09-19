@@ -9,7 +9,7 @@
   export_action = RailsAdmin::Config::Actions.find(:export, { controller: self.controller, abstract_model: @abstract_model })
   export_action = nil unless export_action && authorized?(export_action.authorization_key, @abstract_model)
   description = RailsAdmin.config(@abstract_model.model_name).description
-  properties = @model_config.list.with(controller: self.controller, view: self, object: @abstract_model.model.new).fields_for_table
+  properties = @model_config.list.with(controller: self.controller, view: self, object: @abstract_model.dummy_record).fields_for_table
   checkboxes = @model_config.list.checkboxes?
   table_table_header_count = begin
     count = checkboxes ? 1 : 0
