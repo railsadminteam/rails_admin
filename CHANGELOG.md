@@ -31,6 +31,8 @@
 - Fix an error on Mongoid for a field configured as `:time` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 - Fix records whose composite primary key contains an underscore being unreachable ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 - Fix records loaded by RailsAdmin on Mongoid failing to be dumped with Marshal, as `Rails.cache.write` does ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- Fix the list raising an error instead of rendering when the filter parameters in the URL are malformed ([#3754](https://github.com/railsadminteam/rails_admin/issues/3754))
+- Fix a filter or search term which cannot be read as the field's type, such as a date out of range, raising an error instead of being ignored ([#3754](https://github.com/railsadminteam/rails_admin/issues/3754))
 
 ## [3.3.0](https://github.com/railsadminteam/rails_admin/tree/v3.3.0) - 2024-12-08
 

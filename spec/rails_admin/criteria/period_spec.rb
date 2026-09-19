@@ -14,6 +14,13 @@ RSpec.describe RailsAdmin::Criteria::Period do
         to eq [Date.new(2012, 2, 1), nil]
     end
 
+    # A range filter written by hand can arrive without the array of bounds the
+    # filter UI submits.
+    it 'leaves a range with no bounds open at both ends' do
+      expect(described_class.new('between', nil).bounds).to eq [nil, nil]
+      expect(described_class.new('between', Date.new(2012, 2, 1)).bounds).to eq [nil, nil]
+    end
+
     it 'resolves a single value to a point' do
       expect(described_class.new('default', [Date.new(2012, 2, 1)]).bounds).
         to eq [Date.new(2012, 2, 1), Date.new(2012, 2, 1)]

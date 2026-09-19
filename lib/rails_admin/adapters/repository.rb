@@ -111,7 +111,17 @@ module RailsAdmin
     private
 
       def parse_field_value(field, value)
-        value.is_a?(Array) ? value.map { |v| field.parse_value(v) } : field.parse_value(value)
+        value.is_a?(Array) ? value.map { |v| parse_one_value(field, v) } : parse_one_value(field, value)
+      end
+
+      # What reaches here came from the query string, so a field is regularly
+      # handed something it cannot make sense of -- a date out of range, YAML
+      # which does not parse. A field which cannot read the term takes no part in
+      # the condition, rather than taking the whole page down with it.
+      def parse_one_value(field, value)
+        field.parse_value(value)
+      rescue StandardError
+        nil
       end
 
       # The search box asks every queryable field about the same term. Yields
@@ -134,14 +144,22 @@ module RailsAdmin
       #
       # filters looks like {"string_field" => {"0055" => {"o" => "like", "v" => "x"}}}
       # where "0055" is the filter index and has no meaning here.
+      #
+      # Nothing guarantees that shape: the filters are read straight off the
+      # query string, which anyone can write by hand. Anything which is not the
+      # nesting the filter UI submits is ignored, so that a hand-written URL
+      # leaves the list unfiltered rather than raising.
       def each_filter_condition(filters, fields)
         return to_enum(:each_filter_condition, filters, fields) unless block_given?
+        return unless filters.respond_to?(:each_pair)
 
         filters.each_pair do |field_name, filters_dump|
           field = fields.detect { |f| f.name.to_s == field_name }
-          next unless field
+          next unless field && filters_dump.respond_to?(:each_value)
 
           filters_dump.each_value do |filter_dump|
+            next unless filter_dump.respond_to?(:each_pair)
+
             yield field, parse_field_value(field, filter_dump[:v]), (filter_dump[:o] || RailsAdmin::Config.default_search_operator)
           end
         end

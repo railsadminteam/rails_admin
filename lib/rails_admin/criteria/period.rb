@@ -47,8 +47,12 @@ module RailsAdmin
         [last_week_day.beginning_of_week, last_week_day.end_of_week]
       end
 
+      # The filter UI submits three values, of which the last two are the bounds.
+      # A hand-written URL may carry fewer, or none at all, leaving the period
+      # open at both ends -- which every caller already handles.
       def between
-        [@value[1], @value[2]]
+        bounds = Array.wrap(@value)
+        [bounds[1], bounds[2]]
       end
 
       def default

@@ -177,6 +177,25 @@ RSpec.shared_examples 'a RailsAdmin adapter' do
           not_to raise_error
       end
 
+      # Filters are read straight off the query string, so nothing guarantees
+      # the nesting the filter UI submits. A hand-written URL has to leave the
+      # list unfiltered rather than take the page down.
+      it 'ignores filters which are not shaped the way the filter UI submits them' do
+        ['invalid', %w[invalid], {'name' => 'invalid'}, {'name' => {'0000' => 'invalid'}}].each do |filters|
+          expect { abstract_model.all(filters: filters).to_a }.not_to raise_error
+        end
+      end
+
+      it 'ignores a filter whose value the field cannot read' do
+        expect { abstract_model.all(filters: {'born_on' => {'0000' => {o: 'default', v: '2012-13-45'}}}).to_a }.
+          not_to raise_error
+      end
+
+      it 'ignores a between filter which arrives without its bounds' do
+        expect { abstract_model.all(filters: {'born_on' => {'0000' => {o: 'between', v: 'invalid'}}}).to_a }.
+          not_to raise_error
+      end
+
       # The field types that offer no operator in the filter UI submit none, so
       # the configured default is what those filters end up using.
       it 'falls back to the configured default search operator for a filter with no operator' do
