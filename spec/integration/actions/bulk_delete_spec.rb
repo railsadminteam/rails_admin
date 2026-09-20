@@ -87,6 +87,20 @@ RSpec.describe 'BulkDelete action', type: :request do
     end
   end
 
+  context 'with a configured label_plural' do
+    before do
+      RailsAdmin.config Player do
+        label_plural 'Sportlers'
+      end
+      @players = Array.new(2) { FactoryBot.create(:player) }
+    end
+
+    it 'uses it instead of pluralizing label' do
+      delete(bulk_delete_path(bulk_action: 'bulk_delete', model_name: 'player', bulk_ids: @players.collect(&:id)))
+      expect(flash[:success]).to match(/2 Sportlers successfully deleted/)
+    end
+  end
+
   context 'with composite primary keys', composite_primary_keys: true do
     let!(:fanships) { FactoryBot.create_list(:fanship, 3) }
 
