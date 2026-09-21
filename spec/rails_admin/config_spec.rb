@@ -364,6 +364,15 @@ RSpec.describe RailsAdmin::Config do
         end
       end
     end
+
+    context 'when registered by a string with a leading top-level scope operator' do
+      it 'is found under the same config as the bare model' do
+        described_class.model('::Team') do
+          field :mascot
+        end
+        expect(described_class.model(Team).fields.map(&:name)).to include(:mascot)
+      end
+    end
   end
 
   describe '.reset' do

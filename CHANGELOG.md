@@ -34,6 +34,7 @@
 - Fix the list raising an error instead of rendering when the filter parameters in the URL are malformed ([#3754](https://github.com/railsadminteam/rails_admin/issues/3754))
 - Fix a filter or search term which cannot be read as the field's type, such as a date out of range, raising an error instead of being ignored ([#3754](https://github.com/railsadminteam/rails_admin/issues/3754))
 - Fix the bulk delete flash message pluralizing a model's `label` instead of using its configured `label_plural` ([#2286](https://github.com/railsadminteam/rails_admin/issues/2286))
+- Fix `RailsAdmin.config`/`config.model` silently ignoring a model registered by a string or symbol name with a leading `::`, such as `'::Order'` ([#2607](https://github.com/railsadminteam/rails_admin/issues/2607))
 
 ## [3.3.0](https://github.com/railsadminteam/rails_admin/tree/v3.3.0) - 2024-12-08
 

@@ -236,7 +236,8 @@ module RailsAdmin
           when Class, ConstLoadSuppressor::ConstProxy
             entity.name.to_sym
           when String, Symbol
-            entity.to_sym
+            # Class#name never has a leading '::', so strip it here too.
+            entity.to_s.delete_prefix('::').to_sym
           else
             entity.class.name.to_sym
           end
