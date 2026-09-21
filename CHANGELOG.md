@@ -52,6 +52,7 @@
 - Fix the bulk delete flash message pluralizing a model's `label` instead of using its configured `label_plural` ([#2286](https://github.com/railsadminteam/rails_admin/issues/2286))
 - Fix `RailsAdmin.config`/`config.model` silently ignoring a model registered by a string or symbol name with a leading `::`, such as `'::Order'` ([#2607](https://github.com/railsadminteam/rails_admin/issues/2607))
 - Fix the viewport meta tag's `name` attribute carrying a stray `; charset=utf-8`, which kept mobile browsers from collapsing the navbar ([#2812](https://github.com/railsadminteam/rails_admin/issues/2812))
+- Fix a SimpleMDE field staying blank until clicked into when its nested-form tab wasn't the initially active one ([#3317](https://github.com/railsadminteam/rails_admin/issues/3317))
 
 ## [3.3.0](https://github.com/railsadminteam/rails_admin/tree/v3.3.0) - 2024-12-08
 

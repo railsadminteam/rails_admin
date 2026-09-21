@@ -267,10 +267,10 @@ import I18n from "./i18n.js";
           .find("[data-richtext=simplemde]")
           .not(".simplemded")
           .each(function (index, domEle) {
-            var instance_config, options;
+            var instance_config, options, editor;
             options = $(this).data("options");
             instance_config = options.instance_config;
-            new window.SimpleMDE(
+            editor = new window.SimpleMDE(
               $.extend(
                 true,
                 {
@@ -283,6 +283,10 @@ import I18n from "./i18n.js";
               )
             );
             $(this).addClass("simplemded");
+            // CodeMirror mismeasures itself while hidden; refresh() once it's actually laid out.
+            new ResizeObserver(function () {
+              editor.codemirror.refresh();
+            }).observe(editor.codemirror.getWrapperElement());
           });
       };
       $editors = content.find("[data-richtext=simplemde]").not(".simplemded");
