@@ -53,6 +53,7 @@
 - Fix `RailsAdmin.config`/`config.model` silently ignoring a model registered by a string or symbol name with a leading `::`, such as `'::Order'` ([#2607](https://github.com/railsadminteam/rails_admin/issues/2607))
 - Fix the viewport meta tag's `name` attribute carrying a stray `; charset=utf-8`, which kept mobile browsers from collapsing the navbar ([#2812](https://github.com/railsadminteam/rails_admin/issues/2812))
 - Fix a SimpleMDE field staying blank until clicked into when its nested-form tab wasn't the initially active one ([#3317](https://github.com/railsadminteam/rails_admin/issues/3317))
+- Fix a reorder in `associated_collection_scope` being undone by the associated model's own list sort ([#2430](https://github.com/railsadminteam/rails_admin/issues/2430))
 
 ## [3.3.0](https://github.com/railsadminteam/rails_admin/tree/v3.3.0) - 2024-12-08
 

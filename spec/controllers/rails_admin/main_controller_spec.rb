@@ -242,6 +242,20 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
 
       expect(controller.list_entries.to_a).to eq(@players.sort_by(&:id).reverse)
     end
+
+    it 'orders associated collection records as associated_collection_scope reordered them' do
+      %w[Charlie Alice Bob].each { |name| FactoryBot.create(:player, name: name) }
+
+      RailsAdmin.config Team do
+        field :players do
+          associated_collection_scope do
+            proc { |scope| scope.reorder(name: :asc) }
+          end
+        end
+      end
+
+      expect(controller.list_entries.to_a.collect(&:name)).to eq(%w[Alice Bob Charlie])
+    end
   end
 
   describe '#action_missing' do
