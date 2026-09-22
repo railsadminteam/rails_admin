@@ -54,6 +54,7 @@
 - Fix the viewport meta tag's `name` attribute carrying a stray `; charset=utf-8`, which kept mobile browsers from collapsing the navbar ([#2812](https://github.com/railsadminteam/rails_admin/issues/2812))
 - Fix a SimpleMDE field staying blank until clicked into when its nested-form tab wasn't the initially active one ([#3317](https://github.com/railsadminteam/rails_admin/issues/3317))
 - Fix a reorder in `associated_collection_scope` being undone by the associated model's own list sort ([#2430](https://github.com/railsadminteam/rails_admin/issues/2430))
+- Fix filtering an enum field for blank or present raising a type error on PostgreSQL, by no longer comparing the column against an empty string ([#2590](https://github.com/railsadminteam/rails_admin/issues/2590))
 
 ## [3.3.0](https://github.com/railsadminteam/rails_admin/tree/v3.3.0) - 2024-12-08
 

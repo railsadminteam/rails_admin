@@ -652,6 +652,15 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       expect(build_statement(:enum, '1', nil)).to eq(['(field IN (?))', ['1']])
     end
 
+    it "supports '_blank' and '_present' operators on an enum without comparing it against ''" do
+      [['_blank', ''], ['', '_blank']].each do |value, operator|
+        expect(build_statement(:enum, value, operator)).to eq(['(field IS NULL)'])
+      end
+      [['_present', ''], ['', '_present']].each do |value, operator|
+        expect(build_statement(:enum, value, operator)).to eq(['(field IS NOT NULL)'])
+      end
+    end
+
     describe 'with ActiveRecord native enum' do
       let(:scope) { FieldTest.all }
 

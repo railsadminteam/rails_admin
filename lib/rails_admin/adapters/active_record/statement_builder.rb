@@ -21,6 +21,8 @@ module RailsAdmin
             uuid_unary_operators
           when :integer, :decimal, :float
             numeric_unary_operators
+          when :enum
+            enum_unary_operators
           else
             generic_unary_operators
           end
@@ -49,6 +51,9 @@ module RailsAdmin
         end
         alias_method :numeric_unary_operators, :boolean_unary_operators
         alias_method :uuid_unary_operators, :boolean_unary_operators
+        # An enum has no empty member, and comparing one against '' is a type
+        # error on stores which check.
+        alias_method :enum_unary_operators, :boolean_unary_operators
 
         def range_filter(min, max)
           if min && max && min == max
