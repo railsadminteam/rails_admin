@@ -153,7 +153,7 @@ jobs:
         with:
           node-version: "20"
       - name: Install ImageMagick
-        run: sudo apt-get install imagemagick
+        run: sudo apt-get update && sudo apt-get install -y imagemagick
       - name: Setup application
         env:
           BUNDLE_GEMFILE: ../../${{ matrix.gemfile }}
