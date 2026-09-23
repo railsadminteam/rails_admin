@@ -40,6 +40,7 @@ RailsAdmin exposes a handful of CSS custom properties on `body.rails_admin`. Ove
 | `--ra-table-sort-active-bg`                     | `rgba($info, .25)`                          | sorted column header background                                                       |
 | `--ra-table-sticky-bg`                          | `$table-bg` / `$body-bg`                    | sticky cell background while the list scrolls sideways                                |
 | `--ra-table-sort-sticky-bg`                     | `#e2eff6`                                   | sorted sticky cell background (the sticky counterpart of `--ra-table-sort-active-bg`) |
+| `--ra-autocomplete-font-size`                   | `$font-size-base * 1.1`                     | association autocomplete menu text                                                    |
 
 ```erb
 <%# app/views/layouts/rails_admin/_head_custom.html.erb %>
@@ -50,6 +51,8 @@ RailsAdmin exposes a handful of CSS custom properties on `body.rails_admin`. Ove
   }
 </style>
 ```
+
+These cover RailsAdmin's own chrome. Everything else is a plain Bootstrap component — the association autocomplete, for instance, is a `.dropdown-menu` — so Bootstrap's own `--bs-*` custom properties retheme it the same way.
 
 # Customization
 

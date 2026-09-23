@@ -23,6 +23,7 @@
 - The asset toolchain moved to npm with a committed lockfile; `npm run build` (or `rake rails_admin:build_assets`) regenerates the bundle, and CI fails if the committed output is stale ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - `config.asset_source = :webpack` now maps to `:external`, and `:importmap` falls back to the detected pipeline, both with a deprecation warning ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - [BREAKING CHANGE] Sprockets applications move from the vendored Bootstrap 5.1 fork onto Bootstrap 5.3, which shifts some styling ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- The association autocomplete is rendered as a Bootstrap dropdown, replacing its hand-written jQuery UI palette, so it follows the application theme and Bootstrap's `--bs-dropdown-*` custom properties ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 
 ### Removed
 

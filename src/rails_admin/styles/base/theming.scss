@@ -33,6 +33,7 @@ body.rails_admin {
       $table-bg
     )};
   --ra-table-sort-sticky-bg: #e2eff6;
+  --ra-autocomplete-font-size: #{$font-size-base * 1.1};
 
   .thumbnail {
     display: inline-block;
