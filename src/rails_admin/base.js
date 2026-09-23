@@ -1,5 +1,10 @@
-import Rails from "@rails/ujs";
 import "@hotwired/turbo-rails";
+import * as ActiveStorage from "@rails/activestorage";
+// The ActionText glue (~5 KB) so rich-text attachment uploads work out of the box.
+// Trix itself is not bundled - widgets.js loads it from a CDN when a <trix-editor>
+// appears without window.Trix. Bundle Trix yourself (asset_source :external) to
+// avoid the CDN entirely.
+import "@rails/actiontext";
 import "./jquery.js";
 import "./vendor/jquery_nested_form.js";
 import "bootstrap";
@@ -27,6 +32,4 @@ import "./sidescroll.js";
 import "./ui.js";
 import "./widgets.js";
 
-if (!window._rails_loaded) {
-  Rails.start();
-}
+ActiveStorage.start();

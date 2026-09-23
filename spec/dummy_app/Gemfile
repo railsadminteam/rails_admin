@@ -26,22 +26,16 @@ gem 'dragonfly', '~> 1.0'
 gem 'mini_magick', '>= 3.4'
 gem 'mlb', '>= 0.7'
 gem 'paperclip', '>= 3.4'
+gem 'propshaft', require: false
 gem 'puma'
 gem 'rails_admin', path: '../../'
 gem 'shrine', '~> 3.0'
-
-group :development, :test do
-  gem 'cssbundling-rails', require: false
-  gem 'importmap-rails', require: false
-  gem 'vite_rails', require: false
-  gem 'webpacker', require: false
-end
+# sassc-rails used to pull this in; the dummy app still boots under CI_ASSET=sprockets.
+gem 'sprockets-rails', require: false
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'sassc-rails', '~> 2.1'
-
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   # gem 'therubyracer'
 

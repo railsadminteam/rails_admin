@@ -7,6 +7,9 @@
 ### Added
 
 - Allow adapters for other ORMs to be provided from outside RailsAdmin, by registering them with `RailsAdmin::Adapters.register` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- `config.asset_source` accepts `:propshaft`, and a callable which renders the `<head>` tags itself ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- Add the `_head_custom` partial, so an application can inject its own tags into RailsAdmin's `<head>` with no build step ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- Add `--ra-*` CSS custom properties, so an application can retheme the RailsAdmin chrome without a build step ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 
 ### Changed
 
@@ -15,10 +18,23 @@
 - Records from `AbstractModel#new` and `#get` on ActiveRecord no longer ignore `assign_attributes(nil)` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 - On Mongoid, `@object.save` in a custom action no longer saves the children of a new document's non-autosave `has_many` and `has_one` associations; use `@abstract_model.save(@object)` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 - Deprecate `#safe_send` on models, which RailsAdmin no longer uses; use `RailsAdmin::AbstractModel#read` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- RailsAdmin ships a prebuilt `rails_admin.{js,css}` bundle, which `:propshaft` and `:sprockets` serve with no build step and no Node; see [the upgrade guide](docs/upgrading-to-4.md) ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- The bundle carries jQuery, jQuery UI, Bootstrap, Popper, flatpickr with every locale, `@rails/activestorage` and the `@rails/actiontext` glue; Trix is still loaded from a CDN unless you bundle it yourself with `:external` ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- The asset toolchain moved to npm with a committed lockfile; `npm run build` (or `rake rails_admin:build_assets`) regenerates the bundle, and CI fails if the committed output is stale ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- `config.asset_source = :webpack` now maps to `:external`, and `:importmap` falls back to the detected pipeline, both with a deprecation warning ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- [BREAKING CHANGE] Sprockets applications move from the vendored Bootstrap 5.1 fork onto Bootstrap 5.3, which shifts some styling ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- The association autocomplete is rendered as a Bootstrap dropdown, replacing its hand-written jQuery UI palette, so it follows the application theme and Bootstrap's `--bs-dropdown-*` custom properties ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 
 ### Removed
 
 - `#rails_admin_default_object_label_method` is no longer defined on models, and `object_label_method` is nil for a model which responds to none of `config.label_methods` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- The `rails_admin/application.{js,css}` Sprockets manifests and the `ESModuleProcessor`, which RailsAdmin wired up itself; the prebuilt bundle is served as `rails_admin.{js,css}` ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- [BREAKING CHANGE] The `rails_admin/custom/*` override files; use the `_head_custom` partial or `:external` instead ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- The `sassc-rails` dependency handling, which the prebuilt CSS makes unnecessary ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- [BREAKING CHANGE] `config.asset_source = :webpacker` and `:vite`, which now raise; use `:external` instead - Webpacker is end-of-life, and Vite still builds the `:external` entrypoints ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- The vendored Bootstrap, jQuery UI, Popper and flatpickr copies, which the bundle now resolves from npm ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- The Font Awesome `.ttf` webfont; the face ships as woff2 only ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- [BREAKING CHANGE] `@rails/ujs`, which Rails no longer ships by default; Turbo covers what RailsAdmin used it for, but an application rendering `link_to ..., method:` links inside the RailsAdmin layout needs to switch them to `data: { turbo_method: ... }` ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 
 ### Fixed
 

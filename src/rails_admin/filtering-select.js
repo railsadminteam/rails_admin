@@ -30,7 +30,7 @@ import I18n from "./i18n.js";
       // to be generated.
       if (this.filtering_select.length > 0) {
         this.input = this.filtering_select.children("input");
-        this.button = this.filtering_select.children(".input-group-btn");
+        this.button = this.filtering_select.children(".btn");
       } else {
         this.element.hide();
         this.filtering_select = this._inputGroup(this.element.attr("id"));
@@ -152,11 +152,9 @@ import I18n from "./i18n.js";
     },
 
     _buttonField: function () {
+      // A direct child of .input-group, so Bootstrap joins it to the input.
       return $(
-        '<span class="input-group-btn">' +
-          '<label class="btn btn-info dropdown-toggle" title="Show All Items" role="button">' +
-          "</label>" +
-          "</span>"
+        '<label class="btn btn-info dropdown-toggle" title="Show All Items" role="button"></label>'
       );
     },
 
@@ -212,6 +210,8 @@ import I18n from "./i18n.js";
         delay: this.options.searchDelay,
         minLength: this.options.minLength,
         source: this._getSourceFunction(this.options.source),
+        // Render the menu as a Bootstrap dropdown, so it follows the app's theme.
+        classes: { "ui-autocomplete": "ui-front dropdown-menu" },
         select: function (event, ui) {
           var option = self.element.find(
             `option[value="${CSS.escape(ui.item.id)}"]`
@@ -289,7 +289,7 @@ import I18n from "./i18n.js";
       this.input.data("ui-autocomplete")._renderItem = function (ul, item) {
         return $("<li></li>")
           .data("ui-autocomplete-item", item)
-          .append($("<a></a>").html(item.html || item.id))
+          .append($('<a class="dropdown-item"></a>').html(item.html || item.id))
           .appendTo(ul);
       };
     },
