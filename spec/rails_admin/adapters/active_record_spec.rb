@@ -400,6 +400,12 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
         expect(build_statement(:string, 'foo', 'default')).to eq(['(LOWER(field) LIKE ?)', '%foo%'])
       end
 
+      # Where the comparison is LOWER(), the term is lowered in Ruby to match.
+      it 'lowers a multibyte term' do
+        allow(FieldTest.connection).to receive(:adapter_name).and_return('sqlite3')
+        expect(build_statement(:string, 'ÄÖÜ', 'default')).to eq(['(LOWER(field) LIKE ?)', '%äöü%'])
+      end
+
       it "supports '_blank' operator" do
         [['_blank', ''], ['', '_blank']].each do |value, operator|
           expect(build_statement(:string, value, operator)).to eq(["(field IS NULL OR field = '')"])

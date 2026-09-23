@@ -55,6 +55,7 @@
 - Fix a SimpleMDE field staying blank until clicked into when its nested-form tab wasn't the initially active one ([#3317](https://github.com/railsadminteam/rails_admin/issues/3317))
 - Fix a reorder in `associated_collection_scope` being undone by the associated model's own list sort ([#2430](https://github.com/railsadminteam/rails_admin/issues/2430))
 - Fix filtering an enum field for blank or present raising a type error on PostgreSQL, by no longer comparing the column against an empty string ([#2590](https://github.com/railsadminteam/rails_admin/issues/2590))
+- Fix a `String#mb_chars` deprecation warning on Rails 8.1 when filtering a string field on a database other than PostgreSQL
 
 ## [3.3.0](https://github.com/railsadminteam/rails_admin/tree/v3.3.0) - 2024-12-08
 

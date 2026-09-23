@@ -102,7 +102,7 @@ module RailsAdmin
 
           return ["(#{@column} = ?)", @value] if ['is', '='].include?(@operator)
 
-          @value = @value.mb_chars.downcase unless %w[postgresql postgis].include? ar_adapter
+          @value = @value.downcase unless %w[postgresql postgis].include? ar_adapter
 
           @value =
             case @operator
