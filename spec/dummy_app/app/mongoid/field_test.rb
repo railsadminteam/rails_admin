@@ -62,10 +62,13 @@ class FieldTest
   field :dragonfly_asset_uid
   dragonfly_accessor :dragonfly_asset
 
-  mount_uploader :carrierwave_asset, CarrierwaveUploader
-  # carrierwave-mongoid does not support mount_uploaders yet:
-  #   https://github.com/carrierwaveuploader/carrierwave-mongoid/issues/138
-  mount_uploaders :carrierwave_assets, CarrierwaveUploader
+  if defined?(CarrierWave::Mongoid)
+    mount_uploader :carrierwave_asset, CarrierwaveUploader
+    # carrierwave-mongoid does not support mount_uploaders yet:
+    #   https://github.com/carrierwaveuploader/carrierwave-mongoid/issues/138
+    mount_uploaders :carrierwave_assets, CarrierwaveUploader
+  end
 
   validates :short_text, length: {maximum: 255}
+  validates :string_field, exclusion: {in: ['Invalid']} # to test file upload caching
 end

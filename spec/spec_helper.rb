@@ -37,6 +37,8 @@ require "database_cleaner/#{CI_ORM}"
 require "orm/#{CI_ORM}"
 require 'paper_trail/frameworks/rspec' if defined?(PaperTrail)
 
+CARRIERWAVE_MOUNTED = CI_ORM == :active_record || defined?(CarrierWave::Mongoid)
+
 Dir[File.expand_path('support/**/*.rb', __dir__),
     File.expand_path('shared_examples/**/*.rb', __dir__)].sort.each { |f| require f }
 

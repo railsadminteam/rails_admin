@@ -430,8 +430,10 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
 
     it 'allows for delete method with Carrierwave' do
       RailsAdmin.config FieldTest do
-        field :carrierwave_asset
-        field :carrierwave_assets
+        if CARRIERWAVE_MOUNTED
+          field :carrierwave_asset
+          field :carrierwave_assets
+        end
         field :dragonfly_asset
         field :paperclip_asset do
           delete_method :delete_paperclip_asset
@@ -454,32 +456,26 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
       end
       controller.params = HashWithIndifferentAccess.new(
         'field_test' => {
-          'carrierwave_asset' => 'test',
-          'carrierwave_asset_cache' => 'test',
-          'remove_carrierwave_asset' => 'test',
-          'carrierwave_assets' => 'test',
           'dragonfly_asset' => 'test',
           'remove_dragonfly_asset' => 'test',
           'retained_dragonfly_asset' => 'test',
           'paperclip_asset' => 'test',
           'delete_paperclip_asset' => 'test',
           'should_not_be_here' => 'test',
-        }.merge(defined?(ActiveStorage) ? {'active_storage_asset' => 'test', 'remove_active_storage_asset' => 'test', 'active_storage_assets' => 'test', 'remove_active_storage_assets' => 'test'} : {}).
+        }.merge(CARRIERWAVE_MOUNTED ? {'carrierwave_asset' => 'test', 'carrierwave_asset_cache' => 'test', 'remove_carrierwave_asset' => 'test', 'carrierwave_assets' => 'test'} : {}).
+         merge(defined?(ActiveStorage) ? {'active_storage_asset' => 'test', 'remove_active_storage_asset' => 'test', 'active_storage_assets' => 'test', 'remove_active_storage_assets' => 'test'} : {}).
          merge(defined?(Shrine) ? {'shrine_asset' => 'test', 'remove_shrine_asset' => 'test'} : {}),
       )
 
       controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
       expect(controller.params[:field_test].to_h).to eq({
-        'carrierwave_asset' => 'test',
-        'remove_carrierwave_asset' => 'test',
-        'carrierwave_asset_cache' => 'test',
-        'carrierwave_assets' => 'test',
         'dragonfly_asset' => 'test',
         'remove_dragonfly_asset' => 'test',
         'retained_dragonfly_asset' => 'test',
         'paperclip_asset' => 'test',
         'delete_paperclip_asset' => 'test',
-      }.merge(defined?(ActiveStorage) ? {'active_storage_asset' => 'test', 'remove_active_storage_asset' => 'test', 'active_storage_assets' => 'test', 'remove_active_storage_assets' => 'test'} : {}).
+      }.merge(CARRIERWAVE_MOUNTED ? {'carrierwave_asset' => 'test', 'remove_carrierwave_asset' => 'test', 'carrierwave_asset_cache' => 'test', 'carrierwave_assets' => 'test'} : {}).
+        merge(defined?(ActiveStorage) ? {'active_storage_asset' => 'test', 'remove_active_storage_asset' => 'test', 'active_storage_assets' => 'test', 'remove_active_storage_assets' => 'test'} : {}).
         merge(defined?(Shrine) ? {'shrine_asset' => 'test', 'remove_shrine_asset' => 'test'} : {}))
     end
 

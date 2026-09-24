@@ -118,24 +118,26 @@ RSpec.describe 'Remote form widget', type: :request, js: true do
     end
   end
 
-  context 'with file upload' do
-    before do
-      RailsAdmin.config NestedFieldTest do
-        field :field_test
+  if CARRIERWAVE_MOUNTED
+    context 'with file upload' do
+      before do
+        RailsAdmin.config NestedFieldTest do
+          field :field_test
+        end
+        RailsAdmin.config FieldTest do
+          field :carrierwave_asset
+        end
       end
-      RailsAdmin.config FieldTest do
-        field :carrierwave_asset
-      end
-    end
 
-    it 'submits successfully' do
-      visit new_path(model_name: 'nested_field_test')
-      click_link 'Add a new Field test'
-      is_expected.to have_content 'New Field test'
-      attach_file 'Carrierwave asset', file_path('test.jpg')
-      find('#modal .save-action').click
-      is_expected.to have_css('option', text: /FieldTest #/, visible: false)
-      expect(FieldTest.first.carrierwave_asset.file.size).to eq 1575
+      it 'submits successfully' do
+        visit new_path(model_name: 'nested_field_test')
+        click_link 'Add a new Field test'
+        is_expected.to have_content 'New Field test'
+        attach_file 'Carrierwave asset', file_path('test.jpg')
+        find('#modal .save-action').click
+        is_expected.to have_css('option', text: /FieldTest #/, visible: false)
+        expect(FieldTest.first.carrierwave_asset.file.size).to eq 1575
+      end
     end
   end
 

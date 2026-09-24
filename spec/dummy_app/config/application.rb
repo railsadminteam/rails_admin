@@ -41,7 +41,10 @@ module DummyApp
       config.active_record.time_zone_aware_types = %i[datetime time]
       config.active_record.yaml_column_permitted_classes = [Symbol] if [ActiveRecord::Base, ActiveRecord].any? { |klass| klass.respond_to?(:yaml_column_permitted_classes=) }
     end
-    config.active_storage.service = :local if defined?(ActiveStorage)
+    if defined?(ActiveStorage)
+      config.active_storage.service = :local
+      config.active_storage.variant_processor = :mini_magick
+    end
 
     if CI_ASSET == :external
       # The dummy app builds rails_admin.{js,css} into app/assets/builds, like a

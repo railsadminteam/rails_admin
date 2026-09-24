@@ -57,9 +57,12 @@ end
 appraise 'rails-7.2' do
   gem 'rails', '~> 7.2.0'
 
+  group :test do
+    gem 'carrierwave', '~> 3.0'
+  end
+
   group :mongoid do
     gem 'cancancan-mongoid'
-    gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
     gem 'database_cleaner-mongoid', '>= 2.0', require: false
     gem 'kaminari-mongoid'
     gem 'mongoid', '~> 8.0'
@@ -85,9 +88,12 @@ end
 appraise 'rails-8.1' do
   gem 'rails', '~> 8.1.0'
 
+  group :test do
+    gem 'carrierwave', '>= 4.0.0.beta', '< 5'
+  end
+
   group :mongoid do
     gem 'cancancan-mongoid'
-    gem 'carrierwave-mongoid', '>= 0.6.3', require: 'carrierwave/mongoid'
     gem 'database_cleaner-mongoid', '>= 2.0', require: false
     gem 'kaminari-mongoid'
     gem 'mongoid', '~> 9.0'

@@ -189,17 +189,19 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
       end
     end
 
-    context 'of a Carrierwave installation' do
-      it 'is the parent field itself' do
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_asset }.children_fields).to eq([:carrierwave_asset])
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_asset }.hidden?).to be_falsey
+    if CARRIERWAVE_MOUNTED
+      context 'of a Carrierwave installation' do
+        it 'is the parent field itself' do
+          expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_asset }.children_fields).to eq([:carrierwave_asset])
+          expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_asset }.hidden?).to be_falsey
+        end
       end
-    end
 
-    context 'of a Carrierwave installation with multiple file support' do
-      it 'is the parent field itself' do
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_assets }.children_fields).to eq([:carrierwave_assets])
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_assets }.hidden?).to be_falsey
+      context 'of a Carrierwave installation with multiple file support' do
+        it 'is the parent field itself' do
+          expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_assets }.children_fields).to eq([:carrierwave_assets])
+          expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_assets }.hidden?).to be_falsey
+        end
       end
     end
 
@@ -433,9 +435,11 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
           to eq([RailsAdmin::Criteria::Path[:dragonfly_asset_name]])
       end
 
-      it 'of carrierwave should find the underlying column on the base table' do
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_asset }.searchable_columns.collect { |c| c[:column] }).
-          to eq([RailsAdmin::Criteria::Path[:carrierwave_asset]])
+      if CARRIERWAVE_MOUNTED
+        it 'of carrierwave should find the underlying column on the base table' do
+          expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_asset }.searchable_columns.collect { |c| c[:column] }).
+            to eq([RailsAdmin::Criteria::Path[:carrierwave_asset]])
+        end
       end
     end
   end
@@ -464,9 +468,11 @@ RSpec.describe RailsAdmin::Config::Fields::Base do
         expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :dragonfly_asset }.sortable).to eq(:dragonfly_asset_name)
       end
 
-      it 'of carrierwave should target the first children field' do
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_asset }.searchable).to eq(:carrierwave_asset)
-        expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_asset }.sortable).to eq(:carrierwave_asset)
+      if CARRIERWAVE_MOUNTED
+        it 'of carrierwave should target the first children field' do
+          expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_asset }.searchable).to eq(:carrierwave_asset)
+          expect(RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :carrierwave_asset }.sortable).to eq(:carrierwave_asset)
+        end
       end
     end
   end
