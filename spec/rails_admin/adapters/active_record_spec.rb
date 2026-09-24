@@ -390,6 +390,7 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
         unless %w[postgresql postgis].include?(activerecord_config[:adapter])
           expect(build_statement(:string, 'foo', 'default')).to eq([like, '%foo%'])
           expect(build_statement(:string, 'FOO', 'default')).to eq([like, '%foo%'])
+          expect(build_statement(:string, 'ÄÖÜ', 'default')).to eq([like, '%äöü%'])
         end
       end
 
