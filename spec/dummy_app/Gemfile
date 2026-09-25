@@ -23,6 +23,7 @@ end
 gem 'carrierwave', '>= 2.0.0.rc', '< 3.0'
 gem 'devise', '>= 3.2'
 gem 'dragonfly', '~> 1.0'
+gem 'json', '< 3' # Workaround for json 3.0 quirks_mode removal
 gem 'mini_magick', '>= 3.4'
 gem 'mlb', '>= 0.7'
 gem 'paperclip', '>= 3.4'

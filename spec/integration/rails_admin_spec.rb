@@ -168,8 +168,13 @@ RSpec.describe RailsAdmin, type: :request do
   end
 
   describe 'CSRF protection' do
-    before do
-      allow_any_instance_of(ActionController::Base).to receive(:protect_against_forgery?).and_return(true)
+    # Turning it on for real, rather than stubbing protect_against_forgery?, so
+    # the js examples get it on the server's thread too.
+    around do |example|
+      was = ActionController::Base.allow_forgery_protection
+      ActionController::Base.allow_forgery_protection = true
+      example.run
+      ActionController::Base.allow_forgery_protection = was
     end
 
     it 'is enforced' do
@@ -177,6 +182,32 @@ RSpec.describe RailsAdmin, type: :request do
       fill_in 'league[name]', with: 'National league'
       find('input[name="authenticity_token"]', visible: false).set('invalid token')
       expect { click_button 'Save' }.to raise_error ActionController::InvalidAuthenticityToken
+    end
+
+    it 'lets the main form through' do
+      visit new_path(model_name: 'league')
+      fill_in 'league[name]', with: 'National league'
+      click_button 'Save'
+      expect(League.pluck(:name)).to eq ['National league']
+    end
+
+    # The modal posts the form itself, with a token it has to supply by hand.
+    it 'lets the remote form modal through', js: true do
+      RailsAdmin.config Division do
+        field :league
+      end
+      RailsAdmin.config League do
+        field :name
+      end
+
+      visit new_path(model_name: 'division')
+      click_link 'Add a new League'
+      is_expected.to have_content 'New League'
+      fill_in 'Name', with: 'National league'
+      find('#modal .save-action').click
+
+      is_expected.to have_field(class: 'ra-filtering-select-input', with: 'National league')
+      expect(League.pluck(:name)).to eq ['National league']
     end
   end
 
