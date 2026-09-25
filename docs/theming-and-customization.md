@@ -8,7 +8,7 @@ Since RailsAdmin is built on top of the Web frontend framework [Bootstrap](https
 Let's take [Bootswatch](https://bootswatch.com/) as an example here. First you install the NPM package:
 
 ```bash
-$ yarn add bootswatch
+$ npm install bootswatch
 ```
 
 Then you add following content into your RailsAdmin stylesheet, located in either `app/javascript/stylesheets/rails_admin.scss` or `app/assets/stylesheets/rails_admin.scss`.
