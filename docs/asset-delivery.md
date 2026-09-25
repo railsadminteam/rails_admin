@@ -30,12 +30,20 @@ import "rails_admin/src/rails_admin/base";
 ```
 
 ```scss
-// app/javascript/rails_admin.scss
+// app/assets/stylesheets/rails_admin.scss
 $fa-font-path: "rails_admin";
 @import "rails_admin/src/rails_admin/styles/base";
 ```
 
 Add the `rails_admin` npm package and wire these into your bundler (esbuild, Webpack, Vite, Rollup, …) so they output `app/assets/builds/rails_admin.js` and `app/assets/builds/rails_admin.css`.
+
+Wire them into the build scripts your bundler runs rather than invoking them by hand — those scripts are what `rails assets:precompile` runs on deploy.
+
+With the esbuild and sass setup `jsbundling-rails` and `cssbundling-rails` generate, `app/javascript/rails_admin.js` is already covered by the `build` script's `app/javascript/*.*` glob, and the stylesheet needs one more pair in `build:css`:
+
+```json
+"build:css": "sass ./app/assets/stylesheets/application.sass.scss:./app/assets/builds/application.css ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css --no-source-map --load-path=node_modules"
+```
 
 ```bash
 $ rails g rails_admin:install --asset=external

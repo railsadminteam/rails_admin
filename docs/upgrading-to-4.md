@@ -43,4 +43,4 @@ This works under every `asset_source`. For Sass-level changes (Bootstrap variabl
 
 ## `:external` apps
 
-Re-run the installer to regenerate `app/javascript/rails_admin.{js,scss}` (the import paths are unchanged: `rails_admin/src/rails_admin/base` and `rails_admin/src/rails_admin/styles/base`). If you had added flatpickr locale imports by hand, you can drop them — they're bundled now.
+Re-run the installer to regenerate `app/javascript/rails_admin.js` and `app/assets/stylesheets/rails_admin.scss` (the import paths are unchanged: `rails_admin/src/rails_admin/base` and `rails_admin/src/rails_admin/styles/base`). If you had added flatpickr locale imports by hand, you can drop them — they're bundled now.

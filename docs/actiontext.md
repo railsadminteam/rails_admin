@@ -41,7 +41,7 @@ import "rails_admin/src/rails_admin/base";
 import "trix";
 ```
 
-`app/javascript/rails_admin.scss`
+`app/assets/stylesheets/rails_admin.scss`
 
 ```scss
 @import "rails_admin/src/rails_admin/styles/base";

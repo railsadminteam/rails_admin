@@ -67,11 +67,20 @@ module RailsAdmin
     def configure_for_external
       template 'rails_admin.js', 'app/javascript/rails_admin.js'
       @fa_font_path = 'rails_admin'
-      template 'rails_admin.scss.erb', 'app/javascript/rails_admin.scss'
+      # Not app/javascript: jsbundling builds that whole directory as JavaScript.
+      template 'rails_admin.scss.erb', 'app/assets/stylesheets/rails_admin.scss'
       say <<~INSTRUCTIONS, :yellow
-        Add the `rails_admin` npm package, then wire app/javascript/rails_admin.js and
-        app/javascript/rails_admin.scss into your build so they output
-        app/assets/builds/rails_admin.js and app/assets/builds/rails_admin.css.
+        Add the `rails_admin` npm package, then wire the two entrypoints into the
+        build scripts your bundler runs, so they output app/assets/builds/rails_admin.js
+        and app/assets/builds/rails_admin.css. Going through the scripts matters:
+        that is what `rails assets:precompile` runs on deploy.
+
+        With the esbuild and sass setup jsbundling-rails and cssbundling-rails
+        generate, app/javascript/rails_admin.js is already covered by the "build"
+        script's app/javascript/*.* glob, and the stylesheet needs one more pair in
+        "build:css" - adapt it if you build your CSS some other way:
+
+          sass ./app/assets/stylesheets/application.sass.scss:./app/assets/builds/application.css ./app/assets/stylesheets/rails_admin.scss:./app/assets/builds/rails_admin.css --no-source-map --load-path=node_modules
       INSTRUCTIONS
     end
   end
