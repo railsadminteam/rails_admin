@@ -61,7 +61,7 @@ module RailsAdmin
 
           def value
             attachment = super
-            attachment if attachment&.attached?
+            attachment if !attachment&.new_record? && attachment&.attached?
           end
         end
       end
