@@ -5,6 +5,14 @@ import flatpickr from "./flatpickr.js";
 import I18n from "./i18n.js";
 
 (function ($) {
+  // Editors write back to their textarea on native submit, which modals skip.
+  function flushBeforeRemoteSubmit(element, flush) {
+    var form = element.closest("form");
+    if (form) {
+      form.addEventListener("rails_admin.before_remote_submit", flush);
+    }
+  }
+
   document.addEventListener("rails_admin.dom_ready", function (event) {
     var $editors,
       array,
@@ -282,6 +290,9 @@ import I18n from "./i18n.js";
                 instance_config
               )
             );
+            flushBeforeRemoteSubmit(this, function () {
+              editor.codemirror.save();
+            });
             $(this).addClass("simplemded");
             // CodeMirror mismeasures itself while hidden; refresh() once it's actually laid out.
             new ResizeObserver(function () {
@@ -319,7 +330,13 @@ import I18n from "./i18n.js";
                 instance.destroy(true);
               }
             } catch (error1) {}
-            window.CKEDITOR.replace(this, $(this).data("options").options);
+            var editor = window.CKEDITOR.replace(
+              this,
+              $(this).data("options").options
+            );
+            flushBeforeRemoteSubmit(this, function () {
+              editor.updateElement();
+            });
             $(this).addClass("ckeditored");
           });
       };
@@ -355,7 +372,13 @@ import I18n from "./i18n.js";
                     options["locations"]["theme"] +
                     '" rel="stylesheet" media="all" type="text/css">'
                 );
-                CodeMirror.fromTextArea(textarea, options["options"]);
+                var editor = CodeMirror.fromTextArea(
+                  textarea,
+                  options["options"]
+                );
+                flushBeforeRemoteSubmit(textarea, function () {
+                  editor.save();
+                });
                 return $(textarea).addClass("codemirrored");
               }
             );
@@ -389,7 +412,10 @@ import I18n from "./i18n.js";
           return array.each(function () {
             $(this).addClass("bootstrap-wysihtml5ed");
             $(this).closest(".controls").addClass("well");
-            $(this).wysihtml5(config_options);
+            var $textarea = $(this).wysihtml5(config_options);
+            flushBeforeRemoteSubmit(this, function () {
+              $textarea.val($textarea.data("wysihtml5").editor.getValue());
+            });
           });
         };
       })(this);
@@ -441,7 +467,10 @@ import I18n from "./i18n.js";
                 })
               : void 0;
             $(this).addClass("froala-wysiwyged");
-            $(this).froalaEditor(config_options);
+            var $textarea = $(this).froalaEditor(config_options);
+            flushBeforeRemoteSubmit(this, function () {
+              $textarea.val($textarea.froalaEditor("html.get"));
+            });
             if (uploadEnabled) {
               $(this)
                 .on("froalaEditor.image.error", function (e, editor, error) {

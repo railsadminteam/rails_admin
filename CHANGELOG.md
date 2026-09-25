@@ -38,6 +38,7 @@
 
 ### Fixed
 
+- Fix rich-text editor content being silently dropped when a form is submitted from the modal, which affected the CKEditor, CodeMirror, SimpleMDE, Froala and wysihtml5 fields
 - Fix CSV export ignoring the order the list is sorted in; an export of a list which is not explicitly sorted now comes out newest first, as the list does ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752), [#2580](https://github.com/railsadminteam/rails_admin/issues/2580))
 - Fix CSV export holding every record in memory at once ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752), [#2580](https://github.com/railsadminteam/rails_admin/issues/2580))
 - Fix the list raising an error when an enum field's options come from a class method on the model ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))

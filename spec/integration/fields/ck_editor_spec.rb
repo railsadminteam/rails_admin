@@ -14,4 +14,12 @@ RSpec.describe 'CKEditor field', type: :request do
     expect { visit new_path(model_name: 'draft') }.not_to raise_error
     is_expected.to have_selector('#cke_draft_notes')
   end
+
+  it 'writes back to the textarea when a remote-form modal is submitted', js: true do
+    saved = save_through_modal(:ck_editor) do
+      wait_for_editor %(!!(window.CKEDITOR && CKEDITOR.instances['#{editor_id}'] && CKEDITOR.instances['#{editor_id}'].status === 'ready'))
+      execute_script %(CKEDITOR.instances['#{editor_id}'].insertHtml('<p>typed in the modal</p>'))
+    end
+    expect(saved).to include 'typed in the modal'
+  end
 end

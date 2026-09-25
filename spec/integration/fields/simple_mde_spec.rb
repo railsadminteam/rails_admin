@@ -15,6 +15,14 @@ RSpec.describe 'SimpleMDE field', type: :request do
     is_expected.to have_selector('a[title="Markdown Guide"]')
   end
 
+  it 'writes back to the textarea when a remote-form modal is submitted', js: true do
+    saved = save_through_modal(:simple_mde) do
+      wait_for_editor %(!!(document.querySelector('.CodeMirror') && document.querySelector('.CodeMirror').CodeMirror))
+      execute_script %(document.querySelector('.CodeMirror').CodeMirror.setValue('typed in the modal'))
+    end
+    expect(saved).to include 'typed in the modal'
+  end
+
   it 'renders its content once its nested-form tab is shown, even when that tab was not the initially active one', js: true, active_record: true do
     RailsAdmin.config FieldTest do
       edit do

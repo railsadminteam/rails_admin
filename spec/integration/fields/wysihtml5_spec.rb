@@ -29,4 +29,12 @@ RSpec.describe 'Wysihtml5 field', type: :request do
     visit new_path(model_name: 'draft')
     is_expected.to have_selector('textarea#draft_notes[data-richtext="bootstrap-wysihtml5"][data-options]')
   end
+
+  it 'writes back to the textarea when a remote-form modal is submitted', js: true do
+    saved = save_through_modal(:wysihtml5) do
+      wait_for_editor %(!!(window.jQuery && jQuery('##{editor_id}').data('wysihtml5')))
+      execute_script %(jQuery('##{editor_id}').data('wysihtml5').editor.setValue('<p>typed in the modal</p>'))
+    end
+    expect(saved).to include 'typed in the modal'
+  end
 end

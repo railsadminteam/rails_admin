@@ -113,6 +113,10 @@ import * as bootstrap from "bootstrap";
     _submitForm: function (form) {
       var widget = this;
       var csrf = document.querySelector('meta[name="csrf-token"]');
+      // We read the form without submitting it, so let widgets write back first.
+      form[0].dispatchEvent(
+        new CustomEvent("rails_admin.before_remote_submit")
+      );
       jQuery.ajax({
         url: form.attr("action"),
         method: (form.attr("method") || "post").toUpperCase(),
