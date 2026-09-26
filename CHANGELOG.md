@@ -2,43 +2,67 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.3.0...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v4.0.0.beta...HEAD)
+
+## [4.0.0.beta](https://github.com/railsadminteam/rails_admin/tree/v4.0.0.beta) - 2026-09-26
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.3.0...v4.0.0.beta)
 
 ### Added
 
-- Allow adapters for other ORMs to be provided from outside RailsAdmin, by registering them with `RailsAdmin::Adapters.register` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- Rails 8.1 support ([703e489](https://github.com/railsadminteam/rails_admin/commit/703e4894e4b206a25925921ed035661fe2f13787))
 - `config.asset_source` accepts `:propshaft`, and a callable which renders the `<head>` tags itself ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - Add the `_head_custom` partial, so an application can inject its own tags into RailsAdmin's `<head>` with no build step ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - Add `--ra-*` CSS custom properties, so an application can retheme the RailsAdmin chrome without a build step ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- Allow adapters for other ORMs to be provided from outside RailsAdmin, by registering them with `RailsAdmin::Adapters.register` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- Add a `sass` entry point to the npm package, so Sass's `NodePackageImporter` can resolve RailsAdmin's stylesheet ([#3728](https://github.com/railsadminteam/rails_admin/pull/3728))
+- Add the CSP nonce to RailsAdmin's stylesheet and script tags ([#3719](https://github.com/railsadminteam/rails_admin/pull/3719))
 
 ### Changed
 
-- Plugins which extend or reopen `RailsAdmin::Adapters::ActiveRecord` or `RailsAdmin::Adapters::Mongoid` to change how RailsAdmin reads or queries models need to target the adapter's `Reflection` or `Repository` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
-- Overriding `#sort_column` in a custom field no longer affects sorting; override `#sort_order` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
-- Records from `AbstractModel#new` and `#get` on ActiveRecord no longer ignore `assign_attributes(nil)` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
-- On Mongoid, `@object.save` in a custom action no longer saves the children of a new document's non-autosave `has_many` and `has_one` associations; use `@abstract_model.save(@object)` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
-- Deprecate `#safe_send` on models, which RailsAdmin no longer uses; use `RailsAdmin::AbstractModel#read` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- [BREAKING CHANGE] Sprockets applications move from the vendored Bootstrap 5.1 fork onto Bootstrap 5.3, which shifts some styling ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- [BREAKING CHANGE] Plugins which extend or reopen `RailsAdmin::Adapters::ActiveRecord` or `RailsAdmin::Adapters::Mongoid` to change how RailsAdmin reads or queries models need to target the adapter's `Reflection` or `Repository` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- [BREAKING CHANGE] Overriding `#sort_column` in a custom field no longer affects sorting; override `#sort_order` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- [BREAKING CHANGE] On Mongoid, `@object.save` in a custom action no longer saves the children of a new document's non-autosave `has_many` and `has_one` associations; use `@abstract_model.save(@object)` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 - RailsAdmin ships a prebuilt `rails_admin.{js,css}` bundle, which `:propshaft` and `:sprockets` serve with no build step and no Node; see [the upgrade guide](docs/upgrading-to-4.md) ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - The bundle carries jQuery, jQuery UI, Bootstrap, Popper, flatpickr with every locale, `@rails/activestorage` and the `@rails/actiontext` glue; Trix is still loaded from a CDN unless you bundle it yourself with `:external` ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
-- The asset toolchain moved to npm with a committed lockfile; `npm run build` (or `rake rails_admin:build_assets`) regenerates the bundle, and CI fails if the committed output is stale ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
-- `config.asset_source = :webpack` now maps to `:external`, and `:importmap` falls back to the detected pipeline, both with a deprecation warning ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
-- [BREAKING CHANGE] Sprockets applications move from the vendored Bootstrap 5.1 fork onto Bootstrap 5.3, which shifts some styling ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - The association autocomplete is rendered as a Bootstrap dropdown, replacing its hand-written jQuery UI palette, so it follows the application theme and Bootstrap's `--bs-dropdown-*` custom properties ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- Records from `AbstractModel#new` and `#get` on ActiveRecord no longer ignore `assign_attributes(nil)` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- The show action responds with HTML rather than JSON to a request without a specific `Accept` header, as the other actions do ([#3705](https://github.com/railsadminteam/rails_admin/pull/3705))
+- Non-nullable boolean fields use the same button group as nullable ones, instead of a checkbox ([#3614](https://github.com/railsadminteam/rails_admin/pull/3614))
+- The npm package is declared as an ES module with fully specified imports, so it builds under bundlers which enforce strict ESM resolution ([#3749](https://github.com/railsadminteam/rails_admin/pull/3749), [#3739](https://github.com/railsadminteam/rails_admin/pull/3739))
+- Require `@hotwired/turbo-rails` 8.0.21 or later in the npm package, to pick up a security fix in Turbo ([#3734](https://github.com/railsadminteam/rails_admin/pull/3734))
+- Move the documentation from the GitHub wiki into `docs/` ([70ca765](https://github.com/railsadminteam/rails_admin/commit/70ca765e3554b0a2552f0750cc8b5a423a8e9fff))
+
+### Deprecated
+
+- `config.asset_source = :webpack`, which now maps to `:external`, and `:importmap`, which falls back to the detected pipeline ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- `#safe_send` on models, which RailsAdmin no longer uses; use `RailsAdmin::AbstractModel#read` instead ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 
 ### Removed
 
-- `#rails_admin_default_object_label_method` is no longer defined on models, and `object_label_method` is nil for a model which responds to none of `config.label_methods` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
-- The `rails_admin/application.{js,css}` Sprockets manifests and the `ESModuleProcessor`, which RailsAdmin wired up itself; the prebuilt bundle is served as `rails_admin.{js,css}` ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
 - [BREAKING CHANGE] The `rails_admin/custom/*` override files; use the `_head_custom` partial or `:external` instead ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
-- The `sassc-rails` dependency handling, which the prebuilt CSS makes unnecessary ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
-- [BREAKING CHANGE] `config.asset_source = :webpacker` and `:vite`, which now raise; use `:external` instead - Webpacker is end-of-life, and Vite still builds the `:external` entrypoints ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
-- The vendored Bootstrap, jQuery UI, Popper and flatpickr copies, which the bundle now resolves from npm ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
-- The Font Awesome `.ttf` webfont; the face ships as woff2 only ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- [BREAKING CHANGE] `config.asset_source = :webpacker` and `:vite`, which now raise; use `:external` instead of Webpacker, which is end-of-life, and a callable rendering Vite's tags for Vite, as [Asset delivery](docs/asset-delivery.md#vite) shows ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751), [72bdd18](https://github.com/railsadminteam/rails_admin/commit/72bdd18da58d31b82ab9f8e8a357364cd044ebe2))
 - [BREAKING CHANGE] `@rails/ujs`, which Rails no longer ships by default; Turbo covers what RailsAdmin used it for, but an application rendering `link_to ..., method:` links inside the RailsAdmin layout needs to switch them to `data: { turbo_method: ... }` ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- [BREAKING CHANGE] `#rails_admin_default_object_label_method` is no longer defined on models, and `object_label_method` is nil for a model which responds to none of `config.label_methods` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
+- The `rails_admin/application.{js,css}` Sprockets manifests and the `ESModuleProcessor`, which RailsAdmin wired up itself; the prebuilt bundle is served as `rails_admin.{js,css}` ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- The `sassc-rails` dependency handling, which the prebuilt CSS makes unnecessary ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- The Font Awesome `.ttf` webfont; the face ships as woff2 only ([#3751](https://github.com/railsadminteam/rails_admin/pull/3751))
+- Config options deprecated before 3.0: `total_columns_width`, `sidescroll`, the list section's `sort_reverse`, `momentjs_format`, a field's `eager_load?` and `MultipleFileUpload`'s `delete_key` ([11f214f](https://github.com/railsadminteam/rails_admin/commit/11f214f6c9e8dbdafdecadf2aee8c47120a8be9d))
+- Drop support for Rails 6.x and Ruby 2.6 ([a094661](https://github.com/railsadminteam/rails_admin/commit/a09466150838742f4f007a301d1910099e1ec36f))
 
 ### Fixed
 
-- Fix rich-text editor content being silently dropped when a form is submitted from the modal, which affected the CKEditor, CodeMirror, SimpleMDE, Froala and wysihtml5 fields
+- Fix rich-text editor content being silently dropped when a form is submitted from the modal, which affected the CKEditor, CodeMirror, SimpleMDE, Froala and wysihtml5 fields ([3af6946](https://github.com/railsadminteam/rails_admin/commit/3af6946c91bbde126adabd8a67c5871fbe6c510d))
+- Fix a `String#mb_chars` deprecation warning on Rails 8.1 when filtering a string field on a database other than PostgreSQL ([8302cc2](https://github.com/railsadminteam/rails_admin/commit/8302cc292051008eb0b361a2fecbead2ab723874))
+- Fix filtering an enum field for blank or present raising a type error on PostgreSQL, by no longer comparing the column against an empty string ([63ebb9a](https://github.com/railsadminteam/rails_admin/commit/63ebb9acc538bf56476ca1335dc546db40c018da), [#2590](https://github.com/railsadminteam/rails_admin/issues/2590))
+- Fix a reorder in `associated_collection_scope` being undone by the associated model's own list sort ([749cbe7](https://github.com/railsadminteam/rails_admin/commit/749cbe756069e1306a777693022326dcd7799217), [#2430](https://github.com/railsadminteam/rails_admin/issues/2430))
+- Fix a SimpleMDE field staying blank until clicked into when its nested-form tab wasn't the initially active one ([47da8e9](https://github.com/railsadminteam/rails_admin/commit/47da8e99ab9faa3a812ab89bad38a20eea8ec1c2), [#3317](https://github.com/railsadminteam/rails_admin/issues/3317))
+- Fix the viewport meta tag's `name` attribute carrying a stray `; charset=utf-8`, which kept mobile browsers from collapsing the navbar ([a6f4c5a](https://github.com/railsadminteam/rails_admin/commit/a6f4c5ad690a521a6221b8d4a2859faddec49685), [#2812](https://github.com/railsadminteam/rails_admin/issues/2812))
+- Fix `RailsAdmin.config`/`config.model` silently ignoring a model registered by a string or symbol name with a leading `::`, such as `'::Order'` ([88e6df4](https://github.com/railsadminteam/rails_admin/commit/88e6df4d14d557a6476ab071d9fcec53331bb4b6), [#2607](https://github.com/railsadminteam/rails_admin/issues/2607))
+- Fix the bulk delete flash message pluralizing a model's `label` instead of using its configured `label_plural` ([a5607f2](https://github.com/railsadminteam/rails_admin/commit/a5607f24aa5298956cef4b41c34dda913127f6bc), [#2286](https://github.com/railsadminteam/rails_admin/issues/2286))
+- Fix the list raising an error instead of rendering when the filter parameters in the URL are malformed ([d3cfba1](https://github.com/railsadminteam/rails_admin/commit/d3cfba1d3b8b7d1320678eca7cdb845ef0f5c902), [#3754](https://github.com/railsadminteam/rails_admin/issues/3754))
+- Fix a filter or search term which cannot be read as the field's type, such as a date out of range, raising an error instead of being ignored ([d3cfba1](https://github.com/railsadminteam/rails_admin/commit/d3cfba1d3b8b7d1320678eca7cdb845ef0f5c902), [#3754](https://github.com/railsadminteam/rails_admin/issues/3754))
 - Fix CSV export ignoring the order the list is sorted in; an export of a list which is not explicitly sorted now comes out newest first, as the list does ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752), [#2580](https://github.com/railsadminteam/rails_admin/issues/2580))
 - Fix CSV export holding every record in memory at once ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752), [#2580](https://github.com/railsadminteam/rails_admin/issues/2580))
 - Fix the list raising an error when an enum field's options come from a class method on the model ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
@@ -48,15 +72,11 @@
 - Fix an error on Mongoid for a field configured as `:time` ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 - Fix records whose composite primary key contains an underscore being unreachable ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
 - Fix records loaded by RailsAdmin on Mongoid failing to be dumped with Marshal, as `Rails.cache.write` does ([#3752](https://github.com/railsadminteam/rails_admin/pull/3752))
-- Fix the list raising an error instead of rendering when the filter parameters in the URL are malformed ([#3754](https://github.com/railsadminteam/rails_admin/issues/3754))
-- Fix a filter or search term which cannot be read as the field's type, such as a date out of range, raising an error instead of being ignored ([#3754](https://github.com/railsadminteam/rails_admin/issues/3754))
-- Fix the bulk delete flash message pluralizing a model's `label` instead of using its configured `label_plural` ([#2286](https://github.com/railsadminteam/rails_admin/issues/2286))
-- Fix `RailsAdmin.config`/`config.model` silently ignoring a model registered by a string or symbol name with a leading `::`, such as `'::Order'` ([#2607](https://github.com/railsadminteam/rails_admin/issues/2607))
-- Fix the viewport meta tag's `name` attribute carrying a stray `; charset=utf-8`, which kept mobile browsers from collapsing the navbar ([#2812](https://github.com/railsadminteam/rails_admin/issues/2812))
-- Fix a SimpleMDE field staying blank until clicked into when its nested-form tab wasn't the initially active one ([#3317](https://github.com/railsadminteam/rails_admin/issues/3317))
-- Fix a reorder in `associated_collection_scope` being undone by the associated model's own list sort ([#2430](https://github.com/railsadminteam/rails_admin/issues/2430))
-- Fix filtering an enum field for blank or present raising a type error on PostgreSQL, by no longer comparing the column against an empty string ([#2590](https://github.com/railsadminteam/rails_admin/issues/2590))
-- Fix a `String#mb_chars` deprecation warning on Rails 8.1 when filtering a string field on a database other than PostgreSQL
+- Fix `_discard` leaking into the query as a value when filtering an enum field in multi-select mode ([#3738](https://github.com/railsadminteam/rails_admin/pull/3738))
+- Fix a custom action declared with `http_methods [:GET]` missing from menus and breadcrumbs ([cbea80b](https://github.com/railsadminteam/rails_admin/commit/cbea80b1f1499b6393444d1a11a013df0ff0b17d))
+- Fix forms with a Devise 5 password field raising `comparison of Integer with Proc failed` ([9336ec7](https://github.com/railsadminteam/rails_admin/commit/9336ec71bcf8eb1113d0f19489aad6d2b7b10fdf))
+- Fix a `belongs_to` association not being marked as required on Rails 7.1+ ([#3717](https://github.com/railsadminteam/rails_admin/pull/3717))
+- Fix the nested form of a polymorphic `has_one` showing the child's reference back to its parent, which failed to save on Mongoid 9 ([91e9cca](https://github.com/railsadminteam/rails_admin/commit/91e9cca88556655705721a2c11b73d8eeb9d2401))
 
 ## [3.3.0](https://github.com/railsadminteam/rails_admin/tree/v3.3.0) - 2024-12-08
 
