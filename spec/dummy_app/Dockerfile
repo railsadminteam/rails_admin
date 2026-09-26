@@ -51,7 +51,6 @@ RUN bundle install && \
 # RUN npm install
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN sed -i "/link_tree ..\/..\/..\//d" app/assets/config/manifest.js
 RUN SECRET_KEY_BASE=DUMMY ./bin/rails assets:precompile db:setup
 
 # Final stage for app image
