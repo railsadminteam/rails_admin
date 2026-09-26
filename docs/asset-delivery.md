@@ -53,7 +53,7 @@ $ rails g rails_admin:install --asset=external
 
 ## A callable
 
-`config.asset_source` also accepts anything responding to `call(view)` that returns the `<head>` markup, for when you need to serve the assets some other way (a CDN, a digest lookup of your own, …):
+`config.asset_source` also accepts anything responding to `call(view)` that returns the `<head>` markup, for when you need to serve the assets some other way (a CDN, a bundler RailsAdmin does not know about, a digest lookup of your own, …). It is called on every render, and `view` is RailsAdmin's view context, so any helper your application has is available:
 
 ```ruby
 config.asset_source = ->(view) do
@@ -63,6 +63,34 @@ config.asset_source = ->(view) do
   ])
 end
 ```
+
+Return markup, not a bare string: whatever comes back is interpolated with `<%= %>`, so a plain `String` is HTML-escaped and lands in the page as text. Building the tags with helpers, as above, gives you that for free.
+
+### Vite
+
+Run the installer with `--asset=vite`, move the two generated entrypoints into the directory Vite builds (`app/javascript/entrypoints` by default), and render them with Vite's helpers:
+
+```ruby
+config.asset_source = lambda do |view|
+  view.safe_join([
+    view.vite_stylesheet_tag("rails_admin.scss"),
+    view.vite_javascript_tag("rails_admin", defer: true),
+  ])
+end
+```
+
+One change is needed in the generated stylesheet. It ships with `$fa-font-path: "rails_admin"`, which resolves against the asset path where the gem keeps the Font Awesome face — Vite serves from its own output directory instead, so the face 404s and every icon disappears. Point it at the npm package and Vite bundles the font itself:
+
+```scss
+$fa-font-path: "@fortawesome/fontawesome-free/webfonts";
+@import "rails_admin/src/rails_admin/styles/base";
+```
+
+### Import maps
+
+An import map application needs none of this to run RailsAdmin: the bundle shipped in the gem is an IIFE, it never enters your import map, and `:propshaft` serves it alongside your own pinned JavaScript with no configuration at all.
+
+Serving RailsAdmin's own modules through an import map is possible as well — draw a second map pinning `rails_admin/src/rails_admin/base` and its dependencies, and render it from the callable with `javascript_importmap_tags`, leaving the stylesheet to the prebuilt file in the gem. RailsAdmin generated those pins for you until 3.x and no longer does, so they are yours to write and to refresh on every upgrade; [the 3.x generator](https://github.com/railsadminteam/rails_admin/blob/v3.3.0/lib/generators/rails_admin/importmap_formatter.rb) shows the shape they took.
 
 ## What's in the bundle
 

@@ -15,6 +15,11 @@ RSpec.describe RailsAdmin::Support::AssetSource do
       expect(described_class.resolve(callable)).to eq callable
     end
 
+    it 'passes through anything else which responds to call' do
+      callable = Class.new { def call(view); end }.new
+      expect(described_class.resolve(callable)).to eq callable
+    end
+
     it 'auto-detects the pipeline when given nil' do
       expect(described_class.resolve(nil)).to be_in(%i[propshaft sprockets])
     end

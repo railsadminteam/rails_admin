@@ -37,6 +37,30 @@ RSpec.describe RailsAdmin, type: :request do
     it 'loads the RailsAdmin javascript' do
       is_expected.to have_selector('head script[src*="rails_admin"][src$=".js"]', visible: false)
     end
+
+    context 'with a callable asset_source' do
+      after { RailsAdmin.config { |config| config.asset_source = CI_ASSET } }
+
+      it 'renders what a lambda returns' do
+        RailsAdmin.config do |config|
+          config.asset_source = ->(view) { view.stylesheet_link_tag('https://cdn.example.com/ra.css') }
+        end
+        visit dashboard_path
+        is_expected.to have_selector('head link[href="https://cdn.example.com/ra.css"]', visible: false)
+      end
+
+      it 'renders what any other callable returns' do
+        RailsAdmin.config do |config|
+          config.asset_source = Class.new do
+            def call(view)
+              view.stylesheet_link_tag('https://cdn.example.com/object.css')
+            end
+          end.new
+        end
+        visit dashboard_path
+        is_expected.to have_selector('head link[href="https://cdn.example.com/object.css"]', visible: false)
+      end
+    end
   end
 
   describe 'custom theming' do

@@ -8,8 +8,10 @@ module RailsAdmin
     module AssetSource
       class << self
         def resolve(value)
+          return value if value.respond_to?(:call)
+
           case value
-          when :propshaft, :sprockets, :external, Proc
+          when :propshaft, :sprockets, :external
             value
           when nil
             detect

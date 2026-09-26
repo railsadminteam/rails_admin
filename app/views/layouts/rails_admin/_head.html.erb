@@ -6,7 +6,7 @@
 <%= csrf_meta_tag %>
 <%= csp_meta_tag %>
 <% asset_source = RailsAdmin.config.asset_source %>
-<% if asset_source.is_a?(Proc) %>
+<% if asset_source.respond_to?(:call) %>
   <%= asset_source.call(self) %>
 <% else %>
   <%= stylesheet_link_tag "rails_admin", media: :all, data: {'turbo-track': 'reload'}, nonce: true %>
