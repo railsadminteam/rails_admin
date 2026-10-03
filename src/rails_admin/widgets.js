@@ -219,7 +219,7 @@ import I18n from "./i18n.js";
           .each(function () {
             field
               .find("> .controls .add_nested_fields")
-              .removeClass("add_nested_fields")
+              .attr("aria-disabled", "true")
               .text($(this).children(".object-infos").data("object-label"));
             nav.append(
               $("<li></li>").append(

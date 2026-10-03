@@ -55,6 +55,22 @@ RSpec.describe 'Nested one widget', type: :request, js: true do
     expect(field_test.reload.comment).to be nil
   end
 
+  it 'offers no second child, and offers one again once the first is removed' do
+    visit new_path(model_name: 'field_test')
+    within('#field_test_comment_attributes_field') do
+      add = find('.add_nested_fields')
+      add.click
+      expect(add['aria-disabled']).to eq 'true'
+      add.click
+      expect(page).to have_selector('.fields', count: 1, visible: :all)
+
+      find(':scope > .tab-content > .fields > .remove_nested_fields', visible: false).click
+      expect(add['aria-disabled']).to be_nil
+      add.click
+      expect(page).to have_selector('.fields.tab-pane.active', visible: true)
+    end
+  end
+
   it 'is optional' do
     visit edit_path(model_name: 'field_test', id: field_test.id)
     click_button 'Save'
@@ -91,7 +107,6 @@ RSpec.describe 'Nested one widget', type: :request, js: true do
   end
 
   it 'adds the item to the modal form, not to the form behind it' do
-    pending 'both forms emit a blueprint with the same page-global id, and the one behind wins'
     RailsAdmin.config(FieldTest) do
       edit do
         field :comment
