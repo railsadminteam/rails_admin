@@ -13,7 +13,9 @@
 
 ### Removed
 
+- The `nested_form` runtime dependency ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
 - [BREAKING CHANGE] The page-global `#<association>_fields_blueprint` elements, the `data-blueprint` and `data-blueprint-id` attributes, and `after_nested_form_callbacks`. A nested association now carries an inert `<template>` inside its own control group instead ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
+- The `remove_nested_one_fields` class, along with the click handler and styles that were still waiting for it; nothing has generated it since the has_one remove button was reworked ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
 
 ### Fixed
 

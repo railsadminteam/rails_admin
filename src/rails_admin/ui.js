@@ -67,18 +67,6 @@ import I18n from "./i18n.js";
     }
   });
 
-  $(document).on(
-    "click",
-    "form .tab-content .tab-pane a.remove_nested_one_fields",
-    function () {
-      $(this)
-        .children('input[type="hidden"]')
-        .val($(this).hasClass("active"))
-        .siblings("i")
-        .toggleClass("fa-check fa-trash");
-    }
-  );
-
   function triggerDomReady() {
     I18n.init($("html").attr("lang"), $("#admin-js").data("i18nOptions"));
 
