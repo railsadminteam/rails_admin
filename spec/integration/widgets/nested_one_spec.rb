@@ -91,7 +91,6 @@ RSpec.describe 'Nested one widget', type: :request, js: true do
   end
 
   it 'adds the item to the modal form, not to the form behind it' do
-    pending 'both forms emit a blueprint with the same page-global id, and the one behind wins'
     RailsAdmin.config(FieldTest) do
       edit do
         field :comment

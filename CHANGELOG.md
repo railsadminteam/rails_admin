@@ -4,6 +4,22 @@
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v4.0.0.beta2...HEAD)
 
+### Changed
+
+- Nested forms no longer need the `nested_form` gem, archived since 2021. How you configure them does not change — `nested_form false`, the `nested` section and `inline_add` all behave as before — and an application that has not customized the nested form markup has nothing to do ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
+- [BREAKING CHANGE] The add and remove controls of a nested form are now `<button type="button">` instead of `<a href="javascript:void(0)">`. A stylesheet or script matching `a.add_nested_fields` or `a.remove_nested_fields` needs the `a` dropped; the class names themselves are unchanged, as are `.fields`, `.tab-pane`, `.object-infos`, `data-nestedmany` and `data-nestedone`. In exchange, RailsAdmin's forms no longer need a `javascript:` URL allowed in your Content Security Policy ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
+- [BREAKING CHANGE] A custom `_form_nested_many` or `_form_nested_one` partial needs one line changed: `form.fields_for field.name` becomes `form.nested_fields_for field`, which also renders the template that new rows are cloned from. `link_to_add` and `link_to_remove` are unchanged, and the condition around the remove button can be dropped — it decides for itself now ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
+- [BREAKING CHANGE] Code that hooked the nested form JavaScript needs updating: `window.nestedFormEvents` and the jQuery `nested:fieldAdded` / `nested:fieldRemoved` events are replaced by `rails_admin.nested_field_added` and `rails_admin.nested_field_removed`, `CustomEvent`s dispatched on the row and carrying `{field, association}` and `{field, group, destroyed}` ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
+
+### Removed
+
+- [BREAKING CHANGE] The page-global `#<association>_fields_blueprint` elements, the `data-blueprint` and `data-blueprint-id` attributes, and `after_nested_form_callbacks`. A nested association now carries an inert `<template>` inside its own control group instead ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
+
+### Fixed
+
+- Adding a row to a nested form shown in a modal no longer builds it from the form behind the modal. The row's inputs were named for the wrong model, so whatever was typed into it was dropped on save ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
+- A row you have just added can still be removed after the form comes back from a failed save, on an association configured with `allow_destroy: false` ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
+
 ## [4.0.0.beta2](https://github.com/railsadminteam/rails_admin/tree/v4.0.0.beta2) - 2026-10-05
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v4.0.0.beta...v4.0.0.beta2)

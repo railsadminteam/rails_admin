@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'kaminari'
-require 'nested_form'
 require 'rails'
 require 'rails_admin'
 require 'rails_admin/extensions/url_for_extension'

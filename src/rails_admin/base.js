@@ -6,7 +6,6 @@ import * as ActiveStorage from "@rails/activestorage";
 // avoid the CDN entirely.
 import "@rails/actiontext";
 import "./jquery.js";
-import "./vendor/jquery_nested_form.js";
 import "bootstrap";
 
 // These jQuery-UI indirect dependencies need to be preloaded to be used within Import maps
@@ -26,6 +25,7 @@ import "./abstract-select.js";
 import "./filter-box.js";
 import "./filtering-multiselect.js";
 import "./filtering-select.js";
+import "./nested-form.js";
 import "./nested-form-hooks.js";
 import "./remote-form.js";
 import "./sidescroll.js";

@@ -129,6 +129,10 @@ body.rails_admin {
           top: 0px;
           left: 5px;
           transition: opacity 0.15s ease;
+          /* The control is a <button>; drop its chrome around the .btn span it wraps. */
+          background: none;
+          border: 0;
+          padding: 0;
         }
         &:hover > .remove_nested_fields,
         &:hover > .remove_nested_one_fields,
