@@ -4,6 +4,10 @@ module RailsAdmin
   class FormBuilder < ::ActionView::Helpers::FormBuilder
     include ::RailsAdmin::ApplicationHelper
 
+    # Bounds a nested form for an association that can reach itself. Counting repeats
+    # of one association, rather than depth, leaves distinct models uncapped.
+    MAX_NESTED_FORM_RECURSION = 3
+
     def generate(options = {})
       without_field_error_proc_added_div do
         options.reverse_merge!(
@@ -89,13 +93,17 @@ module RailsAdmin
     def nested_fields_for(field, &block)
       # fields_for answers nil for a singular association with no child yet.
       children = fields_for(field.name, nil, {nested_in: field}, &block) || ''.html_safe
-      children + (field.inline_add ? nested_template_for(field, &block) : ''.html_safe)
+      children + (nested_add_allowed?(field) ? nested_template_for(field, &block) : ''.html_safe)
     end
 
     # data-nested-add is what lets the JavaScript find the template from outside the control group.
     def link_to_add(label, field_or_name, html_options = {})
-      # A Field arrives wrapped in a Proxyable::Proxy, so ask what it is not.
-      name = field_or_name.is_a?(Symbol) || field_or_name.is_a?(String) ? field_or_name : field_or_name.name
+      # A Field arrives wrapped in a Proxyable::Proxy, so ask what it is not. Only a
+      # Field can say whether adding is allowed; a bare name is taken at its word.
+      by_name = field_or_name.is_a?(Symbol) || field_or_name.is_a?(String)
+      return ''.html_safe if !by_name && !nested_add_allowed?(field_or_name)
+
+      name = by_name ? field_or_name : field_or_name.name
       options = nested_button_options(html_options, 'add_nested_fields')
       options[:data] = (options[:data] || {}).merge('nested-add' => name)
       @template.content_tag(:button, label, options)
@@ -151,6 +159,11 @@ module RailsAdmin
     end
 
   protected
+
+    def nested_add_allowed?(field)
+      !!field.inline_add &&
+        @object_name.to_s.scan("[#{field.name}_attributes]").size < MAX_NESTED_FORM_RECURSION
+    end
 
     def nested_template_for(field, &block)
       # Tagged by depth, never by association name: a name-tagged placeholder is a
