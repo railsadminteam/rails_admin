@@ -137,14 +137,15 @@ RSpec.describe 'Nested many widget', type: :request, js: true do
         and_return(allow_destroy: false)
       visit edit_path(model_name: 'field_test', id: field_test.id)
       expect(find('#field_test_nested_field_tests_attributes_0_title').value).to eq('title 1')
-      is_expected.not_to have_selector('form .remove_nested_fields')
-      expect(find('div#nested_field_tests_fields_blueprint', visible: false)[:'data-blueprint']).to match(
-        /<a[^>]* class="remove_nested_fields"[^>]*>/,
-      )
+      is_expected.not_to have_selector('.remove_nested_fields', visible: :all)
+      expect(page.body).to_not include('name="field_test[nested_field_tests_attributes][0][_destroy]"')
+      # A template is a row that does not exist yet, so it is always removable. Its
+      # content is outside the document tree, so it has to be read off the markup.
+      expect(page.body).to include('name="field_test[nested_field_tests_attributes][new_1_nested_field_tests][_destroy]"')
+      expect(page.body).to match(/<button[^>]* class="remove_nested_fields"/)
     end
 
     it 'still offers to remove a row the user added, when the form comes back from a failed save' do
-      pending 'the destroy button is gated on the blueprint child_index, which a re-rendered row does not have'
       allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
         and_return(allow_destroy: false)
       RailsAdmin.config(FieldTest) do
@@ -174,16 +175,14 @@ RSpec.describe 'Nested many widget', type: :request, js: true do
   context "when a field which have the same name of nested_in field's" do
     it "does not hide fields which are not associated with nesting parent field's model" do
       visit new_path(model_name: 'field_test')
-      is_expected.not_to have_selector('select#field_test_nested_field_tests_attributes_new_nested_field_tests_field_test_id')
-      expect(find('div#nested_field_tests_fields_blueprint', visible: false)[:'data-blueprint']).to match(
-        /<select[^>]* id="field_test_nested_field_tests_attributes_new_nested_field_tests_another_field_test_id"[^>]*>/,
-      )
+      expect(page.body).to_not include('field_test_nested_field_tests_attributes_new_1_nested_field_tests_field_test_id')
+      expect(page.body).to include('field_test_nested_field_tests_attributes_new_1_nested_field_tests_another_field_test_id')
     end
 
     it 'hides fields that are deeply nested with inverse_of' do
       visit new_path(model_name: 'field_test')
-      expect(page.body).to_not include('field_test_nested_field_tests_attributes_new_nested_field_tests_deeply_nested_field_tests_attributes_new_deeply_nested_field_tests_nested_field_test_id_field')
-      expect(page.body).to include('field_test_nested_field_tests_attributes_new_nested_field_tests_deeply_nested_field_tests_attributes_new_deeply_nested_field_tests_title')
+      expect(page.body).to_not include('field_test_nested_field_tests_attributes_new_1_nested_field_tests_deeply_nested_field_tests_attributes_new_2_deeply_nested_field_tests_nested_field_test_id_field')
+      expect(page.body).to include('field_test_nested_field_tests_attributes_new_1_nested_field_tests_deeply_nested_field_tests_attributes_new_2_deeply_nested_field_tests_title')
     end
   end
 
