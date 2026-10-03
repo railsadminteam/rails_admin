@@ -105,6 +105,26 @@ RSpec.describe 'Nested many widget', type: :request, js: true do
     end
   end
 
+  it 'attaches a deeply nested item to the row it was added inside of' do
+    visit edit_path(model_name: 'field_test', id: field_test.id)
+
+    find('#field_test_nested_field_tests_attributes_field > .controls .add_nested_fields').click
+    row = find('#field_test_nested_field_tests_attributes_field > .tab-content > .fields.tab-pane.active')
+    row.find(':scope > fieldset > .title_field input').set 'the row the user filled in'
+    deeply_nested = row.find(':scope > fieldset > .deeply_nested_field_tests_field')
+    # trigger click via JS, workaround for instability in CI: the row around this
+    # button is still being revealed, so a click at its computed position misses.
+    deeply_nested.execute_script("this.querySelector('.add_nested_fields').click()")
+    deeply_nested.find('.fields.tab-pane.active > fieldset > .title_field input').set 'the grandchild'
+
+    # trigger click via JS, workaround for instability in CI
+    execute_script %(document.querySelector('button[name="_save"]').click())
+    is_expected.to have_content('Field test successfully updated')
+
+    expect(field_test.nested_field_tests.map(&:title)).to eq ['the row the user filled in']
+    expect(field_test.nested_field_tests.first.deeply_nested_field_tests.map(&:title)).to eq ['the grandchild']
+  end
+
   context 'with nested_attributes_options given' do
     before do
       allow(FieldTest.nested_attributes_options).to receive(:[]).with(any_args).
@@ -120,6 +140,33 @@ RSpec.describe 'Nested many widget', type: :request, js: true do
       is_expected.not_to have_selector('form .remove_nested_fields')
       expect(find('div#nested_field_tests_fields_blueprint', visible: false)[:'data-blueprint']).to match(
         /<a[^>]* class="remove_nested_fields"[^>]*>/,
+      )
+    end
+
+    it 'still offers to remove a row the user added, when the form comes back from a failed save' do
+      pending 'the destroy button is gated on the blueprint child_index, which a re-rendered row does not have'
+      allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
+        and_return(allow_destroy: false)
+      RailsAdmin.config(FieldTest) do
+        edit do
+          field :string_field
+          field :nested_field_tests
+        end
+      end
+      visit edit_path(model_name: 'field_test', id: field_test.id)
+
+      fill_in 'field_test_string_field', with: 'Invalid' # fails the model's exclusion validation
+      find('#field_test_nested_field_tests_attributes_field > .controls .add_nested_fields').click
+      find('#field_test_nested_field_tests_attributes_field > .tab-content > .fields.tab-pane.active' \
+           ' > fieldset > .title_field input').set 'row the user added'
+
+      # trigger click via JS, workaround for instability in CI
+      execute_script %(document.querySelector('button[name="_save"]').click())
+      expect(page).to have_field('field_test_nested_field_tests_attributes_0_title', with: 'row the user added', visible: :all)
+
+      expect(page).to have_selector(
+        '#field_test_nested_field_tests_attributes_field > .tab-content > .fields > .remove_nested_fields',
+        visible: :all,
       )
     end
   end

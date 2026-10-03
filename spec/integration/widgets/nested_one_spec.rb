@@ -90,6 +90,26 @@ RSpec.describe 'Nested one widget', type: :request, js: true do
     end
   end
 
+  it 'adds the item to the modal form, not to the form behind it' do
+    pending 'both forms emit a blueprint with the same page-global id, and the one behind wins'
+    RailsAdmin.config(FieldTest) do
+      edit do
+        field :comment
+        field :nested_field_tests do
+          nested_form false
+        end
+      end
+    end
+    visit edit_path(model_name: 'field_test', id: field_test.id)
+
+    # Both forms nest a comment, which is what the page-global blueprint ids collided over.
+    find('.nested_field_tests_field a.create').click
+    find('#modal #nested_field_test_comment_attributes_field .add_nested_fields').click
+
+    expect(page).to have_selector('#modal textarea[name="nested_field_test[comment_attributes][content]"]', visible: :all)
+    expect(page).to have_no_selector('#modal textarea[name="field_test[comment_attributes][content]"]', visible: :all)
+  end
+
   context 'when XSS attack is attempted' do
     it 'does not break on adding a new item' do
       allow(I18n).to receive(:t).and_call_original
