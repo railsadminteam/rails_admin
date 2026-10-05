@@ -160,6 +160,60 @@ RSpec.describe 'Export action', type: :request do
     end
   end
 
+  describe 'schema for json and xml' do
+    let(:team) { FactoryBot.create :team, name: 'Exported', revenue: 1000 }
+    before do
+      player.update(team: team)
+      RailsAdmin.config Player do
+        export do
+          field :name
+          field :team
+        end
+      end
+      RailsAdmin.config Team do
+        export do
+          field :name
+        end
+      end
+    end
+
+    def export_json(schema = nil)
+      page.driver.post(export_path(model_name: 'player', json: true, all: true, schema: schema))
+      ActiveSupport::JSON.decode(page.driver.response.body)
+    end
+
+    it 'defaults to the fields configured for export' do
+      expect(export_json).to eq [{'name' => player.name, 'team' => {'name' => 'Exported'}}]
+    end
+
+    it 'drops fields which are not exported' do
+      expect(export_json(only: %w[name number], include: {team: {only: %w[name revenue]}})).
+        to eq [{'name' => player.name, 'team' => {'name' => 'Exported'}}]
+    end
+
+    it 'does not call methods which are not exported' do
+      expect(export_json(only: %w[name], methods: %w[destroy])).to eq [{'name' => player.name}]
+      expect(Player.count).to eq 1
+    end
+
+    it 'does not include associations which are not exported' do
+      expect(export_json(only: %w[name], include: {destroy: {only: %w[id]}, draft: {only: %w[id]}})).to eq [{'name' => player.name}]
+      expect(Player.count).to eq 1
+    end
+
+    it 'serializes no attribute when only methods are requested' do
+      expect(export_json(methods: %w[name])).to eq [{}]
+    end
+
+    it 'does the same for xml' do
+      pending 'Mongoid does not support to_xml' if CI_ORM == :mongoid
+      page.driver.post(export_path(model_name: 'player', xml: true, all: true, schema: {only: %w[name number], methods: %w[destroy]}))
+      expect(page.driver.response.body).to include "<name>#{player.name}</name>"
+      expect(page.driver.response.body).not_to include '<number>'
+      expect(Player.count).to eq 1
+    end
+  end
+
   context 'with composite primary keys', composite_primary_keys: true do
     let!(:fanship) { FactoryBot.create(:fanship) }
 

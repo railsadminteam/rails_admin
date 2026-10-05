@@ -94,6 +94,17 @@ module RailsAdmin
       model_config.send(action).with(controller: self, view: view_context, object: @object).visible_fields
     end
 
+    # Memoized, as export renders through index, which switches @action
+    def serialization_schema
+      @serialization_schema ||= begin
+        section = %i[export show].include?(@action.key) ? @model_config.send(@action.key) : @model_config.list
+        RailsAdmin::SerializationSchema.new(
+          section.with(controller: self, view: view_context, object: @object || @abstract_model.model.new),
+          include_associations: @action.key == :export,
+        )
+      end
+    end
+
     def sanitize_params_for!(action, model_config = @model_config, target_params = params[@abstract_model.param_key])
       return unless target_params.present?
 

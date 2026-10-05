@@ -4,6 +4,10 @@
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.3.0...HEAD)
 
+### Security
+
+- Fix JSON/XML export calling arbitrary methods and exposing fields outside the export configuration; the index and show actions' JSON/XML output is now limited to their sections' fields too ([GHSA-22g3-g835-fqqw](https://github.com/railsadminteam/rails_admin/security/advisories/GHSA-22g3-g835-fqqw))
+
 ## [3.3.0](https://github.com/railsadminteam/rails_admin/tree/v3.3.0) - 2024-12-08
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.2.1...v3.3.0)

@@ -21,7 +21,7 @@ module RailsAdmin
         register_instance_option :controller do
           proc do
             respond_to do |format|
-              format.json { render json: @object }
+              format.json { render json: @object.to_json(serialization_schema.default) }
               format.html { render @action.template_name }
             end
           end
