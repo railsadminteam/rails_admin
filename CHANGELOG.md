@@ -2,12 +2,21 @@
 
 ## [Unreleased](https://github.com/railsadminteam/rails_admin/tree/HEAD)
 
-[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.3.0...HEAD)
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.3.1...HEAD)
+
+## [3.3.1](https://github.com/railsadminteam/rails_admin/tree/v3.3.1) - 2026-10-05
+
+[Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v3.3.0...v3.3.1)
+
+### Fixed
+
+- Fix the nested form of a polymorphic `has_one` showing the child's reference back to its parent, which failed to save on Mongoid 9 ([91e9cca](https://github.com/railsadminteam/rails_admin/commit/91e9cca88556655705721a2c11b73d8eeb9d2401))
+- Fix the importmap install generator for importmap-rails versions which return the imports nested ([248a094](https://github.com/railsadminteam/rails_admin/commit/248a094dbcfc8267028572d2705dd8a178391141))
 
 ### Security
 
-- Fix JSON/XML export calling arbitrary methods and exposing fields outside the export configuration; the index and show actions' JSON/XML output is now limited to their sections' fields too ([GHSA-22g3-g835-fqqw](https://github.com/railsadminteam/rails_admin/security/advisories/GHSA-22g3-g835-fqqw))
-- Fix the Pundit adapter granting access to every record of a model whose policy has no `Scope` ([GHSA-qm4x-chm3-xppc](https://github.com/railsadminteam/rails_admin/security/advisories/GHSA-qm4x-chm3-xppc))
+- Fix JSON/XML export calling arbitrary methods and exposing fields outside the export configuration; the index and show actions' JSON/XML output is now limited to their sections' fields too ([f6a44e4](https://github.com/railsadminteam/rails_admin/commit/f6a44e457ba45139bd6a51694e129d912ea57683), [GHSA-22g3-g835-fqqw](https://github.com/railsadminteam/rails_admin/security/advisories/GHSA-22g3-g835-fqqw))
+- Fix the Pundit adapter granting access to every record of a model whose policy has no `Scope` ([250288f](https://github.com/railsadminteam/rails_admin/commit/250288f31e6aef527896959052d532503cc8d3dd), [GHSA-qm4x-chm3-xppc](https://github.com/railsadminteam/rails_admin/security/advisories/GHSA-qm4x-chm3-xppc))
 
 ## [3.3.0](https://github.com/railsadminteam/rails_admin/tree/v3.3.0) - 2024-12-08
 
