@@ -22,7 +22,7 @@ module RailsAdmin
           proc do
             respond_to do |format|
               format.html { render @action.template_name }
-              format.json { render json: @object }
+              format.json { render json: @object.to_json(serialization_schema.default) }
             end
           end
         end

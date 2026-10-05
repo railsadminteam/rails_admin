@@ -910,6 +910,31 @@ RSpec.describe 'Index action', type: :request do
     end
   end
 
+  context 'on listing as json or xml' do
+    let!(:team) { FactoryBot.create(:team, name: 'Listed', revenue: 1000) }
+    before do
+      RailsAdmin.config Team do
+        list do
+          field :name
+          field :division
+        end
+      end
+    end
+
+    it 'serializes only the fields in the list, with the keys of belongs_to associations' do
+      get index_path(model_name: 'team', format: :json)
+      expect(ActiveSupport::JSON.decode(response.body)).to eq [{'name' => 'Listed', 'division_id' => ActiveSupport::JSON.decode(team.division_id.to_json)}]
+    end
+
+    it 'does the same for xml' do
+      pending 'Mongoid does not support to_xml' if CI_ORM == :mongoid
+      get index_path(model_name: 'team', format: :xml)
+      expect(response.body).to include '<name>Listed</name>'
+      expect(response.body).to include "<division-id type=\"integer\">#{team.division_id}</division-id>"
+      expect(response.body).not_to include 'revenue'
+    end
+  end
+
   describe 'with search operator' do
     let(:player) { FactoryBot.create :player }
 

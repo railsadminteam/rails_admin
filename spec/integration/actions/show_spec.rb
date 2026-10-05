@@ -42,8 +42,20 @@ RSpec.describe 'Show action', type: :request do
       expect(uri).to eq("/admin/player/#{@player.id}.json")
     end
 
-    it 'contains the JSONified object' do
-      expect(JSON.parse(body)).to eq JSON.parse @player.reload.to_json
+    context 'with fields configured' do
+      before do
+        RailsAdmin.config Player do
+          show do
+            field :name
+            field :team
+          end
+        end
+        visit uri
+      end
+
+      it 'serializes only the fields in the show view, with the keys of belongs_to associations' do
+        expect(JSON.parse(body)).to eq JSON.parse(@player.to_json(only: %i[name team_id]))
+      end
     end
   end
 

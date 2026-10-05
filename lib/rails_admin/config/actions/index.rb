@@ -56,7 +56,7 @@ module RailsAdmin
                       @objects.collect { |object| {id: object.id.to_s, label: @model_config.object_label(object).to_s} }
                     end
                   else
-                    @objects.to_json(@schema)
+                    @objects.to_json(@schema || serialization_schema.default)
                   end
 
                 if params[:send_data]
@@ -67,7 +67,7 @@ module RailsAdmin
               end
 
               format.xml do
-                output = @objects.to_xml(@schema)
+                output = @objects.to_xml(@schema || serialization_schema.default)
                 if params[:send_data]
                   send_data output, filename: "#{params[:model_name]}_#{DateTime.now.strftime('%Y-%m-%d_%Hh%Mm%S')}.xml"
                 else
