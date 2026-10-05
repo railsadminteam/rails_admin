@@ -52,6 +52,19 @@ class ApplicationPolicy
 end
 
 class PlayerPolicy < ApplicationPolicy
+  class Scope
+    attr_reader :user, :scope
+
+    def initialize(user, scope)
+      @user = user
+      @scope = scope
+    end
+
+    def resolve
+      user.roles.include?(:admin) ? scope.all : scope.none
+    end
+  end
+
   def new?
     (user.roles.include?(:manage_player) ||
       (user.roles.include?(:create_player) && (!record.is_a?(Player) || record.suspended)))

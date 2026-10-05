@@ -124,6 +124,12 @@ RSpec.shared_examples 'a RailsAdmin adapter' do
       end
     end
 
+    describe '#none' do
+      it 'matches nothing, even when merged into another scope' do
+        expect(abstract_model.scoped.merge(abstract_model.none).to_a).to eq []
+      end
+    end
+
     describe '#count' do
       it 'returns the number of records' do
         expect(abstract_model.count).to eq players.count

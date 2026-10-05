@@ -19,6 +19,13 @@ module RailsAdmin
       delegate :model, :config, :associations, :primary_key, :primary_keys, :table_name,
                :quoted_table_name, :quote_column_name, to: :abstract_model
 
+      # A scope matching no record, which an authorization adapter returns to
+      # deny all of them. It is merged into the list's scope, so it has to
+      # survive a merge.
+      def none
+        scoped.none
+      end
+
       # Yield the records of a scope one at a time, in the order it is sorted in,
       # without holding all of them at once. What an export walks.
       #

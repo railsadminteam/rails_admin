@@ -153,6 +153,12 @@ RSpec.describe 'RailsAdmin Pundit Authorization', type: :request do
     it 'uses the custom key' do
       expect { visit index_path(model_name: 'team') }.not_to raise_error
     end
+
+    it 'does not leak records of a model with no Pundit policy scope defined' do
+      @team = FactoryBot.create :team
+      visit index_path(model_name: 'team')
+      is_expected.not_to have_content(@team.name)
+    end
   end
 
   context 'when custom authorization key is suffixed with ?' do

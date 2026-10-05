@@ -31,6 +31,11 @@ module RailsAdmin
           model.scoped
         end
 
+        # Criteria#none is lost when merged into another criteria
+        def none
+          scoped.in(_id: [])
+        end
+
         # Mongoid's #attributes holds what the document actually carries, so an
         # attribute that was never set is not in there and the method wins.
         def read(record, name)
