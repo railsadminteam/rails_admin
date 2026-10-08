@@ -105,6 +105,26 @@ RSpec.describe 'Nested many widget', type: :request, js: true do
     end
   end
 
+  it 'attaches a deeply nested item to the row it was added inside of' do
+    visit edit_path(model_name: 'field_test', id: field_test.id)
+
+    find('#field_test_nested_field_tests_attributes_field > .controls .add_nested_fields').click
+    row = find('#field_test_nested_field_tests_attributes_field > .tab-content > .fields.tab-pane.active')
+    row.find(':scope > fieldset > .title_field input').set 'the row the user filled in'
+    deeply_nested = row.find(':scope > fieldset > .deeply_nested_field_tests_field')
+    # trigger click via JS, workaround for instability in CI: the row around this
+    # button is still being revealed, so a click at its computed position misses.
+    deeply_nested.execute_script("this.querySelector('.add_nested_fields').click()")
+    deeply_nested.find('.fields.tab-pane.active > fieldset > .title_field input').set 'the grandchild'
+
+    # trigger click via JS, workaround for instability in CI
+    execute_script %(document.querySelector('button[name="_save"]').click())
+    is_expected.to have_content('Field test successfully updated')
+
+    expect(field_test.nested_field_tests.map(&:title)).to eq ['the row the user filled in']
+    expect(field_test.nested_field_tests.first.deeply_nested_field_tests.map(&:title)).to eq ['the grandchild']
+  end
+
   context 'with nested_attributes_options given' do
     before do
       allow(FieldTest.nested_attributes_options).to receive(:[]).with(any_args).
@@ -117,9 +137,37 @@ RSpec.describe 'Nested many widget', type: :request, js: true do
         and_return(allow_destroy: false)
       visit edit_path(model_name: 'field_test', id: field_test.id)
       expect(find('#field_test_nested_field_tests_attributes_0_title').value).to eq('title 1')
-      is_expected.not_to have_selector('form .remove_nested_fields')
-      expect(find('div#nested_field_tests_fields_blueprint', visible: false)[:'data-blueprint']).to match(
-        /<a[^>]* class="remove_nested_fields"[^>]*>/,
+      is_expected.not_to have_selector('.remove_nested_fields', visible: :all)
+      expect(page.body).to_not include('name="field_test[nested_field_tests_attributes][0][_destroy]"')
+      # A template is a row that does not exist yet, so it is always removable. Its
+      # content is outside the document tree, so it has to be read off the markup.
+      expect(page.body).to include('name="field_test[nested_field_tests_attributes][new_1_nested_field_tests][_destroy]"')
+      expect(page.body).to match(/<button[^>]* class="remove_nested_fields"/)
+    end
+
+    it 'still offers to remove a row the user added, when the form comes back from a failed save' do
+      allow(FieldTest.nested_attributes_options).to receive(:[]).with(:nested_field_tests).
+        and_return(allow_destroy: false)
+      RailsAdmin.config(FieldTest) do
+        edit do
+          field :string_field
+          field :nested_field_tests
+        end
+      end
+      visit edit_path(model_name: 'field_test', id: field_test.id)
+
+      fill_in 'field_test_string_field', with: 'Invalid' # fails the model's exclusion validation
+      find('#field_test_nested_field_tests_attributes_field > .controls .add_nested_fields').click
+      find('#field_test_nested_field_tests_attributes_field > .tab-content > .fields.tab-pane.active' \
+           ' > fieldset > .title_field input').set 'row the user added'
+
+      # trigger click via JS, workaround for instability in CI
+      execute_script %(document.querySelector('button[name="_save"]').click())
+      expect(page).to have_field('field_test_nested_field_tests_attributes_0_title', with: 'row the user added', visible: :all)
+
+      expect(page).to have_selector(
+        '#field_test_nested_field_tests_attributes_field > .tab-content > .fields > .remove_nested_fields',
+        visible: :all,
       )
     end
   end
@@ -127,16 +175,14 @@ RSpec.describe 'Nested many widget', type: :request, js: true do
   context "when a field which have the same name of nested_in field's" do
     it "does not hide fields which are not associated with nesting parent field's model" do
       visit new_path(model_name: 'field_test')
-      is_expected.not_to have_selector('select#field_test_nested_field_tests_attributes_new_nested_field_tests_field_test_id')
-      expect(find('div#nested_field_tests_fields_blueprint', visible: false)[:'data-blueprint']).to match(
-        /<select[^>]* id="field_test_nested_field_tests_attributes_new_nested_field_tests_another_field_test_id"[^>]*>/,
-      )
+      expect(page.body).to_not include('field_test_nested_field_tests_attributes_new_1_nested_field_tests_field_test_id')
+      expect(page.body).to include('field_test_nested_field_tests_attributes_new_1_nested_field_tests_another_field_test_id')
     end
 
     it 'hides fields that are deeply nested with inverse_of' do
       visit new_path(model_name: 'field_test')
-      expect(page.body).to_not include('field_test_nested_field_tests_attributes_new_nested_field_tests_deeply_nested_field_tests_attributes_new_deeply_nested_field_tests_nested_field_test_id_field')
-      expect(page.body).to include('field_test_nested_field_tests_attributes_new_nested_field_tests_deeply_nested_field_tests_attributes_new_deeply_nested_field_tests_title')
+      expect(page.body).to_not include('field_test_nested_field_tests_attributes_new_1_nested_field_tests_deeply_nested_field_tests_attributes_new_2_deeply_nested_field_tests_nested_field_test_id_field')
+      expect(page.body).to include('field_test_nested_field_tests_attributes_new_1_nested_field_tests_deeply_nested_field_tests_attributes_new_2_deeply_nested_field_tests_title')
     end
   end
 

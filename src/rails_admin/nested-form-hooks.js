@@ -1,23 +1,19 @@
+// The Bootstrap tab and collapse bookkeeping around a nested association; the
+// mechanism lives in nested-form.js and arrives as rails_admin.nested_field_* events.
 import jQuery from "jquery";
 import * as bootstrap from "bootstrap";
 
 (function ($) {
-  $(document).ready(function () {
-    return (window.nestedFormEvents.insertFields = function (
+  document.addEventListener("rails_admin.nested_field_added", function (event) {
+    var controls,
+      field,
+      nav,
+      new_tab,
+      one_to_one,
+      parent_group,
       content,
-      assoc,
-      link
-    ) {
-      var tab_content;
-      tab_content = $(link).closest(".controls").siblings(".tab-content");
-      tab_content.append(content);
-      return tab_content.children().last();
-    });
-  });
-
-  $(document).on("nested:fieldAdded", "form", function (content) {
-    var controls, field, nav, new_tab, one_to_one, parent_group, toggler;
-    field = content.field
+      toggler;
+    field = $(event.detail.field)
       .addClass("tab-pane")
       .attr("id", "unique-id-" + new Date().getTime());
     new_tab = $("<li></li>")
@@ -37,8 +33,10 @@ import * as bootstrap from "bootstrap";
     toggler = controls.find(".toggler");
     nav.append(new_tab);
 
-    const event = new CustomEvent("rails_admin.dom_ready", { detail: field });
-    document.dispatchEvent(event);
+    const domReady = new CustomEvent("rails_admin.dom_ready", {
+      detail: field,
+    });
+    document.dispatchEvent(domReady);
 
     new_tab.children("a").each(function (index, element) {
       bootstrap.Tab.getOrCreateInstance(element).show();
@@ -61,50 +59,42 @@ import * as bootstrap from "bootstrap";
     }
   });
 
-  $(document).on("nested:fieldRemoved", "form", function (content) {
-    var add_button,
-      controls,
-      current_li,
-      field,
-      nav,
-      one_to_one,
-      parent_group,
-      toggler;
-    field = content.field;
-    nav = field
-      .closest(".control-group")
-      .children(".controls")
-      .children(".nav");
-    current_li = nav.children("li").has('a[href="#' + field.attr("id") + '"]');
-    parent_group = field.closest(".control-group");
-    controls = parent_group.children(".controls");
-    one_to_one = controls.data("nestedone") !== void 0;
-    toggler = controls.find(".toggler");
-    (current_li.next().length ? current_li.next() : current_li.prev())
-      .children("a:first")
-      .each(function (index, element) {
-        bootstrap.Tab.getOrCreateInstance(element).show();
-      });
-    current_li.remove();
-    if (nav.children().length === 0) {
-      new bootstrap.Collapse(controls.siblings(".tab-content")[0], {
-        toggle: false,
-      }).hide();
-      toggler
-        .removeClass("active")
-        .addClass("disabled")
-        .children("i")
-        .removeClass("fa-chevron-down")
-        .addClass("fa-chevron-right");
+  document.addEventListener(
+    "rails_admin.nested_field_removed",
+    function (event) {
+      var add_button, controls, current_li, field, nav, one_to_one, toggler;
+      field = $(event.detail.field);
+      const parent_group = $(event.detail.group);
+      nav = parent_group.children(".controls").children(".nav");
+      current_li = nav
+        .children("li")
+        .has('a[href="#' + field.attr("id") + '"]');
+      controls = parent_group.children(".controls");
+      one_to_one = controls.data("nestedone") !== void 0;
+      toggler = controls.find(".toggler");
+      (current_li.next().length ? current_li.next() : current_li.prev())
+        .children("a:first")
+        .each(function (index, element) {
+          bootstrap.Tab.getOrCreateInstance(element).show();
+        });
+      current_li.remove();
+      if (nav.children().length === 0) {
+        new bootstrap.Collapse(controls.siblings(".tab-content")[0], {
+          toggle: false,
+        }).hide();
+        toggler
+          .removeClass("active")
+          .addClass("disabled")
+          .children("i")
+          .removeClass("fa-chevron-down")
+          .addClass("fa-chevron-right");
+      }
+      if (one_to_one) {
+        add_button = toggler.next();
+        add_button
+          .addClass("add_nested_fields")
+          .html(add_button.data("add-label"));
+      }
     }
-    if (one_to_one) {
-      add_button = toggler.next();
-      add_button
-        .addClass("add_nested_fields")
-        .html(add_button.data("add-label"));
-    }
-    field.find("[required]").each(function () {
-      $(this).prop("required", false);
-    });
-  });
+  );
 })(jQuery);
