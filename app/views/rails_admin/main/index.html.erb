@@ -80,9 +80,10 @@
       </div>
     </div>
   <% end %>
-  <% unless @model_config.list.scopes.empty? %>
+  <% scopes = @model_config.list.with(controller: self.controller, view: self).scopes %>
+  <% unless scopes.empty? %>
     <ul class="nav nav-tabs" id="scope_selector">
-      <% @model_config.list.scopes.each_with_index do |scope, index| %>
+      <% scopes.each_with_index do |scope, index| %>
         <% scope = '_all' if scope.nil? %>
         <li class="nav-item">
           <a href="<%= index_path(params.merge(scope: scope, page: nil)) %>" class="nav-link <%= 'active' if scope.to_s == params[:scope] || (params[:scope].blank? && index == 0) %>">

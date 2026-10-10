@@ -34,10 +34,11 @@ module RailsAdmin
           proc do
             @objects ||= list_entries
 
-            unless @model_config.list.scopes.empty?
+            scopes = @model_config.list.with(controller: self, view: view_context).scopes
+            unless scopes.empty?
               if params[:scope].blank?
-                @objects = @objects.send(@model_config.list.scopes.first) unless @model_config.list.scopes.first.nil?
-              elsif @model_config.list.scopes.collect(&:to_s).include?(params[:scope])
+                @objects = @objects.send(scopes.first) unless scopes.first.nil?
+              elsif scopes.collect(&:to_s).include?(params[:scope])
                 @objects = @objects.send(params[:scope].to_sym)
               end
             end

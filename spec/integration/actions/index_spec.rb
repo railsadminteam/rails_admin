@@ -1123,6 +1123,23 @@ RSpec.describe 'Index action', type: :request do
       is_expected.to have_content(@teams[3].name)
     end
 
+    describe 'when the scopes block reads bindings' do
+      before do
+        RailsAdmin.config do |config|
+          config.model Team do
+            list do
+              scopes { bindings[:view] && bindings[:controller] ? [nil, :red] : [] }
+            end
+          end
+        end
+      end
+
+      it 'has a controller and a view available' do
+        visit index_path(model_name: 'team')
+        expect(find('#scope_selector li:last')).to have_content('Red')
+      end
+    end
+
     describe 'i18n' do
       before :each do
         en = {admin: {scopes: {
