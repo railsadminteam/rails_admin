@@ -29,13 +29,33 @@ RSpec.describe RailsAdmin::Extensions::PaperTrail::AuditingAdapter, active_recor
     let(:model) { RailsAdmin::AbstractModel.new(PaperTrailTest) }
 
     it 'uses the given sort order' do
-      expect_any_instance_of(ActiveRecord::Relation).to receive(:order).with(whodunnit: :asc).and_call_original
+      expect_any_instance_of(ActiveRecord::Relation).to receive(:reorder).with(whodunnit: :asc).and_call_original
       subject.listing_for_model model, nil, :username, false, true, nil, 20
     end
 
     it 'uses the default order when sort is not given' do
-      expect_any_instance_of(ActiveRecord::Relation).to receive(:order).with(id: :desc).and_call_original
+      expect_any_instance_of(ActiveRecord::Relation).to receive(:reorder).with(id: :desc).and_call_original
       subject.listing_for_model model, nil, false, false, true, nil, 20
+    end
+  end
+
+  describe '#listing_for_object' do
+    subject { RailsAdmin::Extensions::PaperTrail::AuditingAdapter.new(nil) }
+    let(:model) { RailsAdmin::AbstractModel.new(PaperTrailTest) }
+
+    it 'sorts by the given column, not by the default order has_paper_trail puts on the association' do
+      object = nil
+      with_versioning do
+        PaperTrail.request.whodunnit = 'charlie'
+        object = PaperTrailTest.create!(name: 'a')
+        PaperTrail.request.whodunnit = 'bravo'
+        object.update!(name: 'b')
+        PaperTrail.request.whodunnit = 'alpha'
+        object.update!(name: 'c')
+      end
+
+      asc = subject.listing_for_object(model, object, nil, :username, false, true, nil, 20)
+      expect(asc.map(&:username)).to eq(%w[alpha bravo charlie])
     end
   end
 end
