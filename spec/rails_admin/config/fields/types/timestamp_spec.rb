@@ -21,4 +21,19 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Timestamp, active_record: true
       expect(@object.timestamp_field.strftime('%Y-%m-%d %H:%M')).to eq(@time.strftime('%Y-%m-%d %H:%M'))
     end
   end
+
+  describe 'aliasing' do
+    before :each do
+      RailsAdmin.config do |config|
+        config.model FieldTest do
+          field :timestamp_field, :timestamptz
+        end
+      end
+    end
+
+    it 'allows use of :timestamptz fieldtype' do
+      field = RailsAdmin.config(FieldTest).fields.detect { |f| f.name == :timestamp_field }
+      expect(field.class).to eq RailsAdmin::Config::Fields::Types::Timestamp
+    end
+  end
 end
