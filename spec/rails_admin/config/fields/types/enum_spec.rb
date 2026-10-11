@@ -76,6 +76,24 @@ RSpec.describe RailsAdmin::Config::Fields::Types::Enum do
     end
   end
 
+  describe 'when nothing supplies the enumeration' do
+    subject { RailsAdmin.config(FieldTest).field(:string_field) }
+
+    before do
+      RailsAdmin.config FieldTest do
+        field :string_field, :enum
+      end
+    end
+
+    it "has no values, rather than the column's own current one" do
+      expect(subject.with(object: FieldTest.new(string_field: 'red')).enum).to eq []
+    end
+
+    it 'builds filter options without raising' do
+      expect { subject.with(object: FieldTest.new).filter_options }.not_to raise_error
+    end
+  end
+
   describe 'the enum instance method' do
     before do
       Team.class_eval do

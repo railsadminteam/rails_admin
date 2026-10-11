@@ -24,16 +24,18 @@ module RailsAdmin
             # Fall back to the model when no object is bound, which is how the
             # filters dropdown renders fields. Asking nil for its class used to
             # look the method up on NilClass, hiding class-level enumerations.
+            # nil if there's no such method: there's no enumeration to list,
+            # not the field's own current value.
             @enum_method ||=
               if (bindings[:object]&.class || abstract_model.model).respond_to?("#{name}_enum") ||
                  (bindings[:object] || abstract_model.dummy_record).respond_to?("#{name}_enum")
                 "#{name}_enum"
-              else
-                name
               end
           end
 
           register_instance_option :enum do
+            next [] unless enum_method
+
             if abstract_model.model.respond_to?(enum_method)
               abstract_model.model.send(enum_method)
             else
