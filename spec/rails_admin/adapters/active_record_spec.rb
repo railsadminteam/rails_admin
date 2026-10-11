@@ -136,6 +136,11 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
           expect(results).to eq(players[4, 1])
         end
       end
+
+      it 'leaves out a column the queried term could never fit' do
+        player = FactoryBot.create(:player, name: '6121234567')
+        expect(abstract_model.all(query: '6121234567')).to eq [player]
+      end
     end
 
     # The shared suite asks only that records come out in order; how the batches

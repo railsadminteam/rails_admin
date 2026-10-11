@@ -114,7 +114,28 @@ module RailsAdmin
           "#{path_table_name(target)}.#{target.attribute}"
         end
 
+        # Whether the column's own type rules the value out, which is what
+        # ActiveRecord asks before building a condition of its own.
+        def out_of_range?(target, value)
+          values = Array.wrap(value).reject(&:blank?)
+          return false if values.empty? || !target.is_a?(RailsAdmin::Criteria::Path)
+
+          type = path_abstract_model(target).model.type_for_attribute(target.attribute.to_s)
+          values.all? { |v| range_error?(type, v) }
+        end
+
       private
+
+        # Only a complaint about the range answers the question; a type which
+        # refuses the value for its own other reasons leaves it unanswered.
+        def range_error?(type, value)
+          type.serialize(value)
+          false
+        rescue ::ActiveModel::RangeError
+          true
+        rescue ::StandardError
+          false
+        end
 
         # The model the path's attribute lives on. Only a single association hop
         # is resolvable, which is all the field configuration can express.

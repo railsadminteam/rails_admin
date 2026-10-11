@@ -19,6 +19,8 @@ module RailsAdmin
 
         def add(field, value, operator)
           field.searchable_columns.flatten.each do |column_infos|
+            next if @repository.out_of_range?(column_infos[:column], value)
+
             column = @repository.search_column(column_infos[:column])
             statement, value1, value2 = StatementBuilder.new(column, column_infos[:type], value, operator, @scope.connection.adapter_name).to_statement
             @statements << statement if statement.present?
