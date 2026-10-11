@@ -29,6 +29,49 @@ RSpec.describe RailsAdmin::Config::HasFields do
     expect { RailsAdmin.config(Team).fields.detect { |f| f.name == :division }.visible? }.to raise_error(/undefined method [`']\[\]' for nil/)
   end
 
+  it 'keeps a visible block when the field is declared again' do
+    RailsAdmin.config do |config|
+      config.model Team do
+        list do
+          field :name do
+            visible { false }
+          end
+          field :name
+        end
+      end
+    end
+    expect(RailsAdmin.config(Team).list.fields.detect { |f| f.name == :name }).not_to be_visible
+  end
+
+  context 'with a field whose name is no instance variable name' do
+    before do
+      if CI_ORM == :mongoid
+        Team.instance_eval { field :admin?, type: Mongoid::Boolean }
+      else
+        ActiveRecord::Base.connection.add_column :teams, 'admin?', :boolean
+        Team.reset_column_information
+      end
+    end
+
+    after do
+      if CI_ORM == :mongoid
+        Team.fields.delete('admin?')
+      else
+        ActiveRecord::Base.connection.remove_column :teams, 'admin?'
+        Team.reset_column_information
+      end
+    end
+
+    it 'can be configured' do
+      RailsAdmin.config do |config|
+        config.model Team do
+          field :admin?
+        end
+      end
+      expect(RailsAdmin.config(Team).fields.map(&:name)).to include :admin?
+    end
+  end
+
   it 'assigns properties to new one on overriding existing field' do
     RailsAdmin.config do |config|
       config.model Team do
