@@ -63,6 +63,26 @@ RailsAdmin.config do |config|
 end
 ```
 
+`sort_by` also accepts an array to sort by multiple columns on the model's own
+table, or a hash of `{table_name: column}` pairs to sort across an association
+(for `teams.name`, `{team: :name}` if `team` is the association name and
+`teams` its table):
+
+```ruby
+RailsAdmin.config do |config|
+  config.model 'Player' do
+    list do
+      sort_by %i[team_id name]
+    end
+  end
+end
+```
+
+A plain string is read as a single column or SQL expression, not several --
+there's no array of columns to apply `sort_reverse` to individually, so a
+string with more than one column in it won't reverse the way the array form
+does.
+
 ### Filters
 
 Default visible filters. Must be a list of fields name.
