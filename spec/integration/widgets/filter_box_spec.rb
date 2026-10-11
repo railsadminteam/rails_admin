@@ -217,4 +217,33 @@ RSpec.describe 'Filter box widget', type: :request, js: true do
       expect(page).to have_css '[name^="f[draft]"][name$="[v]"]'
     end
   end
+
+  describe 'for a field whose name is no selector' do
+    before do
+      if CI_ORM == :mongoid
+        Team.instance_eval { field :admin?, type: Mongoid::Boolean }
+      else
+        ActiveRecord::Base.connection.add_column :teams, 'admin?', :boolean
+        Team.reset_column_information
+      end
+    end
+
+    after do
+      if CI_ORM == :mongoid
+        Team.fields.delete('admin?')
+      else
+        ActiveRecord::Base.connection.remove_column :teams, 'admin?'
+        Team.reset_column_information
+      end
+    end
+
+    it 'is filterable' do
+      visit index_path(model_name: 'team')
+      click_link 'Add filter'
+      click_link 'Admin?'
+      within('#filters_box') do
+        is_expected.to have_css '[name^="f[admin?]"][name$="[v]"]'
+      end
+    end
+  end
 end

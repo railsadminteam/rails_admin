@@ -175,7 +175,9 @@ import flatpickr from "./flatpickr.js";
       }
 
       var filterContainerId = field_name + "-" + index + "-filter-container";
-      $("#" + filterContainerId).remove();
+      // A field name is whatever the column is called, "admin?" included, and
+      // an id built out of one isn't a selector until it's escaped.
+      $("#" + $.escapeSelector(filterContainerId)).remove();
 
       var $content = $("<div>")
         .attr("id", filterContainerId)
