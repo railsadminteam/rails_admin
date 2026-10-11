@@ -41,7 +41,8 @@ module RailsAdmin
 
     def to_csv(options = {})
       options = HashWithIndifferentAccess.new(options)
-      encoding_to = Encoding.find(options[:encoding_to]) if options[:encoding_to].present?
+      chosen_encoding = Encoding.find(options[:encoding_to]) if options[:encoding_to].present?
+      encoding_to = chosen_encoding || @abstract_model&.encoding
 
       csv_string = generate_csv_string(options)
       csv_string = csv_string.encode(encoding_to, invalid: :replace, undef: :replace, replace: '?') if encoding_to
@@ -51,7 +52,8 @@ module RailsAdmin
       # If user chooses utf8, they will open it in utf8 and BOM will disappear at reading.
       # But that way "English" users who don't bother and chooses to let utf8 by default won't get BOM added
       # and will not see it if Excel opens the file with a different encoding.
-      csv_string = "\xEF\xBB\xBF#{csv_string}" if encoding_to == Encoding::UTF_8
+      # Only an explicit choice counts here, not a guessed fallback.
+      csv_string = "\xEF\xBB\xBF#{csv_string}" if chosen_encoding == Encoding::UTF_8
 
       [!options[:skip_header], (encoding_to || csv_string.encoding).to_s, csv_string]
     end

@@ -92,6 +92,9 @@ RSpec.describe RailsAdmin::CSVConverter do
       let(:encoding) { '' }
       let(:objects) { FactoryBot.create_list :player, 1, number: 1, name: 'Josè'.encode('ISO-8859-1') }
       before do
+        # mysql2 reports the encoding its connection was opened with, so the
+        # guessed encoding has to be told what SET NAMES below does.
+        allow_any_instance_of(RailsAdmin::AbstractModel).to receive(:encoding).and_return(Encoding::ISO_8859_1)
         case connection_config[:adapter]
         when 'postgresql'
           @connection = ActiveRecord::Base.connection.raw_connection
@@ -110,10 +113,26 @@ RSpec.describe RailsAdmin::CSVConverter do
       end
 
       it 'exports to ISO-8859-1' do
+        # sqlite3 has no client encoding to set above, so the name does not come
+        # back as latin1 to begin with.
+        skip 'nothing to set the connection to latin1 with' if connection_config[:adapter] == 'sqlite3'
+
         expect(subject[1]).to eq 'ISO-8859-1'
         expect(subject[2].encoding).to eq Encoding::ISO_8859_1
         expect(subject[2].unpack1('H*')).
           to eq '4e756d6265722c4e616d650a312c4a6f73e80a'
+      end
+    end
+
+    context 'when encoding_to is left blank' do
+      let(:encoding) { '' }
+
+      before do
+        allow_any_instance_of(RailsAdmin::AbstractModel).to receive(:encoding).and_return(Encoding::ISO_8859_1)
+      end
+
+      it "falls back to the model's guessed encoding instead of leaving the string untouched" do
+        expect(subject[1]).to eq 'ISO-8859-1'
       end
     end
 
