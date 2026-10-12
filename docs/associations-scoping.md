@@ -28,6 +28,14 @@ The scope will default to limit records to 30, unless cache_all is true (no limi
 
 **bindings[:object] can be null for new parent records!** Also note that the scope takes in to account the saved version of the record, not considering any unsaved changes you may have made in the edit form. If you change the team's league, you'll still see the players from the old league until you save.
 
+`associated_collection_scope` governs the records the form offers, not the ones already associated: those are read from the association itself, so a `default_scope` on the associated model hides them from the list, show and edit views too. Unscope the association when you want them to appear:
+
+```ruby
+class Team < ApplicationRecord
+  has_many :players, -> { unscope(where: :retired) }
+end
+```
+
 Validating associations is up to your models, and you'll certainly want to set the up properly. This functionality is basically a filter--that allows you to scope in on the records you're likely to want. It does not enforce what gets mapped in your database. If the Team knows the id of a Player in another League, he can associate it. Use `authorization` or association conditions, and a validation, to prevent that.
 
 ### Scoping the relation itself with conditions
