@@ -1115,6 +1115,19 @@ RSpec.describe 'Index action', type: :request do
       is_expected.to have_no_content(@teams[3].name)
     end
 
+    it 'paginates under a scope which resets the query' do
+      RailsAdmin.config Team do
+        list do
+          scopes [:unscoped]
+          items_per_page 2
+        end
+      end
+
+      visit index_path(model_name: 'team')
+      is_expected.to have_css('#list tbody tr', count: 2)
+      is_expected.to have_css('.pagination')
+    end
+
     it 'shows all records instead when scope not in list' do
       visit index_path(model_name: 'team', scope: 'green')
       is_expected.to have_content(@teams[0].name)

@@ -32,16 +32,8 @@ module RailsAdmin
 
         register_instance_option :controller do
           proc do
-            @objects ||= list_entries
-
-            scopes = @model_config.list.with(controller: self, view: view_context).scopes
-            unless scopes.empty?
-              if params[:scope].blank?
-                @objects = @objects.send(scopes.first) unless scopes.first.nil?
-              elsif scopes.collect(&:to_s).include?(params[:scope])
-                @objects = @objects.send(params[:scope].to_sym)
-              end
-            end
+            association_scope = get_association_scope_from_params
+            @objects ||= @association ? association_entries(@model_config, association_scope) : list_entries
 
             respond_to do |format|
               format.html do

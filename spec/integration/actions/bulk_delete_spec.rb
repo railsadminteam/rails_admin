@@ -101,6 +101,29 @@ RSpec.describe 'BulkDelete action', type: :request do
     end
   end
 
+  context 'with a scope selected' do
+    let!(:left_out) { FactoryBot.create :comment_confirmed, content: 'left out of the default scope' }
+
+    before do
+      RailsAdmin.config Comment::Confirmed do
+        object_label_method :content
+        list do
+          scopes [nil, :unscoped]
+        end
+      end
+    end
+
+    it 'confirms the records the scope leaves' do
+      post(bulk_action_path(bulk_action: 'bulk_delete', model_name: 'comment~confirmed', bulk_ids: [left_out.id], scope: 'unscoped'))
+      expect(response.body).to include left_out.content
+    end
+
+    it 'deletes them' do
+      delete(bulk_delete_path(model_name: 'comment~confirmed', bulk_ids: [left_out.id], scope: 'unscoped'))
+      expect(Comment::Confirmed.unscoped.where(id: left_out.id)).to be_empty
+    end
+  end
+
   context 'with composite primary keys', composite_primary_keys: true do
     let!(:fanships) { FactoryBot.create_list(:fanship, 3) }
 

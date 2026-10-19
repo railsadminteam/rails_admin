@@ -13,11 +13,24 @@ module RailsAdmin
       process(params[:bulk_action]) if params[:bulk_action].in?(RailsAdmin::Config::Actions.all(:bulkable, controller: self, abstract_model: @abstract_model).collect(&:route_fragment))
     end
 
+    # The records the action lists, narrowed by the scope its tabs select.
     def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params, pagination = !(params[:associated_collection] || params[:all] || params[:bulk_ids]))
       scope = model_config.scope
       auth_scope = @authorization_adapter&.query(auth_scope_key, model_config.abstract_model)
       scope = scope.merge(auth_scope) if auth_scope
+      selected = selected_scope(model_config)
+      scope = scope.send(selected) if selected
       scope = get_collection(model_config, scope, pagination)
+      additional_scope ? scope.instance_eval(&additional_scope) : scope
+    end
+
+    # The records a field offers for an association. The list's own scopes have
+    # no say here: associated_collection_scope is what narrows these.
+    def association_entries(model_config, additional_scope)
+      scope = model_config.scope
+      auth_scope = @authorization_adapter&.query(:index, model_config.abstract_model)
+      scope = scope.merge(auth_scope) if auth_scope
+      scope = get_collection(model_config, scope, false)
       additional_scope ? scope.instance_eval(&additional_scope) : scope
     end
 
@@ -148,6 +161,18 @@ module RailsAdmin
       options = options.merge(filters: params[:f]) if params[:f].present?
       options = options.merge(bulk_ids: params[:bulk_ids]) if params[:bulk_ids]
       model_config.abstract_model.all(options, scope)
+    end
+
+    # Which of the list's scopes the request selects, if the list has any.
+    def selected_scope(model_config)
+      scopes = model_config.list.with(controller: self, view: view_context).scopes
+      return if scopes.empty?
+
+      if params[:scope].blank?
+        scopes.first
+      elsif scopes.collect(&:to_s).include?(params[:scope])
+        params[:scope].to_sym
+      end
     end
 
     def get_association_scope_from_params

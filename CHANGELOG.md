@@ -4,6 +4,15 @@
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v4.0.0.beta2...HEAD)
 
+### Changed
+
+- The records a field offers for an association are no longer narrowed by the scopes of the associated model's own list; `associated_collection_scope` is what narrows them
+
+### Fixed
+
+- Fix the list breaking under a selected scope which rebuilds the query, `unscoped` among them: the records are narrowed by it before they are counted and paginated ([#2250](https://github.com/railsadminteam/rails_admin/issues/2250))
+- Fix a bulk action leaving out the records the selected scope brings in, which let a row be checked in the list and then not acted on
+
 ## [4.0.0.beta2](https://github.com/railsadminteam/rails_admin/tree/v4.0.0.beta2) - 2026-10-05
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v4.0.0.beta...v4.0.0.beta2)

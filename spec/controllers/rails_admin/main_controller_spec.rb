@@ -162,11 +162,15 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
     end
   end
 
-  describe '#list_entries for associated_collection' do
+  describe '#association_entries' do
     before do
       @team = FactoryBot.create :team
       controller.params = {associated_collection: 'players', current_action: 'update', source_abstract_model: 'team', source_object_id: @team.id, model_name: 'player', action: 'index'}
       controller.get_model # set @model_config for Team
+    end
+
+    let(:association_entries) do
+      controller.association_entries(RailsAdmin.config(Player), controller.send(:get_association_scope_from_params))
     end
 
     it "doesn't scope associated collection records when associated_collection_scope is nil" do
@@ -178,7 +182,7 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
         end
       end
 
-      expect(controller.list_entries.to_a.length).to eq(@players.size)
+      expect(association_entries.to_a.length).to eq(@players.size)
     end
 
     it 'scopes associated collection records according to associated_collection_scope' do
@@ -192,7 +196,7 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
         end
       end
 
-      expect(controller.list_entries.to_a.length).to eq(3)
+      expect(association_entries.to_a.length).to eq(3)
     end
 
     it 'scopes associated collection records according to bindings' do
@@ -212,7 +216,7 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
         end
       end
 
-      expect(controller.list_entries.to_a.length).to eq(@team.revenue.to_i)
+      expect(association_entries.to_a.length).to eq(@team.revenue.to_i)
     end
 
     it 'limits associated collection records number to 30 if cache_all is false' do
@@ -223,7 +227,7 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
           associated_collection_cache_all false
         end
       end
-      expect(controller.list_entries.to_a.length).to eq(30)
+      expect(association_entries.to_a.length).to eq(30)
     end
 
     it "doesn't limit associated collection records number to 30 if cache_all is true" do
@@ -234,13 +238,13 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
           associated_collection_cache_all true
         end
       end
-      expect(controller.list_entries.length).to eq(@players.size)
+      expect(association_entries.length).to eq(@players.size)
     end
 
     it 'orders associated collection records by id, descending' do
       @players = FactoryBot.create_list(:player, 3)
 
-      expect(controller.list_entries.to_a).to eq(@players.sort_by(&:id).reverse)
+      expect(association_entries.to_a).to eq(@players.sort_by(&:id).reverse)
     end
 
     it 'orders associated collection records as associated_collection_scope reordered them' do
@@ -254,7 +258,23 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
         end
       end
 
-      expect(controller.list_entries.to_a.collect(&:name)).to eq(%w[Alice Bob Charlie])
+      expect(association_entries.to_a.collect(&:name)).to eq(%w[Alice Bob Charlie])
+    end
+
+    it "leaves the scopes of the associated model's own list out of it" do
+      player = FactoryBot.create(:player)
+      FactoryBot.create(:team, color: 'red')
+      FactoryBot.create(:team, color: 'black')
+      RailsAdmin.config Team do
+        list do
+          scopes [:red]
+        end
+      end
+      controller.params = {associated_collection: 'team', current_action: 'update', source_abstract_model: 'player', source_object_id: player.id, model_name: 'team', action: 'index'}
+      controller.get_model
+
+      entries = controller.association_entries(RailsAdmin.config(Team), controller.send(:get_association_scope_from_params))
+      expect(entries.to_a.collect(&:color)).to include 'red', 'black'
     end
   end
 

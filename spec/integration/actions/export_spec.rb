@@ -248,6 +248,30 @@ RSpec.describe 'Export action', type: :request do
     end
   end
 
+  describe 'with a scope selected' do
+    before do
+      RailsAdmin.config Comment::Confirmed do
+        list do
+          scopes [nil, :unscoped]
+        end
+      end
+      FactoryBot.create :comment_confirmed
+      FactoryBot.create :comment_confirmed, content: 'left out of the default scope'
+    end
+
+    it 'exports the records the scope leaves' do
+      visit export_path(model_name: 'comment~confirmed', scope: 'unscoped')
+      click_button 'Export to csv'
+      is_expected.to have_content 'left out of the default scope'
+    end
+
+    it 'exports what the list shows when none is selected' do
+      visit export_path(model_name: 'comment~confirmed')
+      click_button 'Export to csv'
+      is_expected.to have_no_content 'left out of the default scope'
+    end
+  end
+
   context 'with composite primary keys', composite_primary_keys: true do
     let!(:fanship) { FactoryBot.create(:fanship) }
 
