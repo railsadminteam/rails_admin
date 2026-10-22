@@ -18,7 +18,7 @@ end
 group :test do
   gem 'cancancan', '~> 3.0'
   gem 'carrierwave', ['>= 2.2.1', '< 3']
-  gem 'cuprite', '!= 0.15.1'
+  gem 'cuprite', ['!= 0.15.1', '< 0.19'] # ferrum 0.19 deadlocks on JRuby: rubycdp/ferrum#676
   gem 'database_cleaner-active_record', '>= 2.0', require: false
   gem 'dragonfly', '~> 1.0'
   gem 'factory_bot', '>= 4.2', '!= 6.4.5'

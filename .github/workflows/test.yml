@@ -5,6 +5,8 @@ on: [push, pull_request]
 jobs:
   rspec:
     name: RSpec
+    # A suite which hangs rather than fails should not sit out the 6-hour default
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
