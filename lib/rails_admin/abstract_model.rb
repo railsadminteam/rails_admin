@@ -114,7 +114,8 @@ module RailsAdmin
              :attribute_length_options, :attribute_enum_values, :dummy_record,
              to: :reflection
 
-    delegate :new, :get, :first, :all, :count, :destroy, :scoped, :none, :where, :read, :save, :each_record,
+    delegate :new, :get, :first, :all, :count, :destroy, :scoped, :none, :intersect, :scoped_by,
+             :where, :read, :save, :each_record,
              :each_associated_children, :format_id, :parse_id,
              :serialize_attribute, :deserialize_attribute,
              :sort_expression, :search_column, :parse_object_id,

@@ -20,10 +20,21 @@ module RailsAdmin
                :quoted_table_name, :quote_column_name, to: :abstract_model
 
       # A scope matching no record, which an authorization adapter returns to
-      # deny all of them. It is merged into the list's scope, so it has to
-      # survive a merge.
+      # deny all of them. It is intersected with the list's scope, so it has to
+      # stay empty through that.
       def none
         scoped.none
+      end
+
+      # Narrows a scope to the records another scope of the same model selects.
+      # Merging lets the other scope win where conditions collide.
+      def intersect(scope, other)
+        other ? scope.merge(other) : scope
+      end
+
+      # Applies one of the model's own named scopes.
+      def scoped_by(scope, name)
+        name ? scope.send(name) : scope
       end
 
       # Yield the records of a scope one at a time, in the order it is sorted in,

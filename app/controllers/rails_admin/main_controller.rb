@@ -15,11 +15,10 @@ module RailsAdmin
 
     # The records the action lists, narrowed by the scope its tabs select.
     def list_entries(model_config = @model_config, auth_scope_key = :index, additional_scope = get_association_scope_from_params, pagination = !(params[:associated_collection] || params[:all] || params[:bulk_ids]))
+      abstract_model = model_config.abstract_model
       scope = model_config.scope
-      auth_scope = @authorization_adapter&.query(auth_scope_key, model_config.abstract_model)
-      scope = scope.merge(auth_scope) if auth_scope
-      selected = selected_scope(model_config)
-      scope = scope.send(selected) if selected
+      scope = abstract_model.intersect(scope, @authorization_adapter&.query(auth_scope_key, abstract_model))
+      scope = abstract_model.scoped_by(scope, selected_scope(model_config))
       scope = get_collection(model_config, scope, pagination)
       additional_scope ? scope.instance_eval(&additional_scope) : scope
     end
@@ -27,9 +26,9 @@ module RailsAdmin
     # The records a field offers for an association. The list's own scopes have
     # no say here: associated_collection_scope is what narrows these.
     def association_entries(model_config, additional_scope)
+      abstract_model = model_config.abstract_model
       scope = model_config.scope
-      auth_scope = @authorization_adapter&.query(:index, model_config.abstract_model)
-      scope = scope.merge(auth_scope) if auth_scope
+      scope = abstract_model.intersect(scope, @authorization_adapter&.query(:index, abstract_model))
       scope = get_collection(model_config, scope, false)
       additional_scope ? scope.instance_eval(&additional_scope) : scope
     end

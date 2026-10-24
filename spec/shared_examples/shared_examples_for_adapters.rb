@@ -125,8 +125,31 @@ RSpec.shared_examples 'a RailsAdmin adapter' do
     end
 
     describe '#none' do
-      it 'matches nothing, even when merged into another scope' do
-        expect(abstract_model.scoped.merge(abstract_model.none).to_a).to eq []
+      it 'matches nothing, even when intersected with another scope' do
+        expect(abstract_model.intersect(abstract_model.scoped, abstract_model.none).to_a).to eq []
+      end
+    end
+
+    describe '#intersect' do
+      it 'narrows a scope to what another scope of the same model selects' do
+        expect(abstract_model.intersect(abstract_model.scoped, abstract_model.where(name: players.first.name)).to_a).to eq [players.first]
+      end
+
+      it 'leaves the scope as it is when there is nothing to intersect with' do
+        expect(abstract_model.intersect(abstract_model.scoped, nil).to_a).to match_array players
+      end
+    end
+
+    describe '#scoped_by' do
+      let!(:the_one) { FactoryBot.create(:player, name: 'the one') }
+      before { model_class.class_eval { scope :named_the_one, -> { where(name: 'the one') } } }
+
+      it "applies one of the model's own named scopes" do
+        expect(abstract_model.scoped_by(abstract_model.scoped, :named_the_one).to_a).to eq [the_one]
+      end
+
+      it 'leaves the scope as it is without a name' do
+        expect(abstract_model.scoped_by(abstract_model.scoped, nil).to_a).to match_array players + [the_one]
       end
     end
 

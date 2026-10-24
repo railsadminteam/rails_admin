@@ -4,6 +4,10 @@
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v4.0.0.beta2...HEAD)
 
+### Added
+
+- Adapters answer `Repository#intersect` and `#scoped_by`, which narrow a scope by another scope and by one of the model's named scopes, so that RailsAdmin no longer merges and chains scopes itself; an adapter which does not inherit from `RailsAdmin::Adapters::Repository` has to answer them too
+
 ### Changed
 
 - The records a field offers for an association are no longer narrowed by the scopes of the associated model's own list; `associated_collection_scope` is what narrows them

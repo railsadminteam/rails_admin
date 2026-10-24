@@ -76,12 +76,19 @@ Reaches the store.
 | ---------------------------------------------------------- | -------------------------------------------------------------------- |
 | `new`, `get`, `first`, `all`, `count`, `destroy`, `scoped` | reading and writing records                                          |
 | `each_record(scope)`                                       | every record of a scope, in its order, without loading them all      |
-| `none`                                                     | a scope matching no record, which survives being merged into another |
+| `none`                                                     | a scope matching no record, which stays empty when it is intersected |
+| `intersect(scope, other)`                                  | narrowing a scope to what another scope of the same model selects    |
+| `scoped_by(scope, name)`                                   | applying one of the model's own named scopes                         |
 | `save(record)`                                             | persisting, including whatever else the store needs to call it saved |
 | `read(record, name)`                                       | one attribute, as the store holds it                                 |
 | `format_id`, `parse_id`                                    | how an id travels through a URL, and back                            |
 | `serialize_attribute`, `deserialize_attribute`             | casting a value the way the store would                              |
 | `sort_expression`, `search_column`                         | turning a `Criteria::Path` into the store's own terms                |
+
+`intersect` is where an authorization scope meets the list's own. ActiveRecord
+and Mongoid both merge, which lets the other scope's conditions win where they
+collide instead of adding to them. A store with no merge of its own can
+intersect the two queries, or select the records of one within the other.
 
 ## Criteria — how Config says what it wants
 
