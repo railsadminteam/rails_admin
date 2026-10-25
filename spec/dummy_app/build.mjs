@@ -1,4 +1,6 @@
 // Builds the :external-mode RailsAdmin assets for the dummy app.
+// Everything but rails_admin itself resolves from the repository root's node_modules,
+// so versions are declared once there rather than duplicated in this app.
 import { build } from "esbuild";
 import * as sass from "sass";
 import { writeFileSync, mkdirSync } from "node:fs";
