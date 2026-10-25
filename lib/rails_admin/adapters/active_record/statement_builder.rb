@@ -69,12 +69,12 @@ module RailsAdmin
 
         def build_statement_for_type
           case @type
-          when :boolean                   then build_statement_for_boolean
-          when :integer, :decimal, :float then build_statement_for_integer_decimal_or_float
-          when :string, :text, :citext    then build_statement_for_string_or_text
-          when :enum                      then build_statement_for_enum
-          when :belongs_to_association    then build_statement_for_belongs_to_association
-          when :uuid                      then build_statement_for_uuid
+          when :boolean                             then build_statement_for_boolean
+          when :integer, :decimal, :float           then build_statement_for_integer_decimal_or_float
+          when :string, :text, :citext, :serialized then build_statement_for_string_or_text
+          when :enum                                then build_statement_for_enum
+          when :belongs_to_association              then build_statement_for_belongs_to_association
+          when :uuid                                then build_statement_for_uuid
           end
         end
 

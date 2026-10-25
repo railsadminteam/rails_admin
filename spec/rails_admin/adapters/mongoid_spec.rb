@@ -174,6 +174,26 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
       expect(abstract_model.all(query: 'foo').to_a).to match_array players[1..2]
     end
 
+    # A Hash is a subdocument, which a regular expression never matches: the key
+    # it holds has to be searched by name, or by a scope of the model's own.
+    context 'with a serialized field' do
+      let(:abstract_model) { RailsAdmin::AbstractModel.new('FieldTest') }
+      let!(:field_tests) do
+        [%w[needle in a haystack], %w[nothing here]].collect { |array| FieldTest.create!(array_field: array) }
+      end
+      before do
+        RailsAdmin.config FieldTest do
+          list do
+            field :array_field
+          end
+        end
+      end
+
+      it 'matches an element of an array field' do
+        expect(abstract_model.all(query: 'needle').to_a).to eq [field_tests.first]
+      end
+    end
+
     context 'when parsing is not idempotent' do
       before do
         RailsAdmin.config do |c|
@@ -240,6 +260,10 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
     it "strips '_discard' from array values" do
       expect(abstract_model.repository.send(:build_statement, :name, :enum, ['_discard'], nil)).to be_nil
       expect(abstract_model.repository.send(:build_statement, :name, :enum, %w[_discard foo bar], nil)).to eq(name: {'$in' => %w[foo bar]})
+    end
+
+    it 'matches a serialized field as a string' do
+      expect(abstract_model.repository.send(:build_statement, :name, :serialized, 'foo', 'default')).to eq(name: /foo/i)
     end
 
     it "supports '_blank' operator" do

@@ -263,6 +263,22 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
       expect(abstract_model.all(query: 'foo')).to match_array teams[1..2]
     end
 
+    context 'with a serialized column' do
+      let(:abstract_model) { RailsAdmin::AbstractModel.new('User') }
+      let!(:users) { [%w[needle], %w[haystack]].collect { |roles| FactoryBot.create :user, roles: roles } }
+      before do
+        RailsAdmin.config User do
+          list do
+            field :roles, :serialized
+          end
+        end
+      end
+
+      it 'searches what the column holds' do
+        expect(abstract_model.all(query: 'needle').to_a).to eq [users.first]
+      end
+    end
+
     context "when field's searchable_columns is empty" do
       before do
         RailsAdmin.config do |c|
@@ -396,6 +412,12 @@ RSpec.describe 'RailsAdmin::Adapters::ActiveRecord', active_record: true do
           expect(build_statement(:string, 'foo', 'default')).to eq([like, '%foo%'])
           expect(build_statement(:string, 'FOO', 'default')).to eq([like, '%foo%'])
         end
+      end
+
+      # A serialized attribute is stored in a text column, so the term is matched
+      # against the serialization itself.
+      it 'matches a serialized column as text' do
+        expect(build_statement(:serialized, 'foo', 'default')).to eq([like, '%foo%'])
       end
 
       it 'chooses like statement in per-model basis' do
