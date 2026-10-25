@@ -16,6 +16,7 @@
 
 - Fix the list breaking under a selected scope which rebuilds the query, `unscoped` among them: the records are narrowed by it before they are counted and paginated ([#2250](https://github.com/railsadminteam/rails_admin/issues/2250))
 - Fix a bulk action leaving out the records the selected scope brings in, which let a row be checked in the list and then not acted on
+- Fix searching and sorting by a `belongs_to` association which has a nested form: both reached for the attributes the form posts rather than the foreign key, so searching found nothing on Mongoid and raised on ActiveRecord ([#3077](https://github.com/railsadminteam/rails_admin/issues/3077))
 
 ## [4.0.0.beta2](https://github.com/railsadminteam/rails_admin/tree/v4.0.0.beta2) - 2026-10-05
 
