@@ -182,8 +182,10 @@ module RailsAdmin
           end
         end
 
+        # Only the first segment names the collection; whatever follows is a
+        # field path, which a key inside a Hash field is reached by.
         def parse_collection_name_from_string(column)
-          collection_name, column_name = column.split('.')
+          collection_name, column_name = column.split('.', 2)
           if associations.detect { |a| a.name == collection_name.to_sym }.try(:embeds?)
             [table_name, column]
           else

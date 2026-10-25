@@ -16,6 +16,7 @@
 
 - Fix the list breaking under a selected scope which rebuilds the query, `unscoped` among them: the records are narrowed by it before they are counted and paginated ([#2250](https://github.com/railsadminteam/rails_admin/issues/2250))
 - Fix a bulk action leaving out the records the selected scope brings in, which let a row be checked in the list and then not acted on
+- Fix a Mongoid search target of more than two segments, `searchable 'items.data.key'`, losing everything past the second: a key inside a `Hash` field can be searched by name now ([#2554](https://github.com/railsadminteam/rails_admin/issues/2554))
 - Fix the search box and the filters leaving a serialized field out of the query: ActiveRecord matches the text the attribute is stored as, Mongoid matches an element of an `Array` field ([#2554](https://github.com/railsadminteam/rails_admin/issues/2554))
 - Fix searching and sorting by a `belongs_to` association which has a nested form: both reached for the attributes the form posts rather than the foreign key, so searching found nothing on Mongoid and raised on ActiveRecord ([#3077](https://github.com/railsadminteam/rails_admin/issues/3077))
 

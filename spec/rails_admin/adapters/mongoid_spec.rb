@@ -194,6 +194,26 @@ RSpec.describe 'RailsAdmin::Adapters::Mongoid', mongoid: true do
       end
     end
 
+    context 'with searchable pointed at a key of a hash field' do
+      let(:abstract_model) { RailsAdmin::AbstractModel.new('FieldTest') }
+      let!(:field_tests) do
+        [{'key' => 'needle'}, {'key' => 'haystack'}].collect { |hash| FieldTest.create!(hash_field: hash) }
+      end
+      before do
+        RailsAdmin.config FieldTest do
+          list do
+            field :hash_field do
+              searchable 'field_tests.hash_field.key'
+            end
+          end
+        end
+      end
+
+      it 'searches that key' do
+        expect(abstract_model.all(query: 'needle').to_a).to eq [field_tests.first]
+      end
+    end
+
     context 'when parsing is not idempotent' do
       before do
         RailsAdmin.config do |c|
