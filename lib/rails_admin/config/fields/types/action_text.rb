@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_admin/config/fields/types/text'
+require 'rails_admin/version'
 
 module RailsAdmin
   module Config
@@ -11,15 +12,17 @@ module RailsAdmin
           RailsAdmin::Config::Fields::Types.register(self)
 
           register_instance_option :version do
-            '1.3.1'
+            RailsAdmin::Version.npm_dependency('trix')
           end
 
           register_instance_option :css_location do
-            "https://cdnjs.cloudflare.com/ajax/libs/trix/#{version}/trix.css"
+            "https://unpkg.com/trix@#{version}/dist/trix.css"
           end
 
           register_instance_option :js_location do
-            "https://cdnjs.cloudflare.com/ajax/libs/trix/#{version}/trix.js"
+            # Trix 2 dropped dist/trix.js, and $.getScript can only load the UMD build.
+            file = version.to_s.start_with?('1.') ? 'trix.js' : 'trix.umd.min.js'
+            "https://unpkg.com/trix@#{version}/dist/#{file}"
           end
 
           register_instance_option :warn_dynamic_load do

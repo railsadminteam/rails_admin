@@ -4,12 +4,17 @@
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v4.0.0.beta2...HEAD)
 
+### Security
+
+- The ActionText field no longer defaults to Trix 1.3.1, which CVE-2024-34341 and CVE-2024-53847 affect. It follows the version RailsAdmin pins in `package.json`, where Dependabot tracks it
+
 ### Added
 
 - Adapters answer `Repository#intersect` and `#scoped_by`, which narrow a scope by another scope and by one of the model's named scopes, so that RailsAdmin no longer merges and chains scopes itself; an adapter which does not inherit from `RailsAdmin::Adapters::Repository` has to answer them too
 
 ### Changed
 
+- [BREAKING CHANGE] The editors RailsAdmin loads from a CDN are served from unpkg rather than cdnjs, which stopped publishing Trix after 1.3.1; an application whose Content-Security-Policy names `cdnjs.cloudflare.com` has to allow `unpkg.com` instead
 - The records a field offers for an association are no longer narrowed by the scopes of the associated model's own list; `associated_collection_scope` is what narrows them
 - Nested forms no longer need the `nested_form` gem, archived since 2021. How you configure them does not change — `nested_form false`, the `nested` section and `inline_add` all behave as before — and an application that has not customized the nested form markup has nothing to do ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
 - [BREAKING CHANGE] The add and remove controls of a nested form are now `<button type="button">` instead of `<a href="javascript:void(0)">`. A stylesheet or script matching `a.add_nested_fields` or `a.remove_nested_fields` needs the `a` dropped; the class names themselves are unchanged, as are `.fields`, `.tab-pane`, `.object-infos`, `data-nestedmany` and `data-nestedone`. In exchange, RailsAdmin's forms no longer need a `javascript:` URL allowed in your Content Security Policy ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
