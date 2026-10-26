@@ -19,10 +19,10 @@ group :test do
   gem "cancancan", "~> 3.0"
   gem "carrierwave", "~> 3.0"
   gem "cuprite", "!= 0.15.1"
-  gem "ferrum", ["!= 0.19.0", "!= 0.19.1"]
   gem "database_cleaner-active_record", ">= 2.0", require: false
   gem "dragonfly", "~> 1.0"
   gem "factory_bot", ">= 4.2", "!= 6.4.5"
+  gem "ferrum", ["!= 0.19.0", "!= 0.19.1"]
   gem "generator_spec", ">= 0.8"
   gem "json", "< 3"
   gem "kt-paperclip"
