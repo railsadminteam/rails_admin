@@ -11,6 +11,7 @@
 ### Changed
 
 - [BREAKING CHANGE] The editors RailsAdmin loads from a CDN are served from unpkg rather than cdnjs, which stopped publishing Trix after 1.3.1; an application whose Content-Security-Policy names `cdnjs.cloudflare.com` has to allow `unpkg.com` instead
+- [BREAKING CHANGE] The `:ck_editor` and `:froala` fields name no editor to load any more, because every release RailsAdmin could pick is either affected by an unfixed advisory or licensed so that it cannot be chosen on the application's behalf; set `base_location` or `location` for CKEditor, and `js_location` with `css_location` for Froala, and until then the field stays a plain textarea
 - [BREAKING CHANGE] The `:simple_mde` field type is renamed `:easy_mde` and loads EasyMDE, the maintained fork of SimpleMDE; `:simple_mde` goes on working as another name for it, but an application which overrode the `_form_simple_mde` partial has to rename it to `_form_easy_mde`, and one which pinned `version` or `js_location` to a SimpleMDE build has to drop that pin
 - The records a field offers for an association are no longer narrowed by the scopes of the associated model's own list; `associated_collection_scope` is what narrows them
 - Nested forms no longer need the `nested_form` gem, archived since 2021. How you configure them does not change — `nested_form false`, the `nested` section and `inline_add` all behave as before — and an application that has not customized the nested form markup has nothing to do ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
@@ -21,6 +22,8 @@
 ### Deprecated
 
 - The `:code_mirror` field type, because CodeMirror 5 is no longer maintained and CodeMirror 6 is not a drop-in replacement
+- The `:ck_editor` field type, because CKEditor 4 is end-of-life and the releases which fix its known vulnerabilities are commercially licensed
+- The `:froala` field type, because Froala is licensed per application and CVE-2024-51434 has no fixed release
 
 ### Removed
 
@@ -41,6 +44,7 @@
 - The ActionText field no longer defaults to Trix 1.3.1, which CVE-2024-34341 and CVE-2024-53847 affect
 - The CodeMirror field no longer defaults to CodeMirror 5.46.0, which CVE-2020-7760 affects
 - The markdown field no longer loads SimpleMDE 1.11.2, which CVE-2018-19057 affects and which has no fixed release at all; it loads EasyMDE instead
+- The CKEditor field no longer loads CKEditor 4.11.4, which several high-severity advisories affect, and the Froala field no longer Froala 2.9.5, which four affect; neither names a build to load any more
 - The versions these editors are served at are pinned in `package.json`, so that Dependabot tracks them and an advisory against one of them reaches RailsAdmin like any other
 
 ## [4.0.0.beta2](https://github.com/railsadminteam/rails_admin/tree/v4.0.0.beta2) - 2026-10-05
