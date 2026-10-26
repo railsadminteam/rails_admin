@@ -10,12 +10,15 @@ module RichTextEditorHelper
   # saved. The modal posts the form without firing a native submit, which is
   # when editors normally write back to their textarea - so it is the path an
   # editor's write-back has to be proven on.
-  def save_through_modal(field_type)
+  # field_options configures the field, for an editor RailsAdmin has no default location for.
+  def save_through_modal(field_type, field_options = {})
     RailsAdmin.config NestedFieldTest do
       field :field_test
     end
     RailsAdmin.config FieldTest do
-      field :text_field, field_type
+      field :text_field, field_type do
+        field_options.each { |option, value| send(option, value) }
+      end
     end
 
     visit new_path(model_name: 'nested_field_test')

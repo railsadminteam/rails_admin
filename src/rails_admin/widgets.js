@@ -344,15 +344,21 @@ import I18n from "./i18n.js";
       if ($editors.length) {
         if (!window.CKEDITOR) {
           options = $editors.first().data("options");
-          window.CKEDITOR_BASEPATH = options["base_location"];
-          $.getScript(
-            options["jspath"],
-            (function (_this) {
-              return function (script, textStatus, jqXHR) {
-                return goCkeditors();
-              };
-            })(this)
-          );
+          if (!options["jspath"]) {
+            console.warn(
+              "RailsAdmin does not provide a CKEditor to load. Set base_location or location on the field."
+            );
+          } else {
+            window.CKEDITOR_BASEPATH = options["base_location"];
+            $.getScript(
+              options["jspath"],
+              (function (_this) {
+                return function (script, textStatus, jqXHR) {
+                  return goCkeditors();
+                };
+              })(this)
+            );
+          }
         } else {
           goCkeditors();
         }
@@ -502,19 +508,25 @@ import I18n from "./i18n.js";
       if (array.length) {
         options = $(array[0]).data("options");
         if (typeof $.fn.editable !== "function") {
-          $("head").append(
-            '<link href="' +
-              options["csspath"] +
-              '" rel="stylesheet" media="all" type="text/css">'
-          );
-          $.getScript(
-            options["jspath"],
-            (function (_this) {
-              return function (script, textStatus, jqXHR) {
-                return goFroalaWysiwygs(array);
-              };
-            })(this)
-          );
+          if (!options["jspath"]) {
+            console.warn(
+              "RailsAdmin does not provide a Froala editor to load. Set js_location and css_location on the field."
+            );
+          } else {
+            $("head").append(
+              '<link href="' +
+                options["csspath"] +
+                '" rel="stylesheet" media="all" type="text/css">'
+            );
+            $.getScript(
+              options["jspath"],
+              (function (_this) {
+                return function (script, textStatus, jqXHR) {
+                  return goFroalaWysiwygs(array);
+                };
+              })(this)
+            );
+          }
         } else {
           goFroalaWysiwygs(array);
         }
