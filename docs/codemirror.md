@@ -1,3 +1,7 @@
+> **Deprecated.** The `:code_mirror` field type will be removed in RailsAdmin 5.0. CodeMirror 5 is no
+> longer maintained, and CodeMirror 6 is a different library - no `fromTextArea`, ESM only - so this
+> field type has nowhere to follow it to.
+
 Add
 
 ```ruby
