@@ -4,10 +4,6 @@
 
 [Full Changelog](https://github.com/railsadminteam/rails_admin/compare/v4.0.0.beta2...HEAD)
 
-### Security
-
-- The ActionText field no longer defaults to Trix 1.3.1, which CVE-2024-34341 and CVE-2024-53847 affect. It follows the version RailsAdmin pins in `package.json`, where Dependabot tracks it
-
 ### Added
 
 - Adapters answer `Repository#intersect` and `#scoped_by`, which narrow a scope by another scope and by one of the model's named scopes, so that RailsAdmin no longer merges and chains scopes itself; an adapter which does not inherit from `RailsAdmin::Adapters::Repository` has to answer them too
@@ -20,6 +16,10 @@
 - [BREAKING CHANGE] The add and remove controls of a nested form are now `<button type="button">` instead of `<a href="javascript:void(0)">`. A stylesheet or script matching `a.add_nested_fields` or `a.remove_nested_fields` needs the `a` dropped; the class names themselves are unchanged, as are `.fields`, `.tab-pane`, `.object-infos`, `data-nestedmany` and `data-nestedone`. In exchange, RailsAdmin's forms no longer need a `javascript:` URL allowed in your Content Security Policy ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
 - [BREAKING CHANGE] A custom `_form_nested_many` or `_form_nested_one` partial needs one line changed: `form.fields_for field.name` becomes `form.nested_fields_for field`, which also renders the template that new rows are cloned from. `link_to_add` and `link_to_remove` are unchanged, and the condition around the remove button can be dropped — it decides for itself now ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
 - [BREAKING CHANGE] Code that hooked the nested form JavaScript needs updating: `window.nestedFormEvents` and the jQuery `nested:fieldAdded` / `nested:fieldRemoved` events are replaced by `rails_admin.nested_field_added` and `rails_admin.nested_field_removed`, `CustomEvent`s dispatched on the row and carrying `{field, association}` and `{field, group, destroyed}` ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
+
+### Deprecated
+
+- The `:code_mirror` field type, because CodeMirror 5 is no longer maintained and CodeMirror 6 is not a drop-in replacement
 
 ### Removed
 
@@ -34,6 +34,10 @@
 - Adding a row to a nested form shown in a modal no longer builds it from the form behind the modal. The row's inputs were named for the wrong model, so whatever was typed into it was dropped on save ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
 - A row you have just added can still be removed after the form comes back from a failed save, on an association configured with `allow_destroy: false` ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
 - A nested form for an association that can reach itself — Mongoid's `recursively_embeds_many` / `recursively_embeds_one`, or a self-referential `has_many` with `accepts_nested_attributes_for` — now renders. It used to hang the request and exhaust memory. Such an association can be nested `RailsAdmin::FormBuilder::MAX_NESTED_FORM_RECURSION` levels deep in one form, and no "Add" button is offered past that; a chain of distinct models stays unlimited ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
+
+### Security
+
+- The ActionText field no longer defaults to Trix 1.3.1, which CVE-2024-34341 and CVE-2024-53847 affect, and the CodeMirror field no longer to CodeMirror 5.46.0, which CVE-2020-7760 affects. Both follow the version RailsAdmin pins in `package.json`, where Dependabot tracks it
 
 ## [4.0.0.beta2](https://github.com/railsadminteam/rails_admin/tree/v4.0.0.beta2) - 2026-10-05
 
