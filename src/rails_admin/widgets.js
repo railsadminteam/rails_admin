@@ -21,7 +21,7 @@ import I18n from "./i18n.js";
       goCkeditors,
       goCodeMirrors,
       goFroalaWysiwygs,
-      goSimpleMDEs,
+      goEasyMDEs,
       options;
     var content = event.detail || $("form");
     if (content.length) {
@@ -270,15 +270,15 @@ import I18n from "./i18n.js";
           object_select.filteringSelect(selected_data);
         });
       });
-      goSimpleMDEs = function () {
+      goEasyMDEs = function () {
         return content
-          .find("[data-richtext=simplemde]")
-          .not(".simplemded")
+          .find("[data-richtext=easymde]")
+          .not(".easymded")
           .each(function (index, domEle) {
             var instance_config, options, editor;
             options = $(this).data("options");
             instance_config = options.instance_config;
-            editor = new window.SimpleMDE(
+            editor = new window.EasyMDE(
               $.extend(
                 true,
                 {
@@ -293,16 +293,16 @@ import I18n from "./i18n.js";
             flushBeforeRemoteSubmit(this, function () {
               editor.codemirror.save();
             });
-            $(this).addClass("simplemded");
+            $(this).addClass("easymded");
             // CodeMirror mismeasures itself while hidden; refresh() once it's actually laid out.
             new ResizeObserver(function () {
               editor.codemirror.refresh();
             }).observe(editor.codemirror.getWrapperElement());
           });
       };
-      $editors = content.find("[data-richtext=simplemde]").not(".simplemded");
+      $editors = content.find("[data-richtext=easymde]").not(".easymded");
       if ($editors.length) {
-        if (!window.SimpleMDE) {
+        if (!window.EasyMDE) {
           options = $editors.first().data("options");
           $("head").append(
             '<link href="' +
@@ -312,11 +312,11 @@ import I18n from "./i18n.js";
           $.getScript(
             options["js_location"],
             function (script, textStatus, jqXHR) {
-              return goSimpleMDEs();
+              return goEasyMDEs();
             }
           );
         } else {
-          goSimpleMDEs();
+          goEasyMDEs();
         }
       }
       goCkeditors = function () {

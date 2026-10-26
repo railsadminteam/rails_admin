@@ -2,21 +2,31 @@
 
 require 'spec_helper'
 
-RSpec.describe 'SimpleMDE field', type: :request do
+RSpec.describe 'EasyMDE field', type: :request do
   subject { page }
 
   it 'works without error', js: true do
+    RailsAdmin.config Draft do
+      edit do
+        field :notes, :easy_mde
+      end
+    end
+    expect { visit new_path(model_name: 'draft') }.not_to raise_error
+    is_expected.to have_selector('[title="Markdown Guide"]')
+  end
+
+  it 'works under the name the field type used to have', js: true do
     RailsAdmin.config Draft do
       edit do
         field :notes, :simple_mde
       end
     end
     expect { visit new_path(model_name: 'draft') }.not_to raise_error
-    is_expected.to have_selector('a[title="Markdown Guide"]')
+    is_expected.to have_selector('[title="Markdown Guide"]')
   end
 
   it 'writes back to the textarea when a remote-form modal is submitted', js: true do
-    saved = save_through_modal(:simple_mde) do
+    saved = save_through_modal(:easy_mde) do
       wait_for_editor %(!!(document.querySelector('.CodeMirror') && document.querySelector('.CodeMirror').CodeMirror))
       execute_script %(document.querySelector('.CodeMirror').CodeMirror.setValue('typed in the modal'))
     end
@@ -31,7 +41,7 @@ RSpec.describe 'SimpleMDE field', type: :request do
     end
     RailsAdmin.config NestedFieldTest do
       nested do
-        field :title, :simple_mde
+        field :title, :easy_mde
       end
     end
 
