@@ -24,6 +24,7 @@
 - The `:code_mirror` field type, because CodeMirror 5 is no longer maintained and CodeMirror 6 is not a drop-in replacement
 - The `:ck_editor` field type, because CKEditor 4 is end-of-life and the releases which fix its known vulnerabilities are commercially licensed
 - The `:froala` field type, because Froala is licensed per application and CVE-2024-51434 has no fixed release
+- The `:wysihtml5` field type, because bootstrap3-wysihtml5 has had no release since 2014
 
 ### Removed
 
