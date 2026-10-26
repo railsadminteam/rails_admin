@@ -57,7 +57,7 @@ Capybara.register_driver(:cuprite) do |app|
   # get the first Chrome up far enough to report its websocket URL, which shows
   # up as a Ferrum::ProcessTimeoutError on whichever js example happens to run
   # first. Waiting longer costs nothing when the browser does start.
-  Capybara::Cuprite::Driver.new(app, flatten: RUBY_ENGINE != 'jruby', js_errors: true, logger: ConsoleLogger,
+  Capybara::Cuprite::Driver.new(app, js_errors: true, logger: ConsoleLogger,
                                      process_timeout: 60)
 end
 Capybara.server = :webrick
