@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 
 gem 'appraisal', '>= 2.0', require: false
-gem 'devise', '~> 4.7'
+gem 'devise', '~> 5.0'
 gem 'net-smtp', require: false
 gem 'propshaft', require: false
 gem 'rails'
