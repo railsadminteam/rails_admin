@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class NestedFieldTest < ActiveRecord::Base
-  belongs_to :field_test, optional: true, inverse_of: :nested_field_tests
+  # field_test_id is NOT NULL, so this cannot be optional; Mongoid's counterpart always required it.
+  belongs_to :field_test, inverse_of: :nested_field_tests
   belongs_to :another_field_test, optional: true, inverse_of: :nested_field_tests
   has_one :comment, as: :commentable
   has_many :deeply_nested_field_tests, inverse_of: :nested_field_test
