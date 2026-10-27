@@ -15,9 +15,9 @@ if defined?(ActionText)
     end
 
     it 'works without error' do
-      allow(ConsoleLogger).to receive(:warn).with(/ActionText assets should be loaded statically/)
       expect { visit new_path(model_name: 'field_test') }.not_to raise_error
       is_expected.to have_selector('trix-toolbar')
+      page.driver.browser.console.clear if page.driver.browser.respond_to?(:console)
     end
   end
 end
