@@ -64,6 +64,29 @@ One association may now repeat at most `RailsAdmin::FormBuilder::MAX_NESTED_FORM
 - **`@rails/ujs`** is no longer bundled (Rails dropped it from the default stack; Turbo covers what RailsAdmin used it for). If a host app renders old-style `link_to …, method: :delete` links **inside the RailsAdmin layout** and has no `@rails/ujs` of its own, switch those to `data: { turbo_method: :delete }` or add rails-ujs to your app.
 - **ActionText**: no-build apps get the Trix editor from a CDN (attachment uploads still work). Use `:external` with `import "trix"` to serve it statically. See [ActionText](actiontext.md).
 
+## Rich text editors
+
+The editors RailsAdmin loads at runtime now come from **unpkg** rather than cdnjs, which had stopped
+publishing Trix. If your Content-Security-Policy names `cdnjs.cloudflare.com`, allow `unpkg.com`
+instead. The versions are pinned in RailsAdmin's `package.json`, so that Dependabot tracks them.
+
+- **Trix** moves from 1.3.1 to the 2.x line, which the bundled `@rails/actiontext` glue expects
+  anyway. A field which pinned only `version` to a 1.x release keeps working; one which also pinned
+  `js_location` has to drop that pin, because the file name differs between the lines.
+- **`:simple_mde` is renamed `:easy_mde`** and loads [EasyMDE], the maintained fork of SimpleMDE.
+  `:simple_mde` still resolves to it, but an overridden `_form_simple_mde` partial has to be renamed
+  to `_form_easy_mde`, and a `version` or `js_location` pinned to a SimpleMDE build has to go.
+- **`:ck_editor` and `:froala` name no editor to load.** Every release RailsAdmin could have picked
+  is either affected by an advisory with no fix or licensed so that it cannot be chosen for you. Set
+  `base_location` (or `location`) for CKEditor, and `js_location` with `css_location` for Froala;
+  until then the field renders as a plain textarea. See [CKEditor](ckeditor.md) and
+  [Froala](froala-wysiwyg-html-editor.md).
+- **`:ck_editor`, `:froala`, `:code_mirror` and `:wysihtml5` are deprecated** and will be removed in
+  5.0, each because its editor is end-of-life, unmaintained, or has no release free of known
+  vulnerabilities.
+
+[EasyMDE]: https://github.com/Ionaru/easy-markdown-editor
+
 ## `:external` apps
 
 Re-run the installer to regenerate `app/javascript/rails_admin.js` and `app/assets/stylesheets/rails_admin.scss` (the import paths are unchanged: `rails_admin/src/rails_admin/base` and `rails_admin/src/rails_admin/styles/base`). If you had added flatpickr locale imports by hand, you can drop them — they're bundled now.

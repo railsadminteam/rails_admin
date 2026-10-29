@@ -28,8 +28,11 @@
     "jquery-ui": "^1.12.1 <1.14.0"
   },
   "devDependencies": {
+    "codemirror": "5.65.21",
+    "easymde": "2.21.0",
     "esbuild": "^0.25.0",
     "prettier": "^2.4.1",
-    "sass": "^1.83.0"
+    "sass": "^1.83.0",
+    "trix": "2.1.19"
   }
 }

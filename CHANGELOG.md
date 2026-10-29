@@ -10,11 +10,21 @@
 
 ### Changed
 
+- [BREAKING CHANGE] The editors RailsAdmin loads from a CDN are served from unpkg rather than cdnjs, which stopped publishing Trix after 1.3.1; an application whose Content-Security-Policy names `cdnjs.cloudflare.com` has to allow `unpkg.com` instead ([#3762](https://github.com/railsadminteam/rails_admin/pull/3762))
+- [BREAKING CHANGE] The `:ck_editor` and `:froala` fields name no editor to load any more, because every release RailsAdmin could pick is either affected by an unfixed advisory or licensed so that it cannot be chosen on the application's behalf; set `base_location` or `location` for CKEditor, and `js_location` with `css_location` for Froala, and until then the field stays a plain textarea ([#3762](https://github.com/railsadminteam/rails_admin/pull/3762))
+- [BREAKING CHANGE] The `:simple_mde` field type is renamed `:easy_mde` and loads EasyMDE, the maintained fork of SimpleMDE; `:simple_mde` goes on working as another name for it, but an application which overrode the `_form_simple_mde` partial has to rename it to `_form_easy_mde`, and one which pinned `version` or `js_location` to a SimpleMDE build has to drop that pin ([#3762](https://github.com/railsadminteam/rails_admin/pull/3762))
 - The records a field offers for an association are no longer narrowed by the scopes of the associated model's own list; `associated_collection_scope` is what narrows them
 - Nested forms no longer need the `nested_form` gem, archived since 2021. How you configure them does not change — `nested_form false`, the `nested` section and `inline_add` all behave as before — and an application that has not customized the nested form markup has nothing to do ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
 - [BREAKING CHANGE] The add and remove controls of a nested form are now `<button type="button">` instead of `<a href="javascript:void(0)">`. A stylesheet or script matching `a.add_nested_fields` or `a.remove_nested_fields` needs the `a` dropped; the class names themselves are unchanged, as are `.fields`, `.tab-pane`, `.object-infos`, `data-nestedmany` and `data-nestedone`. In exchange, RailsAdmin's forms no longer need a `javascript:` URL allowed in your Content Security Policy ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
 - [BREAKING CHANGE] A custom `_form_nested_many` or `_form_nested_one` partial needs one line changed: `form.fields_for field.name` becomes `form.nested_fields_for field`, which also renders the template that new rows are cloned from. `link_to_add` and `link_to_remove` are unchanged, and the condition around the remove button can be dropped — it decides for itself now ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
 - [BREAKING CHANGE] Code that hooked the nested form JavaScript needs updating: `window.nestedFormEvents` and the jQuery `nested:fieldAdded` / `nested:fieldRemoved` events are replaced by `rails_admin.nested_field_added` and `rails_admin.nested_field_removed`, `CustomEvent`s dispatched on the row and carrying `{field, association}` and `{field, group, destroyed}` ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
+
+### Deprecated
+
+- The `:code_mirror` field type, because CodeMirror 5 is no longer maintained and CodeMirror 6 is not a drop-in replacement ([#3762](https://github.com/railsadminteam/rails_admin/pull/3762))
+- The `:ck_editor` field type, because CKEditor 4 is end-of-life and the releases which fix its known vulnerabilities are commercially licensed ([#3762](https://github.com/railsadminteam/rails_admin/pull/3762))
+- The `:froala` field type, because Froala is licensed per application and CVE-2024-51434 has no fixed release ([#3762](https://github.com/railsadminteam/rails_admin/pull/3762))
+- The `:wysihtml5` field type, because bootstrap3-wysihtml5 has had no release since 2014 ([#3762](https://github.com/railsadminteam/rails_admin/pull/3762))
 
 ### Removed
 
@@ -29,6 +39,14 @@
 - Adding a row to a nested form shown in a modal no longer builds it from the form behind the modal. The row's inputs were named for the wrong model, so whatever was typed into it was dropped on save ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
 - A row you have just added can still be removed after the form comes back from a failed save, on an association configured with `allow_destroy: false` ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
 - A nested form for an association that can reach itself — Mongoid's `recursively_embeds_many` / `recursively_embeds_one`, or a self-referential `has_many` with `accepts_nested_attributes_for` — now renders. It used to hang the request and exhaust memory. Such an association can be nested `RailsAdmin::FormBuilder::MAX_NESTED_FORM_RECURSION` levels deep in one form, and no "Add" button is offered past that; a chain of distinct models stays unlimited ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
+
+### Security
+
+- The ActionText field no longer defaults to Trix 1.3.1, which CVE-2024-34341 and CVE-2024-53847 affect ([#3762](https://github.com/railsadminteam/rails_admin/pull/3762))
+- The CodeMirror field no longer defaults to CodeMirror 5.46.0, which CVE-2020-7760 affects ([#3762](https://github.com/railsadminteam/rails_admin/pull/3762))
+- The markdown field no longer loads SimpleMDE 1.11.2, which CVE-2018-19057 affects and which has no fixed release at all; it loads EasyMDE instead ([#3762](https://github.com/railsadminteam/rails_admin/pull/3762))
+- The CKEditor field no longer loads CKEditor 4.11.4, which several high-severity advisories affect, and the Froala field no longer Froala 2.9.5, which four affect; neither names a build to load any more ([#3762](https://github.com/railsadminteam/rails_admin/pull/3762))
+- The versions these editors are served at are pinned in `package.json`, so that Dependabot tracks them and an advisory against one of them reaches RailsAdmin like any other ([#3762](https://github.com/railsadminteam/rails_admin/pull/3762))
 
 ## [4.0.0.beta2](https://github.com/railsadminteam/rails_admin/tree/v4.0.0.beta2) - 2026-10-05
 
