@@ -5,6 +5,8 @@ require 'spec_helper'
 RSpec.describe 'CodeMirror field', type: :request do
   subject { page }
 
+  before { allow(RailsAdmin.deprecator).to receive(:warn) }
+
   it 'works without error', js: true do
     RailsAdmin.config Draft do
       edit do

@@ -1,9 +1,10 @@
 <%
+  base_location = field.base_location
   js_data = {
-    jspath: field.location ? field.location : field.base_location + "ckeditor.js",
-    base_location: field.base_location,
+    jspath: field.location || (base_location && "#{base_location}ckeditor.js"),
+    base_location: base_location,
     options: {
-      customConfig: field.config_js ? field.config_js : field.base_location + "config.js"
+      customConfig: field.config_js || (base_location && "#{base_location}config.js")
     }
   }
 %>

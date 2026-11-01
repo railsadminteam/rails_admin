@@ -4,6 +4,19 @@ require 'fileutils'
 require 'spec_helper'
 
 RSpec.describe 'RailsAdmin::Version' do
+  describe '#npm_dependency' do
+    # A range is not a URL, so the editors RailsAdmin builds CDN URLs from have to be pinned exactly.
+    %w[codemirror easymde trix].each do |package|
+      it "returns the exact version #{package} is pinned to" do
+        expect(RailsAdmin::Version.npm_dependency(package)).to match(/\A\d+\.\d+\.\d+\z/)
+      end
+    end
+
+    it 'raises when the package is not pinned' do
+      expect { RailsAdmin::Version.npm_dependency('not-a-package') }.to raise_error(KeyError)
+    end
+  end
+
   describe '#warn_with_js_version' do
     it 'does nothing when the versions match' do
       allow(RailsAdmin::Version).to receive(:actual_js_version).and_return('3.0.0')

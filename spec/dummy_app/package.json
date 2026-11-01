@@ -4,12 +4,7 @@
   "version": "0.1.0",
   "type": "module",
   "dependencies": {
-    "@rails/actiontext": "^7.0.3-1",
-    "@rails/activestorage": "^7.0.3-1",
-    "esbuild": "0.25.12",
-    "rails_admin": "file:../..",
-    "sass": "1.103.1",
-    "trix": "^2.1.17"
+    "rails_admin": "file:../.."
   },
   "scripts": {
     "build": "node build.mjs"

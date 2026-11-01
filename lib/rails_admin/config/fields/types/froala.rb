@@ -10,21 +10,21 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types.register(self)
 
+          deprecated 'Froala is a commercial editor, and CVE-2024-51434 has no fixed release'
+
           # See https://www.froala.com/wysiwyg-editor/docs/options
           register_instance_option :config_options do
             nil
           end
 
-          register_instance_option :version do
-            '2.9.5'
-          end
-
+          # There is no default location: Froala is licensed per application, and the
+          # release RailsAdmin used to name is affected by an unfixed advisory.
           register_instance_option :css_location do
-            "https://cdnjs.cloudflare.com/ajax/libs/froala-editor/#{version}/css/froala_editor.min.css"
+            nil
           end
 
           register_instance_option :js_location do
-            "https://cdnjs.cloudflare.com/ajax/libs/froala-editor/#{version}/js/froala_editor.min.js"
+            nil
           end
 
           register_instance_option :partial do

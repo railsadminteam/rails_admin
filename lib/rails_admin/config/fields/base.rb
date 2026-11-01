@@ -24,6 +24,15 @@ module RailsAdmin
           @associated_model_config @group
         ].freeze
 
+        # Marks a field type built on an editor its own upstream no longer maintains.
+        def self.deprecated(reason)
+          define_method(:initialize) do |*args|
+            type = self.class.name.demodulize.underscore
+            RailsAdmin.deprecator.warn("The :#{type} field type is deprecated and will be removed in RailsAdmin 5.0: #{reason}")
+            super(*args)
+          end
+        end
+
         def initialize(parent, name, properties)
           @parent = parent
           @root = parent.root

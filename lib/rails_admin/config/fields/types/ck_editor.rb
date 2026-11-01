@@ -10,9 +10,7 @@ module RailsAdmin
           # Register field type for the type loader
           RailsAdmin::Config::Fields::Types.register(self)
 
-          register_instance_option :version do
-            '4.11.4'
-          end
+          deprecated 'CKEditor 4 is end-of-life, and no freely licensed release of it is free of known vulnerabilities'
 
           # If you want to have a different toolbar configuration for CKEditor
           # create your own custom config.js and override this configuration
@@ -26,8 +24,10 @@ module RailsAdmin
           end
 
           # Use this if you want to point to a cloud instances of the base CKeditor
+          # There is no default: every release RailsAdmin could name is either vulnerable
+          # or licensed so that it cannot be picked on the application's behalf.
           register_instance_option :base_location do
-            "https://cdnjs.cloudflare.com/ajax/libs/ckeditor/#{version}/"
+            nil
           end
 
           register_instance_option :partial do

@@ -1,3 +1,6 @@
+> **Deprecated.** The `:wysihtml5` field type will be removed in RailsAdmin 5.0. bootstrap3-wysihtml5
+> has had no release since 2014, so the editor it loads cannot be moved forward.
+
 http://jhollingworth.github.com/bootstrap-wysihtml5/
 
 - your rails_admin <= 0.6.5
