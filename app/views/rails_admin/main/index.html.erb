@@ -53,6 +53,9 @@
 
 <div id="list">
   <%= form_tag(index_path(params.except(*%w[page f query])), method: :get) do %>
+    <% URI.decode_www_form(params.except(*%w[page f query model_name]).to_query).each do |name, value| %>
+      <%= hidden_field_tag name, value, id: nil %>
+    <% end %>
     <div class="card mb-3 p-3 bg-light">
       <div class="row" data-options="<%= ordered_filter_options.to_json %>" id="filters_box"></div>
       <hr class="filters_box" style="display:<%= ordered_filters.empty? ? 'none' : 'block' %>"/>

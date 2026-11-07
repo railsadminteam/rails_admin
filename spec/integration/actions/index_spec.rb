@@ -1194,6 +1194,95 @@ RSpec.describe 'Index action', type: :request do
         end
       end
     end
+
+    describe 'filter form preserves params (#3665)' do
+      before do
+        RailsAdmin.config do |config|
+          config.model Team do
+            list do
+              scopes [nil, :red, :white]
+            end
+          end
+        end
+        Team.delete_all
+        @red_alpha = FactoryBot.create(:team, color: 'red', name: 'Alpha Red')
+        @red_beta = FactoryBot.create(:team, color: 'red', name: 'Beta Red')
+        @white_alpha = FactoryBot.create(:team, color: 'white', name: 'Alpha White')
+        @white_beta = FactoryBot.create(:team, color: 'white', name: 'Beta White')
+        @white_gamma = FactoryBot.create(:team, color: 'white', name: 'Gamma White')
+      end
+
+      [true, false].each do |js|
+        it "keeps the non-default scope after search (js: #{js})", js: js do
+          visit index_path(model_name: 'team', scope: 'white')
+          expect(find('#scope_selector li a.active')).to have_content('White')
+          fill_in 'query', with: 'Alpha'
+          click_button 'Refresh'
+          expect(page).to have_current_path(/query=Alpha/)
+          expect(find('#scope_selector li a.active')).to have_content('White')
+          is_expected.to have_content(@white_alpha.name)
+          is_expected.to have_no_content(@red_alpha.name)
+          is_expected.to have_no_content(@white_beta.name)
+          expect(URI.parse(page.current_url).query).to include('scope=white')
+        end
+      end
+
+      it 'keeps sort and sort_reverse after search without a scope' do
+        visit index_path(model_name: 'team', sort: 'name', sort_reverse: 'true')
+        fill_in 'query', with: 'Alpha'
+        click_button 'Refresh'
+        expect(page).to have_current_path(/query=Alpha/)
+        query = URI.parse(page.current_url).query
+        expect(query).to include('sort=name')
+        expect(query).to include('sort_reverse=true')
+        expect(all('td.name_field').map(&:text)).to eq(['Alpha White', 'Alpha Red'])
+      end
+
+      it 'keeps scope together with sort after search' do
+        visit index_path(model_name: 'team', scope: 'white', sort: 'name', sort_reverse: 'true')
+        fill_in 'query', with: 'a'
+        click_button 'Refresh'
+        expect(page).to have_current_path(/query=a/)
+        query = URI.parse(page.current_url).query
+        expect(query).to include('scope=white')
+        expect(query).to include('sort=name')
+        expect(query).to include('sort_reverse=true')
+        expect(find('#scope_selector li a.active')).to have_content('White')
+        # White teams matching 'a': Alpha/Beta/Gamma White — reverse name order
+        expect(all('td.name_field').map(&:text)).to eq(['Gamma White', 'Beta White', 'Alpha White'])
+      end
+
+      it 'drops page when submitting a new search so results start on page 1' do
+        RailsAdmin.config Team do
+          list do
+            scopes [nil, :red, :white]
+            items_per_page 2
+          end
+        end
+        visit index_path(model_name: 'team', scope: 'white', page: '2')
+        expect(page).to have_css('.pagination')
+        fill_in 'query', with: 'White'
+        click_button 'Refresh'
+        expect(page).to have_current_path(/query=White/)
+        query = URI.parse(page.current_url).query.to_s
+        expect(query).not_to match(/(^|&)page=/)
+        expect(query).to include('scope=white')
+        # page omitted ⇒ page 1; three matches with items_per_page 2 ⇒ two rows on first page
+        expect(all('td.name_field').map(&:text).size).to eq(2)
+      end
+
+      it 'keeps the current scope after clearing filters', js: true do
+        visit index_path(model_name: 'team', scope: 'white', query: 'Alpha')
+        expect(find('#scope_selector li a.active')).to have_content('White')
+        find_button('Reset filters').click
+        expect(page).to have_current_path(%r{/admin/team})
+        expect(find('#scope_selector li a.active')).to have_content('White')
+        expect(URI.parse(page.current_url).query.to_s).to include('scope=white')
+        is_expected.to have_content(@white_alpha.name)
+        is_expected.to have_content(@white_beta.name)
+        is_expected.to have_no_content(@red_alpha.name)
+      end
+    end
   end
 
   describe 'row CSS class' do
