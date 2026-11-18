@@ -2,7 +2,19 @@ name-template: "v$RESOLVED_VERSION"
 tag-template: "v$RESOLVED_VERSION"
 template: |
   $CHANGES
-change-template: "- $TITLE (#$NUMBER)"
+change-template: "- $TITLE ($NUMBERS)"
+group-changes:
+  - pattern: '/^Bump the (?<group>.+?) group(?: across \d+ director(?:y|ies))? with \d+ updates?$/'
+    title-template: "Bump the $GROUP group"
+  - pattern: '/^Bump (?<group>.+?) from (?<from>\S+) to (?<to>\S+)(?<group_in> in .+)?$/'
+    title-template: "Bump $GROUP from $FIRST_FROM to $LAST_TO$GROUP_IN"
 no-changes-template: "No changes."
+include-pre-releases: false
 version-resolver:
+  major:
+    labels: [major]
+  minor:
+    labels: [minor]
+  patch:
+    labels: [patch]
   default: patch

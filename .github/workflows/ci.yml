@@ -1,16 +1,19 @@
-name: Test
+name: CI
 
+# No pull_request trigger: it stops firing once a PR turns CONFLICTING. A fork PR
+# therefore reports nothing until its head commit is pushed to a branch here.
+# workflow_call lets release.yml run this exact suite on the tagged commit.
 on:
   push:
-    branches: [main]
-  pull_request:
-
-permissions:
-  contents: read
+    branches: ["**"]
+  workflow_call:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
 
 jobs:
   rspec:
@@ -22,7 +25,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Single supported runtime (Ruby 4.0.9 / Rails 8.1 / ActiveRecord / importmap + Propshaft).
+        # Single supported runtime (Ruby 4.0 / Rails 8.1 / ActiveRecord / importmap + Propshaft).
         # The adapter axis is kept because the filter/search SQL is generated per-adapter
         # (AbstractModel::StatementBuilder), so each adapter exercises a distinct code path.
         adapter: [sqlite3, postgresql, mysql2]
@@ -47,11 +50,13 @@ jobs:
       CI_DB_ADAPTER: ${{ matrix.adapter }}
       RAILS_ENV: test
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ruby-version: "4.0.9"
+          persist-credentials: false
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1.338.0
+        with:
+          ruby-version: .ruby-version
           bundler-cache: true
       - name: Install libvips
         # ActiveStorage's :vips variant processor; ruby-vips dlopens the libvips shared library.
@@ -70,12 +75,15 @@ jobs:
   standard:
     name: Standard
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ruby-version: "4.0.9"
+          persist-credentials: false
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1.338.0
+        with:
+          ruby-version: .ruby-version
           bundler-cache: true
       - name: Run Standard
         run: bundle exec standardrb
@@ -83,12 +91,15 @@ jobs:
   brakeman:
     name: Brakeman
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ruby-version: "4.0.9"
+          persist-credentials: false
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1.338.0
+        with:
+          ruby-version: .ruby-version
           bundler-cache: true
       # -A runs the full check set; reviewed false positives are recorded in config/brakeman.ignore.
       - name: Run Brakeman
@@ -97,12 +108,15 @@ jobs:
   hyperdrive:
     name: Hyperdrive
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ruby-version: "4.0.9"
+          persist-credentials: false
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1.338.0
+        with:
+          ruby-version: .ruby-version
           bundler-cache: true
       - name: Check Hyperdrive companion content
         run: bundle exec rake hyperdrive:skills:check hyperdrive:manifest:check
@@ -110,10 +124,13 @@ jobs:
   prettier:
     name: Prettier
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
       - name: Set up Node
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v6
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: "24"
       # No package.json ships (importmap self-hosts the runtime modules), so Prettier is pinned via

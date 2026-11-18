@@ -1,4 +1,4 @@
-ruby_version: 4.0.9
+ruby_version: 4.0
 
 # Standard's built-in default_ignores already cover .git, node_modules, vendor,
 # root bin/*, root db/schema.rb, and root tmp. Only the nested dummy-app paths

@@ -3,6 +3,7 @@ name: Release Drafter
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   update-release-draft:

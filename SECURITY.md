@@ -2,7 +2,7 @@
 
 ## Supported versions
 
-`rails_admin_next` targets a single supported runtime: Ruby >= 4.0.9, Rails ~> 8.1,
+`rails_admin_next` targets a single supported runtime: Ruby >= 4.0, Rails ~> 8.1,
 ActiveRecord, and the importmap + Propshaft asset pipeline. Security fixes land on the
 latest `1.x` release.
 
@@ -23,16 +23,18 @@ Content-Security-Policy posture (and the one host opt-in), see [`docs/security.m
 
 ## Automated scanning
 
-CI gates every push and pull request on:
+CI gates every push on:
 
 - **brakeman** — static analysis (`bundle exec brakeman -A`). Reviewed false positives live in
   [`config/brakeman.ignore`](config/brakeman.ignore), each with a written justification.
-- **Dependabot** — weekly `bundler` and `github-actions` update PRs
-  ([`.github/dependabot.yml`](.github/dependabot.yml)), plus alerts and automated security
-  fixes. Dependabot is the only channel for gem advisories: the `bundler-audit` CI gate was
-  retired in July 2026, so gem advisories are no longer checked on push. Advisories Dependabot
-  cannot fix — one with no patched release exists, `CVE-2026-38969` in `webrick` — are tracked
-  by hand as issues.
+- **Dependabot** — weekly `github-actions` update PRs
+  ([`.github/dependabot.yml`](.github/dependabot.yml)), plus gem alerts and automated security
+  fixes. No `bundler` version updates run: `Gemfile.lock` is not committed, so CI already
+  resolves the newest allowed gems on every run. Without a lockfile, Dependabot alerts cover
+  only the gems declared in `Gemfile` and `*.gemspec`, and the `bundler-audit` CI gate was
+  retired in July 2026, so advisories for transitive gems may go untracked here. Advisories
+  Dependabot cannot fix — one with no patched release exists, `CVE-2026-38969` in `webrick` —
+  are tracked by hand as issues.
 - **Standard** and **Prettier** — Ruby and JS/CSS style gates.
 
 ## Importmap pins: fully self-hosted (jspm blind spot closed)
@@ -50,10 +52,11 @@ same-origin:
 - `trix` → the `action_text-trix` gem (loaded with ActionText).
 - `rails_admin_next/*` → the engine's own source under `src/`, versioned with the gem.
 
-Because every pinned module ships inside a gem, **Dependabot's `bundler` updates move all of them** —
-the front-end JS is now versioned in lockstep with the gems. The previous jspm.io blind spot (pins
-that no manifest declared and Dependabot could not see) is **closed**; there is nothing left to
-hand-audit in the importmap.
+Because every pinned module ships inside a gem, the front-end JS is versioned in lockstep with
+those gems. A host moves them when it updates its own lockfile, by hand or through its own
+Dependabot, and this repository's CI resolves the newest allowed versions on every run. The
+previous jspm.io blind spot (pins that no manifest declared and Dependabot could not see) is
+**closed**; there is nothing left to hand-audit in the importmap.
 
 ### No external front-end network surface
 

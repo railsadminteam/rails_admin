@@ -1,0 +1,58 @@
+name: Release
+
+# Publishes through RubyGems trusted publishing. The rubygems.org publisher
+# matches this file's name and the `release` environment, which admits only
+# `v*` tags: renaming either breaks publishing until the publisher is updated.
+#
+# No concurrency group: a publish must never be cancelled mid-flight, and a
+# group equal to the one ci.yml declares would make the called CI cancel this run.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  # CI skips tag pushes, so this is the only run of CI on the tagged commit. It
+  # holds no id-token, so no development gem it installs can mint a publishing token.
+  ci:
+    uses: ./.github/workflows/ci.yml
+
+  publish:
+    needs: ci
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: release
+    permissions:
+      contents: read
+      id-token: write
+
+    # rubygems/release-gem is unusable here: it runs `rake release`, which
+    # refuses the tree the stamp leaves dirty.
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # No bundle: `gem build` needs only the gemspec, so no third-party gem
+      # runs in the job that can publish.
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@b3aaceaef7e0ee231b499e7b5f49c03fc1d32199 # v1.338.0
+        with:
+          ruby-version: .ruby-version
+          bundler: none
+
+      - name: Stamp the tag version into version.rb
+        run: bin/stamp-version "${GITHUB_REF_NAME#v}" lib/rails_admin_next/version.rb
+
+      - name: Build gem
+        run: gem build rails_admin_next.gemspec
+
+      - name: Configure RubyGems credentials
+        uses: rubygems/configure-rubygems-credentials@dc5a8d8553e6ee01fc26761a49e99e733d17954a # v2.1.0
+
+      # Pushing the file named for the tag means a build whose version differs
+      # from the tag has nothing to push.
+      - name: Push gem
+        run: gem push "rails_admin_next-${GITHUB_REF_NAME#v}.gem"

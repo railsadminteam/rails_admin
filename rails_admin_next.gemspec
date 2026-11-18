@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   }
   spec.name = "rails_admin_next"
   spec.require_paths = %w[lib]
-  spec.required_ruby_version = ">= 4.0.9"
+  spec.required_ruby_version = ">= 4.0"
   spec.required_rubygems_version = ">= 1.8.11"
   spec.summary = "Admin for Rails"
   spec.version = RailsAdminNext::Version

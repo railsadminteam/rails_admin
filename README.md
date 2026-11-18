@@ -6,9 +6,9 @@
 
 **Rails ~> 8.1 · ActiveRecord · importmap + Propshaft · Turbo + Stimulus · zero build step**
 
-[![Build](https://github.com/6temes/rails_admin_next/actions/workflows/test.yml/badge.svg)](https://github.com/6temes/rails_admin_next/actions/workflows/test.yml)
+[![Build](https://github.com/6temes/rails_admin_next/actions/workflows/ci.yml/badge.svg)](https://github.com/6temes/rails_admin_next/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE.md)
-[![Ruby](https://img.shields.io/badge/Ruby-4.0.9%2B-CC342D.svg)](https://www.ruby-lang.org)
+[![Ruby](https://img.shields.io/badge/Ruby-4.0%2B-CC342D.svg)](https://www.ruby-lang.org)
 [![Rails](https://img.shields.io/badge/Rails-8.1-CC0000.svg)](https://rubyonrails.org)
 
 [Why RailsAdminNext?](#why-railsadminnext) ◆ [Quick Start](#quick-start) ◆ [Installation](#installation) ◆ [Architecture](#architecture) ◆ [Security](#security) ◆ [Upgrading](#upgrading-from-railsadmin)
@@ -32,7 +32,7 @@ multi-bundler, jQuery-era machinery. RailsAdminNext keeps the admin and drops th
 - **⚡ Zero build step** — browser-native ESM over **importmap + Propshaft**; no Webpack/Vite/Sprockets, no `yarn build`, no generated pins.
 - **🧩 Turbo + Stimulus** — the jQuery / jQuery-UI / Bootstrap-JS / `@rails/ujs` stack is gone, replaced by engine-shipped Stimulus controllers; styling is hand-maintained vanilla CSS.
 - **🔒 Hardened & CDN-free** — a documented CSRF / clickjacking / mass-assignment / CSP posture ([SECURITY.md](SECURITY.md)) and **zero external CDN**, default or opt-in — every asset is self-hosted off a gem.
-- **🎯 One modern target** — Ruby ≥ 4.0.9, Rails ~> 8.1, ActiveRecord only, latest Chrome + Safari. No Mongoid, no multi-bundler / multi-Rails matrix, no legacy-browser CSS.
+- **🎯 One modern target** — Ruby ≥ 4.0, Rails ~> 8.1, ActiveRecord only, latest Chrome + Safari. No Mongoid, no multi-bundler / multi-Rails matrix, no legacy-browser CSS.
 - **↩️ Familiar** — `RailsAdminNext.config`, per-model `rails_admin_next do … end` blocks, and Pundit authorization all work as before; upgrading from RailsAdmin is a mechanical rename.
 
 ## Quick Start
@@ -50,11 +50,11 @@ bin/rails s                            # then open http://localhost:3000/admin
 
 That's the whole setup — no `yarn add`, no asset build, no generated pins. The engine ships its own importmap and CSS.
 
-> **Prerequisites:** Ruby ≥ 4.0.9 · Rails ~> 8.1 · ActiveRecord · a [Propshaft][propshaft] + [importmap-rails][importmap] host (both are pulled in as dependencies). See [Installation](#installation) for the full walkthrough.
+> **Prerequisites:** Ruby ≥ 4.0 · Rails ~> 8.1 · ActiveRecord · a [Propshaft][propshaft] + [importmap-rails][importmap] host (both are pulled in as dependencies). See [Installation](#installation) for the full walkthrough.
 
 ## Requirements
 
-- Ruby >= 4.0.9
+- Ruby >= 4.0
 - Rails ~> 8.1
 - ActiveRecord (Mongoid is not supported)
 - [Propshaft][propshaft] and [importmap-rails][importmap] (both are pulled in as

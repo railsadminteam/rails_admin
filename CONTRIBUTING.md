@@ -21,7 +21,7 @@ Here are some ways _you_ can contribute:
 
 ## Development
 
-RailsAdminNext targets a **single supported runtime** — Ruby 4.0.9, Rails ~> 8.1,
+RailsAdminNext targets a **single supported runtime** — Ruby 4.0, Rails ~> 8.1,
 ActiveRecord, and an importmap + Propshaft asset pipeline. There is **no multi-ORM,
 multi-bundler, or multi-Rails build matrix**, and **no Appraisal**: the suite runs against
 one Gemfile with no `yarn build` step.
@@ -96,7 +96,7 @@ There is no `spec/rails_helper.rb`: every spec does `require 'spec_helper'`, and
 
 ### Lint and security gates
 
-CI gates every push and pull request on the following checks. Run them locally before
+CI gates every push on the following checks. Run them locally before
 opening a pull request:
 
 ```bash
@@ -129,13 +129,27 @@ pull request with failing specs.
 7. Add, commit, and push your changes.
 8. [Submit a pull request.][pr]
 
+CI runs on pushes to this repository, not on pull requests, so a pull request from a fork
+shows no checks until a maintainer pushes its head commit to a branch here. That push runs
+the workflow files in that commit, not the ones on `main`, so review its `.github/workflows`
+changes before pushing it.
+
 [fork]: https://docs.github.com/en/get-started/quickstart/fork-a-repo
 [pr]: https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request
 
 ## Releasing (maintainers)
 
-Every push to `main` updates a [Release Drafter](https://github.com/6temes/rails_admin_next/releases)
-draft with an auto-bumped version and the merged PR titles. Releasing is publishing that
-draft: the created tag triggers the `Publish Gem` workflow, which stamps the tag's version
-into `lib/rails_admin_next/version.rb`, builds the gem, and pushes it to RubyGems via
-trusted publishing. No version-bump commit and no local step are needed.
+Publishing the release draft is the whole release: there is no version-bump commit, no local step and no API key.
+
+1. Every push to `main` updates a draft GitHub release from the merged pull request titles. Its version bumps the highest published release: a pull request labelled `major` or `minor` bumps that part, and any other pull request bumps the patch.
+2. Publish the draft. Its `vX.Y.Z` tag runs `release.yml`, which runs `ci.yml` on the tagged commit and, only if that passes, stamps the version into `lib/rails_admin_next/version.rb` with `bin/stamp-version`, builds the gem and pushes it through RubyGems trusted publishing in the `release` environment.
+
+`lib/rails_admin_next/version.rb` is never bumped by hand: its constants are only what a local `gem build` produces.
+
+Release Drafter skips prereleases: drafts are never prereleases, and a published prerelease is ignored when it picks the release to bump from.
+
+The trusted publisher on rubygems.org must name workflow `release.yml` and environment `release`; a blank environment field accepts any environment.
+
+### Recovering from a failed publish
+
+Release tags are never moved or deleted. If the `Release` run fails, in `ci` or in `publish`, fix the cause and re-run its failed jobs on the same tag. If that tag cannot be released, because the tagged commit is broken or the run is too old to re-run, leave its tag and release in place and ship the fix as the next version. Before publishing that next draft, regenerate its notes by running the `Release Drafter` workflow on `main` from the Actions tab, and add back any changes the failed release never shipped.

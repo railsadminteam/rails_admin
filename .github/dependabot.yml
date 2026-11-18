@@ -1,34 +1,17 @@
 version: 2
 updates:
-  - package-ecosystem: bundler
+  - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: weekly
-      day: monday
+      interval: "weekly"
+      day: "monday"
       time: "06:00"
-      timezone: "Europe/Madrid"
-    open-pull-requests-limit: 10
+      timezone: "Asia/Tokyo"
+    assignees:
+      - "6temes"
     labels:
-      - dependencies
-      - ruby
-    groups:
-      minor-and-patch:
-        patterns:
-          - "*"
-        update-types:
-          - minor
-          - patch
-
-  - package-ecosystem: github-actions
-    directory: "/"
-    schedule:
-      interval: weekly
-      day: monday
-      time: "06:00"
-      timezone: "Europe/Madrid"
-    labels:
-      - dependencies
-      - github-actions
+      - "dependencies"
+      - "github-actions"
     groups:
       github-actions:
         patterns:
