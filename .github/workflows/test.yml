@@ -143,7 +143,8 @@ jobs:
           bundler-cache: true
           cache-version: gems-${{ hashFiles('Gemfile', 'gemfiles/*.gemfile') }}
         env:
-          MAKEFLAGS: make --jobs 4
+          # Flags only: make reads a leading word of its own name as bundled switches.
+          MAKEFLAGS: -j4
           BUNDLE_WITHOUT: development
       # Only the :external asset_source builds anything; :propshaft / :sprockets
       # serve the committed bundle, so those jobs run with no Node at all.
