@@ -75,7 +75,7 @@ Commits are listed newest first, as `git log` reports them.
 | `2eed28e1` | Fully specify all ESM imports with an extension | n/a — measured: every relative import in `src/` already carries `.js`; browser-native ESM requires it | — |
 | `e8dec57a` | Upgrade @hotwired/turbo-rails to resolve security warning | n/a — turbo comes from the `turbo-rails` gem (2.0.23), which Dependabot reads | — |
 | `07b2066a` | Replace `asset-url` with `url` in Sass files | n/a — no Sass; one hand-owned CSS file | — |
-| `a0946615` | Drop support for Rails 6.x and Ruby 2.5/2.6 | n/a — this fork is Rails ~> 8.1 / Ruby >= 4.0 only | — |
+| `a0946615` | Drop support for Rails 6.x and Ruby 2.5/2.6 | n/a — this fork is Rails ~> 8.1 / Ruby >= 4.0.10 only | — |
 | `0543cb3f` | Revert npm package.json version ahead of actual publish | n/a — no npm package | — |
 | `cf7b112e` | Run Prettier on migrated docs | n/a — upstream's vendored wiki | — |
 | `1c2b92a3` | Rewrite wiki cross-links to relative docs/ links | n/a — upstream's vendored wiki | — |

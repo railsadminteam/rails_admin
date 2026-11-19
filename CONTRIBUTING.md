@@ -21,7 +21,7 @@ Here are some ways _you_ can contribute:
 
 ## Development
 
-RailsAdminNext targets a **single supported runtime** — Ruby 4.0, Rails ~> 8.1,
+RailsAdminNext targets a **single supported runtime** — Ruby 4.0.10, Rails ~> 8.1,
 ActiveRecord, and an importmap + Propshaft asset pipeline. There is **no multi-ORM,
 multi-bundler, or multi-Rails build matrix**, and **no Appraisal**: the suite runs against
 one Gemfile with no `yarn build` step.

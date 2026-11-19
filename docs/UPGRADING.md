@@ -1,6 +1,6 @@
 # Upgrading from rails_admin to rails_admin_next
 
-`rails_admin_next` is the modernized fork of `rails_admin`: Rails 8.1 / Ruby 4.0 floor,
+`rails_admin_next` is the modernized fork of `rails_admin`: Rails 8.1 / Ruby 4.0.10 floor,
 ActiveRecord only, an importmap + Propshaft asset pipeline, a Stimulus + Turbo
 frontend (no jQuery, jQuery-UI, Bootstrap JS, or `@rails/ujs`), vanilla CSS with a
 latest-Chrome/Safari browser floor, and a hardened security posture. This guide covers
