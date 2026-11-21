@@ -14,7 +14,13 @@ module RailsAdmin
       end
 
       def js
-        JSON.parse(File.read("#{__dir__}/../../package.json"))['version']
+        package_json['version']
+      end
+
+      # The exact version an npm package is pinned to, which is how the editors
+      # RailsAdmin loads from a CDN stay in Dependabot's reach.
+      def npm_dependency(package)
+        (package_json['devDependencies'] || {}).fetch(package)
       end
 
       def actual_js_version
@@ -44,6 +50,10 @@ module RailsAdmin
       end
 
     private
+
+      def package_json
+        @package_json ||= JSON.parse(File.read("#{__dir__}/../../package.json"))
+      end
 
       def js_version_from_node_modules
         JSON.parse(File.read(Rails.root.join('node_modules/rails_admin/package.json')))['version']

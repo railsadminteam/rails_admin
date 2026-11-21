@@ -1,0 +1,27 @@
+version: 2
+
+# The editors RailsAdmin loads from a CDN at runtime are pinned in package.json
+# precisely so that the npm entry below covers them: Dependabot reads manifests,
+# and a version written into a field type would be invisible to it.
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    ignore:
+      # CodeMirror 6 is a different library - no fromTextArea, ESM only - so the
+      # :code_mirror field cannot follow it, and the 5.x line is where it stays.
+      - dependency-name: codemirror
+        update-types: ["version-update:semver-major"]
+
+  # gemfiles/*.gemfile are generated from this Gemfile, so a pull request here
+  # needs `bundle exec appraisal generate` before it can be merged.
+  - package-ecosystem: bundler
+    directory: "/"
+    schedule:
+      interval: weekly
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
