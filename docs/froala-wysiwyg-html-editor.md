@@ -1,12 +1,19 @@
+> **Deprecated.** The `:froala` field type will be removed in RailsAdmin 5.0. Froala is licensed per
+> application, and CVE-2024-51434 has no fixed release, so RailsAdmin names no Froala build to load:
+> the field does nothing until you point it at one.
+
 This assume you want to use the FREE version of Froala WYSIWYG HTML Editor (which shows their badge in the editor). For more information, please see: http://www.froala.com/wysiwyg-editor
 
 ### How to use:
 
-RailsAdmin loads Froala from a CDN, so no extra gem is needed. Enabling the froala editor for your field is easy:
+Point the field at the Froala you are licensed to serve, with `js_location` and `css_location`:
 
 ```
 edit do
-  field :content, :froala
+  field :content, :froala do
+    js_location '/froala_editor.min.js'
+    css_location '/froala_editor.min.css'
+  end
 end
 
 # Optionally providing froala options (see https://froala.com/wysiwyg-editor/docs/options/)
@@ -26,7 +33,7 @@ end
 
 ### Using Plugins
 
-RailsAdmin loads the Froala core from a CDN, and each field decides which build that is:
+Each field decides which Froala build it loads:
 
 ```ruby
 edit do
