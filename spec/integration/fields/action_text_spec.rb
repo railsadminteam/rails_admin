@@ -17,7 +17,7 @@ if defined?(ActionText)
     it 'works without error' do
       expect { visit new_path(model_name: 'field_test') }.not_to raise_error
       is_expected.to have_selector('trix-toolbar')
-      page.driver.browser.console.clear if page.driver.browser.respond_to?(:console)
+      clear_browser_console
     end
   end
 end

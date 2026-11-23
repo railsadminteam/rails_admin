@@ -30,7 +30,6 @@ RSpec.describe 'Floara field', type: :request do
   end
 
   it 'leaves the textarea alone when no location is configured', js: true do
-    allow(ConsoleLogger).to receive(:warn)
     RailsAdmin.config Draft do
       edit do
         field :notes, :froala
@@ -39,6 +38,7 @@ RSpec.describe 'Floara field', type: :request do
     visit new_path(model_name: 'draft')
     is_expected.to have_selector('textarea#draft_notes')
     is_expected.not_to have_selector('.fr-box')
+    clear_browser_console
   end
 
   it 'should include custom froala configuration' do

@@ -25,7 +25,6 @@ RSpec.describe 'CKEditor field', type: :request do
   end
 
   it 'leaves the textarea alone when no location is configured', js: true do
-    allow(ConsoleLogger).to receive(:warn)
     RailsAdmin.config Draft do
       edit do
         field :notes, :ck_editor
@@ -34,6 +33,7 @@ RSpec.describe 'CKEditor field', type: :request do
     visit new_path(model_name: 'draft')
     is_expected.to have_selector('textarea#draft_notes')
     is_expected.not_to have_selector('#cke_draft_notes')
+    clear_browser_console
   end
 
   it 'writes back to the textarea when a remote-form modal is submitted', js: true do
