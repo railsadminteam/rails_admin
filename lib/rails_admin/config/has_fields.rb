@@ -21,7 +21,12 @@ module RailsAdmin
         elsif type && type != (field.nil? ? nil : field.type)
           if field
             properties = field.properties
-            field = _fields[_fields.index(field)] = RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)
+            new_field = RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)
+            # The replacement takes over the place the field already had, otherwise it
+            # looks undefined below and gets ordered after every field declared before it
+            new_field.defined = field.defined
+            new_field.order = field.order
+            field = _fields[_fields.index(field)] = new_field
           else
             properties = abstract_model.properties.detect { |p| name == p.name }
             field = (_fields << RailsAdmin::Config::Fields::Types.load(type).new(self, name, properties)).last

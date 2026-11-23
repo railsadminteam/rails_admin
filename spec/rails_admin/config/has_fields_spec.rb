@@ -81,6 +81,23 @@ RSpec.describe RailsAdmin::Config::HasFields do
     expect(RailsAdmin.config(Team).fields.detect { |f| f.name == :players }.properties).not_to be_nil
   end
 
+  it 'keeps the declared order on overriding the type of a field the model already defines' do
+    RailsAdmin.config do |config|
+      config.model Team do
+        include_fields :name, :manager, :division_id
+
+        edit do
+          field :name
+          field :manager, :enum do
+            enum { [] }
+          end
+          field :division_id
+        end
+      end
+    end
+    expect(RailsAdmin.config(Team).edit.visible_fields.map(&:name)).to eq %i[name manager division_id]
+  end
+
   describe '#configure' do
     it 'does not change the order of existing fields, if some field types of them are changed' do
       original_fields_order = RailsAdmin.config(Team).fields.map(&:name)
