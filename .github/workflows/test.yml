@@ -208,6 +208,22 @@ jobs:
       - name: Check committed assets are up to date
         run: git diff --exit-code -- app/assets/builds
 
+  gemfiles:
+    name: Appraisal gemfiles
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.2"
+          bundler-cache: true
+          cache-version: gems-${{ hashFiles('Gemfile') }}
+      - name: Regenerate
+        run: bundle exec appraisal generate
+      - name: Check committed gemfiles are up to date
+        run: git diff --exit-code -- gemfiles
+
   prettier:
     name: Prettier
     runs-on: ubuntu-latest

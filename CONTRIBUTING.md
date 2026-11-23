@@ -79,7 +79,12 @@ In CI, we use [appraisal] to run tests against multiple versions of Rails. The
 See the [GitHub Actions configuration] for more details on what Ruby versions
 run what Rails versions.
 
+Those Gemfiles are generated from the root Gemfile and committed, so a change to
+the root Gemfile or to [Appraisals] has to be followed by `bundle exec appraisal
+generate`. CI fails when the committed ones no longer match.
+
 [appraisal]: https://github.com/thoughtbot/appraisal
+[appraisals]: ./Appraisals
 [gemfiles/ directory]: ./gemfiles
 [github actions configuration]: ./.github/workflows/test.yml
 

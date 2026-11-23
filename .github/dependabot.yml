@@ -15,7 +15,8 @@ updates:
         update-types: ["version-update:semver-major"]
 
   # gemfiles/*.gemfile are generated from this Gemfile, so a pull request here
-  # needs `bundle exec appraisal generate` before it can be merged.
+  # needs `bundle exec appraisal generate` run on it - which the Appraisal
+  # gemfiles job fails until someone does.
   - package-ecosystem: bundler
     directory: "/"
     schedule:
