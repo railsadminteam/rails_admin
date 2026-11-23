@@ -150,7 +150,7 @@ jobs:
       # serve the committed bundle, so those jobs run with no Node at all.
       - name: Set up Node
         if: matrix.asset == 'external'
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: "22"
       - name: Install ImageMagick
@@ -198,7 +198,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node }}
       - name: Install dependencies
@@ -230,7 +230,7 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: "22"
       - name: Install dependencies
