@@ -1271,6 +1271,19 @@ RSpec.describe 'Index action', type: :request do
         expect(all('td.name_field').map(&:text).size).to eq(2)
       end
 
+      context "when Kaminari's custom param_name is set" do
+        before { Kaminari.config.param_name = :pagina }
+        after { Kaminari.config.param_name = :page }
+
+        it 'drops the page on search' do
+          visit index_path(model_name: 'team', scope: 'white', pagina: '2')
+          fill_in 'query', with: 'White'
+          click_button 'Refresh'
+          expect(page).to have_current_path(/query=White/)
+          expect(Rack::Utils.parse_query(URI.parse(current_url).query)).to eq('query' => 'White', 'scope' => 'white')
+        end
+      end
+
       it 'keeps the current scope after clearing filters', js: true do
         visit index_path(model_name: 'team', scope: 'white', query: 'Alpha')
         expect(find('#scope_selector li a.active')).to have_content('White')

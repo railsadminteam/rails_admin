@@ -5,6 +5,9 @@
 <% sort_reverse = params[:sort_reverse] %>
 <% path_method = params[:id] ? "history_show_path" : "history_index_path" %>
 <%= form_tag("", method: "get", class: "search form-inline") do %>
+  <% URI.decode_www_form(params.except(Kaminari.config.param_name.to_s, *%w[query id]).to_query).each do |name, value| %>
+    <%= hidden_field_tag name, value, id: nil %>
+  <% end %>
   <div class="card mb-3 p-3 bg-light">
     <div class="row">
       <div class="col-sm-6">
