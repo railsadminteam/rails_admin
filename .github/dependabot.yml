@@ -21,6 +21,11 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    ignore:
+      # The Gemfile pins json below 3 over the quirks_mode removal in 3.0.
+      # update-types leaves security updates coming through.
+      - dependency-name: json
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: "/"
