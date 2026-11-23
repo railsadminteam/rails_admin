@@ -383,9 +383,15 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
 
   describe 'sanitize_params_for!' do
     context 'with datetime' do
-      before do
+      around do |example|
+        original = ActionController::Parameters.permit_all_parameters
         ActionController::Parameters.permit_all_parameters = false
+        example.run
+      ensure
+        ActionController::Parameters.permit_all_parameters = original
+      end
 
+      before do
         RailsAdmin.config Comment do
           configure :created_at do
             show
@@ -418,10 +424,6 @@ RSpec.describe RailsAdmin::MainController, type: :controller do
           },
         )
         controller.send(:sanitize_params_for!, :create, RailsAdmin.config(FieldTest), controller.params['field_test'])
-      end
-
-      after do
-        ActionController::Parameters.permit_all_parameters = true
       end
 
       it 'sanitize params recursively in nested forms' do
