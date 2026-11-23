@@ -19,6 +19,23 @@ if defined?(ActiveStorage)
       end
     end
 
+    describe '#value' do
+      context 'when the record failed to save with the file attached' do
+        let(:record) do
+          FieldTest.new(string_field: 'Invalid').tap do |field_test|
+            field_test.active_storage_asset.attach(io: StringIO.new('dummy'), filename: 'test.png')
+            field_test.save
+          end
+        end
+
+        it 'leaves the attachment out, there being no URL to show it by' do
+          expect(record.active_storage_asset).to be_attached
+          expect(field.value).to be_nil
+          expect(field.resource_url).to be_nil
+        end
+      end
+    end
+
     describe '#image?' do
       context 'configured Mime::Types' do
         before { Mime::Type.register 'image/webp', :webp }

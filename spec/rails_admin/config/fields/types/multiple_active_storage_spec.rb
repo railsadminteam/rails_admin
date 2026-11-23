@@ -16,6 +16,29 @@ if defined?(ActiveStorage)
       )
     end
 
+    describe '#attachments' do
+      context 'when the record failed to save with the files attached' do
+        let(:record) do
+          FieldTest.new(string_field: 'Invalid').tap do |field_test|
+            field_test.active_storage_assets.attach(io: StringIO.new('dummy'), filename: 'test.png')
+            field_test.save
+          end
+        end
+
+        it 'leaves the unsaved attachments out, there being no URL to show them by' do
+          expect(field.value).to be_a(ActiveStorage::Attached::Many).and be_attached
+          expect(field.attachments).to eq []
+        end
+
+        it 'asks for a file again when the field is required, none of them being kept' do
+          RailsAdmin.config FieldTest do
+            field(:active_storage_assets) { required true }
+          end
+          expect(field.html_attributes[:required]).to be true
+        end
+      end
+    end
+
     describe RailsAdmin::Config::Fields::Types::MultipleActiveStorage::ActiveStorageAttachment do
       describe '#thumb_method' do
         let(:record) { FactoryBot.create :field_test, active_storage_assets: [{io: StringIO.new('dummy'), filename: 'test.txt', content_type: 'text/plain'}] }

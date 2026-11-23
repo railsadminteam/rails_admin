@@ -62,7 +62,7 @@ module RailsAdmin
 
           register_instance_option :html_attributes do
             {
-              required: required? && !value.present?,
+              required: required? && !attachments.present?,
             }.merge(
               direct? && {data: {direct_upload_url: bindings[:view].main_app.rails_direct_uploads_url}} || {},
             )
@@ -74,6 +74,11 @@ module RailsAdmin
 
           register_instance_option :sortable do
             false
+          end
+
+          # An attachment the record never saved has no signed id to build a URL from.
+          def attachments
+            super.reject { |attachment| attachment.value.new_record? }
           end
         end
       end
