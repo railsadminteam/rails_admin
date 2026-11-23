@@ -115,6 +115,19 @@ RSpec.describe RailsAdmin::Config::HasFields do
       expect(RailsAdmin.config(Team).fields.map(&:name)).to eql(original_fields_order)
     end
 
+    it 'keeps a field among the included ones on changing its type' do
+      RailsAdmin.config do |config|
+        config.model Team do
+          include_fields :name, :manager, :founded
+          configure :manager, :enum do
+            enum { [] }
+          end
+        end
+      end
+
+      expect(RailsAdmin.config(Team).edit.visible_fields.map(&:name)).to eq %i[name manager founded]
+    end
+
     it 'allows passing multiple fields to share the same configuration' do
       target_field_names = %i[players revenue]
 

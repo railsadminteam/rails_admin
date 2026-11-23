@@ -41,6 +41,7 @@
 - A row you have just added can still be removed after the form comes back from a failed save, on an association configured with `allow_destroy: false` ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
 - A nested form for an association that can reach itself — Mongoid's `recursively_embeds_many` / `recursively_embeds_one`, or a self-referential `has_many` with `accepts_nested_attributes_for` — now renders. It used to hang the request and exhaust memory. Such an association can be nested `RailsAdmin::FormBuilder::MAX_NESTED_FORM_RECURSION` levels deep in one form, and no "Add" button is offered past that; a chain of distinct models stays unlimited ([#3723](https://github.com/railsadminteam/rails_admin/issues/3723))
 - Fix a form rendered again after a failed save raising `Cannot get a signed_id for a new record` where an ActiveStorage field had taken a file, for `has_many_attached` as well as `has_one_attached` ([#3732](https://github.com/railsadminteam/rails_admin/pull/3732))
+- A field whose type is overridden keeps the place it was declared in, rather than going after every field declared before it, and `configure` with a type no longer drops it from the fields the model included ([#1649](https://github.com/railsadminteam/rails_admin/issues/1649), [#3763](https://github.com/railsadminteam/rails_admin/pull/3763))
 
 ### Security
 
