@@ -30,7 +30,8 @@ RSpec.describe 'Nested many widget', type: :request, js: true do
     nested_field_tests
     visit edit_path(model_name: 'field_test', id: field_test.id)
 
-    fill_in 'field_test_nested_field_tests_attributes_0_title', with: 'nested field test title 1 edited', visible: false
+    find('#field_test_nested_field_tests_attributes_field > .controls .toggler').click
+    fill_in 'field_test_nested_field_tests_attributes_0_title', with: 'nested field test title 1 edited'
     edited_id = find('#field_test_nested_field_tests_attributes_0_id', visible: false).value
 
     # trigger click via JS, workaround for instability in CI
