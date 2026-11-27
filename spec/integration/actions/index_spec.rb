@@ -1282,6 +1282,16 @@ RSpec.describe 'Index action', type: :request do
           expect(page).to have_current_path(/query=White/)
           expect(Rack::Utils.parse_query(URI.parse(current_url).query)).to eq('query' => 'White', 'scope' => 'white')
         end
+
+        it 'drops the page from the export, scope and sort links' do
+          visit index_path(model_name: 'team', scope: 'white', pagina: '2')
+          hrefs = [find("a[href^='/admin/team/export']")[:href]] +
+                  all('#scope_selector a', minimum: 3).map { |a| a[:href] } +
+                  all('th.header', minimum: 1).map { |th| th['data-href'] }
+          queries = hrefs.map { |href| Rack::Utils.parse_query(URI.parse(href).query) }
+          expect(queries).to all(include('scope'))
+          expect(queries.flat_map(&:keys)).not_to include('pagina')
+        end
       end
 
       it 'keeps the current scope after clearing filters', js: true do

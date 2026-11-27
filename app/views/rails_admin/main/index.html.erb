@@ -77,7 +77,7 @@
         </div>
         <div class="col-sm-6 text-end">
           <% if export_action %>
-            <%= link_to wording_for(:link, export_action), export_path(params.except('page')), class: 'btn btn-info' %>
+            <%= link_to wording_for(:link, export_action), export_path(params.except(Kaminari.config.param_name.to_s)), class: 'btn btn-info' %>
           <% end %>
         </div>
       </div>
@@ -89,7 +89,7 @@
       <% scopes.each_with_index do |scope, index| %>
         <% scope = '_all' if scope.nil? %>
         <li class="nav-item">
-          <a href="<%= index_path(params.merge(scope: scope, page: nil)) %>" class="nav-link <%= 'active' if scope.to_s == params[:scope] || (params[:scope].blank? && index == 0) %>">
+          <a href="<%= index_path(params.except(Kaminari.config.param_name.to_s).merge(scope: scope)) %>" class="nav-link <%= 'active' if scope.to_s == params[:scope] || (params[:scope].blank? && index == 0) %>">
             <%= I18n.t("admin.scopes.#{@abstract_model.to_param}.#{scope}", default: I18n.t("admin.scopes.#{scope}", default: scope.to_s.titleize)) %>
           </a>
         </li>
@@ -117,7 +117,7 @@
             <% properties.each do |property| %>
               <% selected = (sort == property.name.to_s) %>
               <% if property.sortable %>
-                <% sort_location = index_path params.except('sort_reverse').except('page').merge(sort: property.name).merge(selected && sort_reverse != "true" ? {sort_reverse: "true"} : {}) %>
+                <% sort_location = index_path params.except('sort_reverse', Kaminari.config.param_name.to_s).merge(sort: property.name).merge(selected && sort_reverse != "true" ? {sort_reverse: "true"} : {}) %>
                 <% sort_direction = (sort_reverse == 'true' ? "headerSortUp" : "headerSortDown" if selected) %>
               <% end %>
               <th class="<%= [property.sortable && "header", property.sortable && sort_direction, property.sticky? && 'sticky', property.css_class, property.type_css_class].select(&:present?).join(' ') %>" data-href="<%= property.sortable && sort_location %>" rel="tooltip" title="<%= property.hint %>">

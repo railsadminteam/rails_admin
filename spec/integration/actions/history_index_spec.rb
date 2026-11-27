@@ -45,6 +45,13 @@ RSpec.describe 'HistoryIndex action', type: :request, active_record: true do
     expect(Rack::Utils.parse_query(URI.parse(current_url).query)).to eq('query' => 'update', 'sort' => 'item', 'sort_reverse' => 'true')
   end
 
+  it 'drops the page from the sort links' do
+    visit history_index_path(model_name: 'paper_trail_test', page: 2)
+    queries = all('th.header', minimum: 1).map { |th| Rack::Utils.parse_query(URI.parse(th['data-href']).query) }
+    expect(queries).to all(include('sort'))
+    expect(queries.flat_map(&:keys)).not_to include('page')
+  end
+
   context "when Kaminari's custom param_name is set" do
     before { Kaminari.config.param_name = :pagina }
     after { Kaminari.config.param_name = :page }
@@ -60,6 +67,13 @@ RSpec.describe 'HistoryIndex action', type: :request, active_record: true do
       click_button 'Refresh'
       expect(page).to have_current_path(/query=update/)
       expect(Rack::Utils.parse_query(URI.parse(current_url).query)).to eq('query' => 'update', 'sort' => 'item')
+    end
+
+    it 'drops the page from the sort links' do
+      visit history_index_path(model_name: 'paper_trail_test', pagina: 2)
+      queries = all('th.header', minimum: 1).map { |th| Rack::Utils.parse_query(URI.parse(th['data-href']).query) }
+      expect(queries).to all(include('sort'))
+      expect(queries.flat_map(&:keys)).not_to include('pagina')
     end
   end
 end
