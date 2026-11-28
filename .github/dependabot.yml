@@ -16,7 +16,7 @@ updates:
       # :code_mirror field cannot follow it, and the 5.x line is where it stays.
       - dependency-name: codemirror
         update-types: ["version-update:semver-major"]
-      # jquery-ui is held below 1.14, which is where jQuery 4 support begins.
+      # jquery-ui 1.13, still in our range, requires jquery below 4.
       - dependency-name: jquery
         update-types: ["version-update:semver-major"]
 

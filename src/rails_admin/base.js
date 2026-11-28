@@ -5,6 +5,7 @@ import * as ActiveStorage from "@rails/activestorage";
 // appears without window.Trix. Bundle Trix yourself (asset_source :external) to
 // avoid the CDN entirely.
 import "@rails/actiontext";
+import jQuery from "jquery";
 import "./jquery.js";
 import "bootstrap";
 
@@ -12,9 +13,7 @@ import "bootstrap";
 import "jquery-ui/ui/version.js";
 import "jquery-ui/ui/keycode.js";
 import "jquery-ui/ui/position.js";
-import "jquery-ui/ui/safe-active-element.js";
 import "jquery-ui/ui/data.js";
-import "jquery-ui/ui/ie.js";
 import "jquery-ui/ui/scroll-parent.js";
 import "jquery-ui/ui/unique-id.js";
 import "jquery-ui/ui/widget.js";
@@ -31,5 +30,11 @@ import "./remote-form.js";
 import "./sidescroll.js";
 import "./ui.js";
 import "./widgets.js";
+
+// jQuery UI 1.14 dropped safe-active-element.js, which 1.13's menu and autocomplete still call on events.
+if (!jQuery.ui.safeActiveElement) {
+  jQuery.ui.safeActiveElement = (document) =>
+    document.activeElement || document.body;
+}
 
 ActiveStorage.start();
