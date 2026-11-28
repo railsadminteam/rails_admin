@@ -17,7 +17,7 @@
     "format:check": "prettier --check ."
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": ">=5.15.0 <7.0.0",
+    "@fortawesome/fontawesome-free": ">=5.15.0 <8.0.0",
     "@hotwired/turbo-rails": "^8.0.21",
     "@popperjs/core": "^2.11.0",
     "@rails/actiontext": ">=7.1.0 <9.0.0",
