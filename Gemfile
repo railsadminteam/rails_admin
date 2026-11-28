@@ -24,7 +24,7 @@ group :test do
   gem 'factory_bot', '>= 4.2', '!= 6.4.5'
   gem 'ferrum', ['!= 0.19.0', '!= 0.19.1'] # deadlock on JRuby: rubycdp/ferrum#676
   gem 'generator_spec', '>= 0.8'
-  gem 'json', '< 3' # Workaround for json 3.0 quirks_mode removal
+  gem 'json', '< 4' # Workaround for json 3.0 quirks_mode removal
   gem 'kt-paperclip'
   gem 'launchy', '>= 2.2'
   gem 'mini_magick', '>= 3.4'
