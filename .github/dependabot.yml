@@ -8,10 +8,16 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+    # package.json is the published package's, so a new major is added to the
+    # range instead of replacing the one applications may still be on.
+    versioning-strategy: widen
     ignore:
       # CodeMirror 6 is a different library - no fromTextArea, ESM only - so the
       # :code_mirror field cannot follow it, and the 5.x line is where it stays.
       - dependency-name: codemirror
+        update-types: ["version-update:semver-major"]
+      # jquery-ui is held below 1.14, which is where jQuery 4 support begins.
+      - dependency-name: jquery
         update-types: ["version-update:semver-major"]
 
   # gemfiles/*.gemfile are generated from this Gemfile, so a pull request here
@@ -25,6 +31,9 @@ updates:
       # The Gemfile pins json below 3 over the quirks_mode removal in 3.0.
       # update-types leaves security updates coming through.
       - dependency-name: json
+        update-types: ["version-update:semver-major"]
+      # Appraisals picks carrierwave 3 and 4 for the Rails versions taking them.
+      - dependency-name: carrierwave
         update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
